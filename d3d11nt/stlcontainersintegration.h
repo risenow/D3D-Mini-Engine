@@ -15,13 +15,13 @@ public:
     template<typename T1>
     struct rebind
     {
-        typedef AllocatorSTLWrapper<T1> other;
+        typedef BigChunkAllocatorSTLWrapper<T1> other;
     };
 
-    AllocatorSTLWrapper() : m_RawAllocator(&MemoryManager::BigChunksAllocator)
+    BigChunkAllocatorSTLWrapper() : m_RawAllocator(MemoryManager::GetBigChunkAllocator())
     {}
 
-    AllocatorSTLWrapper(BigChunkAllocator* all) : m_RawAllocator(all)
+    BigChunkAllocatorSTLWrapper(BigChunkAllocator* all) : m_RawAllocator(all)
     {}
 
     pointer allocate(size_type n, const void *hint = 0)
@@ -38,10 +38,12 @@ public:
     }
 
 
-    AllocatorSTLWrapper(const AllocatorSTLWrapper &a) : m_RawAllocator(a.m_RawAllocator) { }
+    BigChunkAllocatorSTLWrapper(const BigChunkAllocatorSTLWrapper<T> &a) : m_RawAllocator(a.GetRawAllocator()) { }
     template <class U>
-    AllocatorSTLWrapper(const AllocatorSTLWrapper<U> &a) : m_RawAllocator(a.m_RawAllocator) { }
-    ~AllocatorSTLWrapper() { }
+    BigChunkAllocatorSTLWrapper(const BigChunkAllocatorSTLWrapper<U> &a) : m_RawAllocator(a.GetRawAllocator()) { }
+    ~BigChunkAllocatorSTLWrapper() { }
+
+    BigChunkAllocator* GetRawAllocator() const { return m_RawAllocator; }
 private:
     BigChunkAllocator* m_RawAllocator;
 };
@@ -57,13 +59,13 @@ public:
     template<typename T1>
     struct rebind
     {
-        typedef AllocatorSTLWrapper<T1> other;
+        typedef SmallChunkAllocatorSTLWrapper<T1> other;
     };
 
-    AllocatorSTLWrapper() : m_RawAllocator(nullptr)
+    SmallChunkAllocatorSTLWrapper() : m_RawAllocator(MemoryManager::GetSmallChunkAllocator())
     {}
 
-    AllocatorSTLWrapper(BigChunkAllocator* all) : m_RawAllocator(all)
+    SmallChunkAllocatorSTLWrapper(BigChunkAllocator* all) : m_RawAllocator(all)
     {}
 
     pointer allocate(size_type n, const void *hint = 0)
@@ -81,13 +83,20 @@ public:
     }
 
 
-    AllocatorSTLWrapper(const AllocatorSTLWrapper &a) : m_RawAllocator(a.m_RawAllocator) { }
+    SmallChunkAllocatorSTLWrapper(const SmallChunkAllocatorSTLWrapper<T> &a) : m_RawAllocator(a.GetRawAllocator()) { }
     template <class U>
-    AllocatorSTLWrapper(const AllocatorSTLWrapper<U> &a) : m_RawAllocator(a.m_RawAllocator) { }
-    ~AllocatorSTLWrapper() { }
+    SmallChunkAllocatorSTLWrapper(const SmallChunkAllocatorSTLWrapper<U> &a) : m_RawAllocator(a.GetRawAllocator()) { }
+    ~SmallChunkAllocatorSTLWrapper() { }
+
+    SmallChunkAllocator* GetRawAllocator() const { return m_RawAllocator; }
 private:
     SmallChunkAllocator* m_RawAllocator;
 };
 
+
 template<class T>
-typedef std::vector<T, BigChunkAllocatorSTLWrapper<T>> STLVector;
+#ifdef USE_CUSTOM_ALLOCATORS
+using STLVector = std::vector<T, BigChunkAllocatorSTLWrapper<T>>;
+#else
+using STLVector = std::vector<T>;
+#endif

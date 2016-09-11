@@ -77,7 +77,7 @@ void GraphicsSwapChain::Validate(GraphicsDevice& device, const Window& window)
             unsigned int modesNum = 0;
             output->GetDisplayModeList(m_Format, DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH, &modesNum, nullptr);
             assert(modesNum);
-            std::vector<DXGI_MODE_DESC> modeDescs(modesNum);
+            STLVector<DXGI_MODE_DESC> modeDescs(modesNum);
             output->GetDisplayModeList(m_Format, DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH, &modesNum, modeDescs.data());
 
             m_SwapChain->SetFullscreenState(true, output);

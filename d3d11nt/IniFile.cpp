@@ -88,7 +88,7 @@ float IniFile::GetFloatValue(popDeclareGetValParams, float defaultValue) const
 
 std::string IniFile::GetValue(popDeclareGetValParams, const std::string& defaultValue) const
 {
-    std::vector<std::string>* values = GetValues(section, name);
+    STLVector<std::string>* values = GetValues(section, name);
     if (!values || !(*values).size())
         return defaultValue;
 
@@ -96,10 +96,10 @@ std::string IniFile::GetValue(popDeclareGetValParams, const std::string& default
 }
 
 //public
-void IniFile::GetValues(popDeclareGetValParams, const std::vector<std::string>& defaultValues, std::vector<std::string>& outValues)
+void IniFile::GetValues(popDeclareGetValParams, const STLVector<std::string>& defaultValues, STLVector<std::string>& outValues)
 {
     popAssert(defaultValues.size());
-    std::vector<std::string>* values = GetValues(section, name);
+    STLVector<std::string>* values = GetValues(section, name);
     if (!values || (*values).size())
     {
         outValues = defaultValues;
@@ -110,7 +110,7 @@ void IniFile::GetValues(popDeclareGetValParams, const std::vector<std::string>& 
 }
 
 //private method for internal use only
-std::vector<std::string>* IniFile::GetValues(popDeclareGetValParams) const
+STLVector<std::string>* IniFile::GetValues(popDeclareGetValParams) const
 {
     IniStructure::const_iterator sectionIter = m_Ini.find(section);
     if (sectionIter == m_Ini.end())
@@ -124,7 +124,7 @@ std::vector<std::string>* IniFile::GetValues(popDeclareGetValParams) const
         popAssert(false);
         return nullptr;
     }
-    return (std::vector<std::string>*)&propertyIter->second;
+    return (STLVector<std::string>*)&propertyIter->second;
 }
 
 bool IniFile::IsCommentStartChar(char c)
@@ -145,7 +145,7 @@ std::string IniFile::ReadSectionFromLine(const std::string& ln)
 }
 void IniFile::ReadPropertyFromLine(const std::string& ln)
 {
-    std::vector<std::string> propertyValues;
+    STLVector<std::string> propertyValues;
 
     unsigned int equalSignCharIndex = ln.find('=', 0);
     popAssert(equalSignCharIndex != std::string::npos);
@@ -180,7 +180,7 @@ std::string IniFile::ReadPropertyValuesAsWholeStringFromLine(const std::string& 
     return ln.substr(equalSignPos + 1, charCount);
 }
 
-void IniFile::DecomposeWholeStringPropertyValues(const std::string& wholeStringPropertyValues, std::vector<std::string>& values)
+void IniFile::DecomposeWholeStringPropertyValues(const std::string& wholeStringPropertyValues, STLVector<std::string>& values)
 {
     unsigned int valuesNum = std::count(wholeStringPropertyValues.begin(), wholeStringPropertyValues.end(), ',') + 1;
     values.resize(valuesNum);

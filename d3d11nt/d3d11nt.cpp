@@ -2,6 +2,8 @@
 //
 
 #include "stdafx.h"
+
+#include "MemoryManager.h"
 #include "Window.h"
 #include "CommandLineArgs.h"
 #include "GraphicsDevice.h"
@@ -9,7 +11,6 @@
 #include "GraphicsSwapchain.h"
 #include "GraphicsViewport.h"
 #include "DisplayAdaptersList.h"
-#include "MemoryManager.h"
 #include "memutils.h"
 #include <d3d11.h>
 #include "RenderSet.h"

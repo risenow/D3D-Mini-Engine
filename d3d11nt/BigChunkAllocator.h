@@ -32,6 +32,8 @@ public:
 
     void* Allocate(size_t size);
     void Deallocate(void* p);
+
+    void* GetStartPointer() { return m_Start; }
 private:
     void* m_Start;
     size_t m_Size;

@@ -77,8 +77,10 @@ void* BigChunkAllocator::Allocate(size_t size)
         {
             AH_PTR header = (AH_PTR)currentFreeBlock;
             header->m_Size = currentFreeBlock->m_Size + FB_SZ; //give it all the memory that this block has
-
-            prevFreeBlock->m_Next = currentFreeBlock->m_Next; //delete this block from list
+            if (prevFreeBlock)
+                prevFreeBlock->m_Next = currentFreeBlock->m_Next; //delete this block from list
+            else
+                m_FreeBlock = currentFreeBlock->m_Next;
             return (uptr)header + AH_SZ;
         }
         prevFreeBlock = currentFreeBlock;

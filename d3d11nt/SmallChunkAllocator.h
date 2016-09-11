@@ -88,6 +88,8 @@ public:
 
     void* Allocate(size_t size, unsigned int al);
     void Deallocate(void* p);
+
+    void* GetStartPointer() { return m_Start; }
 private:
 
     FB_PTR allocateFreeBlock(bool& isAllreadyInList)

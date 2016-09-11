@@ -1,4 +1,5 @@
 #pragma once
+#include "stlcontainersintegration.h"
 #include <dxgi.h>
 #include <vector>
 
@@ -12,5 +13,5 @@ public:
     size_t GetAdaptersCount();
     void LogInfo();
 private:
-    std::vector<IDXGIAdapter*> m_Adapters;
+    STLVector<IDXGIAdapter*> m_Adapters;
 };
