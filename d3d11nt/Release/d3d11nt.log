@@ -1,0 +1,35 @@
+﻿Build started 14.08.2016 19:20:09.
+     1>Project "C:\Users\Agafontsev Semyon\Documents\Visual Studio 2015\Projects\d3d11nt\d3d11nt\d3d11nt.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /Zc:wchar_t /Zc:forScope /Zc:inline /Yu"stdafx.h" /Fp"Release\d3d11nt.pch" /Fo"Release\\" /Fd"Release\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt GraphicsSwapChain.cpp
+         GraphicsSwapChain.cpp
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Agafontsev Semyon\Documents\Visual Studio 2015\Projects\d3d11nt\Release\d3d11nt.exe" /INCREMENTAL:NO /NOLOGO d3d11.lib dxgi.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"C:\Users\Agafontsev Semyon\Documents\Visual Studio 2015\Projects\d3d11nt\Release\d3d11nt.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /LTCG:incremental /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Agafontsev Semyon\Documents\Visual Studio 2015\Projects\d3d11nt\Release\d3d11nt.lib" /MACHINE:X86 /SAFESEH Release\CommandLineArgs.obj
+         Release\d3d11nt.obj
+         Release\DisplayAdaptersList.obj
+         Release\errorcodesinterpreteutil.obj
+         Release\GraphicsDevice.obj
+         Release\GraphicsOptions.obj
+         Release\GraphicsSurface.obj
+         Release\GraphicsSwapChain.obj
+         Release\GraphicsViewport.obj
+         Release\IniSerializable.obj
+         Release\InitializeInfo.obj
+         Release\Log.obj
+         Release\multisampleutils.obj
+         Release\RenderSet.obj
+         Release\stdafx.obj
+         Release\strutils.obj
+         Release\Texture2D.obj
+         Release\Window.obj
+         Generating code
+         0 of 1410 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+           0 functions were new in current compilation
+           0 functions had inline decision re-evaluated but remain unchanged
+         Finished generating code
+         d3d11nt.vcxproj -> C:\Users\Agafontsev Semyon\Documents\Visual Studio 2015\Projects\d3d11nt\Release\d3d11nt.exe
+     1>Done Building Project "C:\Users\Agafontsev Semyon\Documents\Visual Studio 2015\Projects\d3d11nt\d3d11nt\d3d11nt.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:02.11
