@@ -2,9 +2,10 @@
 
 #include "memutils.h"
 #include "logicsafety.h"
+#include "MemoryAllocator.h"
 
 //allocates chunks < 12bytes
-class SmallChunkAllocator //we can only handle 1gb by one instance of this allocator
+class SmallChunkAllocator : public MemoryAllocator //we can only handle 1gb by one instance of this allocator
 {
 public:
     struct FreeBlock
@@ -86,13 +87,13 @@ public:
     SmallChunkAllocator();
     SmallChunkAllocator(void* start, size_t size);
 
-    void* Allocate(size_t size, unsigned int al);
-    void Deallocate(void* p);
+    virtual void* Allocate(size_t size, unsigned int al);
+    virtual void Deallocate(void* p);
 
     void* GetStartPointer() { return m_Start; }
 private:
 
-    FB_PTR allocateFreeBlock(bool& isAllreadyInList)
+    FB_PTR AllocateFreeBlock(bool& isAllreadyInList)
     {
         isAllreadyInList = false;
         FB_PTR currentFreeBlock = m_FreeBlock;
@@ -109,6 +110,9 @@ private:
                 currentFreeBlock->SetSize(currentFreeBlock->GetSize() - overallSize);
 
                 alingedBlock->SetAl(offset);
+
+                m_AllocatedMemorySize += overallSize;
+
                 return (FB_PTR)alingedBlock;
             }
 

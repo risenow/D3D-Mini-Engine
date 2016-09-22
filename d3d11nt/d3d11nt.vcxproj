@@ -147,9 +147,11 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="MemoryAllocator.h" />
     <ClInclude Include="areahelper.h" />
     <ClInclude Include="BigChunkAllocator.h" />
     <ClInclude Include="BoundQuad.h" />
+    <ClInclude Include="builddefines.h" />
     <ClInclude Include="CommandLineArgs.h" />
     <ClInclude Include="DisplayAdaptersList.h" />
     <ClInclude Include="errorcodesinterpreteutil.h" />

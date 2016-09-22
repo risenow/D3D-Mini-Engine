@@ -27,13 +27,13 @@ public:
     pointer allocate(size_type n, const void *hint = 0)
     {
         //assert(sizeof(T) >= 12);
-        assert(m_RawAllocator);
-        return (T*)m_RawAllocator->Allocate(n*sizeof(T));
+        popAssert(m_RawAllocator);
+        return (T*)m_RawAllocator->Allocate(n*sizeof(T), __alignof(T));
     }
 
     void deallocate(pointer p, size_type n)
     {
-        assert(m_RawAllocator);
+        popAssert(m_RawAllocator);
         m_RawAllocator->Deallocate(p);
     }
 
@@ -71,14 +71,14 @@ public:
     pointer allocate(size_type n, const void *hint = 0)
     {
         size_t allocationSize = sizeof(T) * n;
-        assert(allocationSize < 12);
-        assert(m_RawAllocator);
+        popAssert(allocationSize < 12);
+        popAssert(m_RawAllocator);
         return (T*)m_RawAllocator->Allocate(allocationSize, __alignof(T));
     }
 
     void deallocate(pointer p, size_type n)
     {
-        assert(m_RawAllocator);
+        popAssert(m_RawAllocator);
         m_RawAllocator->Deallocate(p);
     }
 

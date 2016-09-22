@@ -12,13 +12,15 @@ BigChunkAllocator::BigChunkAllocator(void* start, size_t size)
     m_FreeBlock->m_Start = (uptr)m_Start + FB_SZ;
     m_FreeBlock->m_Size = size - FB_SZ;
     m_FreeBlock->m_Next = nullptr;
+
+    m_AllocatedMemorySize += FB_SZ;
 }
 
 BigChunkAllocator::~BigChunkAllocator()
 {
 }
 
-void* BigChunkAllocator::Allocate(size_t size)
+void* BigChunkAllocator::Allocate(size_t size, unsigned int al) //we don't use al in this allocator since this allocator's algorithm produces only aligned by 4 addresses
 {
     size_t overallSize = size + AH_SZ;
 
@@ -37,7 +39,7 @@ void* BigChunkAllocator::Allocate(size_t size)
             FB_PTR movedFreeBlock = (FB_PTR)((uptr)result + overallSize);
 
             unsigned int offset = 0;
-            movedFreeBlock = (FB_PTR)align((void*)movedFreeBlock, sizeof(unsigned int), offset);
+            movedFreeBlock = (FB_PTR)align((void*)movedFreeBlock, __alignof(FreeBlock), offset);
 
             if ((currentFreeBlock->m_Size - overallSize) >= offset)
             {
@@ -58,29 +60,42 @@ void* BigChunkAllocator::Allocate(size_t size)
                 header->m_Size = overallSize - AH_SZ + offset; //size
 
                 result = (uptr)result + AH_SZ;
+
+                m_AllocatedMemorySize += overallSize + offset;
+
                 return result;
             }
 
             if (prevFreeBlock)
+            {
                 prevFreeBlock->m_Next = currentFreeBlock->m_Next;
+            }
             else
+            {
                 m_FreeBlock = currentFreeBlock->m_Next;
+            }
 
             AH_PTR header = (AH_PTR)result;
-            header->m_Size = currentFreeBlock->m_Size + FB_SZ;
+            header->m_Size = currentFreeBlock->m_Size + FB_SZ - AH_SZ;
 
             result = (uptr)result + AH_SZ;
+
+            m_AllocatedMemorySize += currentFreeBlock->m_Size + FB_SZ;
+
             return result;
         }
 
         if ((currentFreeBlock->m_Size + FB_SZ) >= overallSize)
         {
             AH_PTR header = (AH_PTR)currentFreeBlock;
-            header->m_Size = currentFreeBlock->m_Size + FB_SZ; //give it all the memory that this block has
+            header->m_Size = currentFreeBlock->m_Size + FB_SZ - AH_SZ; //give it all the memory that this block has
             if (prevFreeBlock)
                 prevFreeBlock->m_Next = currentFreeBlock->m_Next; //delete this block from list
             else
                 m_FreeBlock = currentFreeBlock->m_Next;
+
+            m_AllocatedMemorySize += currentFreeBlock->m_Size + FB_SZ;
+
             return (uptr)header + AH_SZ;
         }
         prevFreeBlock = currentFreeBlock;
@@ -99,6 +114,8 @@ void BigChunkAllocator::Deallocate(void* p)
     newFreeBlock->m_Size = size - FB_SZ;
     newFreeBlock->m_Start = (uptr)newFreeBlock + FB_SZ;
     newFreeBlock->m_Next = nullptr;
+
+    m_AllocatedMemorySize -= size;
 
     //defragmentation
     FB_PTR beforeChangedFreeBlock = nullptr;
@@ -153,3 +170,4 @@ void BigChunkAllocator::Deallocate(void* p)
         m_FreeBlock = newFreeBlock;
     }
 }
+
