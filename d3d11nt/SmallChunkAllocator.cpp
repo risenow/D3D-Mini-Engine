@@ -27,11 +27,11 @@ void* SmallChunkAllocator::Allocate(size_t size, unsigned int al)
     while (currentFreeBlock)
     {
         unsigned int offset;
-        void* data = align((uptr)currentFreeBlock->m_Start + sizeof(unsigned char), al, offset);
+        void* data = align((uptr)currentFreeBlock->m_Start + AH_SZ, al, offset);
 
         if (currentFreeBlock->GetSize() >= overallSize + offset)
         {
-            AH_PTR header = (AH_PTR)((uptr)data - sizeof(unsigned char));
+            AH_PTR header = (AH_PTR)((uptr)data - AH_SZ);
             header->SetSize(size);
             header->SetAl(offset);
 
@@ -39,20 +39,31 @@ void* SmallChunkAllocator::Allocate(size_t size, unsigned int al)
             currentFreeBlock->m_Start = (uptr)currentFreeBlock->m_Start + overallSize;
             currentFreeBlock->SetSize(currentFreeBlock->GetSize() - overallSize);
 
+            m_AllocatedMemorySize += overallSize;
+
             return data;
         }
 
-        data = align((uptr)currentFreeBlock + 1, al, offset);
-        if (currentFreeBlock->GetSize() == 0 && FB_SZ >= overallSize + offset)
+
+        //void* currentFreeBlockBlockStart = (uptr)currentFreeBlock->m_Start - currentFreeBlock->GetAl();
+        data = align((uptr)currentFreeBlock + AH_SZ, al, offset);
+        if (currentFreeBlock->GetSize() == 0 && FB_SZ >= overallSize + offset) //FIXME: we don't use the fact that the full size that free block has is it's size + al 
         {
-            AH_PTR header = (AH_PTR)((uptr)data - 1);
-            header->SetSize(size);
+            AH_PTR header = (AH_PTR)((uptr)data - AH_SZ);
+            //header->SetSize(size); //memory loose
+            header->SetSize(FB_SZ - offset - AH_SZ);
             header->SetAl(offset);
 
             if (prevFreeBlock)
+            {
                 prevFreeBlock->m_Next = currentFreeBlock->m_Next;
+            }
             else
+            {
                 m_FreeBlock = m_FreeBlock->m_Next;
+            }
+
+            m_AllocatedMemorySize += (FB_SZ);
 
             return data;
         }
@@ -72,6 +83,8 @@ void SmallChunkAllocator::Deallocate(void* p)
     unsigned int alignnment = header->GetAl();
     tmpFreeBlock->m_Start = (uptr)header - alignnment;
     tmpFreeBlock->SetSize(header->GetSize() + alignnment);
+
+    m_AllocatedMemorySize -= tmpFreeBlock->GetSize();
 
     FB_PTR inListPrevFreeBlock = nullptr;
     FB_PTR prevFreeBlock = nullptr;
@@ -121,7 +134,7 @@ void SmallChunkAllocator::Deallocate(void* p)
     if (!inList)
     {
         bool isAllreadyInList;
-        FB_PTR newFreeBlock = allocateFreeBlock(isAllreadyInList);
+        FB_PTR newFreeBlock = AllocateFreeBlock(isAllreadyInList);
 
         (*newFreeBlock) = (*tmpFreeBlock);
         if (!isAllreadyInList)

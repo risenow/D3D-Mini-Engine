@@ -1,5 +1,6 @@
 #pragma once
 #include <d3d11.h>
+#include "stlcontainersintegration.h"
 #include "CommandLineArgs.h"
 
 enum AcceptableFeatureLevel
@@ -30,7 +31,7 @@ public:
     ID3D11Device* GetD3D11Device() const;
     ID3D11DeviceContext* GetD3D11DeviceContext() const;
 private:
-    typedef std::vector<D3D_FEATURE_LEVEL> AcceptableFeatureLevels;
+    typedef STLVector<D3D_FEATURE_LEVEL> AcceptableFeatureLevels;
     AcceptableFeatureLevels GetFeatureLevels(AcceptableFeatureLevel acceptableFeatureLevel);
 
     ID3D11Device* m_D3D11Device;

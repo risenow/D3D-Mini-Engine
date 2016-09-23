@@ -1,5 +1,6 @@
 #pragma once
 #include "IniFile.h"
+#include "stlcontainersintegration.h"
 #include "helperutil.h"
 #include <vector>
 
@@ -35,14 +36,14 @@ private:
 class IniEnumProperty : public IniProperty
 {
 public:
-    IniEnumProperty(const std::string& section, const std::string& key, int default, int* val, const std::vector<int>& acceptableValues);
+    IniEnumProperty(const std::string& section, const std::string& key, int default, int* val, const STLVector<int>& acceptableValues);
 
     virtual void SerializeTo(IniFile& ini);
     virtual void DeserializeFrom(const IniFile& ini);
 private:
     bool IsAcceptable(int val);
 
-    std::vector<int> m_AcceptableValues;
+    STLVector<int> m_AcceptableValues;
     int* m_Val;
     int m_Default;
 };
@@ -72,5 +73,5 @@ protected:
     void BasicSerializeTo(IniFile& iniInfo);
     void BasicDeserializeFrom(const IniFile& iniInfo);
 
-    std::vector<IniProperty*> m_Properties;
+    STLVector<IniProperty*> m_Properties;
 };

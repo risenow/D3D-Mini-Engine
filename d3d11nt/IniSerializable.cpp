@@ -23,7 +23,7 @@ void IniIntProperty::DeserializeFrom(const IniFile& ini)
 }
 
 IniEnumProperty::IniEnumProperty(const std::string& section, const std::string& key,
-                                 int default, int* val, const std::vector<int>& acceptableValues) 
+                                 int default, int* val, const STLVector<int>& acceptableValues)
                                  : IniProperty(section, key), m_Default(default), m_Val(val), m_AcceptableValues(acceptableValues)
 {}
 bool IniEnumProperty::IsAcceptable(int val)

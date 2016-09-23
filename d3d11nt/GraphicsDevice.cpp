@@ -46,7 +46,7 @@ GraphicsDevice::GraphicsDevice(D3D11DeviceCreationFlags deviceCreationFlags, Acc
                             &m_D3D11DeviceFeatureLevel,
                             &m_D3D11DeviceContext));
 }
-std::vector<D3D_FEATURE_LEVEL> GraphicsDevice::GetFeatureLevels(AcceptableFeatureLevel acceptableFeatureLevel)
+STLVector<D3D_FEATURE_LEVEL> GraphicsDevice::GetFeatureLevels(AcceptableFeatureLevel acceptableFeatureLevel)
 {
     AcceptableFeatureLevels featureLevels;
     switch (acceptableFeatureLevel)

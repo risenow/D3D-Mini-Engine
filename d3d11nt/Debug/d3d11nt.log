@@ -1,19 +1,13 @@
-﻿Build started 11.09.2016 20:20:11.
+﻿Build started 22.09.2016 18:02:09.
      1>Project "C:\Users\Agafontsev Semyon\Documents\Visual Studio 2015\Projects\d3d11nt\d3d11nt\d3d11nt.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D NOMINMAX /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /Zc:wchar_t /Zc:forScope /Zc:inline /Yu"stdafx.h" /Fp"Debug\d3d11nt.pch" /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt BigChunkAllocator.cpp MemoryManager.cpp SmallChunkAllocator.cpp
-         MemoryManager.cpp
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\smallchunkallocator.h(31): warning C4267: 'return': conversion from 'size_t' to 'unsigned char', possible loss of data
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\memorymanager.cpp(10): warning C4244: 'initializing': conversion from 'double' to 'size_t', possible loss of data
-         Generating Code...
-         Compiling...
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D USE_CUSTOM_ALLOCATORS /D NOMINMAX /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /Zc:wchar_t /Zc:forScope /Zc:inline /Yu"stdafx.h" /Fp"Debug\d3d11nt.pch" /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt BigChunkAllocator.cpp SmallChunkAllocator.cpp
          SmallChunkAllocator.cpp
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\smallchunkallocator.h(31): warning C4267: 'return': conversion from 'size_t' to 'unsigned char', possible loss of data
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\smallchunkallocator.h(32): warning C4267: 'return': conversion from 'size_t' to 'unsigned char', possible loss of data
      1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\smallchunkallocator.cpp(35): warning C4267: 'argument': conversion from 'size_t' to 'unsigned char', possible loss of data
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\smallchunkallocator.cpp(49): warning C4267: 'argument': conversion from 'size_t' to 'unsigned char', possible loss of data
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\smallchunkallocator.cpp(54): warning C4267: 'argument': conversion from 'size_t' to 'unsigned char', possible loss of data
          BigChunkAllocator.cpp
          Generating Code...
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\smallchunkallocator.h(121): warning C4715: 'SmallChunkAllocator::allocateFreeBlock': not all control paths return a value
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Agafontsev Semyon\Documents\Visual Studio 2015\Projects\d3d11nt\Debug\d3d11nt.exe" /INCREMENTAL /NOLOGO d3d11.lib dxgi.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"C:\Users\Agafontsev Semyon\Documents\Visual Studio 2015\Projects\d3d11nt\Debug\d3d11nt.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Agafontsev Semyon\Documents\Visual Studio 2015\Projects\d3d11nt\Debug\d3d11nt.lib" /MACHINE:X86 Debug\BigChunkAllocator.obj
          Debug\CommandLineArgs.obj
@@ -42,4 +36,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:11.91
+Time Elapsed 00:00:04.26

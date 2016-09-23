@@ -18,6 +18,6 @@ public:
 
     bool HasArg(const std::string& param) const;
 private:
-    std::vector<std::string> m_Args;
+    STLVector<std::string> m_Args;
     std::string m_FileName;
 };

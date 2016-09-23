@@ -1,4 +1,5 @@
 #pragma once
+#include "stlcontainersintegration.h"
 #include <map>
 #include <vector>
 #include <string>
@@ -35,7 +36,7 @@ public:
     unsigned int     GetUIntValue       (popDeclareGetValParams, unsigned int defaultValue) const;
     float            GetFloatValue      (popDeclareGetValParams, float defaultValue) const;
     
-    void GetValues(popDeclareGetValParams, const std::vector<std::string>& defaultValues, std::vector<std::string>& values);
+    void GetValues(popDeclareGetValParams, const STLVector<std::string>& defaultValues, STLVector<std::string>& values);
 
     void Load(const std::string& fileName);
     void Save(const std::string& fileName);
@@ -44,14 +45,14 @@ private:
     void ReadPropertyFromLine(const std::string& ln);
     std::string ReadPropertyNameFromLine(const std::string& ln, unsigned int equalSignPos);
     std::string ReadPropertyValuesAsWholeStringFromLine(const std::string& ln, unsigned int equalSignPos);
-    void DecomposeWholeStringPropertyValues(const std::string& wholeStringPropertyValues, std::vector<std::string>& values);
+    void DecomposeWholeStringPropertyValues(const std::string& wholeStringPropertyValues, STLVector<std::string>& values);
     bool IsCommentStartChar(char c);
 
-    std::vector<std::string>* GetValues(popDeclareGetValParams) const;
+    STLVector<std::string>* GetValues(popDeclareGetValParams) const;
 
     std::string m_CurrentSection;
     bool m_AtLeastOneSectionRead;
-    typedef std::map<std::string, std::vector<std::string>> IniProperties;
+    typedef std::map<std::string, STLVector<std::string>> IniProperties;
     typedef std::map<std::string, IniProperties> IniStructure;
     IniStructure m_Ini;
 };

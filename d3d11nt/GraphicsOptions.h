@@ -1,10 +1,11 @@
 #pragma once
 #include "IniSerializable.h"
 #include "IniFile.h"
+#include "stlcontainersintegration.h"
 #include <vector>
 
 constexpr unsigned int AcceptabeMultisampleTypeValuesCount = 4;
-const std::vector<int> AcceptabeMultisampleTypeValues = {1, 2, 4, 8};
+const STLVector<int> AcceptabeMultisampleTypeValues = {1, 2, 4, 8};
 
 enum MultisampleType
 {
