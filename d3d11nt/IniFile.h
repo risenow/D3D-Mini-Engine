@@ -52,7 +52,7 @@ private:
 
     std::string m_CurrentSection;
     bool m_AtLeastOneSectionRead;
-    typedef std::map<std::string, STLVector<std::string>> IniProperties;
-    typedef std::map<std::string, IniProperties> IniStructure;
+    typedef STLMap<std::string, STLVector<std::string>> IniProperties;
+    typedef STLMap<std::string, IniProperties> IniStructure;
     IniStructure m_Ini;
 };

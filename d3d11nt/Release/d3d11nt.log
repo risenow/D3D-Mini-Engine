@@ -1,588 +1,475 @@
-﻿Build started 23.09.2016 12:49:25.
+﻿Build started 23.09.2016 16:00:01.
      1>Project "C:\Users\Agafontsev Semyon\Documents\Visual Studio 2015\Projects\d3d11nt\d3d11nt\d3d11nt.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /Zc:wchar_t /Zc:forScope /Zc:inline /Yc"stdafx.h" /Fp"Release\d3d11nt.pch" /Fo"Release\\" /Fd"Release\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _CONSOLE /D NOMINMAX /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /Zc:wchar_t /Zc:forScope /Zc:inline /Yc"stdafx.h" /Fp"Release\d3d11nt.pch" /Fo"Release\\" /Fd"Release\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp
          stdafx.cpp
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /Zc:wchar_t /Zc:forScope /Zc:inline /Yu"stdafx.h" /Fp"Release\d3d11nt.pch" /Fo"Release\\" /Fd"Release\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt BigChunkAllocator.cpp CommandLineArgs.cpp d3d11nt.cpp DisplayAdaptersList.cpp errorcodesinterpreteutil.cpp GraphicsDevice.cpp GraphicsOptions.cpp GraphicsSurface.cpp GraphicsSwapChain.cpp GraphicsViewport.cpp IniSerializable.cpp Log.cpp MemoryManager.cpp memutils.cpp multisampleutils.cpp RenderSet.cpp IniFile.cpp SmallChunkAllocator.cpp strutils.cpp Texture2D.cpp Window.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _CONSOLE /D NOMINMAX /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /Zc:wchar_t /Zc:forScope /Zc:inline /Yu"stdafx.h" /Fp"Release\d3d11nt.pch" /Fo"Release\\" /Fd"Release\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt BigChunkAllocator.cpp CommandLineArgs.cpp d3d11nt.cpp DisplayAdaptersList.cpp errorcodesinterpreteutil.cpp GraphicsDevice.cpp GraphicsOptions.cpp GraphicsSurface.cpp GraphicsSwapChain.cpp GraphicsViewport.cpp IniSerializable.cpp Log.cpp MemoryManager.cpp memutils.cpp multisampleutils.cpp RenderSet.cpp IniFile.cpp SmallChunkAllocator.cpp strutils.cpp Texture2D.cpp Window.cpp
          BigChunkAllocator.cpp
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(39): error C2062: type 'void' unexpected
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(39): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(40): error C2062: type 'void' unexpected
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(40): error C2238: unexpected token(s) preceding ';'
      1>BigChunkAllocator.cpp(172): warning C4552: '!': operator has no effect; expected operator with side-effect
          CommandLineArgs.cpp
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): warning C4003: not enough actual parameters for macro 'max'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): error C2589: '(': illegal token on right side of '::'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): error C2059: syntax error: '::'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): error C2334: unexpected token(s) preceding ':'; skipping apparent function body
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(51): error C2143: syntax error: missing ')' before ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(51): error C2059: syntax error: ')'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(51): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(81): error C2027: use of undefined type 'SmallChunkAllocator::FreeBlock'
-         c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(12): note: see declaration of 'SmallChunkAllocator::FreeBlock'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(87): error C2059: syntax error: ')'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(87): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(88): error C2062: type 'void' unexpected
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(88): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(39): error C2062: type 'void' unexpected
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(39): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(40): error C2062: type 'void' unexpected
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(40): error C2238: unexpected token(s) preceding ';'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xmemory(15): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xmemory(15): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vector(17): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vector(17): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(17): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(17): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(848): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(848): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(859): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(859): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xtree(15): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xtree(15): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\map(15): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\map(15): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\stlcontainersintegration.h(102): error C2061: syntax error: identifier 'vector'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\stlcontainersintegration.h(106): error C2649: 'typename': is not a 'class'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\stlcontainersintegration.h(110): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\IniFile.h(8): error C2631: 'IniParseState': a class or enum cannot be defined in an alias template
-     1>CommandLineArgs.cpp(33): fatal error C1004: unexpected end-of-file found
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(25): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(32): warning C4267: 'return': conversion from 'size_t' to 'unsigned char', possible loss of data
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(37): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(68): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(74): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>CommandLineArgs.cpp(8): warning C4018: '<': signed/unsigned mismatch
+     1>CommandLineArgs.cpp(26): warning C4018: '<': signed/unsigned mismatch
+     1>CommandLineArgs.cpp(33): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint': decorated name length exceeded, name was truncated
+                 with
+                 [
+                     _Kty=std::string,
+                     _Ty=IniFile::IniProperties,
+                     _Pr=std::less<std::string>,
+                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                 ]
+     1>CommandLineArgs.cpp(33): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at': decorated name length exceeded, name was truncated
+                 with
+                 [
+                     _Kty=std::string,
+                     _Ty=IniFile::IniProperties,
+                     _Pr=std::less<std::string>,
+                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                 ]
+     1>CommandLineArgs.cpp(33): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint': decorated name length exceeded, name was truncated
+                 with
+                 [
+                     _Kty=std::string,
+                     _Ty=IniFile::IniProperties,
+                     _Pr=std::less<std::string>,
+                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                 ]
          d3d11nt.cpp
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(39): error C2062: type 'void' unexpected
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(39): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(40): error C2062: type 'void' unexpected
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(40): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): warning C4003: not enough actual parameters for macro 'max'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): error C2589: '(': illegal token on right side of '::'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): error C2059: syntax error: '::'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): error C2334: unexpected token(s) preceding ':'; skipping apparent function body
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(51): error C2143: syntax error: missing ')' before ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(51): error C2059: syntax error: ')'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(51): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(81): error C2027: use of undefined type 'SmallChunkAllocator::FreeBlock'
-         c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(12): note: see declaration of 'SmallChunkAllocator::FreeBlock'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(87): error C2059: syntax error: ')'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(87): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(88): error C2062: type 'void' unexpected
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(88): error C2238: unexpected token(s) preceding ';'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xmemory(15): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xmemory(15): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vector(17): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vector(17): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(17): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(17): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(848): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(848): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(859): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(859): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xtree(15): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xtree(15): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\map(15): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\map(15): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\stlcontainersintegration.h(102): error C2061: syntax error: identifier 'vector'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\stlcontainersintegration.h(106): error C2649: 'typename': is not a 'class'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\stlcontainersintegration.h(110): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\IniFile.h(8): error C2631: 'IniParseState': a class or enum cannot be defined in an alias template
-     1>d3d11nt.cpp(73): fatal error C1004: unexpected end-of-file found
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(25): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(32): warning C4267: 'return': conversion from 'size_t' to 'unsigned char', possible loss of data
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(37): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(68): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(74): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>d3d11nt.cpp(73): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint': decorated name length exceeded, name was truncated
+                 with
+                 [
+                     _Kty=std::string,
+                     _Ty=IniFile::IniProperties,
+                     _Pr=std::less<std::string>,
+                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                 ]
+     1>d3d11nt.cpp(73): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at': decorated name length exceeded, name was truncated
+                 with
+                 [
+                     _Kty=std::string,
+                     _Ty=IniFile::IniProperties,
+                     _Pr=std::less<std::string>,
+                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                 ]
+     1>d3d11nt.cpp(73): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint': decorated name length exceeded, name was truncated
+                 with
+                 [
+                     _Kty=std::string,
+                     _Ty=IniFile::IniProperties,
+                     _Pr=std::less<std::string>,
+                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                 ]
          DisplayAdaptersList.cpp
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): warning C4003: not enough actual parameters for macro 'max'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): error C2589: '(': illegal token on right side of '::'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): error C2059: syntax error: '::'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): error C2334: unexpected token(s) preceding ':'; skipping apparent function body
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(51): error C2143: syntax error: missing ')' before ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(51): error C2059: syntax error: ')'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(51): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(81): error C2027: use of undefined type 'SmallChunkAllocator::FreeBlock'
-         c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(12): note: see declaration of 'SmallChunkAllocator::FreeBlock'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(87): error C2059: syntax error: ')'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(87): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(88): error C2062: type 'void' unexpected
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(88): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(39): error C2062: type 'void' unexpected
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(39): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(40): error C2062: type 'void' unexpected
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(40): error C2238: unexpected token(s) preceding ';'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xmemory(15): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xmemory(15): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vector(17): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vector(17): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(17): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(17): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(848): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(848): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(859): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(859): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xtree(15): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xtree(15): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\map(15): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\map(15): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\stlcontainersintegration.h(102): error C2061: syntax error: identifier 'vector'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\stlcontainersintegration.h(106): error C2649: 'typename': is not a 'class'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\stlcontainersintegration.h(110): error C2238: unexpected token(s) preceding ';'
-     1>C:\Program Files (x86)\Windows Kits\8.1\Include\um\ocidl.h(330): error C2988: unrecognizable template declaration/definition
-     1>C:\Program Files (x86)\Windows Kits\8.1\Include\um\ocidl.h(330): error C2059: syntax error: 'string'
-     1>C:\Program Files (x86)\Windows Kits\8.1\Include\um\ocidl.h(330): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>c:\program files (x86)\windows kits\8.1\include\shared\dxgiformat.h(11): error C2631: 'DXGI_FORMAT': a class or enum cannot be defined in an alias template
-     1>DisplayAdaptersList.cpp(47): fatal error C1004: unexpected end-of-file found
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(25): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(32): warning C4267: 'return': conversion from 'size_t' to 'unsigned char', possible loss of data
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(37): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(68): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(74): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>DisplayAdaptersList.cpp(25): warning C4552: '<': operator has no effect; expected operator with side-effect
+     1>DisplayAdaptersList.cpp(36): warning C4018: '<': signed/unsigned mismatch
          errorcodesinterpreteutil.cpp
          GraphicsDevice.cpp
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): warning C4003: not enough actual parameters for macro 'max'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): error C2589: '(': illegal token on right side of '::'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): error C2059: syntax error: '::'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): error C2334: unexpected token(s) preceding ':'; skipping apparent function body
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(51): error C2143: syntax error: missing ')' before ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(51): error C2059: syntax error: ')'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(51): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(81): error C2027: use of undefined type 'SmallChunkAllocator::FreeBlock'
-         c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(12): note: see declaration of 'SmallChunkAllocator::FreeBlock'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(87): error C2059: syntax error: ')'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(87): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(88): error C2062: type 'void' unexpected
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(88): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(39): error C2062: type 'void' unexpected
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(39): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(40): error C2062: type 'void' unexpected
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(40): error C2238: unexpected token(s) preceding ';'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xmemory(15): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xmemory(15): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vector(17): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vector(17): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(17): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(17): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(848): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(848): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(859): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(859): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xtree(15): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xtree(15): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\map(15): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\map(15): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\stlcontainersintegration.h(102): error C2061: syntax error: identifier 'vector'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\stlcontainersintegration.h(106): error C2649: 'typename': is not a 'class'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\stlcontainersintegration.h(110): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\IniFile.h(8): error C2631: 'IniParseState': a class or enum cannot be defined in an alias template
-     1>GraphicsDevice.cpp(75): fatal error C1004: unexpected end-of-file found
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(25): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(32): warning C4267: 'return': conversion from 'size_t' to 'unsigned char', possible loss of data
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(37): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(68): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(74): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>GraphicsDevice.cpp(75): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint': decorated name length exceeded, name was truncated
+                 with
+                 [
+                     _Kty=std::string,
+                     _Ty=IniFile::IniProperties,
+                     _Pr=std::less<std::string>,
+                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                 ]
+     1>GraphicsDevice.cpp(75): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at': decorated name length exceeded, name was truncated
+                 with
+                 [
+                     _Kty=std::string,
+                     _Ty=IniFile::IniProperties,
+                     _Pr=std::less<std::string>,
+                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                 ]
+     1>GraphicsDevice.cpp(75): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint': decorated name length exceeded, name was truncated
+                 with
+                 [
+                     _Kty=std::string,
+                     _Ty=IniFile::IniProperties,
+                     _Pr=std::less<std::string>,
+                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                 ]
          GraphicsOptions.cpp
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): warning C4003: not enough actual parameters for macro 'max'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): error C2589: '(': illegal token on right side of '::'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): error C2059: syntax error: '::'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): error C2334: unexpected token(s) preceding ':'; skipping apparent function body
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(51): error C2143: syntax error: missing ')' before ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(51): error C2059: syntax error: ')'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(51): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(81): error C2027: use of undefined type 'SmallChunkAllocator::FreeBlock'
-         c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(12): note: see declaration of 'SmallChunkAllocator::FreeBlock'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(87): error C2059: syntax error: ')'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(87): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(88): error C2062: type 'void' unexpected
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(88): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(39): error C2062: type 'void' unexpected
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(39): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(40): error C2062: type 'void' unexpected
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(40): error C2238: unexpected token(s) preceding ';'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xmemory(15): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xmemory(15): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vector(17): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vector(17): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(17): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(17): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(848): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(848): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(859): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(859): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xtree(15): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xtree(15): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\map(15): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\map(15): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\stlcontainersintegration.h(102): error C2061: syntax error: identifier 'vector'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\stlcontainersintegration.h(106): error C2649: 'typename': is not a 'class'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\stlcontainersintegration.h(110): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\IniFile.h(8): error C2631: 'IniParseState': a class or enum cannot be defined in an alias template
-     1>GraphicsOptions.cpp(25): fatal error C1004: unexpected end-of-file found
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(25): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(32): warning C4267: 'return': conversion from 'size_t' to 'unsigned char', possible loss of data
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(37): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(68): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(74): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>GraphicsOptions.cpp(25): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint': decorated name length exceeded, name was truncated
+                 with
+                 [
+                     _Kty=std::string,
+                     _Ty=IniFile::IniProperties,
+                     _Pr=std::less<std::string>,
+                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                 ]
+     1>GraphicsOptions.cpp(25): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at': decorated name length exceeded, name was truncated
+                 with
+                 [
+                     _Kty=std::string,
+                     _Ty=IniFile::IniProperties,
+                     _Pr=std::less<std::string>,
+                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                 ]
+     1>GraphicsOptions.cpp(25): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint': decorated name length exceeded, name was truncated
+                 with
+                 [
+                     _Kty=std::string,
+                     _Ty=IniFile::IniProperties,
+                     _Pr=std::less<std::string>,
+                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                 ]
          GraphicsSurface.cpp
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): warning C4003: not enough actual parameters for macro 'max'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): error C2589: '(': illegal token on right side of '::'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): error C2059: syntax error: '::'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): error C2334: unexpected token(s) preceding ':'; skipping apparent function body
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(51): error C2143: syntax error: missing ')' before ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(51): error C2059: syntax error: ')'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(51): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(81): error C2027: use of undefined type 'SmallChunkAllocator::FreeBlock'
-         c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(12): note: see declaration of 'SmallChunkAllocator::FreeBlock'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(87): error C2059: syntax error: ')'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(87): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(88): error C2062: type 'void' unexpected
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(88): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(39): error C2062: type 'void' unexpected
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(39): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(40): error C2062: type 'void' unexpected
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(40): error C2238: unexpected token(s) preceding ';'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xmemory(15): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xmemory(15): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vector(17): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vector(17): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(17): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(17): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(848): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(848): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(859): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(859): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xtree(15): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xtree(15): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\map(15): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\map(15): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\stlcontainersintegration.h(102): error C2061: syntax error: identifier 'vector'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\stlcontainersintegration.h(106): error C2649: 'typename': is not a 'class'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\stlcontainersintegration.h(110): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\IniFile.h(8): error C2631: 'IniParseState': a class or enum cannot be defined in an alias template
-     1>GraphicsSurface.cpp(62): fatal error C1004: unexpected end-of-file found
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(25): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(32): warning C4267: 'return': conversion from 'size_t' to 'unsigned char', possible loss of data
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(37): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(68): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(74): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>GraphicsSurface.cpp(62): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint': decorated name length exceeded, name was truncated
+                 with
+                 [
+                     _Kty=std::string,
+                     _Ty=IniFile::IniProperties,
+                     _Pr=std::less<std::string>,
+                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                 ]
+     1>GraphicsSurface.cpp(62): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at': decorated name length exceeded, name was truncated
+                 with
+                 [
+                     _Kty=std::string,
+                     _Ty=IniFile::IniProperties,
+                     _Pr=std::less<std::string>,
+                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                 ]
+     1>GraphicsSurface.cpp(62): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint': decorated name length exceeded, name was truncated
+                 with
+                 [
+                     _Kty=std::string,
+                     _Ty=IniFile::IniProperties,
+                     _Pr=std::less<std::string>,
+                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                 ]
          GraphicsSwapChain.cpp
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): warning C4003: not enough actual parameters for macro 'max'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): error C2589: '(': illegal token on right side of '::'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): error C2059: syntax error: '::'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): error C2334: unexpected token(s) preceding ':'; skipping apparent function body
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(51): error C2143: syntax error: missing ')' before ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(51): error C2059: syntax error: ')'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(51): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(81): error C2027: use of undefined type 'SmallChunkAllocator::FreeBlock'
-         c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(12): note: see declaration of 'SmallChunkAllocator::FreeBlock'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(87): error C2059: syntax error: ')'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(87): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(88): error C2062: type 'void' unexpected
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(88): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(39): error C2062: type 'void' unexpected
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(39): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(40): error C2062: type 'void' unexpected
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(40): error C2238: unexpected token(s) preceding ';'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xmemory(15): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xmemory(15): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vector(17): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vector(17): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(17): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(17): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(848): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(848): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(859): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(859): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xtree(15): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xtree(15): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\map(15): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\map(15): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\stlcontainersintegration.h(102): error C2061: syntax error: identifier 'vector'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\stlcontainersintegration.h(106): error C2649: 'typename': is not a 'class'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\stlcontainersintegration.h(110): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\IniFile.h(8): error C2631: 'IniParseState': a class or enum cannot be defined in an alias template
-     1>GraphicsSwapChain.cpp(136): fatal error C1004: unexpected end-of-file found
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(25): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(32): warning C4267: 'return': conversion from 'size_t' to 'unsigned char', possible loss of data
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(37): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(68): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(74): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>GraphicsSwapChain.cpp(136): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint': decorated name length exceeded, name was truncated
+                 with
+                 [
+                     _Kty=std::string,
+                     _Ty=IniFile::IniProperties,
+                     _Pr=std::less<std::string>,
+                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                 ]
+     1>GraphicsSwapChain.cpp(136): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at': decorated name length exceeded, name was truncated
+                 with
+                 [
+                     _Kty=std::string,
+                     _Ty=IniFile::IniProperties,
+                     _Pr=std::less<std::string>,
+                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                 ]
+     1>GraphicsSwapChain.cpp(136): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint': decorated name length exceeded, name was truncated
+                 with
+                 [
+                     _Kty=std::string,
+                     _Ty=IniFile::IniProperties,
+                     _Pr=std::less<std::string>,
+                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                 ]
          GraphicsViewport.cpp
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): warning C4003: not enough actual parameters for macro 'max'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): error C2589: '(': illegal token on right side of '::'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): error C2059: syntax error: '::'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): error C2334: unexpected token(s) preceding ':'; skipping apparent function body
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(51): error C2143: syntax error: missing ')' before ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(51): error C2059: syntax error: ')'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(51): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(81): error C2027: use of undefined type 'SmallChunkAllocator::FreeBlock'
-         c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(12): note: see declaration of 'SmallChunkAllocator::FreeBlock'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(87): error C2059: syntax error: ')'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(87): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(88): error C2062: type 'void' unexpected
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(88): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(39): error C2062: type 'void' unexpected
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(39): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(40): error C2062: type 'void' unexpected
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(40): error C2238: unexpected token(s) preceding ';'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xmemory(15): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xmemory(15): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vector(17): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vector(17): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(17): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(17): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(848): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(848): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(859): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(859): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xtree(15): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xtree(15): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\map(15): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\map(15): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\stlcontainersintegration.h(102): error C2061: syntax error: identifier 'vector'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\stlcontainersintegration.h(106): error C2649: 'typename': is not a 'class'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\stlcontainersintegration.h(110): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\IniFile.h(8): error C2631: 'IniParseState': a class or enum cannot be defined in an alias template
-     1>GraphicsViewport.cpp(52): fatal error C1004: unexpected end-of-file found
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(25): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(32): warning C4267: 'return': conversion from 'size_t' to 'unsigned char', possible loss of data
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(37): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(68): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(74): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>GraphicsViewport.cpp(52): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint': decorated name length exceeded, name was truncated
+                 with
+                 [
+                     _Kty=std::string,
+                     _Ty=IniFile::IniProperties,
+                     _Pr=std::less<std::string>,
+                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                 ]
+     1>GraphicsViewport.cpp(52): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at': decorated name length exceeded, name was truncated
+                 with
+                 [
+                     _Kty=std::string,
+                     _Ty=IniFile::IniProperties,
+                     _Pr=std::less<std::string>,
+                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                 ]
+     1>GraphicsViewport.cpp(52): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint': decorated name length exceeded, name was truncated
+                 with
+                 [
+                     _Kty=std::string,
+                     _Ty=IniFile::IniProperties,
+                     _Pr=std::less<std::string>,
+                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                 ]
          IniSerializable.cpp
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): warning C4003: not enough actual parameters for macro 'max'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): error C2589: '(': illegal token on right side of '::'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): error C2059: syntax error: '::'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): error C2334: unexpected token(s) preceding ':'; skipping apparent function body
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(51): error C2143: syntax error: missing ')' before ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(51): error C2059: syntax error: ')'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(51): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(81): error C2027: use of undefined type 'SmallChunkAllocator::FreeBlock'
-         c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(12): note: see declaration of 'SmallChunkAllocator::FreeBlock'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(87): error C2059: syntax error: ')'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(87): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(88): error C2062: type 'void' unexpected
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(88): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(39): error C2062: type 'void' unexpected
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(39): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(40): error C2062: type 'void' unexpected
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(40): error C2238: unexpected token(s) preceding ';'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xmemory(15): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xmemory(15): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vector(17): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vector(17): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(17): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(17): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(848): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(848): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(859): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(859): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xtree(15): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xtree(15): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\map(15): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\map(15): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\stlcontainersintegration.h(102): error C2061: syntax error: identifier 'vector'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\stlcontainersintegration.h(106): error C2649: 'typename': is not a 'class'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\stlcontainersintegration.h(110): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\IniFile.h(8): error C2631: 'IniParseState': a class or enum cannot be defined in an alias template
-     1>IniSerializable.cpp(89): fatal error C1004: unexpected end-of-file found
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(25): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(32): warning C4267: 'return': conversion from 'size_t' to 'unsigned char', possible loss of data
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(37): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(68): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(74): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>IniSerializable.cpp(31): warning C4018: '<': signed/unsigned mismatch
+     1>IniSerializable.cpp(65): warning C4018: '<': signed/unsigned mismatch
+     1>IniSerializable.cpp(72): warning C4018: '<': signed/unsigned mismatch
+     1>IniSerializable.cpp(79): warning C4018: '<': signed/unsigned mismatch
+     1>IniSerializable.cpp(89): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint': decorated name length exceeded, name was truncated
+                 with
+                 [
+                     _Kty=std::string,
+                     _Ty=IniFile::IniProperties,
+                     _Pr=std::less<std::string>,
+                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                 ]
+     1>IniSerializable.cpp(89): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at': decorated name length exceeded, name was truncated
+                 with
+                 [
+                     _Kty=std::string,
+                     _Ty=IniFile::IniProperties,
+                     _Pr=std::less<std::string>,
+                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                 ]
+     1>IniSerializable.cpp(89): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint': decorated name length exceeded, name was truncated
+                 with
+                 [
+                     _Kty=std::string,
+                     _Ty=IniFile::IniProperties,
+                     _Pr=std::less<std::string>,
+                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                 ]
          Log.cpp
          MemoryManager.cpp
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(39): error C2062: type 'void' unexpected
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(39): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(40): error C2062: type 'void' unexpected
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(40): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): warning C4003: not enough actual parameters for macro 'max'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): error C2589: '(': illegal token on right side of '::'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): error C2059: syntax error: '::'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): error C2334: unexpected token(s) preceding ':'; skipping apparent function body
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(51): error C2143: syntax error: missing ')' before ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(51): error C2059: syntax error: ')'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(51): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(81): error C2027: use of undefined type 'SmallChunkAllocator::FreeBlock'
-         c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(12): note: see declaration of 'SmallChunkAllocator::FreeBlock'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(87): error C2059: syntax error: ')'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(87): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(88): error C2062: type 'void' unexpected
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(88): error C2238: unexpected token(s) preceding ';'
-     1>MemoryManager.cpp(4): error C2838: 'm_BigChunkAllocator': illegal qualified name in member declaration
-     1>MemoryManager.cpp(5): error C2838: 'm_SmallChunkAllocator': illegal qualified name in member declaration
-     1>MemoryManager.cpp(8): error C3254: 'SmallChunkAllocator': class contains explicit override 'Initialize' but does not derive from an interface that contains the function declaration
-     1>MemoryManager.cpp(8): error C2838: 'Initialize': illegal qualified name in member declaration
-     1>MemoryManager.cpp(17): error C3254: 'SmallChunkAllocator': class contains explicit override 'GetBigChunkAllocator' but does not derive from an interface that contains the function declaration
-     1>MemoryManager.cpp(17): error C2838: 'GetBigChunkAllocator': illegal qualified name in member declaration
-     1>MemoryManager.cpp(27): error C3254: 'SmallChunkAllocator': class contains explicit override 'GetSmallChunkAllocator' but does not derive from an interface that contains the function declaration
-     1>MemoryManager.cpp(27): error C2838: 'GetSmallChunkAllocator': illegal qualified name in member declaration
-     1>MemoryManager.cpp(37): error C3254: 'SmallChunkAllocator': class contains explicit override 'GetAllocatedMemorySize' but does not derive from an interface that contains the function declaration
-     1>MemoryManager.cpp(37): error C2838: 'GetAllocatedMemorySize': illegal qualified name in member declaration
-     1>MemoryManager.cpp(46): fatal error C1004: unexpected end-of-file found
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(25): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(32): warning C4267: 'return': conversion from 'size_t' to 'unsigned char', possible loss of data
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(37): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(68): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(74): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>MemoryManager.cpp(10): warning C4244: 'initializing': conversion from 'double' to 'size_t', possible loss of data
          memutils.cpp
          multisampleutils.cpp
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): warning C4003: not enough actual parameters for macro 'max'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): error C2589: '(': illegal token on right side of '::'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): error C2059: syntax error: '::'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): error C2334: unexpected token(s) preceding ':'; skipping apparent function body
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(51): error C2143: syntax error: missing ')' before ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(51): error C2059: syntax error: ')'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(51): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(81): error C2027: use of undefined type 'SmallChunkAllocator::FreeBlock'
-         c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(12): note: see declaration of 'SmallChunkAllocator::FreeBlock'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(87): error C2059: syntax error: ')'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(87): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(88): error C2062: type 'void' unexpected
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(88): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(39): error C2062: type 'void' unexpected
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(39): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(40): error C2062: type 'void' unexpected
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(40): error C2238: unexpected token(s) preceding ';'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xmemory(15): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xmemory(15): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vector(17): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vector(17): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(17): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(17): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(848): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(848): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(859): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(859): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xtree(15): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xtree(15): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\map(15): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\map(15): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\stlcontainersintegration.h(102): error C2061: syntax error: identifier 'vector'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\stlcontainersintegration.h(106): error C2649: 'typename': is not a 'class'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\stlcontainersintegration.h(110): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\IniFile.h(8): error C2631: 'IniParseState': a class or enum cannot be defined in an alias template
-     1>multisampleutils.cpp(28): fatal error C1004: unexpected end-of-file found
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(25): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(32): warning C4267: 'return': conversion from 'size_t' to 'unsigned char', possible loss of data
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(37): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(68): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(74): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>multisampleutils.cpp(28): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint': decorated name length exceeded, name was truncated
+                 with
+                 [
+                     _Kty=std::string,
+                     _Ty=IniFile::IniProperties,
+                     _Pr=std::less<std::string>,
+                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                 ]
+     1>multisampleutils.cpp(28): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at': decorated name length exceeded, name was truncated
+                 with
+                 [
+                     _Kty=std::string,
+                     _Ty=IniFile::IniProperties,
+                     _Pr=std::less<std::string>,
+                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                 ]
+     1>multisampleutils.cpp(28): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint': decorated name length exceeded, name was truncated
+                 with
+                 [
+                     _Kty=std::string,
+                     _Ty=IniFile::IniProperties,
+                     _Pr=std::less<std::string>,
+                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                 ]
          RenderSet.cpp
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): warning C4003: not enough actual parameters for macro 'max'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): error C2589: '(': illegal token on right side of '::'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): error C2059: syntax error: '::'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): error C2334: unexpected token(s) preceding ':'; skipping apparent function body
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(51): error C2143: syntax error: missing ')' before ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(51): error C2059: syntax error: ')'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(51): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(81): error C2027: use of undefined type 'SmallChunkAllocator::FreeBlock'
-         c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(12): note: see declaration of 'SmallChunkAllocator::FreeBlock'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(87): error C2059: syntax error: ')'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(87): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(88): error C2062: type 'void' unexpected
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(88): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(39): error C2062: type 'void' unexpected
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(39): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(40): error C2062: type 'void' unexpected
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(40): error C2238: unexpected token(s) preceding ';'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xmemory(15): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xmemory(15): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vector(17): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vector(17): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(17): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(17): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(848): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(848): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(859): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(859): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xtree(15): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xtree(15): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\map(15): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\map(15): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\stlcontainersintegration.h(102): error C2061: syntax error: identifier 'vector'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\stlcontainersintegration.h(106): error C2649: 'typename': is not a 'class'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\stlcontainersintegration.h(110): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\IniFile.h(8): error C2631: 'IniParseState': a class or enum cannot be defined in an alias template
-     1>RenderSet.cpp(56): fatal error C1004: unexpected end-of-file found
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(25): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(32): warning C4267: 'return': conversion from 'size_t' to 'unsigned char', possible loss of data
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(37): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(68): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(74): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>RenderSet.cpp(11): warning C4552: '!': operator has no effect; expected operator with side-effect
+     1>RenderSet.cpp(56): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint': decorated name length exceeded, name was truncated
+                 with
+                 [
+                     _Kty=std::string,
+                     _Ty=IniFile::IniProperties,
+                     _Pr=std::less<std::string>,
+                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                 ]
+     1>RenderSet.cpp(56): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at': decorated name length exceeded, name was truncated
+                 with
+                 [
+                     _Kty=std::string,
+                     _Ty=IniFile::IniProperties,
+                     _Pr=std::less<std::string>,
+                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                 ]
+     1>RenderSet.cpp(56): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint': decorated name length exceeded, name was truncated
+                 with
+                 [
+                     _Kty=std::string,
+                     _Ty=IniFile::IniProperties,
+                     _Pr=std::less<std::string>,
+                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                 ]
          IniFile.cpp
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): warning C4003: not enough actual parameters for macro 'max'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): error C2589: '(': illegal token on right side of '::'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): error C2059: syntax error: '::'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): error C2334: unexpected token(s) preceding ':'; skipping apparent function body
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(51): error C2143: syntax error: missing ')' before ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(51): error C2059: syntax error: ')'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(51): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(81): error C2027: use of undefined type 'SmallChunkAllocator::FreeBlock'
-         c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(12): note: see declaration of 'SmallChunkAllocator::FreeBlock'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(87): error C2059: syntax error: ')'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(87): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(88): error C2062: type 'void' unexpected
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(88): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(39): error C2062: type 'void' unexpected
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(39): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(40): error C2062: type 'void' unexpected
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(40): error C2238: unexpected token(s) preceding ';'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xmemory(15): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xmemory(15): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vector(17): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vector(17): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(17): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(17): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(848): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(848): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(859): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(859): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xtree(15): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xtree(15): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\map(15): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\map(15): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\stlcontainersintegration.h(102): error C2061: syntax error: identifier 'vector'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\stlcontainersintegration.h(106): error C2649: 'typename': is not a 'class'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\stlcontainersintegration.h(110): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\IniFile.h(8): error C2631: 'IniParseState': a class or enum cannot be defined in an alias template
-     1>IniFile.cpp(202): fatal error C1004: unexpected end-of-file found
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(25): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(32): warning C4267: 'return': conversion from 'size_t' to 'unsigned char', possible loss of data
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(37): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(68): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(74): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>IniFile.cpp(62): warning C4018: '<': signed/unsigned mismatch
+     1>IniFile.cpp(79): warning C4552: '>=': operator has no effect; expected operator with side-effect
+     1>IniFile.cpp(137): warning C4553: '==': operator has no effect; did you intend '='?
+     1>IniFile.cpp(143): warning C4552: '!=': operator has no effect; expected operator with side-effect
+     1>IniFile.cpp(151): warning C4552: '!=': operator has no effect; expected operator with side-effect
+     1>IniFile.cpp(162): warning C4552: '!': operator has no effect; expected operator with side-effect
+     1>IniFile.cpp(190): warning C4018: '<': signed/unsigned mismatch
+     1>IniFile.cpp(202): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint': decorated name length exceeded, name was truncated
+                 with
+                 [
+                     _Kty=std::string,
+                     _Ty=IniFile::IniProperties,
+                     _Pr=std::less<std::string>,
+                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                 ]
+     1>IniFile.cpp(202): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at': decorated name length exceeded, name was truncated
+                 with
+                 [
+                     _Kty=std::string,
+                     _Ty=IniFile::IniProperties,
+                     _Pr=std::less<std::string>,
+                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                 ]
+     1>IniFile.cpp(202): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint': decorated name length exceeded, name was truncated
+                 with
+                 [
+                     _Kty=std::string,
+                     _Ty=IniFile::IniProperties,
+                     _Pr=std::less<std::string>,
+                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                 ]
          SmallChunkAllocator.cpp
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): warning C4003: not enough actual parameters for macro 'max'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): error C2589: '(': illegal token on right side of '::'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): error C2059: syntax error: '::'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): error C2334: unexpected token(s) preceding ':'; skipping apparent function body
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(51): error C2143: syntax error: missing ')' before ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(51): error C2059: syntax error: ')'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(51): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(81): error C2027: use of undefined type 'SmallChunkAllocator::FreeBlock'
-         c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(12): note: see declaration of 'SmallChunkAllocator::FreeBlock'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(87): error C2059: syntax error: ')'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(87): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(88): error C2062: type 'void' unexpected
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(88): error C2238: unexpected token(s) preceding ';'
-     1>SmallChunkAllocator.cpp(148): fatal error C1004: unexpected end-of-file found
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(25): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(32): warning C4267: 'return': conversion from 'size_t' to 'unsigned char', possible loss of data
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(37): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(68): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(74): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>SmallChunkAllocator.cpp(20): warning C4552: '<': operator has no effect; expected operator with side-effect
+     1>SmallChunkAllocator.cpp(35): warning C4267: 'argument': conversion from 'size_t' to 'unsigned char', possible loss of data
+     1>SmallChunkAllocator.cpp(55): warning C4267: 'argument': conversion from 'size_t' to 'unsigned char', possible loss of data
          strutils.cpp
          Texture2D.cpp
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): warning C4003: not enough actual parameters for macro 'max'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): error C2589: '(': illegal token on right side of '::'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): error C2059: syntax error: '::'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): error C2334: unexpected token(s) preceding ':'; skipping apparent function body
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(51): error C2143: syntax error: missing ')' before ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(51): error C2059: syntax error: ')'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(51): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(81): error C2027: use of undefined type 'SmallChunkAllocator::FreeBlock'
-         c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(12): note: see declaration of 'SmallChunkAllocator::FreeBlock'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(87): error C2059: syntax error: ')'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(87): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(88): error C2062: type 'void' unexpected
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(88): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(39): error C2062: type 'void' unexpected
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(39): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(40): error C2062: type 'void' unexpected
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(40): error C2238: unexpected token(s) preceding ';'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xmemory(15): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xmemory(15): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vector(17): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vector(17): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(17): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(17): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(848): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(848): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(859): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(859): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xtree(15): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xtree(15): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\map(15): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\map(15): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\stlcontainersintegration.h(102): error C2061: syntax error: identifier 'vector'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\stlcontainersintegration.h(106): error C2649: 'typename': is not a 'class'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\stlcontainersintegration.h(110): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\IniFile.h(8): error C2631: 'IniParseState': a class or enum cannot be defined in an alias template
-     1>Texture2D.cpp(97): fatal error C1004: unexpected end-of-file found
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(25): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(32): warning C4267: 'return': conversion from 'size_t' to 'unsigned char', possible loss of data
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(37): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(68): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(74): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>Texture2D.cpp(97): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint': decorated name length exceeded, name was truncated
+                 with
+                 [
+                     _Kty=std::string,
+                     _Ty=IniFile::IniProperties,
+                     _Pr=std::less<std::string>,
+                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                 ]
+     1>Texture2D.cpp(97): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at': decorated name length exceeded, name was truncated
+                 with
+                 [
+                     _Kty=std::string,
+                     _Ty=IniFile::IniProperties,
+                     _Pr=std::less<std::string>,
+                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                 ]
+     1>Texture2D.cpp(97): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint': decorated name length exceeded, name was truncated
+                 with
+                 [
+                     _Kty=std::string,
+                     _Ty=IniFile::IniProperties,
+                     _Pr=std::less<std::string>,
+                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                 ]
          Compiling...
          Window.cpp
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): warning C4003: not enough actual parameters for macro 'max'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): error C2589: '(': illegal token on right side of '::'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): error C2059: syntax error: '::'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(14): error C2334: unexpected token(s) preceding ':'; skipping apparent function body
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(51): error C2143: syntax error: missing ')' before ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(51): error C2059: syntax error: ')'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(51): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(81): error C2027: use of undefined type 'SmallChunkAllocator::FreeBlock'
-         c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(12): note: see declaration of 'SmallChunkAllocator::FreeBlock'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(87): error C2059: syntax error: ')'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(87): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(88): error C2062: type 'void' unexpected
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(88): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(39): error C2062: type 'void' unexpected
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(39): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(40): error C2062: type 'void' unexpected
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\BigChunkAllocator.h(40): error C2238: unexpected token(s) preceding ';'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xmemory(15): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xmemory(15): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vector(17): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\vector(17): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(17): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(17): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(848): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(848): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(859): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\tuple(859): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xtree(15): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xtree(15): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\map(15): error C2059: syntax error: 'namespace'
-     1>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\map(15): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\stlcontainersintegration.h(102): error C2061: syntax error: identifier 'vector'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\stlcontainersintegration.h(106): error C2649: 'typename': is not a 'class'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\stlcontainersintegration.h(110): error C2238: unexpected token(s) preceding ';'
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\IniFile.h(8): error C2631: 'IniParseState': a class or enum cannot be defined in an alias template
-     1>Window.cpp(17): warning C4003: not enough actual parameters for macro 'max'
-     1>Window.cpp(242): fatal error C1004: unexpected end-of-file found
-     1>Done Building Project "C:\Users\Agafontsev Semyon\Documents\Visual Studio 2015\Projects\d3d11nt\d3d11nt\d3d11nt.vcxproj" (Build target(s)) -- FAILED.
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(25): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(32): warning C4267: 'return': conversion from 'size_t' to 'unsigned char', possible loss of data
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(37): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(68): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(74): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>Window.cpp(242): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint': decorated name length exceeded, name was truncated
+                 with
+                 [
+                     _Kty=std::string,
+                     _Ty=IniFile::IniProperties,
+                     _Pr=std::less<std::string>,
+                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                 ]
+     1>Window.cpp(242): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at': decorated name length exceeded, name was truncated
+                 with
+                 [
+                     _Kty=std::string,
+                     _Ty=IniFile::IniProperties,
+                     _Pr=std::less<std::string>,
+                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                 ]
+     1>Window.cpp(242): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint': decorated name length exceeded, name was truncated
+                 with
+                 [
+                     _Kty=std::string,
+                     _Ty=IniFile::IniProperties,
+                     _Pr=std::less<std::string>,
+                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                 ]
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Agafontsev Semyon\Documents\Visual Studio 2015\Projects\d3d11nt\Release\d3d11nt.exe" /INCREMENTAL:NO /NOLOGO d3d11.lib dxgi.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"C:\Users\Agafontsev Semyon\Documents\Visual Studio 2015\Projects\d3d11nt\Release\d3d11nt.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /LTCG:incremental /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Agafontsev Semyon\Documents\Visual Studio 2015\Projects\d3d11nt\Release\d3d11nt.lib" /MACHINE:X86 /SAFESEH Release\BigChunkAllocator.obj
+         Release\CommandLineArgs.obj
+         Release\d3d11nt.obj
+         Release\DisplayAdaptersList.obj
+         Release\errorcodesinterpreteutil.obj
+         Release\GraphicsDevice.obj
+         Release\GraphicsOptions.obj
+         Release\GraphicsSurface.obj
+         Release\GraphicsSwapChain.obj
+         Release\GraphicsViewport.obj
+         Release\IniSerializable.obj
+         Release\Log.obj
+         Release\MemoryManager.obj
+         Release\memutils.obj
+         Release\multisampleutils.obj
+         Release\RenderSet.obj
+         Release\IniFile.obj
+         Release\SmallChunkAllocator.obj
+         Release\stdafx.obj
+         Release\strutils.obj
+         Release\Texture2D.obj
+         Release\Window.obj
+         Generating code
+         685 of 1424 functions (48.1%) were compiled, the rest were copied from previous compilation.
+           518 functions were new in current compilation
+           88 functions had inline decision re-evaluated but remain unchanged
+         Finished generating code
+         d3d11nt.vcxproj -> C:\Users\Agafontsev Semyon\Documents\Visual Studio 2015\Projects\d3d11nt\Release\d3d11nt.exe
+     1>Done Building Project "C:\Users\Agafontsev Semyon\Documents\Visual Studio 2015\Projects\d3d11nt\d3d11nt\d3d11nt.vcxproj" (Build target(s)).
 
-Build FAILED.
+Build succeeded.
 
-Time Elapsed 00:00:21.45
+Time Elapsed 00:00:31.28
