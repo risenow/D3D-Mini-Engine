@@ -5,3 +5,11 @@ d3d11nt.sdf
 ipch/D3D11NT-6e2198bf/D3D11NT-880752eb.ipch
 .vs/d3d11nt/v14/.suo
 *.obj
+d3d11nt.sdf
+d3d11nt/Release/d3d11nt.pch
+d3d11nt/Release/d3d11nt.log
+d3d11nt/Release/vc140.pdb
+*.obj
+*.tlog
+d3d11nt/Release/d3d11nt.tlog/unsuccessfulbuild
+*.ipch
