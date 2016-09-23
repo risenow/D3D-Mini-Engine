@@ -45,9 +45,10 @@ void* SmallChunkAllocator::Allocate(size_t size, unsigned int al)
         }
 
 
-        //void* currentFreeBlockBlockStart = (uptr)currentFreeBlock->m_Start - currentFreeBlock->GetAl();
-        data = align((uptr)currentFreeBlock + AH_SZ, al, offset);
-        if (currentFreeBlock->GetSize() == 0 && FB_SZ >= overallSize + offset) //FIXME: we don't use the fact that the full size that free block has is it's size + al 
+        void* currentFreeBlockBlockStart = (uptr)currentFreeBlock->m_Start - currentFreeBlock->GetAl();
+        data = align((uptr)currentFreeBlockBlockStart + AH_SZ, al, offset);
+        //data = align((uptr)currentFreeBlock + AH_SZ, al, offset);
+        if (currentFreeBlock->GetSize() == 0 && (FB_SZ + currentFreeBlock->GetAl()) >= overallSize + offset) //FIXME: we don't use the fact that the full size that free block has is it's size + al 
         {
             AH_PTR header = (AH_PTR)((uptr)data - AH_SZ);
             //header->SetSize(size); //memory loose
@@ -63,7 +64,7 @@ void* SmallChunkAllocator::Allocate(size_t size, unsigned int al)
                 m_FreeBlock = m_FreeBlock->m_Next;
             }
 
-            m_AllocatedMemorySize += (FB_SZ);
+            m_AllocatedMemorySize += (FB_SZ + currentFreeBlock->GetAl());
 
             return data;
         }

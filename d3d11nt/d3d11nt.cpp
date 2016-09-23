@@ -19,7 +19,9 @@
 
 int main(int argc, char* argv[])
 {
+    //system
     MemoryManager::Initialize(64 MB);
+    RuntimeLog::GetInstance().SetMode(RuntimeLogMode_FILE_OUTPUT | RuntimeLogMode_CONSOLE_OUTPUT);
 
     CommandLineArgs commandLineArgs(argv, argc);
     IniFile iniFile("options.ini");

@@ -80,7 +80,7 @@ void Window::InternalCreateWindow(Window* target)
 
     if (!RegisterClass(&wc))
     {
-        LOG("Failed to register window class");
+        LOG(std::string("Failed to register window class"));
         exit(-1);
     }
 
@@ -94,7 +94,7 @@ void Window::InternalCreateWindow(Window* target)
         NULL);
     if (!target->m_WindowHandle)
     {
-        LOG("Failed to create window");
+        LOG(std::string("Failed to create window"));
         exit(-1);
     }
 

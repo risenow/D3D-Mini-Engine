@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Log.h"
+#include <iostream>
 
 RuntimeLog& RuntimeLog::GetInstance()
 {
@@ -16,11 +17,7 @@ RuntimeLog::~RuntimeLog()
     m_OutputFile.close();
 }
 
-void RuntimeLog::WriteLine(const std::string& ln)
+void RuntimeLog::SetMode(RuntimeLogMode mode)
 {
-    m_OutputFile << ln.c_str() << '\n';
-}
-void RuntimeLog::WriteLine(const std::wstring& ln)
-{
-    m_OutputFile << ln.c_str() << '\n';
+    m_Mode = mode;
 }

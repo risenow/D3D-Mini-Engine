@@ -32,7 +32,7 @@ size_t DisplayAdaptersList::GetAdaptersCount()
 
 void DisplayAdaptersList::LogInfo()
 {
-    LOG("Adapters enumerated:");
+    LOG(std::string("Adapters enumerated:"));
     for (int i = 0; i < m_Adapters.size(); i++)
     {
         DXGI_ADAPTER_DESC currentAdapterDesc;
@@ -40,7 +40,7 @@ void DisplayAdaptersList::LogInfo()
         LOG("Adapter index: " + std::to_string(i));
         std::wstring t = std::wstring(L"Description: ") + std::wstring(currentAdapterDesc.Description);
         LOG(std::wstring(L"Description: ") + std::wstring(currentAdapterDesc.Description));
-        LOG("");
+        LOG(std::string(""));
     }
 }
 

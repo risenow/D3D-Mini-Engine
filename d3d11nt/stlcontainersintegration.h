@@ -3,6 +3,7 @@
 #include "BigChunkAllocator.h"
 #include "MemoryManager.h"
 #include <vector>
+#include <map>
 
 template<class T>
 class BigChunkAllocatorSTLWrapper : public std::allocator<T>
@@ -93,10 +94,18 @@ private:
     SmallChunkAllocator* m_RawAllocator;
 };
 
-
+//vector
 template<class T>
 #ifdef USE_CUSTOM_ALLOCATORS
 using STLVector = std::vector<T, BigChunkAllocatorSTLWrapper<T>>;
 #else
 using STLVector = std::vector<T>;
+#endif
+
+//map
+template<class K, class T, class C = std::less<K>>
+#ifdef USE_CUSTOM_ALLOCATORS
+using STLMap = std::map<K, T, C, BigChunkAllocatorSTLWrapper<std::pair<K, T>>>;
+#else
+using STLMap = std::map<K, T, C, std::allocator<std::pair<K, T>>>;
 #endif

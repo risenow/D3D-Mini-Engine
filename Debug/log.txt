@@ -1,0 +1,10 @@
+Adapters enumerated:
+Adapter index: 0
+0089A7D0
+
+Adapter index: 1
+0089A830
+
+Adapter index: 2
+0089A7E0
+
