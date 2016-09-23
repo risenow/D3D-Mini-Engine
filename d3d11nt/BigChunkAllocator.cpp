@@ -62,6 +62,7 @@ void* BigChunkAllocator::Allocate(size_t size, unsigned int al) //we don't use a
                 result = (uptr)result + AH_SZ;
 
                 m_AllocatedMemorySize += overallSize + offset;
+                DEBUG_ONLY(WriteAllocationDebugInfo(size, overallSize + offset, false));
 
                 return result;
             }
@@ -81,6 +82,7 @@ void* BigChunkAllocator::Allocate(size_t size, unsigned int al) //we don't use a
             result = (uptr)result + AH_SZ;
 
             m_AllocatedMemorySize += currentFreeBlock->m_Size + FB_SZ;
+            DEBUG_ONLY(WriteAllocationDebugInfo(size, currentFreeBlock->m_Size + FB_SZ, true));
 
             return result;
         }
@@ -95,6 +97,7 @@ void* BigChunkAllocator::Allocate(size_t size, unsigned int al) //we don't use a
                 m_FreeBlock = currentFreeBlock->m_Next;
 
             m_AllocatedMemorySize += currentFreeBlock->m_Size + FB_SZ;
+            DEBUG_ONLY(WriteAllocationDebugInfo(size, currentFreeBlock->m_Size + FB_SZ, false));
 
             return (uptr)header + AH_SZ;
         }
@@ -116,6 +119,7 @@ void BigChunkAllocator::Deallocate(void* p)
     newFreeBlock->m_Next = nullptr;
 
     m_AllocatedMemorySize -= size;
+    DEBUG_ONLY(WriteDeallocationDebugInfo(size));
 
     //defragmentation
     FB_PTR beforeChangedFreeBlock = nullptr;
@@ -170,4 +174,25 @@ void BigChunkAllocator::Deallocate(void* p)
         m_FreeBlock = newFreeBlock;
     }
 }
+
+#ifdef _DEBUG
+void BigChunkAllocator::WriteAllocationDebugInfo(size_t requestedAllocationSize, size_t realAllocatedSize, bool blockConsumed)
+{
+    std::string blockConsumeInfoStr = ", block consumed: ";
+    if (blockConsumed)
+        blockConsumeInfoStr += "yes";
+    else
+        blockConsumeInfoStr += "no";
+
+    LOG_CONS(std::string("Big Chunk Allocator allocation, requested size: " + std::to_string(requestedAllocationSize) + 
+             " real allocated size: " + std::to_string(realAllocatedSize) +
+             ", free memory: " + BytesNumberToFormattedString(m_Size - m_AllocatedMemorySize) + blockConsumeInfoStr));
+}
+
+void BigChunkAllocator::WriteDeallocationDebugInfo(size_t deallocatedSize)
+{
+    LOG_CONS("Big Chunk Allocator deallocation, size: " + std::to_string(deallocatedSize) +
+             ", free memory: " + BytesNumberToFormattedString(m_Size - m_AllocatedMemorySize));
+}
+#endif // _DEBUG
 

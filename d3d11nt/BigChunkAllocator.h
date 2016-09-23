@@ -36,6 +36,9 @@ public:
 
     void* GetStartPointer() { return m_Start; }
 private:
+    DEBUG_ONLY(void WriteAllocationDebugInfo(size_t requestedAllocationSize, size_t realAllocatedSize, bool blockConsumed));
+    DEBUG_ONLY(void WriteDeallocationDebugInfo(size_t deallocatedSize));
+
     void* m_Start;
     size_t m_Size;
 
