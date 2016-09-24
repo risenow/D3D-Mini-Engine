@@ -1,95 +1,73 @@
-﻿Build started 23.09.2016 16:00:01.
-     1>Project "C:\Users\Agafontsev Semyon\Documents\Visual Studio 2015\Projects\d3d11nt\d3d11nt\d3d11nt.vcxproj" on node 2 (Build target(s)).
+﻿Build started 23.09.2016 23:55:50.
+     1>Project "C:\Users\Agafontsev Semyon\Documents\Visual Studio 2015\Projects\d3d11nt\d3d11nt\d3d11nt.vcxproj" on node 2 (Rebuild target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _CONSOLE /D NOMINMAX /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /Zc:wchar_t /Zc:forScope /Zc:inline /Yc"stdafx.h" /Fp"Release\d3d11nt.pch" /Fo"Release\\" /Fd"Release\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _CONSOLE /D NOMINMAX /D USE_CUSTOM_ALLOCATORS /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /Zc:wchar_t /Zc:forScope /Zc:inline /Yc"stdafx.h" /Fp"Release\d3d11nt.pch" /Fo"Release\\" /Fd"Release\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp
          stdafx.cpp
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _CONSOLE /D NOMINMAX /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /Zc:wchar_t /Zc:forScope /Zc:inline /Yu"stdafx.h" /Fp"Release\d3d11nt.pch" /Fo"Release\\" /Fd"Release\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt BigChunkAllocator.cpp CommandLineArgs.cpp d3d11nt.cpp DisplayAdaptersList.cpp errorcodesinterpreteutil.cpp GraphicsDevice.cpp GraphicsOptions.cpp GraphicsSurface.cpp GraphicsSwapChain.cpp GraphicsViewport.cpp IniSerializable.cpp Log.cpp MemoryManager.cpp memutils.cpp multisampleutils.cpp RenderSet.cpp IniFile.cpp SmallChunkAllocator.cpp strutils.cpp Texture2D.cpp Window.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _CONSOLE /D NOMINMAX /D USE_CUSTOM_ALLOCATORS /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /Zc:wchar_t /Zc:forScope /Zc:inline /Yu"stdafx.h" /Fp"Release\d3d11nt.pch" /Fo"Release\\" /Fd"Release\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt BigChunkAllocator.cpp CommandLineArgs.cpp d3d11nt.cpp DisplayAdaptersList.cpp errorcodesinterpreteutil.cpp GraphicsDevice.cpp GraphicsOptions.cpp GraphicsSurface.cpp GraphicsSwapChain.cpp GraphicsViewport.cpp IniSerializable.cpp Log.cpp MemoryManager.cpp memutils.cpp multisampleutils.cpp RenderSet.cpp IniFile.cpp SmallChunkAllocator.cpp strutils.cpp Texture2D.cpp Window.cpp
          BigChunkAllocator.cpp
-     1>BigChunkAllocator.cpp(172): warning C4552: '!': operator has no effect; expected operator with side-effect
          CommandLineArgs.cpp
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(25): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(32): warning C4267: 'return': conversion from 'size_t' to 'unsigned char', possible loss of data
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(37): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(68): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(74): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>CommandLineArgs.cpp(8): warning C4018: '<': signed/unsigned mismatch
-     1>CommandLineArgs.cpp(26): warning C4018: '<': signed/unsigned mismatch
-     1>CommandLineArgs.cpp(33): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint': decorated name length exceeded, name was truncated
+     1>CommandLineArgs.cpp(59): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint': decorated name length exceeded, name was truncated
                  with
                  [
                      _Kty=std::string,
                      _Ty=IniFile::IniProperties,
                      _Pr=std::less<std::string>,
-                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
-     1>CommandLineArgs.cpp(33): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at': decorated name length exceeded, name was truncated
+     1>CommandLineArgs.cpp(59): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at': decorated name length exceeded, name was truncated
                  with
                  [
                      _Kty=std::string,
                      _Ty=IniFile::IniProperties,
                      _Pr=std::less<std::string>,
-                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
-     1>CommandLineArgs.cpp(33): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint': decorated name length exceeded, name was truncated
+     1>CommandLineArgs.cpp(59): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint': decorated name length exceeded, name was truncated
                  with
                  [
                      _Kty=std::string,
                      _Ty=IniFile::IniProperties,
                      _Pr=std::less<std::string>,
-                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
          d3d11nt.cpp
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(25): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(32): warning C4267: 'return': conversion from 'size_t' to 'unsigned char', possible loss of data
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(37): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(68): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(74): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>d3d11nt.cpp(73): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint': decorated name length exceeded, name was truncated
+     1>d3d11nt.cpp(75): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint': decorated name length exceeded, name was truncated
                  with
                  [
                      _Kty=std::string,
                      _Ty=IniFile::IniProperties,
                      _Pr=std::less<std::string>,
-                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
-     1>d3d11nt.cpp(73): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at': decorated name length exceeded, name was truncated
+     1>d3d11nt.cpp(75): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at': decorated name length exceeded, name was truncated
                  with
                  [
                      _Kty=std::string,
                      _Ty=IniFile::IniProperties,
                      _Pr=std::less<std::string>,
-                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
-     1>d3d11nt.cpp(73): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint': decorated name length exceeded, name was truncated
+     1>d3d11nt.cpp(75): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint': decorated name length exceeded, name was truncated
                  with
                  [
                      _Kty=std::string,
                      _Ty=IniFile::IniProperties,
                      _Pr=std::less<std::string>,
-                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
          DisplayAdaptersList.cpp
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(25): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(32): warning C4267: 'return': conversion from 'size_t' to 'unsigned char', possible loss of data
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(37): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(68): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(74): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>DisplayAdaptersList.cpp(25): warning C4552: '<': operator has no effect; expected operator with side-effect
-     1>DisplayAdaptersList.cpp(36): warning C4018: '<': signed/unsigned mismatch
+     1>DisplayAdaptersList.cpp(10): warning C4390: ';': empty controlled statement found; is this the intent?
+     1>DisplayAdaptersList.cpp(39): warning C4390: ';': empty controlled statement found; is this the intent?
          errorcodesinterpreteutil.cpp
          GraphicsDevice.cpp
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(25): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(32): warning C4267: 'return': conversion from 'size_t' to 'unsigned char', possible loss of data
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(37): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(68): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(74): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>GraphicsDevice.cpp(47): warning C4390: ';': empty controlled statement found; is this the intent?
      1>GraphicsDevice.cpp(75): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint': decorated name length exceeded, name was truncated
                  with
                  [
                      _Kty=std::string,
                      _Ty=IniFile::IniProperties,
                      _Pr=std::less<std::string>,
-                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
      1>GraphicsDevice.cpp(75): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at': decorated name length exceeded, name was truncated
                  with
@@ -97,7 +75,7 @@
                      _Kty=std::string,
                      _Ty=IniFile::IniProperties,
                      _Pr=std::less<std::string>,
-                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
      1>GraphicsDevice.cpp(75): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint': decorated name length exceeded, name was truncated
                  with
@@ -105,21 +83,16 @@
                      _Kty=std::string,
                      _Ty=IniFile::IniProperties,
                      _Pr=std::less<std::string>,
-                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
          GraphicsOptions.cpp
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(25): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(32): warning C4267: 'return': conversion from 'size_t' to 'unsigned char', possible loss of data
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(37): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(68): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(74): warning C4552: '<=': operator has no effect; expected operator with side-effect
      1>GraphicsOptions.cpp(25): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint': decorated name length exceeded, name was truncated
                  with
                  [
                      _Kty=std::string,
                      _Ty=IniFile::IniProperties,
                      _Pr=std::less<std::string>,
-                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
      1>GraphicsOptions.cpp(25): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at': decorated name length exceeded, name was truncated
                  with
@@ -127,7 +100,7 @@
                      _Kty=std::string,
                      _Ty=IniFile::IniProperties,
                      _Pr=std::less<std::string>,
-                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
      1>GraphicsOptions.cpp(25): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint': decorated name length exceeded, name was truncated
                  with
@@ -135,21 +108,18 @@
                      _Kty=std::string,
                      _Ty=IniFile::IniProperties,
                      _Pr=std::less<std::string>,
-                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
          GraphicsSurface.cpp
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(25): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(32): warning C4267: 'return': conversion from 'size_t' to 'unsigned char', possible loss of data
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(37): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(68): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(74): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>GraphicsSurface.cpp(12): warning C4390: ';': empty controlled statement found; is this the intent?
+     1>GraphicsSurface.cpp(15): warning C4390: ';': empty controlled statement found; is this the intent?
      1>GraphicsSurface.cpp(62): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint': decorated name length exceeded, name was truncated
                  with
                  [
                      _Kty=std::string,
                      _Ty=IniFile::IniProperties,
                      _Pr=std::less<std::string>,
-                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
      1>GraphicsSurface.cpp(62): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at': decorated name length exceeded, name was truncated
                  with
@@ -157,7 +127,7 @@
                      _Kty=std::string,
                      _Ty=IniFile::IniProperties,
                      _Pr=std::less<std::string>,
-                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
      1>GraphicsSurface.cpp(62): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint': decorated name length exceeded, name was truncated
                  with
@@ -165,21 +135,26 @@
                      _Kty=std::string,
                      _Ty=IniFile::IniProperties,
                      _Pr=std::less<std::string>,
-                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
          GraphicsSwapChain.cpp
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(25): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(32): warning C4267: 'return': conversion from 'size_t' to 'unsigned char', possible loss of data
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(37): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(68): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(74): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>GraphicsSwapChain.cpp(16): warning C4390: ';': empty controlled statement found; is this the intent?
+     1>GraphicsSwapChain.cpp(18): warning C4390: ';': empty controlled statement found; is this the intent?
+     1>GraphicsSwapChain.cpp(20): warning C4390: ';': empty controlled statement found; is this the intent?
+     1>GraphicsSwapChain.cpp(22): warning C4390: ';': empty controlled statement found; is this the intent?
+     1>GraphicsSwapChain.cpp(36): warning C4390: ';': empty controlled statement found; is this the intent?
+     1>GraphicsSwapChain.cpp(49): warning C4390: ';': empty controlled statement found; is this the intent?
+     1>GraphicsSwapChain.cpp(57): warning C4390: ';': empty controlled statement found; is this the intent?
+     1>GraphicsSwapChain.cpp(76): warning C4390: ';': empty controlled statement found; is this the intent?
+     1>GraphicsSwapChain.cpp(84): warning C4390: ';': empty controlled statement found; is this the intent?
+     1>GraphicsSwapChain.cpp(90): warning C4390: ';': empty controlled statement found; is this the intent?
      1>GraphicsSwapChain.cpp(136): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint': decorated name length exceeded, name was truncated
                  with
                  [
                      _Kty=std::string,
                      _Ty=IniFile::IniProperties,
                      _Pr=std::less<std::string>,
-                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
      1>GraphicsSwapChain.cpp(136): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at': decorated name length exceeded, name was truncated
                  with
@@ -187,7 +162,7 @@
                      _Kty=std::string,
                      _Ty=IniFile::IniProperties,
                      _Pr=std::less<std::string>,
-                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
      1>GraphicsSwapChain.cpp(136): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint': decorated name length exceeded, name was truncated
                  with
@@ -195,21 +170,16 @@
                      _Kty=std::string,
                      _Ty=IniFile::IniProperties,
                      _Pr=std::less<std::string>,
-                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
          GraphicsViewport.cpp
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(25): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(32): warning C4267: 'return': conversion from 'size_t' to 'unsigned char', possible loss of data
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(37): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(68): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(74): warning C4552: '<=': operator has no effect; expected operator with side-effect
      1>GraphicsViewport.cpp(52): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint': decorated name length exceeded, name was truncated
                  with
                  [
                      _Kty=std::string,
                      _Ty=IniFile::IniProperties,
                      _Pr=std::less<std::string>,
-                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
      1>GraphicsViewport.cpp(52): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at': decorated name length exceeded, name was truncated
                  with
@@ -217,7 +187,7 @@
                      _Kty=std::string,
                      _Ty=IniFile::IniProperties,
                      _Pr=std::less<std::string>,
-                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
      1>GraphicsViewport.cpp(52): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint': decorated name length exceeded, name was truncated
                  with
@@ -225,25 +195,16 @@
                      _Kty=std::string,
                      _Ty=IniFile::IniProperties,
                      _Pr=std::less<std::string>,
-                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
          IniSerializable.cpp
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(25): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(32): warning C4267: 'return': conversion from 'size_t' to 'unsigned char', possible loss of data
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(37): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(68): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(74): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>IniSerializable.cpp(31): warning C4018: '<': signed/unsigned mismatch
-     1>IniSerializable.cpp(65): warning C4018: '<': signed/unsigned mismatch
-     1>IniSerializable.cpp(72): warning C4018: '<': signed/unsigned mismatch
-     1>IniSerializable.cpp(79): warning C4018: '<': signed/unsigned mismatch
      1>IniSerializable.cpp(89): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint': decorated name length exceeded, name was truncated
                  with
                  [
                      _Kty=std::string,
                      _Ty=IniFile::IniProperties,
                      _Pr=std::less<std::string>,
-                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
      1>IniSerializable.cpp(89): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at': decorated name length exceeded, name was truncated
                  with
@@ -251,7 +212,7 @@
                      _Kty=std::string,
                      _Ty=IniFile::IniProperties,
                      _Pr=std::less<std::string>,
-                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
      1>IniSerializable.cpp(89): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint': decorated name length exceeded, name was truncated
                  with
@@ -259,30 +220,20 @@
                      _Kty=std::string,
                      _Ty=IniFile::IniProperties,
                      _Pr=std::less<std::string>,
-                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
          Log.cpp
          MemoryManager.cpp
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(25): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(32): warning C4267: 'return': conversion from 'size_t' to 'unsigned char', possible loss of data
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(37): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(68): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(74): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>MemoryManager.cpp(10): warning C4244: 'initializing': conversion from 'double' to 'size_t', possible loss of data
          memutils.cpp
          multisampleutils.cpp
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(25): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(32): warning C4267: 'return': conversion from 'size_t' to 'unsigned char', possible loss of data
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(37): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(68): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(74): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>multisampleutils.cpp(8): warning C4390: ';': empty controlled statement found; is this the intent?
      1>multisampleutils.cpp(28): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint': decorated name length exceeded, name was truncated
                  with
                  [
                      _Kty=std::string,
                      _Ty=IniFile::IniProperties,
                      _Pr=std::less<std::string>,
-                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
      1>multisampleutils.cpp(28): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at': decorated name length exceeded, name was truncated
                  with
@@ -290,7 +241,7 @@
                      _Kty=std::string,
                      _Ty=IniFile::IniProperties,
                      _Pr=std::less<std::string>,
-                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
      1>multisampleutils.cpp(28): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint': decorated name length exceeded, name was truncated
                  with
@@ -298,22 +249,16 @@
                      _Kty=std::string,
                      _Ty=IniFile::IniProperties,
                      _Pr=std::less<std::string>,
-                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
          RenderSet.cpp
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(25): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(32): warning C4267: 'return': conversion from 'size_t' to 'unsigned char', possible loss of data
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(37): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(68): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(74): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>RenderSet.cpp(11): warning C4552: '!': operator has no effect; expected operator with side-effect
      1>RenderSet.cpp(56): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint': decorated name length exceeded, name was truncated
                  with
                  [
                      _Kty=std::string,
                      _Ty=IniFile::IniProperties,
                      _Pr=std::less<std::string>,
-                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
      1>RenderSet.cpp(56): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at': decorated name length exceeded, name was truncated
                  with
@@ -321,7 +266,7 @@
                      _Kty=std::string,
                      _Ty=IniFile::IniProperties,
                      _Pr=std::less<std::string>,
-                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
      1>RenderSet.cpp(56): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint': decorated name length exceeded, name was truncated
                  with
@@ -329,28 +274,16 @@
                      _Kty=std::string,
                      _Ty=IniFile::IniProperties,
                      _Pr=std::less<std::string>,
-                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
          IniFile.cpp
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(25): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(32): warning C4267: 'return': conversion from 'size_t' to 'unsigned char', possible loss of data
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(37): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(68): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(74): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>IniFile.cpp(62): warning C4018: '<': signed/unsigned mismatch
-     1>IniFile.cpp(79): warning C4552: '>=': operator has no effect; expected operator with side-effect
-     1>IniFile.cpp(137): warning C4553: '==': operator has no effect; did you intend '='?
-     1>IniFile.cpp(143): warning C4552: '!=': operator has no effect; expected operator with side-effect
-     1>IniFile.cpp(151): warning C4552: '!=': operator has no effect; expected operator with side-effect
-     1>IniFile.cpp(162): warning C4552: '!': operator has no effect; expected operator with side-effect
-     1>IniFile.cpp(190): warning C4018: '<': signed/unsigned mismatch
      1>IniFile.cpp(202): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint': decorated name length exceeded, name was truncated
                  with
                  [
                      _Kty=std::string,
                      _Ty=IniFile::IniProperties,
                      _Pr=std::less<std::string>,
-                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
      1>IniFile.cpp(202): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at': decorated name length exceeded, name was truncated
                  with
@@ -358,7 +291,7 @@
                      _Kty=std::string,
                      _Ty=IniFile::IniProperties,
                      _Pr=std::less<std::string>,
-                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
      1>IniFile.cpp(202): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint': decorated name length exceeded, name was truncated
                  with
@@ -366,31 +299,22 @@
                      _Kty=std::string,
                      _Ty=IniFile::IniProperties,
                      _Pr=std::less<std::string>,
-                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
          SmallChunkAllocator.cpp
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(25): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(32): warning C4267: 'return': conversion from 'size_t' to 'unsigned char', possible loss of data
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(37): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(68): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(74): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>SmallChunkAllocator.cpp(20): warning C4552: '<': operator has no effect; expected operator with side-effect
      1>SmallChunkAllocator.cpp(35): warning C4267: 'argument': conversion from 'size_t' to 'unsigned char', possible loss of data
      1>SmallChunkAllocator.cpp(55): warning C4267: 'argument': conversion from 'size_t' to 'unsigned char', possible loss of data
          strutils.cpp
          Texture2D.cpp
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(25): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(32): warning C4267: 'return': conversion from 'size_t' to 'unsigned char', possible loss of data
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(37): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(68): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(74): warning C4552: '<=': operator has no effect; expected operator with side-effect
+     1>Texture2D.cpp(36): warning C4390: ';': empty controlled statement found; is this the intent?
+     1>Texture2D.cpp(48): warning C4390: ';': empty controlled statement found; is this the intent?
      1>Texture2D.cpp(97): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint': decorated name length exceeded, name was truncated
                  with
                  [
                      _Kty=std::string,
                      _Ty=IniFile::IniProperties,
                      _Pr=std::less<std::string>,
-                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
      1>Texture2D.cpp(97): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at': decorated name length exceeded, name was truncated
                  with
@@ -398,7 +322,7 @@
                      _Kty=std::string,
                      _Ty=IniFile::IniProperties,
                      _Pr=std::less<std::string>,
-                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
      1>Texture2D.cpp(97): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint': decorated name length exceeded, name was truncated
                  with
@@ -406,22 +330,17 @@
                      _Kty=std::string,
                      _Ty=IniFile::IniProperties,
                      _Pr=std::less<std::string>,
-                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
          Compiling...
          Window.cpp
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(25): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(32): warning C4267: 'return': conversion from 'size_t' to 'unsigned char', possible loss of data
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(37): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(68): warning C4552: '<=': operator has no effect; expected operator with side-effect
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\SmallChunkAllocator.h(74): warning C4552: '<=': operator has no effect; expected operator with side-effect
      1>Window.cpp(242): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint': decorated name length exceeded, name was truncated
                  with
                  [
                      _Kty=std::string,
                      _Ty=IniFile::IniProperties,
                      _Pr=std::less<std::string>,
-                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
      1>Window.cpp(242): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at': decorated name length exceeded, name was truncated
                  with
@@ -429,7 +348,7 @@
                      _Kty=std::string,
                      _Ty=IniFile::IniProperties,
                      _Pr=std::less<std::string>,
-                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
      1>Window.cpp(242): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint': decorated name length exceeded, name was truncated
                  with
@@ -437,7 +356,7 @@
                      _Kty=std::string,
                      _Ty=IniFile::IniProperties,
                      _Pr=std::less<std::string>,
-                     _Alloc=std::allocator<std::pair<std::string,IniFile::IniProperties>>
+                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Agafontsev Semyon\Documents\Visual Studio 2015\Projects\d3d11nt\Release\d3d11nt.exe" /INCREMENTAL:NO /NOLOGO d3d11.lib dxgi.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"C:\Users\Agafontsev Semyon\Documents\Visual Studio 2015\Projects\d3d11nt\Release\d3d11nt.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /LTCG:incremental /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Agafontsev Semyon\Documents\Visual Studio 2015\Projects\d3d11nt\Release\d3d11nt.lib" /MACHINE:X86 /SAFESEH Release\BigChunkAllocator.obj
@@ -463,13 +382,11 @@
          Release\Texture2D.obj
          Release\Window.obj
          Generating code
-         685 of 1424 functions (48.1%) were compiled, the rest were copied from previous compilation.
-           518 functions were new in current compilation
-           88 functions had inline decision re-evaluated but remain unchanged
+         All 1554 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
          Finished generating code
          d3d11nt.vcxproj -> C:\Users\Agafontsev Semyon\Documents\Visual Studio 2015\Projects\d3d11nt\Release\d3d11nt.exe
-     1>Done Building Project "C:\Users\Agafontsev Semyon\Documents\Visual Studio 2015\Projects\d3d11nt\d3d11nt\d3d11nt.vcxproj" (Build target(s)).
+     1>Done Building Project "C:\Users\Agafontsev Semyon\Documents\Visual Studio 2015\Projects\d3d11nt\d3d11nt\d3d11nt.vcxproj" (Rebuild target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:31.28
+Time Elapsed 00:00:28.23

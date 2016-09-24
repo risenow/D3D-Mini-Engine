@@ -14,3 +14,4 @@ d3d11nt/Release/vc140.pdb
 d3d11nt/Release/d3d11nt.tlog/unsuccessfulbuild
 *.ipch
 *.tlog
+*.sdf

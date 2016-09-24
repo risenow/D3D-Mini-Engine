@@ -7,7 +7,7 @@ SmallChunkAllocator* MemoryManager::m_SmallChunkAllocator = nullptr;
 void MemoryManager::Initialize(size_t size)
 {
     void* start = malloc(size);
-    size_t sizeForBigChunksAllocator = (3.0 / 4.0)*size;
+    size_t sizeForBigChunksAllocator = (size_t)((3.0 / 4.0)*size);
     
     m_BigChunkAllocator = new BigChunkAllocator(start, sizeForBigChunksAllocator);
     m_SmallChunkAllocator = new SmallChunkAllocator((uptr)start + sizeForBigChunksAllocator, size - sizeForBigChunksAllocator);

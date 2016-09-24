@@ -33,7 +33,7 @@ size_t DisplayAdaptersList::GetAdaptersCount()
 void DisplayAdaptersList::LogInfo()
 {
     LOG(std::string("Adapters enumerated:"));
-    for (int i = 0; i < m_Adapters.size(); i++)
+    for (unsigned int i = 0; i < m_Adapters.size(); i++)
     {
         DXGI_ADAPTER_DESC currentAdapterDesc;
         D3D_HR_OP(m_Adapters[i]->GetDesc(&currentAdapterDesc));

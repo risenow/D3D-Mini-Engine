@@ -7,7 +7,7 @@
 #ifdef _DEBUG
 #define popAssert(op) assert(op)  
 #else
-#define popAssert(op) op
+#define popAssert(op)
 #endif
 
 #define WIN_HR_OP(op) { HRESULT hr = op; if (hr != S_OK){ LOG("Operation error: " + WinHRtoStr(hr) + " Line: " + std::to_string(__LINE__)); popAssert(false); }}

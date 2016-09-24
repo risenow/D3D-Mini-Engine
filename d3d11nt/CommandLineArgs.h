@@ -18,6 +18,8 @@ public:
 
     bool HasArg(const std::string& param) const;
 private:
+    void ParseArgsFromString(const std::string& argsStr);
+
     STLVector<std::string> m_Args;
     std::string m_FileName;
 };

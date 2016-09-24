@@ -29,7 +29,7 @@ public:
         }
         unsigned char GetAl()
         {
-            return m_Data & AL_MASK;
+            return (unsigned char)(m_Data & AL_MASK);
         }
 
         void SetSize(size_t size)

@@ -28,7 +28,7 @@ IniEnumProperty::IniEnumProperty(const std::string& section, const std::string& 
 {}
 bool IniEnumProperty::IsAcceptable(int val)
 {
-    for (int i = 0; i < m_AcceptableValues.size(); i++)
+    for (unsigned int i = 0; i < m_AcceptableValues.size(); i++)
     {
         if (val == m_AcceptableValues[i])
             return true;
@@ -62,21 +62,21 @@ void IniStringProperty::SerializeTo(IniFile& ini)
 
 IniSerializable::~IniSerializable()
 {
-    for (int i = 0; i < m_Properties.size(); i++)
+    for (unsigned int i = 0; i < m_Properties.size(); i++)
     {
         delete m_Properties[i];
     }
 }
 void IniSerializable::BasicDeserializeFrom(const IniFile& ini)
 {
-    for (int i = 0; i < m_Properties.size(); i++)
+    for (unsigned int i = 0; i < m_Properties.size(); i++)
     {
         m_Properties[i]->DeserializeFrom(ini);
     }
 }
 void IniSerializable::BasicSerializeTo(IniFile& ini)
 {
-    for (int i = 0; i < m_Properties.size(); i++)
+    for (unsigned int i = 0; i < m_Properties.size(); i++)
     {
         m_Properties[i]->SerializeTo(ini);
     }

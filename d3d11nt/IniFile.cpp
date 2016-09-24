@@ -59,7 +59,7 @@ void IniFile::Save(const std::string& fileName)
                 continue;
             }
             file << j->second[0] << ',';                //multivalue
-            for (int k = 1; k < j->second.size(); k++) 
+            for (unsigned int k = 1; k < j->second.size(); k++) 
             {
                 file << ',' << j->second[k];
             }
@@ -187,7 +187,7 @@ void IniFile::DecomposeWholeStringPropertyValues(const std::string& wholeStringP
 
     std::string tempValueString;
     int j = 0;
-    for (int i = 0; i < wholeStringPropertyValues.size(); i++)
+    for (unsigned int i = 0; i < wholeStringPropertyValues.size(); i++)
     {
         if (wholeStringPropertyValues[i] == ',')
         {
