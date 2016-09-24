@@ -15,3 +15,10 @@ d3d11nt/Release/d3d11nt.tlog/unsuccessfulbuild
 *.ipch
 *.tlog
 *.sdf
+*.obj
+*.suo
+*.ipch
+*.tlog
+d3d11nt/Release/d3d11nt.pch
+*.idb
+d3d11nt/Debug/vc140.pdb
