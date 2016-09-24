@@ -35,7 +35,7 @@ void GraphicsSwapChain::InitializeBackBufferSurface(GraphicsDevice& device)
     ID3D11Texture2D* backBuffer;
     D3D_HR_OP(m_SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)(&backBuffer)));
     m_BackBufferTexture = Texture2D(backBuffer);
-    m_BackBufferSurface = GraphicsSurface(device, m_BackBufferTexture,
+    m_BackBufferSurface = GraphicsSurface(device, &m_BackBufferTexture,
         GRAPHICS_SURFACE_TYPE_RENDER_TARGET);
 }
 
@@ -97,9 +97,9 @@ ID3D11Texture2D* GraphicsSwapChain::GetBackBufferTexture()
 {
     return nullptr;
 }
-GraphicsSurface GraphicsSwapChain::GetBackBufferSurface()
+GraphicsSurface* GraphicsSwapChain::GetBackBufferSurface()
 {
-    return m_BackBufferSurface;
+    return &m_BackBufferSurface;
 }
 
 void GraphicsSwapChain::FillSwapChainDesc(const Window& window, DXGI_SWAP_CHAIN_DESC& desc, 

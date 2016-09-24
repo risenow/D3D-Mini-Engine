@@ -17,6 +17,7 @@ public:
 
     size_t GetWidth() const;
     size_t GetHeight() const;
+    size_t GetConsumedVideoMemorySize();
 
     ID3D11Texture2D* GetD3D11Texture2D() const;
 
@@ -25,6 +26,7 @@ public:
     void Release();
 private:
     void FillDesc(D3D11_TEXTURE2D_DESC& desc);
+    size_t GetBytesPerPixelForDXGIFormat(DXGI_FORMAT format);
 
     size_t m_Width;
     size_t m_Height;

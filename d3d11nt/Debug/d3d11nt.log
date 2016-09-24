@@ -1,147 +1,7 @@
-﻿Build started 23.09.2016 23:57:40.
+﻿Build started 24.09.2016 20:59:59.
      1>Project "C:\Users\Agafontsev Semyon\Documents\Visual Studio 2015\Projects\d3d11nt\d3d11nt\d3d11nt.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D USE_CUSTOM_ALLOCATORS /D NOMINMAX /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /Zc:wchar_t /Zc:forScope /Zc:inline /Yu"stdafx.h" /Fp"Debug\d3d11nt.pch" /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt BigChunkAllocator.cpp CommandLineArgs.cpp DisplayAdaptersList.cpp GraphicsDevice.cpp GraphicsOptions.cpp GraphicsSurface.cpp GraphicsSwapChain.cpp GraphicsViewport.cpp IniFile.cpp IniSerializable.cpp Log.cpp MemoryManager.cpp RenderSet.cpp SmallChunkAllocator.cpp Texture2D.cpp Window.cpp d3d11nt.cpp memutils.cpp multisampleutils.cpp
-         multisampleutils.cpp
-     1>c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1683): warning C4503: '__LINE__Var': decorated name length exceeded, name was truncated
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1121): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint<std::pair<const _Kty,_Ty>&,std::_Tree_node<std::pair<const _Kty,_Ty>,void *>*>(std::_Tree_const_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1121): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint<std::pair<const _Kty,_Ty>&,std::_Tree_node<std::pair<const _Kty,_Ty>,void *>*>(std::_Tree_const_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\map(348): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::emplace_hint<const std::piecewise_construct_t&,std::tuple<const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &>,std::tuple<>>(std::_Tree_const_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,const std::piecewise_construct_t &,std::tuple<const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &> &&,std::tuple<> &&)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\map(348): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::emplace_hint<const std::piecewise_construct_t&,std::tuple<const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &>,std::tuple<>>(std::_Tree_const_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,const std::piecewise_construct_t &,std::tuple<const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &> &&,std::tuple<> &&)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\map(340): note: while compiling class template member function 'std::map<std::string,std::vector<std::string,BigChunkAllocatorSTLWrapper<std::string>>,std::less<K>,BigChunkAllocatorSTLWrapper<std::pair<std::string,std::vector<std::string,BigChunkAllocatorSTLWrapper<std::string>>>>> &std::map<std::string,IniFile::IniProperties,std::less<K>,BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>>::operator [](const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &)'
-                 with
-                 [
-                     K=std::string
-                 ]
-         c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\inifile.h(31): note: see reference to function template instantiation 'std::map<std::string,std::vector<std::string,BigChunkAllocatorSTLWrapper<std::string>>,std::less<K>,BigChunkAllocatorSTLWrapper<std::pair<std::string,std::vector<std::string,BigChunkAllocatorSTLWrapper<std::string>>>>> &std::map<std::string,IniFile::IniProperties,std::less<K>,BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>>::operator [](const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &)' being compiled
-                 with
-                 [
-                     K=std::string
-                 ]
-         c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\inifile.h(57): note: see reference to class template instantiation 'std::map<std::string,IniFile::IniProperties,std::less<K>,BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>>' being compiled
-                 with
-                 [
-                     K=std::string
-                 ]
-     1>c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1855): warning C4503: '__LINE__Var': decorated name length exceeded, name was truncated
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1696): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at<std::pair<const _Kty,_Ty>&,_Nodety>(bool,std::_Tree_node<std::pair<const _Kty,_Ty>,void *> *,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1696): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at<std::pair<const _Kty,_Ty>&,_Nodety>(bool,std::_Tree_node<std::pair<const _Kty,_Ty>,void *> *,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1121): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint<std::pair<const _Kty,_Ty>&,std::_Tree_node<std::pair<const _Kty,_Ty>,void *>*>(std::_Tree_const_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1121): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint<std::pair<const _Kty,_Ty>&,std::_Tree_node<std::pair<const _Kty,_Ty>,void *>*>(std::_Tree_const_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *
-                 ]
-     1>c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1799): warning C4503: '__LINE__Var': decorated name length exceeded, name was truncated
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1792): note: see reference to function template instantiation 'std::pair<std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,bool> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint<std::pair<const _Kty,_Ty>&,_Nodety>(bool,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1792): note: see reference to function template instantiation 'std::pair<std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,bool> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint<std::pair<const _Kty,_Ty>&,_Nodety>(bool,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &
-                 ]
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\multisampleutils.cpp(28): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint': decorated name length exceeded, name was truncated
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
-                 ]
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\multisampleutils.cpp(28): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at': decorated name length exceeded, name was truncated
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
-                 ]
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\multisampleutils.cpp(28): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint': decorated name length exceeded, name was truncated
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
-                 ]
-         memutils.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D USE_CUSTOM_ALLOCATORS /D NOMINMAX /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /Zc:wchar_t /Zc:forScope /Zc:inline /Yu"stdafx.h" /Fp"Debug\d3d11nt.pch" /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt GraphicsSurface.cpp GraphicsSwapChain.cpp GraphicsViewport.cpp RenderSet.cpp Texture2D.cpp d3d11nt.cpp
          d3d11nt.cpp
      1>c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1683): warning C4503: '__LINE__Var': decorated name length exceeded, name was truncated
          c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1121): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint<std::pair<const _Kty,_Ty>&,std::_Tree_node<std::pair<const _Kty,_Ty>,void *>*>(std::_Tree_const_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,_Valty,_Nodety)' being compiled
@@ -257,7 +117,7 @@
                      _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *,
                      _Valty=std::pair<const std::string,IniFile::IniProperties> &
                  ]
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\d3d11nt.cpp(75): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint': decorated name length exceeded, name was truncated
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\d3d11nt.cpp(74): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint': decorated name length exceeded, name was truncated
                  with
                  [
                      _Kty=std::string,
@@ -265,7 +125,7 @@
                      _Pr=std::less<std::string>,
                      _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\d3d11nt.cpp(75): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at': decorated name length exceeded, name was truncated
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\d3d11nt.cpp(74): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at': decorated name length exceeded, name was truncated
                  with
                  [
                      _Kty=std::string,
@@ -273,146 +133,7 @@
                      _Pr=std::less<std::string>,
                      _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\d3d11nt.cpp(75): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint': decorated name length exceeded, name was truncated
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
-                 ]
-         Window.cpp
-     1>c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1683): warning C4503: '__LINE__Var': decorated name length exceeded, name was truncated
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1121): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint<std::pair<const _Kty,_Ty>&,std::_Tree_node<std::pair<const _Kty,_Ty>,void *>*>(std::_Tree_const_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1121): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint<std::pair<const _Kty,_Ty>&,std::_Tree_node<std::pair<const _Kty,_Ty>,void *>*>(std::_Tree_const_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\map(348): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::emplace_hint<const std::piecewise_construct_t&,std::tuple<const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &>,std::tuple<>>(std::_Tree_const_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,const std::piecewise_construct_t &,std::tuple<const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &> &&,std::tuple<> &&)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\map(348): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::emplace_hint<const std::piecewise_construct_t&,std::tuple<const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &>,std::tuple<>>(std::_Tree_const_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,const std::piecewise_construct_t &,std::tuple<const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &> &&,std::tuple<> &&)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\map(340): note: while compiling class template member function 'std::map<std::string,std::vector<std::string,BigChunkAllocatorSTLWrapper<std::string>>,std::less<K>,BigChunkAllocatorSTLWrapper<std::pair<std::string,std::vector<std::string,BigChunkAllocatorSTLWrapper<std::string>>>>> &std::map<std::string,IniFile::IniProperties,std::less<K>,BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>>::operator [](const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &)'
-                 with
-                 [
-                     K=std::string
-                 ]
-         c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\inifile.h(31): note: see reference to function template instantiation 'std::map<std::string,std::vector<std::string,BigChunkAllocatorSTLWrapper<std::string>>,std::less<K>,BigChunkAllocatorSTLWrapper<std::pair<std::string,std::vector<std::string,BigChunkAllocatorSTLWrapper<std::string>>>>> &std::map<std::string,IniFile::IniProperties,std::less<K>,BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>>::operator [](const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &)' being compiled
-                 with
-                 [
-                     K=std::string
-                 ]
-         c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\inifile.h(57): note: see reference to class template instantiation 'std::map<std::string,IniFile::IniProperties,std::less<K>,BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>>' being compiled
-                 with
-                 [
-                     K=std::string
-                 ]
-     1>c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1855): warning C4503: '__LINE__Var': decorated name length exceeded, name was truncated
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1696): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at<std::pair<const _Kty,_Ty>&,_Nodety>(bool,std::_Tree_node<std::pair<const _Kty,_Ty>,void *> *,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1696): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at<std::pair<const _Kty,_Ty>&,_Nodety>(bool,std::_Tree_node<std::pair<const _Kty,_Ty>,void *> *,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1121): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint<std::pair<const _Kty,_Ty>&,std::_Tree_node<std::pair<const _Kty,_Ty>,void *>*>(std::_Tree_const_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1121): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint<std::pair<const _Kty,_Ty>&,std::_Tree_node<std::pair<const _Kty,_Ty>,void *>*>(std::_Tree_const_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *
-                 ]
-     1>c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1799): warning C4503: '__LINE__Var': decorated name length exceeded, name was truncated
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1792): note: see reference to function template instantiation 'std::pair<std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,bool> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint<std::pair<const _Kty,_Ty>&,_Nodety>(bool,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1792): note: see reference to function template instantiation 'std::pair<std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,bool> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint<std::pair<const _Kty,_Ty>&,_Nodety>(bool,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &
-                 ]
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\window.cpp(242): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint': decorated name length exceeded, name was truncated
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
-                 ]
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\window.cpp(242): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at': decorated name length exceeded, name was truncated
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
-                 ]
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\window.cpp(242): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint': decorated name length exceeded, name was truncated
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\d3d11nt.cpp(74): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint': decorated name length exceeded, name was truncated
                  with
                  [
                      _Kty=std::string,
@@ -535,7 +256,7 @@
                      _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *,
                      _Valty=std::pair<const std::string,IniFile::IniProperties> &
                  ]
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\texture2d.cpp(97): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint': decorated name length exceeded, name was truncated
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\texture2d.cpp(120): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint': decorated name length exceeded, name was truncated
                  with
                  [
                      _Kty=std::string,
@@ -543,7 +264,7 @@
                      _Pr=std::less<std::string>,
                      _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\texture2d.cpp(97): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at': decorated name length exceeded, name was truncated
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\texture2d.cpp(120): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at': decorated name length exceeded, name was truncated
                  with
                  [
                      _Kty=std::string,
@@ -551,7 +272,7 @@
                      _Pr=std::less<std::string>,
                      _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\texture2d.cpp(97): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint': decorated name length exceeded, name was truncated
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\texture2d.cpp(120): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint': decorated name length exceeded, name was truncated
                  with
                  [
                      _Kty=std::string,
@@ -559,9 +280,6 @@
                      _Pr=std::less<std::string>,
                      _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
-         SmallChunkAllocator.cpp
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\smallchunkallocator.cpp(35): warning C4267: 'argument': conversion from 'size_t' to 'unsigned char', possible loss of data
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\smallchunkallocator.cpp(55): warning C4267: 'argument': conversion from 'size_t' to 'unsigned char', possible loss of data
          RenderSet.cpp
      1>c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1683): warning C4503: '__LINE__Var': decorated name length exceeded, name was truncated
          c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1121): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint<std::pair<const _Kty,_Ty>&,std::_Tree_node<std::pair<const _Kty,_Ty>,void *>*>(std::_Tree_const_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,_Valty,_Nodety)' being compiled
@@ -694,425 +412,6 @@
                      _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
      1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\renderset.cpp(56): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint': decorated name length exceeded, name was truncated
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
-                 ]
-         MemoryManager.cpp
-         Log.cpp
-         IniSerializable.cpp
-     1>c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1683): warning C4503: '__LINE__Var': decorated name length exceeded, name was truncated
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1121): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint<std::pair<const _Kty,_Ty>&,std::_Tree_node<std::pair<const _Kty,_Ty>,void *>*>(std::_Tree_const_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1121): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint<std::pair<const _Kty,_Ty>&,std::_Tree_node<std::pair<const _Kty,_Ty>,void *>*>(std::_Tree_const_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\map(348): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::emplace_hint<const std::piecewise_construct_t&,std::tuple<const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &>,std::tuple<>>(std::_Tree_const_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,const std::piecewise_construct_t &,std::tuple<const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &> &&,std::tuple<> &&)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\map(348): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::emplace_hint<const std::piecewise_construct_t&,std::tuple<const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &>,std::tuple<>>(std::_Tree_const_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,const std::piecewise_construct_t &,std::tuple<const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &> &&,std::tuple<> &&)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\map(340): note: while compiling class template member function 'std::map<std::string,std::vector<std::string,BigChunkAllocatorSTLWrapper<std::string>>,std::less<K>,BigChunkAllocatorSTLWrapper<std::pair<std::string,std::vector<std::string,BigChunkAllocatorSTLWrapper<std::string>>>>> &std::map<std::string,IniFile::IniProperties,std::less<K>,BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>>::operator [](const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &)'
-                 with
-                 [
-                     K=std::string
-                 ]
-         c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\inifile.h(31): note: see reference to function template instantiation 'std::map<std::string,std::vector<std::string,BigChunkAllocatorSTLWrapper<std::string>>,std::less<K>,BigChunkAllocatorSTLWrapper<std::pair<std::string,std::vector<std::string,BigChunkAllocatorSTLWrapper<std::string>>>>> &std::map<std::string,IniFile::IniProperties,std::less<K>,BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>>::operator [](const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &)' being compiled
-                 with
-                 [
-                     K=std::string
-                 ]
-         c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\inifile.h(57): note: see reference to class template instantiation 'std::map<std::string,IniFile::IniProperties,std::less<K>,BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>>' being compiled
-                 with
-                 [
-                     K=std::string
-                 ]
-     1>c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1855): warning C4503: '__LINE__Var': decorated name length exceeded, name was truncated
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1696): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at<std::pair<const _Kty,_Ty>&,_Nodety>(bool,std::_Tree_node<std::pair<const _Kty,_Ty>,void *> *,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1696): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at<std::pair<const _Kty,_Ty>&,_Nodety>(bool,std::_Tree_node<std::pair<const _Kty,_Ty>,void *> *,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1121): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint<std::pair<const _Kty,_Ty>&,std::_Tree_node<std::pair<const _Kty,_Ty>,void *>*>(std::_Tree_const_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1121): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint<std::pair<const _Kty,_Ty>&,std::_Tree_node<std::pair<const _Kty,_Ty>,void *>*>(std::_Tree_const_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *
-                 ]
-     1>c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1799): warning C4503: '__LINE__Var': decorated name length exceeded, name was truncated
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1792): note: see reference to function template instantiation 'std::pair<std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,bool> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint<std::pair<const _Kty,_Ty>&,_Nodety>(bool,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1792): note: see reference to function template instantiation 'std::pair<std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,bool> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint<std::pair<const _Kty,_Ty>&,_Nodety>(bool,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &
-                 ]
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\iniserializable.cpp(89): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint': decorated name length exceeded, name was truncated
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
-                 ]
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\iniserializable.cpp(89): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at': decorated name length exceeded, name was truncated
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
-                 ]
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\iniserializable.cpp(89): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint': decorated name length exceeded, name was truncated
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
-                 ]
-         IniFile.cpp
-     1>c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1683): warning C4503: '__LINE__Var': decorated name length exceeded, name was truncated
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1121): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint<std::pair<const _Kty,_Ty>&,std::_Tree_node<std::pair<const _Kty,_Ty>,void *>*>(std::_Tree_const_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1121): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint<std::pair<const _Kty,_Ty>&,std::_Tree_node<std::pair<const _Kty,_Ty>,void *>*>(std::_Tree_const_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\map(348): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::emplace_hint<const std::piecewise_construct_t&,std::tuple<const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &>,std::tuple<>>(std::_Tree_const_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,const std::piecewise_construct_t &,std::tuple<const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &> &&,std::tuple<> &&)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\map(348): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::emplace_hint<const std::piecewise_construct_t&,std::tuple<const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &>,std::tuple<>>(std::_Tree_const_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,const std::piecewise_construct_t &,std::tuple<const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &> &&,std::tuple<> &&)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\map(340): note: while compiling class template member function 'std::map<std::string,std::vector<std::string,BigChunkAllocatorSTLWrapper<std::string>>,std::less<K>,BigChunkAllocatorSTLWrapper<std::pair<std::string,std::vector<std::string,BigChunkAllocatorSTLWrapper<std::string>>>>> &std::map<std::string,IniFile::IniProperties,std::less<K>,BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>>::operator [](const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &)'
-                 with
-                 [
-                     K=std::string
-                 ]
-         c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\inifile.h(31): note: see reference to function template instantiation 'std::map<std::string,std::vector<std::string,BigChunkAllocatorSTLWrapper<std::string>>,std::less<K>,BigChunkAllocatorSTLWrapper<std::pair<std::string,std::vector<std::string,BigChunkAllocatorSTLWrapper<std::string>>>>> &std::map<std::string,IniFile::IniProperties,std::less<K>,BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>>::operator [](const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &)' being compiled
-                 with
-                 [
-                     K=std::string
-                 ]
-         c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\inifile.h(57): note: see reference to class template instantiation 'std::map<std::string,IniFile::IniProperties,std::less<K>,BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>>' being compiled
-                 with
-                 [
-                     K=std::string
-                 ]
-     1>c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1855): warning C4503: '__LINE__Var': decorated name length exceeded, name was truncated
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1696): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at<std::pair<const _Kty,_Ty>&,_Nodety>(bool,std::_Tree_node<std::pair<const _Kty,_Ty>,void *> *,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1696): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at<std::pair<const _Kty,_Ty>&,_Nodety>(bool,std::_Tree_node<std::pair<const _Kty,_Ty>,void *> *,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1121): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint<std::pair<const _Kty,_Ty>&,std::_Tree_node<std::pair<const _Kty,_Ty>,void *>*>(std::_Tree_const_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1121): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint<std::pair<const _Kty,_Ty>&,std::_Tree_node<std::pair<const _Kty,_Ty>,void *>*>(std::_Tree_const_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *
-                 ]
-     1>c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1799): warning C4503: '__LINE__Var': decorated name length exceeded, name was truncated
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1792): note: see reference to function template instantiation 'std::pair<std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,bool> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint<std::pair<const _Kty,_Ty>&,_Nodety>(bool,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1792): note: see reference to function template instantiation 'std::pair<std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,bool> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint<std::pair<const _Kty,_Ty>&,_Nodety>(bool,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &
-                 ]
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\inifile.cpp(202): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint': decorated name length exceeded, name was truncated
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
-                 ]
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\inifile.cpp(202): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at': decorated name length exceeded, name was truncated
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
-                 ]
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\inifile.cpp(202): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint': decorated name length exceeded, name was truncated
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
-                 ]
-         GraphicsViewport.cpp
-     1>c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1683): warning C4503: '__LINE__Var': decorated name length exceeded, name was truncated
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1121): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint<std::pair<const _Kty,_Ty>&,std::_Tree_node<std::pair<const _Kty,_Ty>,void *>*>(std::_Tree_const_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1121): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint<std::pair<const _Kty,_Ty>&,std::_Tree_node<std::pair<const _Kty,_Ty>,void *>*>(std::_Tree_const_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\map(348): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::emplace_hint<const std::piecewise_construct_t&,std::tuple<const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &>,std::tuple<>>(std::_Tree_const_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,const std::piecewise_construct_t &,std::tuple<const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &> &&,std::tuple<> &&)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\map(348): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::emplace_hint<const std::piecewise_construct_t&,std::tuple<const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &>,std::tuple<>>(std::_Tree_const_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,const std::piecewise_construct_t &,std::tuple<const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &> &&,std::tuple<> &&)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\map(340): note: while compiling class template member function 'std::map<std::string,std::vector<std::string,BigChunkAllocatorSTLWrapper<std::string>>,std::less<K>,BigChunkAllocatorSTLWrapper<std::pair<std::string,std::vector<std::string,BigChunkAllocatorSTLWrapper<std::string>>>>> &std::map<std::string,IniFile::IniProperties,std::less<K>,BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>>::operator [](const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &)'
-                 with
-                 [
-                     K=std::string
-                 ]
-         c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\inifile.h(31): note: see reference to function template instantiation 'std::map<std::string,std::vector<std::string,BigChunkAllocatorSTLWrapper<std::string>>,std::less<K>,BigChunkAllocatorSTLWrapper<std::pair<std::string,std::vector<std::string,BigChunkAllocatorSTLWrapper<std::string>>>>> &std::map<std::string,IniFile::IniProperties,std::less<K>,BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>>::operator [](const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &)' being compiled
-                 with
-                 [
-                     K=std::string
-                 ]
-         c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\inifile.h(57): note: see reference to class template instantiation 'std::map<std::string,IniFile::IniProperties,std::less<K>,BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>>' being compiled
-                 with
-                 [
-                     K=std::string
-                 ]
-     1>c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1855): warning C4503: '__LINE__Var': decorated name length exceeded, name was truncated
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1696): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at<std::pair<const _Kty,_Ty>&,_Nodety>(bool,std::_Tree_node<std::pair<const _Kty,_Ty>,void *> *,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1696): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at<std::pair<const _Kty,_Ty>&,_Nodety>(bool,std::_Tree_node<std::pair<const _Kty,_Ty>,void *> *,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1121): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint<std::pair<const _Kty,_Ty>&,std::_Tree_node<std::pair<const _Kty,_Ty>,void *>*>(std::_Tree_const_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1121): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint<std::pair<const _Kty,_Ty>&,std::_Tree_node<std::pair<const _Kty,_Ty>,void *>*>(std::_Tree_const_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *
-                 ]
-     1>c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1799): warning C4503: '__LINE__Var': decorated name length exceeded, name was truncated
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1792): note: see reference to function template instantiation 'std::pair<std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,bool> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint<std::pair<const _Kty,_Ty>&,_Nodety>(bool,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1792): note: see reference to function template instantiation 'std::pair<std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,bool> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint<std::pair<const _Kty,_Ty>&,_Nodety>(bool,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &
-                 ]
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\graphicsviewport.cpp(52): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint': decorated name length exceeded, name was truncated
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
-                 ]
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\graphicsviewport.cpp(52): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at': decorated name length exceeded, name was truncated
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
-                 ]
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\graphicsviewport.cpp(52): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint': decorated name length exceeded, name was truncated
                  with
                  [
                      _Kty=std::string,
@@ -1374,7 +673,7 @@
                      _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *,
                      _Valty=std::pair<const std::string,IniFile::IniProperties> &
                  ]
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\graphicssurface.cpp(62): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint': decorated name length exceeded, name was truncated
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\graphicssurface.cpp(75): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint': decorated name length exceeded, name was truncated
                  with
                  [
                      _Kty=std::string,
@@ -1382,7 +681,7 @@
                      _Pr=std::less<std::string>,
                      _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\graphicssurface.cpp(62): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at': decorated name length exceeded, name was truncated
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\graphicssurface.cpp(75): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at': decorated name length exceeded, name was truncated
                  with
                  [
                      _Kty=std::string,
@@ -1390,7 +689,7 @@
                      _Pr=std::less<std::string>,
                      _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\graphicssurface.cpp(62): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint': decorated name length exceeded, name was truncated
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\graphicssurface.cpp(75): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint': decorated name length exceeded, name was truncated
                  with
                  [
                      _Kty=std::string,
@@ -1398,7 +697,9 @@
                      _Pr=std::less<std::string>,
                      _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
-         GraphicsOptions.cpp
+         Generating Code...
+         Compiling...
+         GraphicsViewport.cpp
      1>c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1683): warning C4503: '__LINE__Var': decorated name length exceeded, name was truncated
          c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1121): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint<std::pair<const _Kty,_Ty>&,std::_Tree_node<std::pair<const _Kty,_Ty>,void *>*>(std::_Tree_const_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,_Valty,_Nodety)' being compiled
                  with
@@ -1513,7 +814,7 @@
                      _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *,
                      _Valty=std::pair<const std::string,IniFile::IniProperties> &
                  ]
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\graphicsoptions.cpp(25): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint': decorated name length exceeded, name was truncated
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\graphicsviewport.cpp(52): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint': decorated name length exceeded, name was truncated
                  with
                  [
                      _Kty=std::string,
@@ -1521,7 +822,7 @@
                      _Pr=std::less<std::string>,
                      _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\graphicsoptions.cpp(25): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at': decorated name length exceeded, name was truncated
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\graphicsviewport.cpp(52): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at': decorated name length exceeded, name was truncated
                  with
                  [
                      _Kty=std::string,
@@ -1529,7 +830,7 @@
                      _Pr=std::less<std::string>,
                      _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\graphicsoptions.cpp(25): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint': decorated name length exceeded, name was truncated
+     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\graphicsviewport.cpp(52): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint': decorated name length exceeded, name was truncated
                  with
                  [
                      _Kty=std::string,
@@ -1537,286 +838,6 @@
                      _Pr=std::less<std::string>,
                      _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
                  ]
-         GraphicsDevice.cpp
-     1>c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1683): warning C4503: '__LINE__Var': decorated name length exceeded, name was truncated
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1121): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint<std::pair<const _Kty,_Ty>&,std::_Tree_node<std::pair<const _Kty,_Ty>,void *>*>(std::_Tree_const_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1121): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint<std::pair<const _Kty,_Ty>&,std::_Tree_node<std::pair<const _Kty,_Ty>,void *>*>(std::_Tree_const_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\map(348): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::emplace_hint<const std::piecewise_construct_t&,std::tuple<const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &>,std::tuple<>>(std::_Tree_const_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,const std::piecewise_construct_t &,std::tuple<const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &> &&,std::tuple<> &&)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\map(348): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::emplace_hint<const std::piecewise_construct_t&,std::tuple<const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &>,std::tuple<>>(std::_Tree_const_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,const std::piecewise_construct_t &,std::tuple<const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &> &&,std::tuple<> &&)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\map(340): note: while compiling class template member function 'std::map<std::string,std::vector<std::string,BigChunkAllocatorSTLWrapper<std::string>>,std::less<K>,BigChunkAllocatorSTLWrapper<std::pair<std::string,std::vector<std::string,BigChunkAllocatorSTLWrapper<std::string>>>>> &std::map<std::string,IniFile::IniProperties,std::less<K>,BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>>::operator [](const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &)'
-                 with
-                 [
-                     K=std::string
-                 ]
-         c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\inifile.h(31): note: see reference to function template instantiation 'std::map<std::string,std::vector<std::string,BigChunkAllocatorSTLWrapper<std::string>>,std::less<K>,BigChunkAllocatorSTLWrapper<std::pair<std::string,std::vector<std::string,BigChunkAllocatorSTLWrapper<std::string>>>>> &std::map<std::string,IniFile::IniProperties,std::less<K>,BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>>::operator [](const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &)' being compiled
-                 with
-                 [
-                     K=std::string
-                 ]
-         c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\inifile.h(57): note: see reference to class template instantiation 'std::map<std::string,IniFile::IniProperties,std::less<K>,BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>>' being compiled
-                 with
-                 [
-                     K=std::string
-                 ]
-     1>c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1855): warning C4503: '__LINE__Var': decorated name length exceeded, name was truncated
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1696): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at<std::pair<const _Kty,_Ty>&,_Nodety>(bool,std::_Tree_node<std::pair<const _Kty,_Ty>,void *> *,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1696): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at<std::pair<const _Kty,_Ty>&,_Nodety>(bool,std::_Tree_node<std::pair<const _Kty,_Ty>,void *> *,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1121): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint<std::pair<const _Kty,_Ty>&,std::_Tree_node<std::pair<const _Kty,_Ty>,void *>*>(std::_Tree_const_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1121): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint<std::pair<const _Kty,_Ty>&,std::_Tree_node<std::pair<const _Kty,_Ty>,void *>*>(std::_Tree_const_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *
-                 ]
-     1>c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1799): warning C4503: '__LINE__Var': decorated name length exceeded, name was truncated
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1792): note: see reference to function template instantiation 'std::pair<std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,bool> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint<std::pair<const _Kty,_Ty>&,_Nodety>(bool,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1792): note: see reference to function template instantiation 'std::pair<std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,bool> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint<std::pair<const _Kty,_Ty>&,_Nodety>(bool,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &
-                 ]
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\graphicsdevice.cpp(75): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint': decorated name length exceeded, name was truncated
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
-                 ]
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\graphicsdevice.cpp(75): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at': decorated name length exceeded, name was truncated
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
-                 ]
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\graphicsdevice.cpp(75): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint': decorated name length exceeded, name was truncated
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
-                 ]
-         DisplayAdaptersList.cpp
-         CommandLineArgs.cpp
-     1>c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1683): warning C4503: '__LINE__Var': decorated name length exceeded, name was truncated
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1121): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint<std::pair<const _Kty,_Ty>&,std::_Tree_node<std::pair<const _Kty,_Ty>,void *>*>(std::_Tree_const_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1121): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint<std::pair<const _Kty,_Ty>&,std::_Tree_node<std::pair<const _Kty,_Ty>,void *>*>(std::_Tree_const_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\map(348): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::emplace_hint<const std::piecewise_construct_t&,std::tuple<const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &>,std::tuple<>>(std::_Tree_const_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,const std::piecewise_construct_t &,std::tuple<const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &> &&,std::tuple<> &&)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\map(348): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::emplace_hint<const std::piecewise_construct_t&,std::tuple<const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &>,std::tuple<>>(std::_Tree_const_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,const std::piecewise_construct_t &,std::tuple<const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &> &&,std::tuple<> &&)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\map(340): note: while compiling class template member function 'std::map<std::string,std::vector<std::string,BigChunkAllocatorSTLWrapper<std::string>>,std::less<K>,BigChunkAllocatorSTLWrapper<std::pair<std::string,std::vector<std::string,BigChunkAllocatorSTLWrapper<std::string>>>>> &std::map<std::string,IniFile::IniProperties,std::less<K>,BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>>::operator [](const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &)'
-                 with
-                 [
-                     K=std::string
-                 ]
-         c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\inifile.h(31): note: see reference to function template instantiation 'std::map<std::string,std::vector<std::string,BigChunkAllocatorSTLWrapper<std::string>>,std::less<K>,BigChunkAllocatorSTLWrapper<std::pair<std::string,std::vector<std::string,BigChunkAllocatorSTLWrapper<std::string>>>>> &std::map<std::string,IniFile::IniProperties,std::less<K>,BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>>::operator [](const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &)' being compiled
-                 with
-                 [
-                     K=std::string
-                 ]
-         c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\inifile.h(57): note: see reference to class template instantiation 'std::map<std::string,IniFile::IniProperties,std::less<K>,BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>>' being compiled
-                 with
-                 [
-                     K=std::string
-                 ]
-     1>c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1855): warning C4503: '__LINE__Var': decorated name length exceeded, name was truncated
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1696): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at<std::pair<const _Kty,_Ty>&,_Nodety>(bool,std::_Tree_node<std::pair<const _Kty,_Ty>,void *> *,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1696): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at<std::pair<const _Kty,_Ty>&,_Nodety>(bool,std::_Tree_node<std::pair<const _Kty,_Ty>,void *> *,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1121): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint<std::pair<const _Kty,_Ty>&,std::_Tree_node<std::pair<const _Kty,_Ty>,void *>*>(std::_Tree_const_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1121): note: see reference to function template instantiation 'std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint<std::pair<const _Kty,_Ty>&,std::_Tree_node<std::pair<const _Kty,_Ty>,void *>*>(std::_Tree_const_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *
-                 ]
-     1>c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1799): warning C4503: '__LINE__Var': decorated name length exceeded, name was truncated
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1792): note: see reference to function template instantiation 'std::pair<std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,bool> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint<std::pair<const _Kty,_Ty>&,_Nodety>(bool,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &
-                 ]
-         c:\program files (x86)\microsoft visual studio 14.0\vc\include\xtree(1792): note: see reference to function template instantiation 'std::pair<std::_Tree_iterator<std::_Tree_val<std::_Tree_simple_types<std::pair<const _Kty,_Ty>>>>,bool> std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint<std::pair<const _Kty,_Ty>&,_Nodety>(bool,_Valty,_Nodety)' being compiled
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>,
-                     _Nodety=std::_Tree_node<std::pair<const std::string,IniFile::IniProperties>,void *> *,
-                     _Valty=std::pair<const std::string,IniFile::IniProperties> &
-                 ]
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\commandlineargs.cpp(59): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_hint': decorated name length exceeded, name was truncated
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
-                 ]
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\commandlineargs.cpp(59): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_at': decorated name length exceeded, name was truncated
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
-                 ]
-     1>c:\users\agafontsev semyon\documents\visual studio 2015\projects\d3d11nt\d3d11nt\commandlineargs.cpp(59): warning C4503: 'std::_Tree<std::_Tmap_traits<_Kty,_Ty,_Pr,_Alloc,false>>::_Insert_nohint': decorated name length exceeded, name was truncated
-                 with
-                 [
-                     _Kty=std::string,
-                     _Ty=IniFile::IniProperties,
-                     _Pr=std::less<std::string>,
-                     _Alloc=BigChunkAllocatorSTLWrapper<std::pair<std::string,IniFile::IniProperties>>
-                 ]
-         BigChunkAllocator.cpp
          Generating Code...
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Agafontsev Semyon\Documents\Visual Studio 2015\Projects\d3d11nt\Debug\d3d11nt.exe" /INCREMENTAL /NOLOGO d3d11.lib dxgi.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"C:\Users\Agafontsev Semyon\Documents\Visual Studio 2015\Projects\d3d11nt\Debug\d3d11nt.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Agafontsev Semyon\Documents\Visual Studio 2015\Projects\d3d11nt\Debug\d3d11nt.lib" /MACHINE:X86 Debug\BigChunkAllocator.obj
@@ -1841,10 +862,9 @@
          Debug\strutils.obj
          Debug\Texture2D.obj
          Debug\Window.obj
-         LINK : C:\Users\Agafontsev Semyon\Documents\Visual Studio 2015\Projects\d3d11nt\Debug\d3d11nt.exe not found or not built by the last incremental link; performing full link
          d3d11nt.vcxproj -> C:\Users\Agafontsev Semyon\Documents\Visual Studio 2015\Projects\d3d11nt\Debug\d3d11nt.exe
      1>Done Building Project "C:\Users\Agafontsev Semyon\Documents\Visual Studio 2015\Projects\d3d11nt\d3d11nt\d3d11nt.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:36.18
+Time Elapsed 00:00:15.08

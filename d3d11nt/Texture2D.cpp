@@ -57,6 +57,10 @@ size_t Texture2D::GetHeight() const
 {
     return m_Height;
 }
+size_t Texture2D::GetConsumedVideoMemorySize()
+{
+    return m_Width*m_Height*m_ArraySize*GetBytesPerPixelForDXGIFormat(m_DXGIFormat);
+}
 
 ID3D11Texture2D* Texture2D::GetD3D11Texture2D() const
 {
@@ -74,6 +78,25 @@ void Texture2D::FillDesc(D3D11_TEXTURE2D_DESC& desc)
     desc.BindFlags = m_BindFlags;
     desc.CPUAccessFlags = m_CPUAccessFlags;
     desc.MiscFlags = m_MiscFlags;
+}
+size_t Texture2D::GetBytesPerPixelForDXGIFormat(DXGI_FORMAT format)
+{
+    if (format == 0)
+        return 0;
+    if (format >= DXGI_FORMAT_R32G32B32A32_TYPELESS && format <= DXGI_FORMAT_R32G32B32A32_SINT)
+        return 16;
+    if (format >= DXGI_FORMAT_R32G32B32_TYPELESS && format <= DXGI_FORMAT_R32G32B32_SINT)
+        return 12;
+    if (format >= DXGI_FORMAT_R16G16B16A16_TYPELESS && format <= DXGI_FORMAT_X32_TYPELESS_G8X24_UINT)
+        return 8;
+    if (format >= DXGI_FORMAT_R10G10B10A2_TYPELESS && format <= DXGI_FORMAT_X24_TYPELESS_G8_UINT)
+        return 4;
+    if (format >= DXGI_FORMAT_R8G8_TYPELESS && format <= DXGI_FORMAT_R16_SINT)
+        return 2;
+    if (format >= DXGI_FORMAT_R8_TYPELESS && format <= DXGI_FORMAT_A8_UNORM)
+        return 1;
+    popAssert(false); // if you got assert here it means u need to add some format support for this function
+    return 0;
 }
 
 bool Texture2D::IsValid() const

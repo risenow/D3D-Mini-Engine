@@ -22,3 +22,7 @@ d3d11nt/Release/d3d11nt.tlog/unsuccessfulbuild
 d3d11nt/Release/d3d11nt.pch
 *.idb
 d3d11nt/Debug/vc140.pdb
+d3d11nt/Debug/d3d11nt.tlog/CL.write.1.tlog
+*.exe
+Debug/d3d11nt.ilk
+*.pdb
