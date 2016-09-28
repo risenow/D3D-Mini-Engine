@@ -26,3 +26,6 @@ d3d11nt/Debug/d3d11nt.tlog/CL.write.1.tlog
 *.exe
 Debug/d3d11nt.ilk
 *.pdb
+.vs/d3d11nt/v14/.suo
+ipch/D3D11NT-6e2198bf/D3D11NT-880752eb.ipch
+*.ipch
