@@ -1,10 +1,11 @@
 #include "stdafx.h"
+#include "MemoryManager.h"
 #include "GraphicsOptions.h"
 
 GraphicsOptions::GraphicsOptions() {}
 GraphicsOptions::GraphicsOptions(const IniFile& ini)
 {
-    AddProperty((IniProperty*)new IniEnumProperty(GRAPHICS_SECTION, "MultisampleType", 1, (int*)&m_MultisampleType, AcceptabeMultisampleTypeValues));
+    AddProperty((IniProperty*)popNew(IniEnumProperty)(GRAPHICS_SECTION, "MultisampleType", 1, (int*)&m_MultisampleType, AcceptabeMultisampleTypeValues));
     DeserializeFromIni(ini);
 }
 GraphicsOptions::~GraphicsOptions()

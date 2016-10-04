@@ -3,6 +3,7 @@
 #include <cstring>
 #include <thread>
 #include "strutils.h"
+#include "MemoryManager.h"
 #include "Log.h"
 #include <limits>
 #include <iostream>
@@ -16,12 +17,12 @@ WindowAttributes::WindowAttributes(const IniFile& info)
     std::string section = "Window";
     NumberRange<int> unsignedIntRange = NumberRange<int>(0, std::numeric_limits<unsigned int>::max());
 
-    AddProperty(new IniIntProperty(section, "WindowWidth", 0, (int*)&m_Width, unsignedIntRange));
-    AddProperty(new IniIntProperty(section, "WindowHeight", 0, (int*)&m_Height, unsignedIntRange));
-    AddProperty(new IniIntProperty(section, "WindowPosX", 0, (int*)&m_X, unsignedIntRange));
-    AddProperty(new IniIntProperty(section, "WindowPosY", 0, (int*)&m_Y, unsignedIntRange));
-    AddProperty(new IniIntProperty(section, "WindowPosX", 0, (int*)&m_X, unsignedIntRange));
-    AddProperty(new IniStringProperty(section, "WindowTitle", "", &m_Title));
+    AddProperty(popNew(IniIntProperty)(section, "WindowWidth", 0, (int*)&m_Width, unsignedIntRange));
+    AddProperty(popNew(IniIntProperty)(section, "WindowHeight", 0, (int*)&m_Height, unsignedIntRange));
+    AddProperty(popNew(IniIntProperty)(section, "WindowPosX", 0, (int*)&m_X, unsignedIntRange));
+    AddProperty(popNew(IniIntProperty)(section, "WindowPosY", 0, (int*)&m_Y, unsignedIntRange));
+    AddProperty(popNew(IniIntProperty)(section, "WindowPosX", 0, (int*)&m_X, unsignedIntRange));
+    AddProperty(popNew(IniStringProperty)(section, "WindowTitle", "", &m_Title));
     DeserializeFromIni(info);
 }
 void WindowAttributes::DeserializeFromIni(const IniFile& info)

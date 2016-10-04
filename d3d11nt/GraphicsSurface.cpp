@@ -2,73 +2,69 @@
 #include "GraphicsSurface.h"
 #include "logicsafety.h"
 
-GraphicsSurface::GraphicsSurface(): m_RenderTargetView(nullptr), m_DepthStencilView(nullptr) {}
-GraphicsSurface::GraphicsSurface(GraphicsDevice& device, Texture2D* texture, GraphicsSurfaceType type)
-                                : m_Texture(texture), m_RenderTargetView(nullptr), m_DepthStencilView(nullptr)
+
+template<class T>
+void CreateView(GraphicsDevice& device, Texture2D* texture, T** view) {}
+
+template<>
+void CreateView(GraphicsDevice& device, Texture2D* texture, ID3D11RenderTargetView** view)
 {
-    switch (type)
-    {
-    case GRAPHICS_SURFACE_TYPE_RENDER_TARGET:
-        D3D_HR_OP(device.GetD3D11Device()->CreateRenderTargetView(texture->GetD3D11Texture2D(), nullptr, &m_RenderTargetView));
-        break;
-    case GRAPHICS_SURFACE_TYPE_DEPTH_STENCIL:
-        D3D_HR_OP(device.GetD3D11Device()->CreateDepthStencilView(texture->GetD3D11Texture2D(), nullptr, &m_DepthStencilView));
-        break;
-    default:
-        popAssert(false);
-        break;
-    }
+    D3D_HR_OP(device.GetD3D11Device()->CreateRenderTargetView(texture->GetD3D11Texture2D(), nullptr, view));
 }
-GraphicsSurface::~GraphicsSurface()
+
+template<>
+void CreateView(GraphicsDevice& device, Texture2D* texture, ID3D11DepthStencilView** view)
+{
+    D3D_HR_OP(device.GetD3D11Device()->CreateDepthStencilView(texture->GetD3D11Texture2D(), nullptr, view));
+}
+
+
+template<class T>
+GraphicsSurface<T>::GraphicsSurface() {}
+
+template<class T>
+GraphicsSurface<T>::GraphicsSurface(GraphicsDevice& device, Texture2D* texture)
+                                : m_Texture(texture)
+{
+    CreateView(device, texture, (T**)(&GetDX11ObjectReference()));
+}
+template<class T>
+GraphicsSurface<T>::~GraphicsSurface()
 {
 }
 
-void GraphicsSurface::Resize(GraphicsDevice& device, size_t width, size_t height)
+template<class T>
+void GraphicsSurface<T>::Resize(GraphicsDevice& device, size_t width, size_t height)
 {
     popAssert(m_Texture);
-    popAssert(m_RenderTargetView || m_DepthStencilView);
+    popAssert(GetDX11Object());
 
-    m_Texture->Resize(device, width, height);
-    
-    if (m_RenderTargetView)
-        D3D_HR_OP(device.GetD3D11Device()->CreateRenderTargetView(m_Texture->GetD3D11Texture2D(), nullptr, &m_RenderTargetView));
-    if (m_DepthStencilView)
-        D3D_HR_OP(device.GetD3D11Device()->CreateDepthStencilView(m_Texture->GetD3D11Texture2D(), nullptr, &m_DepthStencilView));
+    if (m_Texture->GetWidth() != width || m_Texture->GetWidth() != height)
+    {
+        ReleaseDX11Object();
+
+        m_Texture->Resize(device, width, height);
+
+        CreateView(device, m_Texture, (T**)(&GetDX11ObjectReference()));
+    }
 }
 
-size_t GraphicsSurface::GetWidth() const
+template<class T>
+size_t GraphicsSurface<T>::GetWidth() const
 {
     return m_Texture->GetWidth();
 }
-size_t GraphicsSurface::GetHeight() const
+template<class T>
+size_t GraphicsSurface<T>::GetHeight() const
 {
     return m_Texture->GetHeight();
 }
 
-ID3D11RenderTargetView* GraphicsSurface::GetRenderTargetView() const
+template<class T>
+void GraphicsSurface<T>::Release()
 {
-    return m_RenderTargetView;
-}
-ID3D11DepthStencilView* GraphicsSurface::GetDepthStencilView() const
-{
-    return m_DepthStencilView;
+    ReleaseDX11Object();
 }
 
-bool GraphicsSurface::IsValid() const
-{
-    return (m_RenderTargetView || m_DepthStencilView) && !(m_RenderTargetView && m_DepthStencilView);
-}
-
-void GraphicsSurface::Release()
-{
-    if (m_RenderTargetView)
-    {
-        m_RenderTargetView->Release();
-        m_RenderTargetView = nullptr;
-    }
-    if (m_DepthStencilView)
-    {
-        m_DepthStencilView->Release();
-        m_DepthStencilView = nullptr;
-    }
-}
+template class GraphicsSurface<ID3D11RenderTargetView>;
+template class GraphicsSurface<ID3D11DepthStencilView>;

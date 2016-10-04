@@ -10,10 +10,12 @@ public:
     GraphicsSwapChain();
     GraphicsSwapChain(const Window& window, GraphicsDevice& device, MultisampleType multisample = MULTISAMPLE_TYPE_NONE);
 
+    ~GraphicsSwapChain();
+
     void Present();
 
     ID3D11Texture2D* GetBackBufferTexture();
-    GraphicsSurface* GetBackBufferSurface();
+    ColorSurface* GetBackBufferSurface();
 
     IDXGISwapChain* GetDXGISwapChain();
 
@@ -30,7 +32,7 @@ private:
     IDXGISwapChain* m_SwapChain;
     //ID3D11Texture2D* m_BackBufferTexture;
     Texture2D m_BackBufferTexture;
-    GraphicsSurface m_BackBufferSurface;
+    ColorSurface m_BackBufferSurface;
     //ID3D11RenderTargetView* m_BackBufferRenderTargetView;
     DXGI_FORMAT m_Format;
 

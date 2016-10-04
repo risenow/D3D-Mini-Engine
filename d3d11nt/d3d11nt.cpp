@@ -2,6 +2,7 @@
 //
 
 #include "stdafx.h"
+#include <initguid.h>
 
 #include "MemoryManager.h"
 #include "Window.h"
@@ -13,6 +14,7 @@
 #include "DisplayAdaptersList.h"
 #include "memutils.h"
 #include <d3d11.h>
+#include <dxgidebug.h>
 #include "RenderSet.h"
 #include "IniFile.h"
 #include <iostream>
@@ -32,9 +34,11 @@ int main(int argc, char* argv[])
     DisplayAdaptersList displayAdaptersList;
     D3D11DeviceCreationFlags deviceCreationFlags(commandLineArgs); 
     GraphicsDevice device(deviceCreationFlags, FEATURE_LEVEL_ONLY_D3D11, nullptr);
+
     GraphicsSwapChain swapchain(window, device, options.GetMultisampleType());
 
-    GraphicsSurface* backBufferSurface = swapchain.GetBackBufferSurface();
+    ColorSurface* backBufferSurface = swapchain.GetBackBufferSurface();
+
     Texture2D depthStencilTexture = Texture2DHelper::CreateCommonTexture(device,
                                                                          backBufferSurface->GetWidth(),
                                                                          backBufferSurface->GetHeight(),
@@ -42,7 +46,9 @@ int main(int argc, char* argv[])
                                                                          DXGI_FORMAT_D24_UNORM_S8_UINT,
                                                                          options.GetMultisampleType(),
                                                                          D3D11_BIND_DEPTH_STENCIL);
-    GraphicsSurface depthStencilSurface(device, &depthStencilTexture, GRAPHICS_SURFACE_TYPE_DEPTH_STENCIL);
+    DEBUG_ONLY(depthStencilTexture.SetDebugName("Depth Stencil"));
+
+    DepthSurface depthStencilSurface(device, &depthStencilTexture);
     RenderSet finalRenderSet(backBufferSurface, &depthStencilSurface);
 
     GraphicsViewport viewport(finalRenderSet);
@@ -55,9 +61,6 @@ int main(int argc, char* argv[])
         {
             swapchain.Validate(device, window);
             depthStencilSurface.Resize(device, backBufferSurface->GetWidth(), backBufferSurface->GetHeight());
-            //depthStencilSurface.Release();
-            //depthStencilTexture.Resize(device, backBufferSurface->GetWidth(), backBufferSurface->GetHeight());
-            //finalRenderSet = RenderSet(backBufferSurface, //GraphicsSurface(device, depthStencilTexture, GRAPHICS_SURFACE_TYPE_DEPTH_STENCIL));
         }
         //TO INCAPSULATE IN RENDERPASS class
         finalRenderSet.Set(device);
@@ -67,6 +70,11 @@ int main(int argc, char* argv[])
         if (swapchain.IsValid(window)) //if swapchain in not valid discard the frame //POSSIBLE RACE CONDITION?
             swapchain.Present();
     }
+
+    if (device.GetD3D11DeviceContext())
+        device.GetD3D11DeviceContext()->ClearState();
+
+    DEBUG_ONLY(device.ReportAllLiveObjects());
 
     return 0;
 }

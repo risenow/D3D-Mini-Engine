@@ -2,12 +2,14 @@
 #include "Texture2D.h"
 #include "multisampleutils.h"
 #include "logicsafety.h"
+#include <d3dcommon.h>
 
-Texture2D::Texture2D() : m_D3D11Texture(nullptr) {}
-Texture2D::Texture2D(ID3D11Texture2D* texture) : m_D3D11Texture(texture)
+Texture2D::Texture2D() {}
+Texture2D::Texture2D(ID3D11Texture2D* texture) : D3D11ResourceHolder(texture)
 {
     D3D11_TEXTURE2D_DESC desc;
-    m_D3D11Texture->GetDesc(&desc);
+    GetD3D11Texture2D()->GetDesc(&desc);
+
     m_Width = desc.Width;
     m_Height = desc.Height;
     m_ArraySize = desc.ArraySize;
@@ -33,19 +35,24 @@ Texture2D::Texture2D(GraphicsDevice& device, size_t width, size_t height, unsign
     D3D11_TEXTURE2D_DESC desc;
     FillDesc(desc);
 
-    D3D_HR_OP(device.GetD3D11Device()->CreateTexture2D(&desc, initialData, &m_D3D11Texture));
+    D3D_HR_OP(device.GetD3D11Device()->CreateTexture2D(&desc, initialData, (ID3D11Texture2D**)(&GetDX11ObjectReference())));
+}
+
+Texture2D::~Texture2D()
+{
 }
 
 void Texture2D::Resize(GraphicsDevice& device, size_t width, size_t height)
 {
     if (m_Width != width || m_Height != height)
     {
-        m_D3D11Texture->Release();
         m_Width = width;
         m_Height = height;
-        D3D11_TEXTURE2D_DESC desc;
-        FillDesc(desc);
-        D3D_HR_OP(device.GetD3D11Device()->CreateTexture2D(&desc, nullptr, &m_D3D11Texture));
+        *this = Texture2D(device, m_Width, m_Height, 
+                            m_MipLevels, m_ArraySize, 
+                            m_DXGIFormat, m_SampleDesc, 
+                            m_Usage, m_BindFlags, 
+                            m_CPUAccessFlags, m_MiscFlags, nullptr);
     }
 }
 
@@ -64,8 +71,9 @@ size_t Texture2D::GetConsumedVideoMemorySize()
 
 ID3D11Texture2D* Texture2D::GetD3D11Texture2D() const
 {
-    return m_D3D11Texture;
+    return (ID3D11Texture2D*)GetDX11Object();
 }
+
 void Texture2D::FillDesc(D3D11_TEXTURE2D_DESC& desc)
 {
     desc.Width = m_Width;
@@ -101,13 +109,12 @@ size_t Texture2D::GetBytesPerPixelForDXGIFormat(DXGI_FORMAT format)
 
 bool Texture2D::IsValid() const
 {
-    return m_D3D11Texture != nullptr;
+    return GetDX11Object() != nullptr;
 }
 
 void Texture2D::Release() 
 {
-    m_D3D11Texture->Release();
-    m_D3D11Texture = nullptr;
+    ReleaseDX11Object();
 }
 
 Texture2D Texture2DHelper::CreateCommonTexture(GraphicsDevice& device, size_t width, size_t height,

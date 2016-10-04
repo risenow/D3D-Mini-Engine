@@ -3,6 +3,7 @@
 #include "memutils.h"
 #include "logicsafety.h"
 #include "MemoryAllocator.h"
+#include <mutex>
 
 //allocates chunks < 12bytes
 class SmallChunkAllocator : public MemoryAllocator //we can only handle 1gb by one instance of this allocator

@@ -28,8 +28,12 @@ public:
     GraphicsDevice();
     GraphicsDevice(D3D11DeviceCreationFlags deviceCreationFlags, AcceptableFeatureLevel acceptableFeatureLevel, IDXGIAdapter* adapter = nullptr);
 
+    ~GraphicsDevice();
+
     ID3D11Device* GetD3D11Device() const;
     ID3D11DeviceContext* GetD3D11DeviceContext() const;
+
+    void ReportAllLiveObjects();
 private:
     typedef STLVector<D3D_FEATURE_LEVEL> AcceptableFeatureLevels;
     AcceptableFeatureLevels GetFeatureLevels(AcceptableFeatureLevel acceptableFeatureLevel);

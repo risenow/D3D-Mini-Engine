@@ -47,7 +47,8 @@ void CommandLineArgs::ParseArgsFromString(const std::string& argsStr)
     std::string tempArgStr;
     for (unsigned int i = 0; i < argsStr.size(); i++)
     {
-        tempArgStr += argsStr[i];
+        if (argsStr[i] != '/')
+            tempArgStr += argsStr[i];
 
         if ((i + 1)==argsStr.size() || argsStr[i + 1] == '/')
         {

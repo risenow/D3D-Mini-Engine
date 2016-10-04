@@ -2,8 +2,9 @@
 #include <d3d11.h>
 #include "GraphicsDevice.h"
 #include "GraphicsOptions.h"
+#include "DX11Object.h"
 
-class Texture2D
+class Texture2D : public D3D11ResourceHolder
 {
 public:
     Texture2D();
@@ -12,7 +13,8 @@ public:
               unsigned int mipLevels, unsigned int arraySize, DXGI_FORMAT dxgiFormat, 
               DXGI_SAMPLE_DESC sampleDesc, D3D11_USAGE usage, UINT bindFlags,
               UINT cpuAccessFlags, UINT miscFlags, D3D11_SUBRESOURCE_DATA* initialData = nullptr);
-
+    //Texture2D(Texture2D& other);
+    ~Texture2D();
     void Resize(GraphicsDevice& device, size_t width, size_t height);
 
     size_t GetWidth() const;
@@ -39,7 +41,7 @@ private:
     UINT m_CPUAccessFlags;
     UINT m_MiscFlags;
 
-    ID3D11Texture2D* m_D3D11Texture;
+    //ID3D11Texture2D* m_D3D11Texture;
 };
 
 class Texture2DHelper 

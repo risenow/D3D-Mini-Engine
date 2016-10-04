@@ -2,6 +2,7 @@
 #include "GraphicsDevice.h"
 #include "memutils.h"
 #include "logicsafety.h"
+#include <dxgidebug.h>
 
 D3D11DeviceCreationFlags::D3D11DeviceCreationFlags() : m_Flags(0)
 {}
@@ -46,6 +47,15 @@ GraphicsDevice::GraphicsDevice(D3D11DeviceCreationFlags deviceCreationFlags, Acc
                             &m_D3D11DeviceFeatureLevel,
                             &m_D3D11DeviceContext));
 }
+
+GraphicsDevice::~GraphicsDevice()
+{
+    if (m_D3D11Device)
+        m_D3D11Device->Release();
+    if (m_D3D11DeviceContext)
+        m_D3D11DeviceContext->Release();
+}
+
 STLVector<D3D_FEATURE_LEVEL> GraphicsDevice::GetFeatureLevels(AcceptableFeatureLevel acceptableFeatureLevel)
 {
     AcceptableFeatureLevels featureLevels;
@@ -71,4 +81,19 @@ ID3D11Device* GraphicsDevice::GetD3D11Device() const
 ID3D11DeviceContext* GraphicsDevice::GetD3D11DeviceContext() const
 {
     return m_D3D11DeviceContext;
+}
+
+void GraphicsDevice::ReportAllLiveObjects()
+{
+    typedef HRESULT(WINAPI * LPDXGIGETDEBUGINTERFACE)(REFIID, void **);
+
+    static HMODULE dxgidebug = LoadLibraryEx(L"dxgidebug.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32);
+    if (dxgidebug)
+    {
+        auto dxgiGetDebugInterface = reinterpret_cast<LPDXGIGETDEBUGINTERFACE>(
+            reinterpret_cast<void*>(GetProcAddress(dxgidebug, "DXGIGetDebugInterface")));
+        IDXGIDebug* dxgiDebug;
+        dxgiGetDebugInterface(__uuidof(IDXGIDebug), (void**)&dxgiDebug);
+        dxgiDebug->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_ALL);
+    }
 }

@@ -19,6 +19,13 @@ DisplayAdaptersList::DisplayAdaptersList()
 
     LogInfo();
 }
+DisplayAdaptersList::~DisplayAdaptersList()
+{
+    for (int i = 0; i < m_Adapters.size(); i++)
+    {
+        m_Adapters[i]->Release();
+    }
+}
 
 IDXGIAdapter* DisplayAdaptersList::GetAdapter(unsigned int i)
 {

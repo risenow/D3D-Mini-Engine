@@ -30,13 +30,22 @@ GraphicsSwapChain::GraphicsSwapChain(const Window& window, GraphicsDevice& devic
     InitializeBackBufferSurface(device);
 }
 
+GraphicsSwapChain::~GraphicsSwapChain()
+{
+    m_SwapChain->Release();
+}
+
 void GraphicsSwapChain::InitializeBackBufferSurface(GraphicsDevice& device)
 {
     ID3D11Texture2D* backBuffer;
     D3D_HR_OP(m_SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)(&backBuffer)));
+
     m_BackBufferTexture = Texture2D(backBuffer);
-    m_BackBufferSurface = GraphicsSurface(device, &m_BackBufferTexture,
-        GRAPHICS_SURFACE_TYPE_RENDER_TARGET);
+    DEBUG_ONLY(m_BackBufferTexture.SetDebugName("Backbuffer Texture"));
+
+    m_BackBufferSurface = ColorSurface(device, &m_BackBufferTexture);      
+
+    backBuffer->Release();
 }
 
 IDXGISwapChain* GraphicsSwapChain::GetDXGISwapChain()
@@ -76,13 +85,15 @@ void GraphicsSwapChain::Validate(GraphicsDevice& device, const Window& window)
             D3D_HR_OP(m_SwapChain->GetContainingOutput(&output));
             unsigned int modesNum = 0;
             output->GetDisplayModeList(m_Format, DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH, &modesNum, nullptr);
-            assert(modesNum);
+            popAssert(modesNum);
             STLVector<DXGI_MODE_DESC> modeDescs(modesNum);
             output->GetDisplayModeList(m_Format, DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH, &modesNum, modeDescs.data());
 
             m_SwapChain->SetFullscreenState(true, output);
             D3D_HR_OP(m_SwapChain->ResizeTarget(&modeDescs[modesNum - 1]));
             m_FullsreenState = true;
+
+            output->Release();
         }
         if (!m_FullsreenState)
             m_SwapChain->SetFullscreenState(false, nullptr);
@@ -97,7 +108,7 @@ ID3D11Texture2D* GraphicsSwapChain::GetBackBufferTexture()
 {
     return nullptr;
 }
-GraphicsSurface* GraphicsSwapChain::GetBackBufferSurface()
+ColorSurface* GraphicsSwapChain::GetBackBufferSurface()
 {
     return &m_BackBufferSurface;
 }

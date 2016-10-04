@@ -20,7 +20,7 @@ GraphicsViewport::GraphicsViewport(const RenderSet& renderSet, NumberRange<float
 {
     FillD3D11ViewportStructure();
 }
-GraphicsViewport::GraphicsViewport(const GraphicsSurface& surface, NumberRange<float> depthRange)
+GraphicsViewport::GraphicsViewport(const ColorSurface& surface, NumberRange<float> depthRange)
                                    : m_TopLeft(0, 0),
                                      m_Width(surface.GetWidth()), m_Height(surface.GetHeight()),
                                      m_MinDepth(depthRange.GetStart()), m_MaxDepth(depthRange.GetEnd())

@@ -21,3 +21,5 @@ private:
 };
 
 #define popNew(type) new (MemoryManager::GetBigChunkAllocator()->Allocate(sizeof(type), __alignof(type))) type
+
+#define popDelete(p) (MemoryManager::GetBigChunkAllocator()->Deallocate(p))

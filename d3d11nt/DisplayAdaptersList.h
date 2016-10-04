@@ -7,6 +7,7 @@ class DisplayAdaptersList
 {
 public:
     DisplayAdaptersList();
+    ~DisplayAdaptersList();
 
     IDXGIAdapter* GetAdapter(unsigned int i);
 

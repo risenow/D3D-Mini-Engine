@@ -9,7 +9,7 @@ class RenderSet
 {
 public:
     RenderSet();
-    RenderSet(GraphicsSurface* colorSurface, GraphicsSurface* depthStencilSurface);
+    RenderSet(ColorSurface* colorSurface, DepthSurface* depthStencilSurface);
     //RenderSet(ID3D11RenderTargetView* renderTargetView, ID3D11DepthStencilView* depthStencilView, bool useDepthStencil);
     RenderSet(size_t width, size_t height, DXGI_FORMAT colorSurfaceFormat, DXGI_FORMAT depthSurfaceFormat, bool useDepthStencil = false);
 
@@ -26,8 +26,8 @@ private:
     //ID3D11Texture2D* m_RenderTargetTexture;
     //ID3D11Texture2D* m_DepthStencilTexture;
 
-    GraphicsSurface* m_ColorSurface;
-    GraphicsSurface* m_DepthStencilSurface;
+    ColorSurface* m_ColorSurface;
+    DepthSurface* m_DepthStencilSurface;
     Texture2D m_RenderTargetTexture;
     Texture2D m_DepthStencilTexture;
 

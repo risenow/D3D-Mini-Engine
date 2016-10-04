@@ -64,7 +64,7 @@ IniSerializable::~IniSerializable()
 {
     for (unsigned int i = 0; i < m_Properties.size(); i++)
     {
-        delete m_Properties[i];
+        popDelete(m_Properties[i]);
     }
 }
 void IniSerializable::BasicDeserializeFrom(const IniFile& ini)
