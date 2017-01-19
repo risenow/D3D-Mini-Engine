@@ -32,3 +32,12 @@ ipch/D3D11NT-6e2198bf/D3D11NT-880752eb.ipch
 d3d11nt/Debug/d3d11nt.log
 d3d11nt/Debug/d3d11nt.pch
 d3d11nt/Debug/d3d11nt.Build.CppClean.log
+Graphics/Debug/Graphics.pch
+Graphics/Debug/Graphics.Build.CppClean.log
+*.log
+Debug/SystemBenchmark.ilk
+Release/d3d11nt.ipdb
+*.iobj
+Graphics/Release/Graphics.pch
+Release/SystemBenchmark.ipdb
+*.pch
