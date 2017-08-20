@@ -1,19 +1,56 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <d3d11.h>
+#include <dxgi.h>
+#include "Extern/glm/glm.hpp"
 #include "System/typesalias.h"
+#include "System/logicsafety.h"
+#include "System/stlcontainersintegration.h"
+
+template<class T> // glm type
+DXGI_FORMAT GetVertexDXGIFormat()
+{
+	popAssert(false);
+	return DXGI_FORMAT_UNKNOWN;
+}
+template<> // glm type
+DXGI_FORMAT GetVertexDXGIFormat<glm::vec3>();
+template<> // glm type
+DXGI_FORMAT GetVertexDXGIFormat<glm::vec4>();
+
+
+struct VertexPropertyPrototype
+{
+	VertexPropertyPrototype();
+
+	std::string m_Name;
+	size_t m_Size;
+
+	index_t m_SlotIndex;
+	index_t m_SemanticIndex;
+	DXGI_FORMAT m_DXGIFormat;
+};
+
+template<class T> //glm type
+VertexPropertyPrototype CreateVertexPropertyPrototype(const std::string& name, index_t semanticIndex = 0, index_t slotIndex = 0)
+{
+	VertexPropertyPrototype vertexPropertyPrototype;
+	vertexPropertyPrototype.m_Name = name;
+	vertexPropertyPrototype.m_SemanticIndex = semanticIndex;
+	vertexPropertyPrototype.m_SlotIndex = slotIndex;
+	vertexPropertyPrototype.m_DXGIFormat = GetVertexDXGIFormat<T>();
+	vertexPropertyPrototype.m_Size = sizeof(T);
+	return vertexPropertyPrototype;
+}
 
 struct VertexProperty
 {
-    VertexProperty();
-    VertexProperty(const std::string& name, size_t size, offset_t bytesOffset, index_t semanticIndex = 0, index_t slotIndex = 0);
+	VertexProperty();
+	VertexProperty(const VertexPropertyPrototype& prototype, offset_t bytesOffset);
 
-    std::string m_Name;
-    size_t m_Size;
-
-    offset_t m_BytesOffset;
-    index_t m_SlotIndex;
-    index_t m_SemanticIndex;
+	VertexPropertyPrototype m_Prototype;
+	offset_t m_BytesOffset;
 };
 
 struct VertexFormat
@@ -22,10 +59,12 @@ struct VertexFormat
 
     count_t GetNumSlotsUsed() const;
     size_t GetVertexSizeInBytesForSlot(index_t slotIndex) const;
-    void AddVertexProperty(const std::string& name, size_t size, index_t semanticIndex = 0, index_t slotIndex = 0);//const VertexProperty& vertexProperty);
+	void AddVertexProperty(const VertexPropertyPrototype& vertexPropertyPrototype);
 
-    std::vector<size_t> m_PerSlotVertexSizes;
-    std::vector<VertexProperty> m_VertexProperties;
+	std::vector<D3D11_INPUT_ELEMENT_DESC> GetD3D11InputElementDescs() const;
+
+    STLVector<size_t> m_PerSlotVertexSizes;
+    STLVector<VertexProperty> m_VertexProperties;
 private:
     count_t m_NumSlots;
 };
@@ -48,7 +87,7 @@ protected:
     count_t m_NumVertexes;
     count_t m_NumSlots;
 
-    typedef std::vector<byte_t> RawData;
-    typedef std::vector<RawData> VertexSlotsData;
+    typedef STLVector<byte_t> RawData;
+    typedef STLVector<RawData> VertexSlotsData;
     VertexSlotsData m_Data;
 };

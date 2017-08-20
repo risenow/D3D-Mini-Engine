@@ -1,6 +1,9 @@
 #pragma once
 #include <Windows.h>
 #include <string>
+#include <mutex>
+#include "System/MemoryManager.h"
+#include "System/stlcontainersintegration.h"
 #include "System/areahelper.h"
 #include "System/IniFile.h"
 #include "System/IniSerializable.h"
@@ -21,6 +24,42 @@ enum WindowMode
     WINDOW_MODES_COUNT
 };
 
+class WindowThreadCommand
+{
+public:
+	virtual void Execute() = 0;
+};
+
+class SetCursorPosCommand : public WindowThreadCommand
+{
+public:
+	SetCursorPosCommand(unsigned long x, unsigned long y) : m_X(x), m_Y(y)
+	{
+	}
+
+	virtual void Execute() override
+	{
+		SetCursorPos(m_X, m_Y);
+	}
+private:
+	unsigned long m_X;
+	unsigned long m_Y;
+};
+
+class SetCursorVisibilityCommand : public WindowThreadCommand
+{
+public:
+	SetCursorVisibilityCommand(bool visibility) : m_Visible(visibility)
+	{
+	}
+
+	virtual void Execute() override
+	{
+		ShowCursor(m_Visible);
+	}
+private:
+	bool m_Visible;
+};
 
 //class for creation window in console app
 class Window : public IniSerializable
@@ -49,25 +88,45 @@ public:
 
     std::string GetTitle() const;
 
+	unsigned long GetCursorX() const;
+	unsigned long GetCursorY() const;
+
     void SwitchMode();
+
+	template<class T>
+	void AddCommand(const T& command)
+	{
+		m_WindowThreadCommandsMutex.lock();
+		m_WindowThreadCommands.push(popNew(T)(command));
+		m_WindowThreadCommandsMutex.unlock();
+	}
 
     virtual void InitializeIniProperties();
 private:
+	void UpdateCursorPos();
     void WindowCreationDebugOutput();
 
     static void WindowThreadWorker(Window* owner);
     static void InternalCreateWindow(Window* target);
     static HINSTANCE GetConsoleHInstance();
 
-    static void UpdateLoop(HWND hwnd);
+    static void UpdateLoop(Window* target);
 
     static LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam);
+
+	void ExecuteWindowThreadCommands();
+
+	std::mutex m_WindowThreadCommandsMutex;
+	STLStack<WindowThreadCommand*> m_WindowThreadCommands;
 
     size_t m_Width;
     size_t m_Height;
 
     unsigned int m_X;
     unsigned int m_Y;
+
+	unsigned long m_CursorX;
+	unsigned long m_CursorY;
 
     std::string m_Title;
 

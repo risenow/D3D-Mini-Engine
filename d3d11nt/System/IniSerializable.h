@@ -18,19 +18,6 @@ protected:
     std::string m_Key;
 };
 
-//default value must have type INT?
-class IniIntProperty : public IniProperty
-{
-public:
-    IniIntProperty(const std::string& section, const std::string& key, int default, int* val, const NumberRange<int>& acceptableRange);
-
-    virtual void SerializeTo(IniFile& ini);
-    virtual void DeserializeFrom(const IniFile& ini);
-private:
-    NumberRange<int> m_AcceptableRange;
-    int* m_Val;
-    int m_Default;
-};
 
 template<class T>
 class IniNumberProperty : public IniProperty

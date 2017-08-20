@@ -2,7 +2,7 @@
 
 #include "System/stlcontainersintegration.h"
 
-static const unsigned int DEFAULT_FRAME_TIMES_NUM_BUFFERED = 20;
+static const unsigned int DEFAULT_FRAME_TIMES_NUM_BUFFERED = 60;
 
 class FrameMeasurer
 {
@@ -32,5 +32,5 @@ private:
     unsigned int m_SecondMeasurementTime;
 
     unsigned int m_FrameTimesAllreadyBufferedNum;
-    STLVector<unsigned int> m_BufferedFrameTimes; //use to calculate average frame time
+    STLVector<unsigned int> m_BufferedFrameTimes; //used to calculate average frame time
 };

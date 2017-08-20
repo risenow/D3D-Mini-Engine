@@ -70,19 +70,20 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Users\Agafontsev Semyon\Documents\Visual Studio 2015\Projects\d3d11nt\d3d11nt;$(IncludePath)</IncludePath>
-    <SourcePath>C:\Users\Agafontsev Semyon\Documents\Visual Studio 2015\Projects\d3d11nt\d3d11nt\System;C:\Users\Agafontsev Semyon\Documents\Visual Studio 2015\Projects\d3d11nt\d3d11nt;$(SourcePath)</SourcePath>
+    <IncludePath>$(SolutionDir)d3d11nt;$(IncludePath)</IncludePath>
+    <SourcePath>$(SolutionDir)d3d11nt\System\;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>C:\Users\Agafontsev Semyon\Documents\Visual Studio 2015\Projects\d3d11nt\d3d11nt;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Agafontsev Semyon\Documents\Visual Studio 2015\Projects\d3d11nt\Release;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)d3d11nt;$(IncludePath)</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86</LibraryPath>
+    <SourcePath>$(SolutionDir)d3d11nt\System\;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>USE_CUSTOM_ALLOCATORS;_DEBUG;WIN32;_LIB;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>CPU_SIDE_CODE;USE_CUSTOM_ALLOCATORS;_DEBUG;WIN32;_LIB;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
@@ -107,10 +108,10 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <Optimization>MaxSpeed</Optimization>
+      <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>USE_CUSTOM_ALLOCATORS;NOMINMAX;WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>CPU_SIDE_CODE;USE_CUSTOM_ALLOCATORS;NOMINMAX;WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
@@ -146,6 +147,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\d3d11nt\System\areahelper.h" />
+    <ClInclude Include="..\d3d11nt\System\arrayutil.h" />
     <ClInclude Include="..\d3d11nt\System\BigChunkAllocator.h" />
     <ClInclude Include="..\d3d11nt\System\BoundQuad.h" />
     <ClInclude Include="..\d3d11nt\System\builddefines.h" />
@@ -161,6 +163,10 @@
     <ClInclude Include="..\d3d11nt\System\MemoryAllocator.h" />
     <ClInclude Include="..\d3d11nt\System\MemoryManager.h" />
     <ClInclude Include="..\d3d11nt\System\memutils.h" />
+    <ClInclude Include="..\d3d11nt\System\MouseKeyboardCameraController.h" />
+    <ClInclude Include="..\d3d11nt\System\mtutils.h" />
+    <ClInclude Include="..\d3d11nt\System\NewBigChunkAllocator.h" />
+    <ClInclude Include="..\d3d11nt\System\PoolAllocator.h" />
     <ClInclude Include="..\d3d11nt\System\ProfileUnitsManager.h" />
     <ClInclude Include="..\d3d11nt\System\ProfileUnit.h" />
     <ClInclude Include="..\d3d11nt\System\SmallChunkAllocator.h" />
@@ -184,9 +190,13 @@
     <ClCompile Include="..\d3d11nt\System\Log.cpp" />
     <ClCompile Include="..\d3d11nt\System\MemoryManager.cpp" />
     <ClCompile Include="..\d3d11nt\System\memutils.cpp" />
+    <ClCompile Include="..\d3d11nt\System\MouseKeyboardCameraController.cpp" />
+    <ClCompile Include="..\d3d11nt\System\NewBigChunkAllocator.cpp" />
+    <ClCompile Include="..\d3d11nt\System\PoolAllocator.cpp" />
     <ClCompile Include="..\d3d11nt\System\ProfileUnitsManager.cpp" />
     <ClCompile Include="..\d3d11nt\System\ProfileUnit.cpp" />
     <ClCompile Include="..\d3d11nt\System\SmallChunkAllocator.cpp" />
+    <ClCompile Include="..\d3d11nt\System\stlcontainersintegration.cpp" />
     <ClCompile Include="..\d3d11nt\System\strutils.cpp" />
     <ClCompile Include="..\d3d11nt\System\timeutils.cpp" />
     <ClCompile Include="..\d3d11nt\System\Window.cpp" />

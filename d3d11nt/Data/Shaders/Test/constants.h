@@ -1,0 +1,52 @@
+#include "Graphics/ConstantsPreprocessing.h"
+#ifdef CPU_SIDE_CODE
+#include "Extern/glm/glm.hpp"
+#endif
+
+//static const float test = 0.5f;
+
+DECLARE_CONSTANT_STRUCTURE constsTest
+{
+	DECLARE_FLOAT coef;
+	DECLARE_FLOAT3 offset;
+	DECLARE_FLOAT4X4 viewProjection;
+	//DECLARE_FLOAT coef1;
+	//DECLARE_FLOAT coef2;
+	//DECLARE_FLOAT coef3;
+	/*DECLARE_FLOAT coef4;
+	DECLARE_FLOAT coef5;
+	DECLARE_FLOAT coef6;
+	DECLARE_FLOAT coef7;
+	DECLARE_FLOAT coef8;
+	DECLARE_FLOAT coef9;
+	DECLARE_FLOAT coef10;
+
+	DECLARE_FLOAT coef11;
+	DECLARE_FLOAT coef12;
+	DECLARE_FLOAT coef13;
+	DECLARE_FLOAT coef14;
+	DECLARE_FLOAT coef15;
+	DECLARE_FLOAT coef16;
+	DECLARE_FLOAT coef17;
+	DECLARE_FLOAT coef18;
+	DECLARE_FLOAT coef19;
+	DECLARE_FLOAT coef20;
+	DECLARE_FLOAT coef21;
+	DECLARE_FLOAT coef22;
+	DECLARE_FLOAT coef23;
+	DECLARE_FLOAT coef24;
+	DECLARE_FLOAT coef25;
+	DECLARE_FLOAT coef26;
+	DECLARE_FLOAT coef27;
+	DECLARE_FLOAT coef28;
+	DECLARE_FLOAT coef29;
+	DECLARE_FLOAT coef30;
+	DECLARE_FLOAT coef31;
+
+	DECLARE_FLOAT coef32;
+	DECLARE_FLOAT coef33;
+	DECLARE_FLOAT coef34;
+	DECLARE_FLOAT coef35;*/
+
+};
+

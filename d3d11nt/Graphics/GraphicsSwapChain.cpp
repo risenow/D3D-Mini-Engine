@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Graphics/GraphicsSwapchain.h"
 #include "System/logicsafety.h"
+#include "System/builddefines.h"
 #include "Graphics/dxlogicsafety.h"
 #include "Graphics/multisampleutils.h"
 #include <dxgi.h>
@@ -56,7 +57,7 @@ IDXGISwapChain* GraphicsSwapChain::GetDXGISwapChain()
 
 void GraphicsSwapChain::Present()
 {
-    D3D_HR_OP(m_SwapChain->Present(1, 0));
+    D3D_HR_OP(m_SwapChain->Present(0, 0));
 }
 
 bool GraphicsSwapChain::IsValid(const Window& window, MultisampleType currentlySelectedMultisampleType)

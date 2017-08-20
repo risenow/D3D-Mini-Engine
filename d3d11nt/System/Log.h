@@ -5,57 +5,140 @@
 #include <cstring>
 #include <string>
 #include <iostream>
+#include <sstream>
 
 constexpr char* LOG_FILE_OUTPUT_NAME = "log.txt";
 
 enum RuntimeLogModeMasks
 {
-    RuntimeLogMode_FileOutput = 1u,
-    RuntimeLogMode_ConsoleOutput = 1u << 1,
-    RuntimeLogMode_WriteTime = 1u << 2,
-    RuntimeLogMode_WriteLine = 1u << 3
+	RuntimeLogMode_None = 0u,
+    RuntimeLogMode_WriteTime = 1u << 1,
+    RuntimeLogMode_WriteLine = 1u << 2
 };
 typedef unsigned int RuntimeLogMode;
+
+class RuntimeLogStreamBase
+{
+public:
+	virtual void Write(const std::wstring& str) = 0;
+	virtual ~RuntimeLogStreamBase() {}
+};
+
+template<class S> // S = stream with << operator for writing
+class RuntimeLogStream : public RuntimeLogStreamBase
+{
+public:
+	RuntimeLogStream() : m_Stream(nullptr) {}
+	~RuntimeLogStream()
+	{}
+	virtual void Write(const std::wstring& str) override
+	{
+		(*m_Stream) << str;
+	}
+
+	S* GetStream() const
+	{
+		return m_Stream;
+	}
+	void SetStream(S* stream)
+	{
+		m_Stream = stream;
+	}
+private:
+	S* m_Stream;
+};
+
+class StringRuntimeLogStream : public RuntimeLogStreamBase
+{
+public:
+	StringRuntimeLogStream() : m_DestString(nullptr) {}
+	StringRuntimeLogStream(std::wstring* dest) : m_DestString(dest) {}
+	~StringRuntimeLogStream() {}
+
+	void SetDestString(std::wstring* dest)
+	{
+		m_DestString = dest;
+	}
+
+	virtual void Write(const std::wstring& str) override
+	{
+		(*m_DestString) += str;
+	}
+private:
+	std::wstring* m_DestString;
+};
+
+class FileRuntimeLogStream : public RuntimeLogStreamBase, public std::wofstream
+{
+public:
+	FileRuntimeLogStream() {}
+	~FileRuntimeLogStream() { close(); }
+
+	virtual void Write(const std::wstring& str) override
+	{
+		(*(std::wofstream*)(this)) << str;
+		flush();
+	}
+};
 
 class RuntimeLog
 {
 public:
+	typedef RuntimeLogStream<std::wostream>      DefaultConsoleStreamType;
+	typedef FileRuntimeLogStream                 DefaultFileStreamType;
+	typedef std::vector<RuntimeLogStreamBase*>   DefaultStreamsSetType;
+
     static RuntimeLog& GetInstance();
 
-    template<class T>
-    void WriteUsingMode(const T& str, RuntimeLogMode mode)
-    {
-        if (!m_Enabled)
-            return;
+	template<class T>
+	void WriteUsingMode(const std::vector<RuntimeLogStreamBase*> streams, const T& str, RuntimeLogMode mode)
+	{
+		if (!m_Enabled)
+			return;
 
-        std::wstring compiledStr = GetWideString(str);
-        CompileStr(compiledStr, mode);
-        if (mode & RuntimeLogMode_FileOutput)
-            m_OutputFile << GetWideString(compiledStr);
-        if (mode & RuntimeLogMode_ConsoleOutput)
-        {
-            WriteToConsole(compiledStr);
-        }
-    }
+		std::wstring compiledStr = GetWideString(str);
+		CompileStr(compiledStr, mode);
+		
+		for (RuntimeLogStreamBase* stream : streams)
+		{
+			stream->Write(compiledStr);
+		}
+	}
 
-    template<class T>
-    void Write(const T& str)
-    {
-        WriteUsingMode(str, m_Mode);
-    }
-
-    template<class T>
-    void WriteToBufferUsingMode(const T& str, T& destBuffer, RuntimeLogMode mode)
-    {
-        T compiledStr = str;
-        CompileStr(compiledStr, mode);
-        destBuffer += compiledStr;
-    }
+	//do we need default mode(m_Mode) after refactor?
+	//void Write(const std::vector<RuntimeLogStreamBase*> streams, const T& str) 
     
+	RuntimeLogMode GetMode() const
+	{
+		return m_Mode;
+	}
     void SetMode(RuntimeLogMode mode);
     void SetEnabled(bool enabled);
 
     bool GetEnabled();
+
+	DefaultFileStreamType& GetDefaultFileStream()
+	{
+		if (!m_DefaultFileStream.is_open())
+		{
+			m_DefaultFileStream.open("testlog.txt");
+		}
+		return m_DefaultFileStream;
+	}
+	DefaultConsoleStreamType& GetDefaultConsoleStream()
+	{
+		if (m_DefaultConsoleStream.GetStream() == nullptr)
+		{
+			m_DefaultConsoleStream.SetStream(&std::wcout);
+		}
+
+		return m_DefaultConsoleStream;
+	}
+
+	std::vector<RuntimeLogStreamBase*>& GetDefaultRuntimeLogStreamsSet()
+	{
+		return m_DefaultStreamsSet;
+	}
 private:
     RuntimeLog();
     ~RuntimeLog();
@@ -82,11 +165,18 @@ private:
     }
     bool m_Enabled;
     RuntimeLogMode m_Mode;
-    std::wofstream m_OutputFile;
+
+	//
+	DefaultFileStreamType    m_DefaultFileStream;
+	DefaultConsoleStreamType m_DefaultConsoleStream;
+	DefaultStreamsSetType    m_DefaultStreamsSet;
 };
 
+#define LOG_CONSOLE_STREAM() RuntimeLog::GetInstance().GetDefaultConsoleStream()
+#define LOG_FILE_STREAM()    RuntimeLog::GetInstance().GetDefaultFileStream()
+
 #define popGetLogger() (RuntimeLog::GetInstance())
-#define LOG_BUFFER(str, dest) (RuntimeLog::GetInstance().WriteToBufferUsingMode(str, dest, RuntimeLogMode_WriteTime | RuntimeLogMode_WriteLine))
-#define LOG(str) (RuntimeLog::GetInstance().Write(str))
-#define LOG_CONS(str) (RuntimeLog::GetInstance().WriteUsingMode(str, RuntimeLogMode_ConsoleOutput | RuntimeLogMode_WriteTime | RuntimeLogMode_WriteLine))
-#define LOG_FILE(str) (RuntimeLog::GetInstance().WriteUsingMode(str, RuntimeLogMode_FileOutput | RuntimeLogMode_WriteTime | RuntimeLogMode_WriteLine))
+#define LOG_BUFFER(str, dest) { StringRuntimeLogStream tempStringStream(&dest); RuntimeLog::GetInstance().WriteUsingMode( { &tempStringStream }, str, RuntimeLogMode_WriteTime | RuntimeLogMode_WriteLine);}
+#define LOG(str) (RuntimeLog::GetInstance().WriteUsingMode(RuntimeLog::GetInstance().GetDefaultRuntimeLogStreamsSet(), str, RuntimeLog::GetInstance().GetMode()))
+#define LOG_CONS(str) (RuntimeLog::GetInstance().WriteUsingMode({ &LOG_CONSOLE_STREAM() }, str, RuntimeLogMode_WriteTime | RuntimeLogMode_WriteLine))
+#define LOG_FILE(str) (RuntimeLog::GetInstance().WriteUsingMode({ &LOG_FILE_STREAM() }, str, RuntimeLogMode_WriteTime | RuntimeLogMode_WriteLine))

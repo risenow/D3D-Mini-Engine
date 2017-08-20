@@ -15,7 +15,7 @@ SmallChunkAllocator::SmallChunkAllocator(void* start, size_t size)
     m_FreeBlock->m_Next = nullptr;
 }
 
-void* SmallChunkAllocator::Allocate(size_t size, unsigned int al)
+void* SmallChunkAllocator::Allocate(size_t size, unsigned long al, unsigned long hint)
 {
     popProfile(SmallChunkAllocatorAllocate);
 

@@ -16,6 +16,9 @@
     <Filter Include="Header Files\MemoryBenchmarks">
       <UniqueIdentifier>{a6d2d5cf-27e7-4691-9dd7-dd8697b41c90}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\MiscBenchmarks">
+      <UniqueIdentifier>{dd0525fe-7bca-428a-a634-ca091101f09c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -32,6 +35,9 @@
     </ClInclude>
     <ClInclude Include="MemoryAllocatorBenchmark.h">
       <Filter>Header Files\MemoryBenchmarks</Filter>
+    </ClInclude>
+    <ClInclude Include="OutBenchmark.h">
+      <Filter>Header Files\MiscBenchmarks</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

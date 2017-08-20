@@ -2,10 +2,36 @@
 #include "Graphics/VertexData.h"
 #include "System/logicsafety.h"
 
-VertexProperty::VertexProperty() : m_Size(0) {}
-VertexProperty::VertexProperty(const std::string& name, size_t size, offset_t bytesOffset,
-                               index_t semanticIndex/* = 0*/, index_t slotIndex/* = 0*/) : m_Name(name), m_Size(size), m_BytesOffset(bytesOffset),
-                                                                                           m_SemanticIndex(semanticIndex), m_SlotIndex(slotIndex) {}
+template<> // glm type
+DXGI_FORMAT GetVertexDXGIFormat<glm::vec3>()
+{
+	return DXGI_FORMAT_R32G32B32_FLOAT;
+}
+template<> // glm type
+DXGI_FORMAT GetVertexDXGIFormat<glm::vec4>()
+{
+	return DXGI_FORMAT_R32G32B32A32_FLOAT;
+}
+
+D3D11_INPUT_ELEMENT_DESC GetD3D11InputElementDesc(const VertexProperty& vertexProperty)
+{
+	D3D11_INPUT_ELEMENT_DESC inputElementDesc;
+	inputElementDesc.SemanticName      = vertexProperty.m_Prototype.m_Name.c_str();
+	inputElementDesc.SemanticIndex     = vertexProperty.m_Prototype.m_SemanticIndex;
+	inputElementDesc.Format            = vertexProperty.m_Prototype.m_DXGIFormat;
+	inputElementDesc.InputSlot         = vertexProperty.m_Prototype.m_SlotIndex;
+	inputElementDesc.AlignedByteOffset = vertexProperty.m_BytesOffset;
+	inputElementDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+	inputElementDesc.InstanceDataStepRate = 0;
+
+	return inputElementDesc;
+}
+
+
+VertexPropertyPrototype::VertexPropertyPrototype() : m_Size(0), m_SlotIndex(0), m_SemanticIndex(0) {}
+
+VertexProperty::VertexProperty() : m_BytesOffset(0) {}
+VertexProperty::VertexProperty(const VertexPropertyPrototype& vertexPropertyPrototype, offset_t bytesOffset) : m_Prototype(vertexPropertyPrototype), m_BytesOffset(bytesOffset) {}
 
 VertexFormat::VertexFormat() : m_NumSlots(0) {}
 count_t VertexFormat::GetNumSlotsUsed() const
@@ -16,8 +42,10 @@ size_t VertexFormat::GetVertexSizeInBytesForSlot(index_t slotIndex) const
 {
     return m_PerSlotVertexSizes[slotIndex];
 }
-void VertexFormat::AddVertexProperty(const std::string& name, size_t size, index_t semanticIndex/* = 0*/, index_t slotIndex/* = 0*/)//const VertexProperty& vertexProperty)
+void VertexFormat::AddVertexProperty(const VertexPropertyPrototype& vertexPropertyPrototype)
 {
+	index_t slotIndex = vertexPropertyPrototype.m_SlotIndex;
+
     if (m_NumSlots < slotIndex + 1)
     {
         m_NumSlots = slotIndex + 1;
@@ -25,8 +53,18 @@ void VertexFormat::AddVertexProperty(const std::string& name, size_t size, index
         m_PerSlotVertexSizes[slotIndex] = 0;
     }
 
-    m_VertexProperties.push_back(VertexProperty(name, size, m_PerSlotVertexSizes[slotIndex], semanticIndex, slotIndex));
-    m_PerSlotVertexSizes[slotIndex] += size;
+	m_VertexProperties.push_back(VertexProperty(vertexPropertyPrototype, m_PerSlotVertexSizes[slotIndex]));
+    m_PerSlotVertexSizes[slotIndex] += vertexPropertyPrototype.m_Size;
+}
+std::vector<D3D11_INPUT_ELEMENT_DESC> VertexFormat::GetD3D11InputElementDescs() const
+{
+	std::vector<D3D11_INPUT_ELEMENT_DESC> inputElementDescs;
+	for (index_t i = 0; i < m_VertexProperties.size(); i++)
+	{
+		inputElementDescs.push_back(GetD3D11InputElementDesc(m_VertexProperties[i]));
+	}
+
+	return inputElementDescs;
 }
 
 VertexData::VertexData() : m_NumVertexes(0)
@@ -53,10 +91,11 @@ VertexProperty VertexData::GetVertexPropertyByName(const std::string& name, inde
     for (int i = 0; i < m_VertexFormat.m_VertexProperties.size(); i++)
     {
         const VertexProperty& vertexProperty = m_VertexFormat.m_VertexProperties.at(i);
-        if (vertexProperty.m_Name == name && vertexProperty.m_SemanticIndex == semanticIndex)
+        if (vertexProperty.m_Prototype.m_Name == name && vertexProperty.m_Prototype.m_SemanticIndex == semanticIndex)
             return vertexProperty;
     }
     popAssert(false);
+	return VertexProperty();
 }
 VertexFormat VertexData::GetVertexFormat() const
 {
@@ -68,6 +107,6 @@ void* VertexData::GetDataPtrForSlot(index_t slotIndex) const
 }
 void* VertexData::GetVertexPropertyDataPtrForVertexWithIndex(index_t index, const VertexProperty& vertexProperty)
 {
-    index_t byteIndex = index * m_VertexFormat.GetVertexSizeInBytesForSlot(vertexProperty.m_SlotIndex) + vertexProperty.m_BytesOffset;
-    return &m_Data[vertexProperty.m_SlotIndex][byteIndex];
+    index_t byteIndex = index * m_VertexFormat.GetVertexSizeInBytesForSlot(vertexProperty.m_Prototype.m_SlotIndex) + vertexProperty.m_BytesOffset;
+    return &m_Data[vertexProperty.m_Prototype.m_SlotIndex][byteIndex];
 }

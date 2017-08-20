@@ -39,7 +39,7 @@ size_t DisplayAdaptersList::GetAdaptersCount()
 
 void DisplayAdaptersList::LogInfo()
 {
-    std::string logBuffer;
+    std::wstring logBuffer;
     LOG_BUFFER(std::string("Adapters enumerated:"), logBuffer);
     for (unsigned int i = 0; i < m_Adapters.size(); i++)
     {
@@ -49,6 +49,6 @@ void DisplayAdaptersList::LogInfo()
         LOG_BUFFER(wstrtostr(std::wstring(L"Description: ") + std::wstring(currentAdapterDesc.Description)), logBuffer);
         LOG_BUFFER(std::string(""), logBuffer);
     }
-    popGetLogger().WriteUsingMode(logBuffer, RuntimeLogMode_FileOutput | RuntimeLogMode_ConsoleOutput);
+	popGetLogger().WriteUsingMode({ &LOG_CONSOLE_STREAM(), &LOG_FILE_STREAM() }, logBuffer, RuntimeLogMode_None);
 }
 

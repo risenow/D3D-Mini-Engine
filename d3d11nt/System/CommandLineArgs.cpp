@@ -25,13 +25,14 @@ CommandLineArgs::CommandLineArgs(const IniFile& ini)
 
 void CommandLineArgs::WriteToConsole()
 {
-    std::string logBuffer;
+    std::wstring logBuffer;
+	StringRuntimeLogStream logBufferStream(&logBuffer);
     LOG_BUFFER(std::string("Commandline Args:\n"), logBuffer);
-    for (std::string arg : m_Args)
+    for (std::string& arg : m_Args)
     {
-        popGetLogger().WriteToBufferUsingMode(arg + " ", logBuffer, 0);
+		popGetLogger().WriteUsingMode({ &logBufferStream }, arg + " ", 0);
     }
-    popGetLogger().WriteUsingMode(logBuffer, RuntimeLogMode_ConsoleOutput);
+	popGetLogger().WriteUsingMode({ &LOG_CONSOLE_STREAM() }, logBuffer, 0);
 }
 
 bool CommandLineArgs::HasArg(const std::string& param) const

@@ -1,0 +1,12 @@
+#include "Data/Shaders/Test/constants.h"
+
+float4 PSEntry(float4 pos : SV_POSITION) : SV_Target
+{
+    //float c = 0.0;
+    //for (int i = 0; i < 4; i++)
+    //for (int j = 0; j < 4; j++)
+    //{
+    //    c += viewProjection[i][j];
+    //}
+    return float4(coef, 0.0, 0.0, 1.0);
+}

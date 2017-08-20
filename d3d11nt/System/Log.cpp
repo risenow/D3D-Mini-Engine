@@ -9,13 +9,12 @@ RuntimeLog& RuntimeLog::GetInstance()
     return s_RuntimeLog;
 }
 
-RuntimeLog::RuntimeLog()
+RuntimeLog::RuntimeLog() : m_Enabled(true)
 {
-    m_OutputFile = std::wofstream(LOG_FILE_OUTPUT_NAME, std::ofstream::out | std::ofstream::trunc);
+	m_DefaultStreamsSet = { &GetDefaultConsoleStream(), &GetDefaultFileStream() };
 }
 RuntimeLog::~RuntimeLog()
 {
-    m_OutputFile.close();
 }
 void RuntimeLog::SetMode(RuntimeLogMode mode)
 {

@@ -62,7 +62,7 @@ private:
     T* m_DX11Object;
 };
 
-template<class T>
+/*template<class T>
 class DX11ObjectHolder
 {
 public:
@@ -93,7 +93,7 @@ protected:
         return m_DX11Object.GetRef();
     }
     DX11Object<T> m_DX11Object;
-};
+};*/
 
 template<class T, size_t num>
 class DX11MultipleObjectsHolder
@@ -102,6 +102,14 @@ public:
     DX11MultipleObjectsHolder()
     {}
 
+	DX11MultipleObjectsHolder(const std::array<T*, num>& objs)
+	{
+		for (unsigned long i = 0; i < num; i++)
+		{
+			m_DX11Objects[i].Set(objs[i]);
+			objs[i]->AddRef();
+		}
+	}
     //DX11ObjectHolder(T* obj) : m_DX11Object(obj)
     //{
     //    m_DX11Object.Get()->AddRef();
@@ -122,6 +130,12 @@ public:
     {
         m_DX11Objects[index].Release();
     }
+
+	void ReleaseDX11Objects()
+	{
+		for (unsigned long i = 0; i < m_DX11Objects.size(); i++)
+			m_DX11Objects[i].Release();
+	}
 protected:
     T*& GetDX11ObjectReference(index_t index = 0)
     {
@@ -131,16 +145,19 @@ protected:
 };
 
 template<class T>
+using DX11ObjectHolder = DX11MultipleObjectsHolder<T, 1>;
+
+template<class T>
 class DX11ObjectWithNameHolder : public DX11ObjectHolder<T>
 {
 public:
     DX11ObjectWithNameHolder() : DX11ObjectHolder<T>() {}
-    DX11ObjectWithNameHolder(T* obj) : DX11ObjectHolder<T>(obj) {}
+	DX11ObjectWithNameHolder(T* obj) : DX11ObjectHolder<T>({ obj }) {}
 
     void SetDebugName(const std::string& name)
     {
-        popAssert(m_DX11Object.Get());
-        m_DX11Object.Get()->SetPrivateData(WKPDID_D3DDebugObjectName, name.size(), name.c_str());
+        popAssert(GetDX11Object());
+        GetDX11Object()->SetPrivateData(WKPDID_D3DDebugObjectName, name.size(), name.c_str());
     }
 };
 

@@ -13,11 +13,11 @@ void ProfileUnit::EndProfile()
 {
     m_ResultTime = GetPerfomanceCounterMicroseconds() - m_StartTime;
 }
-std::string ProfileUnit::GetName()
+std::string ProfileUnit::GetName() const
 {
     return m_Name;
 }
-long long ProfileUnit::GetResultTime()
+long long ProfileUnit::GetResultTime() const
 {
     return m_ResultTime;
 }
@@ -30,11 +30,11 @@ void ManagedProfileUnit::SetParentID(IDType parentID)
 {
     m_ParentID = parentID;
 }
-unsigned int ManagedProfileUnit::GetParentID() const
+ManagedProfileUnit::IDType ManagedProfileUnit::GetParentID() const
 {
     return m_ParentID;
 }
-unsigned int ManagedProfileUnit::GetID() const
+ManagedProfileUnit::IDType ManagedProfileUnit::GetID() const
 {
     return m_ID;
 }

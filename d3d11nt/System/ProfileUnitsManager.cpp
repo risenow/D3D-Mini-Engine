@@ -11,7 +11,7 @@ ProfileUnitsManager& ProfileUnitsManager::GetInstance()
 ManagedProfileUnit::IDType ProfileUnitsManager::CreateProfileUnit(const std::string& name)
 {
     PerThreadProfileUnitsData& perThreadData = GetDataForThisThread();
-    unsigned int newID = perThreadData.m_Units.size();
+    ManagedProfileUnit::IDType newID = perThreadData.m_Units.size();
     perThreadData.m_Units.push_back(ManagedProfileUnit(name, newID, INVALID_ID));
     return newID;
 }
@@ -42,12 +42,12 @@ ProfileStats ProfileUnitsManager::GatherStatsForProfileWithName(const std::strin
         return ProfileStats();
 
     long long summ = 0;
-    unsigned int count = 0;
+    unsigned long count = 0;
     long long minTime = std::numeric_limits<long long>::max();
     long long maxTime = 0;
-    ManagedProfileUnit::IDType minTimeProfileID = std::numeric_limits<unsigned int>::max();
-    ManagedProfileUnit::IDType maxTimeProfileID = std::numeric_limits<unsigned int>::max();
-    for (int i = 0; i < perThreadData.m_Units.size(); i++)
+    ManagedProfileUnit::IDType minTimeProfileID = std::numeric_limits<unsigned long>::max();
+    ManagedProfileUnit::IDType maxTimeProfileID = std::numeric_limits<unsigned long>::max();
+    for (long i = 0; i < perThreadData.m_Units.size(); i++)
     {
         ManagedProfileUnit& currentProfileUnit = perThreadData.m_Units[i];
         if (currentProfileUnit.GetName() == name)

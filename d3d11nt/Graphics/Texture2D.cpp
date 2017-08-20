@@ -6,7 +6,7 @@
 #include <d3dcommon.h>
 
 Texture2D::Texture2D() {}
-Texture2D::Texture2D(ID3D11Texture2D* texture) : D3D11ResourceHolder(texture)
+Texture2D::Texture2D(ID3D11Texture2D* texture) : D3D11ResourceHolder({ texture })
 {
     popAssert(texture);
 
@@ -117,7 +117,7 @@ bool Texture2D::IsValid() const
 
 void Texture2D::Release() 
 {
-    //ReleaseDX11Object(); //we ve got auto release, right?
+    ReleaseDX11Object(); //we ve got auto release, right? wtf? errors got without this line, to investigate
 }
 
 Texture2D Texture2DHelper::CreateCommonTexture(GraphicsDevice& device, size_t width, size_t height,

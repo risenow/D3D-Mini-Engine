@@ -2,25 +2,12 @@
 #include "System/IniSerializable.h"
 #include "System/strutils.h"
 #include "System/logicsafety.h"
+#include "System/MemoryManager.h"
 
 IniProperty::IniProperty(const std::string section, const std::string& key) 
                          : m_Section(section), m_Key(key)
 {}
 
-IniIntProperty::IniIntProperty(const std::string& section, const std::string& key, 
-                               int default, int* val, const NumberRange<int>& acceptableRange) 
-                               : IniProperty(section, key), m_Default(default), m_Val(val), m_AcceptableRange(acceptableRange)
-{}
-
-void IniIntProperty::SerializeTo(IniFile& ini)
-{
-    ini.SetValue(m_Section, m_Key, *m_Val);
-}
-void IniIntProperty::DeserializeFrom(const IniFile& ini)
-{
-    int tempVal = ini.GetIntValue(m_Section, m_Key, m_Default);
-    (*m_Val) = m_AcceptableRange.InRange(tempVal) ? tempVal : m_Default;
-}
 
 IniEnumProperty::IniEnumProperty(const std::string& section, const std::string& key,
                                  int default, int* val, const STLVector<int>& acceptableValues)

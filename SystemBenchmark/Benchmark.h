@@ -2,11 +2,12 @@
 #include <string>
 #include <iostream>
 #include "System/timeutils.h"
+#include "System/ProfileUnit.h"
 
 class Benchmark
 {
 public:
-    Benchmark() : m_StartTime(0), m_ResultTime(0) {}
+    Benchmark() {}
     Benchmark(const std::string& name) : Benchmark() 
     {
         m_Name = name;
@@ -17,21 +18,19 @@ public:
 
     void WriteResultToConsole()
     {
-        std::cout << m_Name << "benchmark result: " << m_ResultTime << std::endl;
+        std::cout << m_Name << "benchmark result: " << m_ProfileUnit.GetResultTime() << std::endl;
     }
-    unsigned int GetResultTime() const { return m_ResultTime; }
+    unsigned int GetResultTime() const { return m_ProfileUnit.GetResultTime(); }
 protected:
-    void StartMeasure()
+    void BeginMeasure()
     {
-        m_StartTime = GetMilisecondsSinceProgramStart();
+		m_ProfileUnit.BeginProfile();
     }
     void EndMeasure()
     {
-        m_ResultTime = GetMilisecondsSinceProgramStart() - m_StartTime;
+		m_ProfileUnit.EndProfile();
     }
 
     std::string m_Name;
-
-    unsigned int m_StartTime;
-    unsigned int m_ResultTime;
+	ProfileUnit m_ProfileUnit;
 };

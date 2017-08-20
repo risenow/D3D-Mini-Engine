@@ -31,15 +31,15 @@ public:
         m_Ini[section][name] = { value };
     }
 
-    std::string      GetStrValue        (popDeclareGetValParams, const std::string& defaultValue) const;
-    int              GetIntValue        (popDeclareGetValParams, int defaultValue) const;
-    unsigned int     GetUIntValue       (popDeclareGetValParams, unsigned int defaultValue) const;
-    float            GetFloatValue      (popDeclareGetValParams, float defaultValue) const;
+    std::string   GetStrValue    (popDeclareGetValParams, const std::string& defaultValue) const;
+    int           GetIntValue    (popDeclareGetValParams, int defaultValue) const;
+    unsigned int  GetUIntValue   (popDeclareGetValParams, unsigned int defaultValue) const;
+    float         GetFloatValue  (popDeclareGetValParams, float defaultValue) const;
 
-    std::string GetValue(popDeclareGetValParams, const std::string& defaultValue) const;
-    int GetValue(popDeclareGetValParams, int defaultValue) const;
-    unsigned int GetValue(popDeclareGetValParams, unsigned int defaultValue) const;
-    float GetValue(popDeclareGetValParams, float defaultValue) const;
+    std::string    GetValue   (popDeclareGetValParams, const std::string& defaultValue) const;
+    int            GetValue   (popDeclareGetValParams, int defaultValue) const;
+    unsigned int   GetValue   (popDeclareGetValParams, unsigned int defaultValue) const;
+    float          GetValue   (popDeclareGetValParams, float defaultValue) const;
     
     void GetValues(popDeclareGetValParams, const STLVector<std::string>& defaultValues, STLVector<std::string>& values);
 

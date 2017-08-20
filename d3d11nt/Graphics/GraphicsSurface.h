@@ -42,7 +42,6 @@ public:
     void Release();
 private:
     Texture2D* m_Texture;
-
 };
 
 typedef GraphicsSurface<ID3D11RenderTargetView> ColorSurface;

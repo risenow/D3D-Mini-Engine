@@ -85,8 +85,9 @@ GraphicsBuffer::GraphicsBuffer(GraphicsDevice& device, size_t size, BindFlags bi
 {
     D3D11_BUFFER_DESC bufferDesc;
     D3D11_SUBRESOURCE_DATA subresourceData;
+
     CreateDesc(size, bindFlag, usageFlag, miscFlag, data, structureByteStride, bufferDesc, subresourceData);
-    D3D_HR_OP(device.GetD3D11Device()->CreateBuffer(&bufferDesc, &subresourceData, (ID3D11Buffer**)&m_DX11Object.GetRef()));
+    D3D_HR_OP(device.GetD3D11Device()->CreateBuffer(&bufferDesc, (data) ? &subresourceData : nullptr, (ID3D11Buffer**)&GetDX11ObjectReference()));
 }
 
 VertexBuffer::VertexBuffer(GraphicsDevice& device, const VertexData& vertexData) : GraphicsBuffer(device, 
@@ -101,5 +102,5 @@ VertexBuffer::VertexBuffer(GraphicsDevice& device, const VertexData& vertexData)
 void VertexBuffer::Bind(GraphicsDevice& device)
 {
     offset_t offset = 0;
-    device.GetD3D11DeviceContext()->IASetVertexBuffers(0, 1, (ID3D11Buffer**)&m_DX11Object.GetRef(), &m_VertexSizeInBytes, (unsigned int*)&offset);
+    device.GetD3D11DeviceContext()->IASetVertexBuffers(0, 1, (ID3D11Buffer**)&GetDX11ObjectReference(), &m_VertexSizeInBytes, (unsigned int*)&offset);
 }

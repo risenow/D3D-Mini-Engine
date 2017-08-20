@@ -33,6 +33,7 @@ Window::Window(const std::string& title, unsigned int posX, unsigned int posY,
 Window::Window(const IniFile& ini) : m_Closed(false)
 {
     DeserializeFromIni(ini);
+	//Window::WindowThreadWorker(this);
     std::thread windowThreadWorker(&Window::WindowThreadWorker, this);
     windowThreadWorker.detach();
 }
@@ -47,13 +48,13 @@ Window::Window(const IniFile& ini) : m_Closed(false)
 
 void Window::InternalCreateWindow(Window* target)
 {
-    HINSTANCE hInstance = GetConsoleHInstance();
+	HINSTANCE hInstance = GetModuleHandle(NULL);//GetConsoleHInstance(); //idk why i set console instance earlier mb there was a reason so this comment may stand here for a while
 
     const static std::wstring windowClassName = L"_D3DAPP_MAIN_WINDOW";
 
     WNDCLASS wc = { 0 };
     wc.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
-    wc.hCursor = LoadCursor(hInstance, IDC_ARROW);
+	wc.hCursor = LoadCursor(hInstance, IDC_ARROW);
     wc.hIcon = LoadIcon(hInstance, IDI_APPLICATION);
     wc.hInstance = hInstance;
     wc.lpfnWndProc = Window::WndProc;
@@ -92,7 +93,7 @@ void Window::InternalCreateWindow(Window* target)
 void Window::WindowThreadWorker(Window* owner)
 {
     InternalCreateWindow(owner);
-    UpdateLoop(owner->m_WindowHandle);
+    UpdateLoop(owner);
 }
 void Window::SetTitle(const std::string& title)
 {
@@ -151,6 +152,15 @@ std::string Window::GetTitle() const
     return m_Title;
 }
 
+unsigned long Window::GetCursorX() const
+{
+	return m_CursorX;
+}
+unsigned long Window::GetCursorY() const
+{
+	return m_CursorY;
+}
+
 void Window::SwitchMode()
 {
     m_WindowMode = (m_WindowMode == WindowMode_WINDOWED) ? WindowMode_FULLSCREEN : WindowMode_WINDOWED;
@@ -172,24 +182,39 @@ void Window::InitializeIniProperties()
 
 void Window::WindowCreationDebugOutput()
 {
-    std::string logBuffer;
+    std::wstring logBuffer;
     LOG_BUFFER(std::string("Window created with next params: "),               logBuffer);
     LOG_BUFFER(std::string("Window Title: ") + m_Title,                        logBuffer);
     LOG_BUFFER(std::string("Window Pos X: ") + std::to_string(m_X),            logBuffer);
     LOG_BUFFER(std::string("Window Pos Y: ") + std::to_string(m_Y),            logBuffer);
     LOG_BUFFER(std::string("Window Width: ") + std::to_string(m_Width),        logBuffer);
     LOG_BUFFER(std::string("Window Height: ") + std::to_string(m_Height),      logBuffer);
-    popGetLogger().WriteUsingMode(logBuffer, RuntimeLogMode_ConsoleOutput);
+	
+	StringRuntimeLogStream logBufferStream(&logBuffer);
+	popGetLogger().WriteUsingMode({ &logBufferStream }, logBuffer, RuntimeLogMode_None);
 }
-void Window::UpdateLoop(HWND hwnd)
+void Window::UpdateCursorPos()
 {
+	POINT p;
+	GetCursorPos(&p);
+	m_CursorX = p.x;
+	m_CursorY = p.y;
+}
+void Window::UpdateLoop(Window* target)
+{
+	HWND windowHandle = target->GetWindowHandle();
     MSG msg;
-    BOOL r;
-    while (r = GetMessage(&msg, hwnd, 0, 0))
-    {
-        TranslateMessage(&msg);
-        DispatchMessage(&msg);
-    }
+	BOOL r;
+	while (!target->IsClosed())
+	{
+		target->UpdateCursorPos();
+		target->ExecuteWindowThreadCommands();
+		while (r = PeekMessage(&msg, windowHandle, 0, 0, PM_REMOVE))
+		{
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
+	}
 }
 
 HINSTANCE Window::GetConsoleHInstance()
@@ -216,6 +241,13 @@ LRESULT CALLBACK Window::WndProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM 
             }
         }
         break;
+	case WM_KEYDOWN:
+		if (wparam == VK_ESCAPE)
+		{
+			((Window*)GetWindowLong(hwnd, GWLP_USERDATA))->Close();
+		}
+
+		break;
     case WM_SIZE:
     {
         switch (wparam)
@@ -245,4 +277,14 @@ LRESULT CALLBACK Window::WndProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM 
     }
 
     return DefWindowProc(hwnd, message, wparam, lparam);
+}
+
+void Window::ExecuteWindowThreadCommands()
+{
+	while (m_WindowThreadCommands.size())
+	{
+		m_WindowThreadCommands.top()->Execute();
+		popDelete(m_WindowThreadCommands.top());
+		m_WindowThreadCommands.pop();
+	}
 }

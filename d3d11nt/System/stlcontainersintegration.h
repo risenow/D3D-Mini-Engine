@@ -1,13 +1,31 @@
 #pragma once
-#include "System/SmallChunkAllocator.h"
-#include "System/BigChunkAllocator.h"
-#include "System/MemoryManager.h"
+//#include "System/SmallChunkAllocator.h"
+//#include "System/NewBigChunkAllocator.h"
+//#include "System/MemoryManager.h"
 #include <vector>
 #include <deque>
 #include <stack>
 #include <map>
+#include "System/logicsafety.h"
 
-template<class T>
+class BigChunkAllocator;
+class SmallChunkAllocator;
+
+namespace AllocatorWrapperUtils
+{
+	BigChunkAllocator* GetBigChunkAllocatorFromMemoryManager();
+	SmallChunkAllocator* GetSmallChunkAllocatorFromMemoryManager();
+
+	// get rid of BigChunkAllocator dependency
+	void* AllocateBy(BigChunkAllocator* allocator, size_t size, unsigned long al, unsigned long hint);
+	void DeallocateBy(BigChunkAllocator* allocator, void* p);
+
+	// get rid of SmallChunkAllocator dependency
+	void* AllocateBy(SmallChunkAllocator* allocator, size_t size, unsigned long al, unsigned long hint);
+	void DeallocateBy(SmallChunkAllocator* allocator, void* p);
+}
+
+template<class T, unsigned long H, BigChunkAllocator* (*GetAllocF)()>
 class BigChunkAllocatorSTLWrapper : public std::allocator<T>
 {
 public:
@@ -18,10 +36,10 @@ public:
     template<typename T1>
     struct rebind
     {
-        typedef BigChunkAllocatorSTLWrapper<T1> other;
+        typedef BigChunkAllocatorSTLWrapper<T1, H, GetAllocF> other;
     };
 
-    BigChunkAllocatorSTLWrapper() : m_RawAllocator(MemoryManager::GetBigChunkAllocator())
+    BigChunkAllocatorSTLWrapper() : m_RawAllocator(GetAllocF()), m_Hint(H)
     {}
 
     BigChunkAllocatorSTLWrapper(BigChunkAllocator* all) : m_RawAllocator(all)
@@ -29,25 +47,26 @@ public:
 
     pointer allocate(size_type n, const void *hint = 0)
     {
-        //assert(sizeof(T) >= 12);
         popAssert(m_RawAllocator);
-        return (T*)m_RawAllocator->Allocate(n*sizeof(T), __alignof(T));
+		return (T*)AllocatorWrapperUtils::AllocateBy(m_RawAllocator, n*sizeof(T), __alignof(T), H);
     }
 
     void deallocate(pointer p, size_type n)
     {
         popAssert(m_RawAllocator);
-        m_RawAllocator->Deallocate(p);
+		AllocatorWrapperUtils::DeallocateBy(m_RawAllocator, p);
     }
 
 
-    BigChunkAllocatorSTLWrapper(const BigChunkAllocatorSTLWrapper<T> &a) : m_RawAllocator(a.GetRawAllocator()) { }
+    BigChunkAllocatorSTLWrapper(const BigChunkAllocatorSTLWrapper<T, H, GetAllocF> &a) : m_RawAllocator(a.GetRawAllocator())  { }
     template <class U>
-    BigChunkAllocatorSTLWrapper(const BigChunkAllocatorSTLWrapper<U> &a) : m_RawAllocator(a.GetRawAllocator()) { }
+    BigChunkAllocatorSTLWrapper(const BigChunkAllocatorSTLWrapper<U, H, GetAllocF> &a) : m_RawAllocator(a.GetRawAllocator()) { }
     ~BigChunkAllocatorSTLWrapper() { }
 
-    BigChunkAllocator* GetRawAllocator() const { return m_RawAllocator; }
+	BigChunkAllocator* GetRawAllocator() const { return m_RawAllocator; }
+
 private:
+	unsigned long m_Hint;
     BigChunkAllocator* m_RawAllocator;
 };
 
@@ -65,7 +84,7 @@ public:
         typedef SmallChunkAllocatorSTLWrapper<T1> other;
     };
 
-    SmallChunkAllocatorSTLWrapper() : m_RawAllocator(MemoryManager::GetSmallChunkAllocator())
+    SmallChunkAllocatorSTLWrapper() : m_RawAllocator(AllocatorWrapperUtils::GetSmallChunkAllocatorFromMemoryManager())
     {}
 
     SmallChunkAllocatorSTLWrapper(BigChunkAllocator* all) : m_RawAllocator(all)
@@ -76,13 +95,13 @@ public:
         size_t allocationSize = sizeof(T) * n;
         popAssert(allocationSize < 12);
         popAssert(m_RawAllocator);
-        return (T*)m_RawAllocator->Allocate(allocationSize, __alignof(T));
+		return (T*)AllocatorWrapperUtils::AllocateBy(m_RawAllocator, allocationSize, __alignof(T), 0);
     }
 
     void deallocate(pointer p, size_type n)
     {
         popAssert(m_RawAllocator);
-        m_RawAllocator->Deallocate(p);
+		AllocatorWrapperUtils::DeallocateBy(m_RawAllocator, p);
     }
 
 
@@ -96,10 +115,13 @@ private:
     SmallChunkAllocator* m_RawAllocator;
 };
 
+template<class T>
+using DefaultBigChunkAllocatorSTLWrapper = BigChunkAllocatorSTLWrapper<T, 0, AllocatorWrapperUtils::GetBigChunkAllocatorFromMemoryManager>;
+
 //deque
 template<class T, class A =
 #ifdef USE_CUSTOM_ALLOCATORS
-    BigChunkAllocatorSTLWrapper<T>
+	DefaultBigChunkAllocatorSTLWrapper<T>
 #else
     std::allocator<T>
 #endif
@@ -113,7 +135,7 @@ using STLStack = std::stack<T, C>;
 //vector
 template<class T, class A =
 #ifdef USE_CUSTOM_ALLOCATORS
-    BigChunkAllocatorSTLWrapper<T>
+	DefaultBigChunkAllocatorSTLWrapper<T>
 #else
     std::allocator<T>
 #endif
@@ -123,7 +145,7 @@ using STLVector = std::vector<T, A>;
 //map
 template<class K, class T, class C = std::less<K>, class A =
 #ifdef USE_CUSTOM_ALLOCATORS
-    BigChunkAllocatorSTLWrapper<std::pair<K, T>>
+	DefaultBigChunkAllocatorSTLWrapper<std::pair<K, T>>
 #else
     std::allocator<std::pair<K, T>>
 #endif
@@ -133,7 +155,7 @@ using STLMap = std::map<K, T, C, A>;
 //string
 template<class T, class Tr = std::char_traits<T>, class A =
 #ifdef USE_CUSTOM_ALLOCATORS
-    BigChunkAllocatorSTLWrapper<T>
+	DefaultBigChunkAllocatorSTLWrapper<T>
 #else
     std::allocator<T>
 #endif

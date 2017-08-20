@@ -2,12 +2,13 @@
 #include <string>
 #include "Benchmark.h"
 #include "System/memutils.h"
-#include "System/BigChunkAllocator.h"
+#include "System/PoolAllocator.h"
+#include "System/NewBigChunkAllocator.h"
 #include "System/SmallChunkAllocator.h"
 
-static const unsigned int PreAllocatedSize = 256 MB;
+static const unsigned int PreAllocatedSize = 360 MB;
 static const unsigned int NumAllocatedChunks = 450000;
-static const unsigned int AllocatedChunkSize = 6;
+static const unsigned int AllocatedChunkSize = 400;
 
 class CustomMemoryAllocationBenchmark : public Benchmark
 {
@@ -17,20 +18,23 @@ public:
 
     virtual void Run()
     {
-        void* preAllocatedMemoryP = malloc(PreAllocatedSize);
-        SmallChunkAllocator bigChunkAllocator(preAllocatedMemoryP, PreAllocatedSize);
+		BigChunkAllocator bigChunkAllocator(PreAllocatedSize, 1, BigChunkAllocator::ExtendMode_Disabled, false);
 
         void** allocatedChunks = new void*[NumAllocatedChunks];
 
-        StartMeasure();
+		BigChunksPage& allocatorPage = (bigChunkAllocator.GetPagesVector())[0];
+
+		BeginMeasure();
         for (int i = 0; i < NumAllocatedChunks; i++)
         {
-            allocatedChunks[i] = bigChunkAllocator.Allocate(AllocatedChunkSize, 1);
+			popProfile(BigChunkAllocatorAllocate);
+            /*allocatedChunks[i] = *///bigChunkAllocator.Allocate(AllocatedChunkSize, 1);
+			allocatorPage.Allocate(AllocatedChunkSize);
+			//popAssert(allocatedChunks[i]);
         }
         EndMeasure();
 
         delete[] allocatedChunks;
-        free(preAllocatedMemoryP);
     }
 private:
 };
@@ -45,10 +49,11 @@ public:
     {
         void** allocatedChunks = new void*[NumAllocatedChunks];
         
-        StartMeasure();
+		BeginMeasure();
         for (int i = 0; i < NumAllocatedChunks; i++)
         {
             allocatedChunks[i] = malloc(AllocatedChunkSize);
+			popAssert(allocatedChunks[i]);
         }
         EndMeasure();
 
@@ -69,7 +74,9 @@ public:
     virtual void Run()
     {
         void* preAllocatedMemoryP = malloc(PreAllocatedSize);
-        SmallChunkAllocator bigChunkAllocator(preAllocatedMemoryP, PreAllocatedSize);
+        BigChunkAllocator bigChunkAllocator(PreAllocatedSize, 1, BigChunkAllocator::ExtendMode_Disabled, false);
+
+		BigChunksPage& allocatorPage = (bigChunkAllocator.GetPagesVector())[0];
 
         void** allocatedChunks = new void*[NumAllocatedChunks];
 
@@ -78,10 +85,12 @@ public:
             allocatedChunks[i] = bigChunkAllocator.Allocate(AllocatedChunkSize, 1);
         }
 
-        StartMeasure();
+		BeginMeasure();
         for (int i = 0; i < NumAllocatedChunks; i++)
         {
-            bigChunkAllocator.Deallocate(allocatedChunks[i]);
+			//popProfile(BigChunkAllocatorDeallocate);
+			allocatorPage.Deallocate(allocatedChunks[i]);
+            //bigChunkAllocator.Deallocate(allocatedChunks[i]);
         }
         EndMeasure();
 
@@ -105,12 +114,59 @@ public:
             allocatedChunks[i] = malloc(AllocatedChunkSize);
         }
 
-        StartMeasure();
+		BeginMeasure();
         for (int i = 0; i < NumAllocatedChunks; i++)
         {
             free(allocatedChunks[i]);
         }
         EndMeasure();
     }
+private:
+};
+
+class PooledMemoryAllocationBenchmark : public Benchmark
+{
+public:
+	PooledMemoryAllocationBenchmark(const std::string& name) : Benchmark(name) {}
+
+	virtual void Run()
+	{
+		PoolAllocator poolAllocator(AllocatedChunkSize, NumAllocatedChunks, 1, false);
+		void** allocatedChunks = new void*[NumAllocatedChunks];
+		
+		BeginMeasure();
+		for (unsigned long i = 0; i < NumAllocatedChunks/2; i++)
+		{
+			allocatedChunks[i] = poolAllocator.Allocate();
+			popAssert(allocatedChunks[i]);
+		}
+		EndMeasure();
+	}
+private:
+};
+
+class PooledMemoryDeallocationBenchmark : public Benchmark
+{
+public:
+	PooledMemoryDeallocationBenchmark(const std::string& name) : Benchmark(name) {}
+
+	virtual void Run()
+	{
+		PoolAllocator poolAllocator(AllocatedChunkSize, NumAllocatedChunks, 1, false);
+		void** allocatedChunks = new void*[NumAllocatedChunks];
+
+		for (unsigned long i = 0; i < NumAllocatedChunks; i++)
+		{
+			allocatedChunks[i] = poolAllocator.Allocate();
+		}
+
+		BeginMeasure();
+		for (unsigned long i = 0; i < NumAllocatedChunks; i++)
+		{
+			poolAllocator.Deallocate(allocatedChunks[i]);
+		}
+		EndMeasure();
+	}
+
 private:
 };

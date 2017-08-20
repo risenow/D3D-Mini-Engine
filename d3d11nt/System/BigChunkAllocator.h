@@ -32,7 +32,7 @@ public:
     BigChunkAllocator(void* start, size_t size);
     ~BigChunkAllocator();
 
-    virtual void* Allocate(size_t size, unsigned int al);
+    virtual void* Allocate(size_t size = 1, unsigned long al = 1);
     virtual void Deallocate(void* p);
 
     void* GetStartPointer() { return m_Start; }

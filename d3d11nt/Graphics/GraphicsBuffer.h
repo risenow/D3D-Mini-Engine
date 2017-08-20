@@ -13,6 +13,11 @@ public:
     GraphicsBuffer(GraphicsDevice& device, size_t size, BindFlags bindFlag, 
                    UsageFlags usageFlag, MiscFlags miscFlag = MiscFlag_Default, 
                    void* data = nullptr, size_t structureByteStride = 0);
+
+	virtual ~GraphicsBuffer()
+	{
+		ReleaseDX11Objects();
+	}
 protected:
     //void CreateDesc(const size_t size, const BindFlags bindFlag, 
     //                const UsageFlags usageFlag, const MiscFlags miscFlag, void* data, size_t structureByStride, 

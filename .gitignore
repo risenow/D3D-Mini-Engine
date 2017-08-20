@@ -41,3 +41,9 @@ Release/d3d11nt.ipdb
 Graphics/Release/Graphics.pch
 Release/SystemBenchmark.ipdb
 *.pch
+d3d11nt/desktop.ini
+d3d11nt.VC.VC.opendb
+*.db
+.vs/d3d11nt/v14/.suo
+Debug/Graphics.lib
+*.lib

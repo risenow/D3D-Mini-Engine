@@ -11,11 +11,11 @@ void MemoryManager::Initialize(size_t size)
     if (m_BigChunkAllocator || m_SmallChunkAllocator)
         return;
 
-    void* start = malloc(size);
+    //void* start = malloc(size);
     size_t sizeForBigChunksAllocator = (size_t)((3.0 / 4.0)*size);
     
-    m_BigChunkAllocator = new BigChunkAllocator(start, sizeForBigChunksAllocator);
-    m_SmallChunkAllocator = new SmallChunkAllocator((uptr)start + sizeForBigChunksAllocator, size - sizeForBigChunksAllocator);
+	m_BigChunkAllocator = new BigChunkAllocator(sizeForBigChunksAllocator, 1, BigChunkAllocator::ExtendMode_Disabled, false);//new BigChunkAllocator(start, sizeForBigChunksAllocator);
+    //m_SmallChunkAllocator = new SmallChunkAllocator((uptr)start + sizeForBigChunksAllocator, size - sizeForBigChunksAllocator);
 }
 
 BigChunkAllocator* MemoryManager::GetBigChunkAllocator()

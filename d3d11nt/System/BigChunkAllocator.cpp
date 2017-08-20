@@ -2,7 +2,7 @@
 #include "System/BigChunkAllocator.h"
 #include "System/ProfileUnit.h"
 
-BigChunkAllocator::BigChunkAllocator() : m_Start(nullptr), m_Size(0)
+/*BigChunkAllocator::BigChunkAllocator() : m_Start(nullptr), m_Size(0)
 {}
 BigChunkAllocator::BigChunkAllocator(void* start, size_t size)
 {
@@ -21,11 +21,11 @@ BigChunkAllocator::~BigChunkAllocator()
 {
 }
 
-void* BigChunkAllocator::Allocate(size_t size, unsigned int al) //we don't use al in this allocator since this allocator's algorithm produces only aligned by 4 addresses
+void* BigChunkAllocator::Allocate(size_t size, unsigned long al) //we don't use al in this allocator since this allocator's algorithm produces only aligned by 4 addresses
 {
-    popProfile(BigChunkAllocatorAllocate);
+    //popProfile(BigChunkAllocatorAllocate);
 
-    std::lock_guard<std::mutex> autoLock(m_Lock);
+    //std::lock_guard<std::mutex> autoLock(m_Lock);
 
     size_t overallSize = size + AH_SZ;
 
@@ -116,9 +116,9 @@ void* BigChunkAllocator::Allocate(size_t size, unsigned int al) //we don't use a
 
 void BigChunkAllocator::Deallocate(void* p)
 {
-    popProfile(BigChunkAllocatorDeallocate);
+    //popProfile(BigChunkAllocatorDeallocate);
 
-    std::lock_guard<std::mutex> autoLock(m_Lock);
+    //std::lock_guard<std::mutex> autoLock(m_Lock);
 
     AH_PTR header = (AH_PTR)((uptr)p - AH_SZ);
     size_t size = header->m_Size + AH_SZ;
@@ -175,7 +175,7 @@ void BigChunkAllocator::Deallocate(void* p)
         prevFreeBlock = currentFreeBlock;
         currentFreeBlock = currentFreeBlock->m_Next;
     }
-
+	
     if (!inList)
     {
         popAssert(!newFreeBlock->m_Next);
@@ -203,5 +203,5 @@ void BigChunkAllocator::WriteDeallocationDebugInfo(size_t deallocatedSize)
     LOG_CONS("Big Chunk Allocator deallocation, size: " + std::to_string(deallocatedSize) +
              ", free memory: " + BytesNumberToFormattedString(m_Size - m_AllocatedMemorySize));
 }
-#endif // _DEBUG
+#endif // _DEBUG*/
 

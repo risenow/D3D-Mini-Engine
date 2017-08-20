@@ -73,7 +73,7 @@ bool IsSpace(T c) // T == char
     return c == ' ';
 }
 template<>
-bool IsSpace(wchar_t c); // T== wchar
+bool IsSpace(wchar_t c); // T == wchar
 
 template<class T>
 void EraseAllSpacesFromString(T& str)
