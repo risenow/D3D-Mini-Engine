@@ -217,6 +217,7 @@ void IniFile::DecomposeWholeStringPropertyValues(const std::string& wholeStringP
             values[j] = tempValueString;
             tempValueString = "";
             j++;
+			continue;
         }
         tempValueString += wholeStringPropertyValues[i];
     }

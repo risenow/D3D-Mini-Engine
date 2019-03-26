@@ -15,6 +15,7 @@ Window::Window() : m_Width(DEFAULT_WINDOW_WIDTH), m_Height(DEFAULT_WINDOW_HEIGHT
                    m_WindowMode(WindowMode_WINDOWED)
 {
     std::thread windowThreadWorker(&Window::WindowThreadWorker, this);
+	m_WindowThreadID = windowThreadWorker.get_id();
     windowThreadWorker.detach();
 }
 
@@ -26,6 +27,7 @@ Window::Window(const std::string& title, unsigned int posX, unsigned int posY,
                m_WindowMode(WindowMode_WINDOWED)
 {
     std::thread windowThreadWorker(&Window::WindowThreadWorker, this);
+	m_WindowThreadID = windowThreadWorker.get_id();
     windowThreadWorker.detach();
 }
 
@@ -35,6 +37,7 @@ Window::Window(const IniFile& ini) : m_Closed(false)
     DeserializeFromIni(ini);
 	//Window::WindowThreadWorker(this);
     std::thread windowThreadWorker(&Window::WindowThreadWorker, this);
+	m_WindowThreadID = windowThreadWorker.get_id();
     windowThreadWorker.detach();
 }
 /*Window::Window(const WindowAttributes& attributes) : m_Width(attributes.GetWidth()), m_Height(attributes.GetHeight()), 
@@ -48,7 +51,7 @@ Window::Window(const IniFile& ini) : m_Closed(false)
 
 void Window::InternalCreateWindow(Window* target)
 {
-	HINSTANCE hInstance = GetModuleHandle(NULL);//GetConsoleHInstance(); //idk why i set console instance earlier mb there was a reason so this comment may stand here for a while
+	HINSTANCE hInstance = NULL;//GetConsoleHInstance(); //idk why i set console instance earlier mb there was a reason so this comment may stand here for a while
 
     const static std::wstring windowClassName = L"_D3DAPP_MAIN_WINDOW";
 
@@ -195,6 +198,8 @@ void Window::WindowCreationDebugOutput()
 }
 void Window::UpdateCursorPos()
 {
+	popAssert(std::this_thread::get_id() == m_WindowThreadID);
+
 	POINT p;
 	GetCursorPos(&p);
 	m_CursorX = p.x;
@@ -263,7 +268,21 @@ LRESULT CALLBACK Window::WndProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM 
 
         break;
     }
+	case WM_MOVE:
+	{
+		switch (wparam)
+		{
+		case SIZE_RESTORED:
+		{
+			Window* window = ((Window*)GetWindowLong(hwnd, GWLP_USERDATA));
+			window->m_X = LOWORD(lparam);
+			window->m_Y = HIWORD(lparam);
+			break;
+		}
+		}
 
+		break;
+	}
     case WM_CLOSE:
     {
         ((Window*)GetWindowLong(hwnd, GWLP_USERDATA))->Close();
@@ -281,10 +300,12 @@ LRESULT CALLBACK Window::WndProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM 
 
 void Window::ExecuteWindowThreadCommands()
 {
+	m_WindowThreadCommandsMutex.lock();
 	while (m_WindowThreadCommands.size())
 	{
 		m_WindowThreadCommands.top()->Execute();
 		popDelete(m_WindowThreadCommands.top());
 		m_WindowThreadCommands.pop();
 	}
+	m_WindowThreadCommandsMutex.unlock();
 }

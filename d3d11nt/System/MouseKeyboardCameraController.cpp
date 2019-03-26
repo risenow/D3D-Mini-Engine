@@ -10,8 +10,8 @@ MouseKeyboardCameraController::MouseKeyboardCameraController(const Camera& camer
 
 void MouseKeyboardCameraController::Update(Window& window)
 {
-	unsigned long midCursorX = window.GetWidth() / 2; 
-    unsigned long midCursorY = window.GetHeight() / 2;
+	unsigned long midCursorX = window.GetX() + window.GetWidth() / 2; 
+    unsigned long midCursorY = window.GetY() + window.GetHeight() / 2;
 
 	long dX = window.GetCursorX() - midCursorX;
 	long dY = window.GetCursorY() - midCursorY;
@@ -21,8 +21,8 @@ void MouseKeyboardCameraController::Update(Window& window)
 	m_RotationAxisY += dX * m_Sensetive;
 	m_RotationAxisX += dY * m_Sensetive;
 
-	const float maxXAxisRotateAnge = glm::radians(90.0f);
-	m_RotationAxisX = std::max(std::min(m_RotationAxisX, maxXAxisRotateAnge), -maxXAxisRotateAnge);
+	const float maxXAxisRotateAngle = glm::radians(75.0f);
+	m_RotationAxisX = std::max(std::min(m_RotationAxisX, maxXAxisRotateAngle), -maxXAxisRotateAngle);
 
 	m_Camera.SetRotation(glm::vec3(m_RotationAxisX, m_RotationAxisY, 0));
 }

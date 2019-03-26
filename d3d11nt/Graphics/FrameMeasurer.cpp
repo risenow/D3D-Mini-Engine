@@ -37,7 +37,7 @@ void FrameMeasurer::SetFrameTimesNumBuffered(unsigned int frameTimesNumBuffered)
     ResetAverageFrameTimeSolver();
 }
 
-void FrameMeasurer::AddFrameTime(unsigned int frameTime)
+void FrameMeasurer::AddFrameTime(FrameTimeType frameTime)
 {
     if (m_FrameTimesAllreadyBufferedNum < m_BufferedFrameTimes.size())
         m_FrameTimesAllreadyBufferedNum++;
@@ -54,12 +54,12 @@ void FrameMeasurer::AddFrameTime(unsigned int frameTime)
 
 void FrameMeasurer::BeginMeasurement()
 {
-    m_FrameStartTime = GetMilisecondsSinceProgramStart();
+	m_FrameStartTime = (FrameTimeType)GetPerfomanceCounterMicroseconds() / 1000.0;
 }
 
 void FrameMeasurer::EndMeasurement()
 {
-    unsigned int frameTime = GetMilisecondsSinceProgramStart() - m_FrameStartTime;
+	FrameTimeType frameTime = (FrameTimeType)GetPerfomanceCounterMicroseconds()/1000.0 - m_FrameStartTime;
     AddFrameTime(frameTime);
     m_SecondMeasurementTime += frameTime;
     m_BufferedPerSecondFramesCount++;
@@ -79,20 +79,24 @@ unsigned int FrameMeasurer::GetFPSBasedOnPerSecondFrameCounter() const
     return m_IsPerSecondFramesCountValuedIsReady ? m_PerSecondFramesCount : m_BufferedPerSecondFramesCount;
 }
 
-float FrameMeasurer::GetAverageFrameTime() const
+FrameMeasurer::FrameTimeType FrameMeasurer::GetAverageFrameTime() const
 {
-    unsigned int frameTimesSumm = 0.0f;
+    FrameTimeType frameTimesSumm = 0.0f;
 
     for (int i = 0; i < m_BufferedFrameTimes.size(); i++)
     {
         frameTimesSumm += m_BufferedFrameTimes[i];
     }
 
-    return (float)frameTimesSumm / (float)m_FrameTimesAllreadyBufferedNum;
+	FrameTimeType result = frameTimesSumm / m_FrameTimesAllreadyBufferedNum;
+
+	return result;
 }
 
 float FrameMeasurer::GetFPSBasedOnAverageFrameTime() const
 {
     static const unsigned int milisecPerSec = 1000;
-    return (float)milisecPerSec/GetAverageFrameTime();
+    float result = (float)milisecPerSec/GetAverageFrameTime();
+
+	return result;
 }

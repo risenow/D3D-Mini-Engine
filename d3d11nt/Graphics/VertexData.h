@@ -18,6 +18,8 @@ template<> // glm type
 DXGI_FORMAT GetVertexDXGIFormat<glm::vec3>();
 template<> // glm type
 DXGI_FORMAT GetVertexDXGIFormat<glm::vec4>();
+template<> // 
+DXGI_FORMAT GetVertexDXGIFormat<uint32_t>();
 
 
 struct VertexPropertyPrototype
@@ -30,6 +32,11 @@ struct VertexPropertyPrototype
 	index_t m_SlotIndex;
 	index_t m_SemanticIndex;
 	DXGI_FORMAT m_DXGIFormat;
+
+	 bool operator == (const VertexPropertyPrototype& other) const
+	{
+		return m_Name == other.m_Name && m_Size == other.m_Size && m_SlotIndex == other.m_Size && m_SemanticIndex == other.m_SemanticIndex && m_DXGIFormat == other.m_DXGIFormat;
+	}
 };
 
 template<class T> //glm type
@@ -51,11 +58,17 @@ struct VertexProperty
 
 	VertexPropertyPrototype m_Prototype;
 	offset_t m_BytesOffset;
+
+	bool operator == (const VertexProperty& other) const
+	{
+		return m_BytesOffset == other.m_BytesOffset && m_Prototype == other.m_Prototype;
+	}
 };
 
 struct VertexFormat
 {
     VertexFormat();
+	VertexFormat(const std::vector<VertexPropertyPrototype>& vertexPropertyPrototypes);
 
     count_t GetNumSlotsUsed() const;
     size_t GetVertexSizeInBytesForSlot(index_t slotIndex) const;
@@ -65,6 +78,11 @@ struct VertexFormat
 
     STLVector<size_t> m_PerSlotVertexSizes;
     STLVector<VertexProperty> m_VertexProperties;
+
+	bool operator==(const VertexFormat& other) const
+	{
+		return m_NumSlots == other.m_NumSlots && m_PerSlotVertexSizes == other.m_PerSlotVertexSizes && m_VertexProperties == other.m_VertexProperties;
+	}
 private:
     count_t m_NumSlots;
 };
@@ -80,11 +98,15 @@ public:
     VertexProperty GetVertexPropertyByName(const std::string& name, index_t semanticIndex = 0) const;
     VertexFormat GetVertexFormat() const;
 
-    void* GetDataPtrForSlot(index_t slotIndex) const;
+    void* GetDataPtrForSlot(index_t slotIndex);
     void* GetVertexPropertyDataPtrForVertexWithIndex(index_t index, const VertexProperty& vertexProperty);
+	void* GetVertexPropertyDataPtr(const VertexProperty& vertexProperty);
+
+	void Resize(count_t vertexNum);
 protected:
     VertexFormat m_VertexFormat;
     count_t m_NumVertexes;
+	//count_t m_NumVertexesCapacity;
     count_t m_NumSlots;
 
     typedef STLVector<byte_t> RawData;

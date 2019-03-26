@@ -87,7 +87,46 @@
     <ClInclude Include="..\d3d11nt\Graphics\GraphicsConstantsBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ShaderCollection.h">
+    <ClInclude Include="..\d3d11nt\Graphics\ShadersCollection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\d3d11nt\Graphics\FrameRateLock.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\d3d11nt\Graphics\SceneGraph.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\d3d11nt\Graphics\GraphicsObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\d3d11nt\Graphics\GraphicsObjectManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\d3d11nt\Graphics\GraphicsMaterialsManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\d3d11nt\Graphics\OrdinaryGraphicsObjectManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\d3d11nt\Graphics\GraphicsMaterial.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\d3d11nt\Graphics\PlainColorMaterial.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\d3d11nt\Graphics\GraphicsTopology.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\d3d11nt\Graphics\SerializableGraphicsObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\d3d11nt\Graphics\MaterialBatchStructuredBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\d3d11nt\Graphics\MappableDX11MultipleObjectsHolder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\d3d11nt\Graphics\GeneralShaderMutationsDefines.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -141,6 +180,39 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\d3d11nt\Graphics\GraphicsConstantsBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\d3d11nt\Graphics\ShadersCollection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\d3d11nt\Graphics\FrameRateLock.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\d3d11nt\Graphics\SceneGraph.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\d3d11nt\Graphics\GraphicsObject.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\d3d11nt\Graphics\GraphicsObjectManager.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\d3d11nt\Graphics\OrdinaryGraphicsObjectManager.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PlainColorMaterial.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicsMaterialsManager.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicsMaterial.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\d3d11nt\Graphics\GraphicsTopology.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\d3d11nt\Graphics\MaterialBatchStructuredBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

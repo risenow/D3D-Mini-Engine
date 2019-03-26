@@ -22,32 +22,32 @@
     <ProjectGuid>{BAFC0F0E-89FA-4567-AD7C-83E14B34B284}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>System</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -153,8 +153,10 @@
     <ClInclude Include="..\d3d11nt\System\builddefines.h" />
     <ClInclude Include="..\d3d11nt\System\Camera.h" />
     <ClInclude Include="..\d3d11nt\System\CommandLineArgs.h" />
+    <ClInclude Include="..\d3d11nt\System\FileChangesMonitor.h" />
     <ClInclude Include="..\d3d11nt\System\fileutils.h" />
     <ClInclude Include="..\d3d11nt\System\HardwareInfo.h" />
+    <ClInclude Include="..\d3d11nt\System\hashutils.h" />
     <ClInclude Include="..\d3d11nt\System\helperutil.h" />
     <ClInclude Include="..\d3d11nt\System\IniFile.h" />
     <ClInclude Include="..\d3d11nt\System\IniSerializable.h" />
@@ -166,6 +168,7 @@
     <ClInclude Include="..\d3d11nt\System\MouseKeyboardCameraController.h" />
     <ClInclude Include="..\d3d11nt\System\mtutils.h" />
     <ClInclude Include="..\d3d11nt\System\NewBigChunkAllocator.h" />
+    <ClInclude Include="..\d3d11nt\System\pathutils.h" />
     <ClInclude Include="..\d3d11nt\System\PoolAllocator.h" />
     <ClInclude Include="..\d3d11nt\System\ProfileUnitsManager.h" />
     <ClInclude Include="..\d3d11nt\System\ProfileUnit.h" />
@@ -183,6 +186,7 @@
     <ClCompile Include="..\d3d11nt\System\BigChunkAllocator.cpp" />
     <ClCompile Include="..\d3d11nt\System\Camera.cpp" />
     <ClCompile Include="..\d3d11nt\System\CommandLineArgs.cpp" />
+    <ClCompile Include="..\d3d11nt\System\FileChangesMonitor.cpp" />
     <ClCompile Include="..\d3d11nt\System\fileutils.cpp" />
     <ClCompile Include="..\d3d11nt\System\HardwareInfo.cpp" />
     <ClCompile Include="..\d3d11nt\System\IniFile.cpp" />
@@ -192,6 +196,7 @@
     <ClCompile Include="..\d3d11nt\System\memutils.cpp" />
     <ClCompile Include="..\d3d11nt\System\MouseKeyboardCameraController.cpp" />
     <ClCompile Include="..\d3d11nt\System\NewBigChunkAllocator.cpp" />
+    <ClCompile Include="..\d3d11nt\System\pathutils.cpp" />
     <ClCompile Include="..\d3d11nt\System\PoolAllocator.cpp" />
     <ClCompile Include="..\d3d11nt\System\ProfileUnitsManager.cpp" />
     <ClCompile Include="..\d3d11nt\System\ProfileUnit.cpp" />

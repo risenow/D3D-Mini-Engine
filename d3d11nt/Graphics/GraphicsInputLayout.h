@@ -7,6 +7,7 @@
 class GraphicsInputLayout : public D3D11ResourceHolder
 {
 public:
+	GraphicsInputLayout();
     GraphicsInputLayout(GraphicsDevice& device, const VertexFormat& verteFormat, const GraphicsVertexShader& shader);
 
 	void Bind(GraphicsDevice& device);

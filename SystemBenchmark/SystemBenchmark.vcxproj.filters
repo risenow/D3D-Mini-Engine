@@ -19,6 +19,9 @@
     <Filter Include="Header Files\MiscBenchmarks">
       <UniqueIdentifier>{dd0525fe-7bca-428a-a634-ca091101f09c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\BenchmarkScenesGenerators">
+      <UniqueIdentifier>{382492a0-edf2-422e-97d2-6f492dd7a1d2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -38,6 +41,9 @@
     </ClInclude>
     <ClInclude Include="OutBenchmark.h">
       <Filter>Header Files\MiscBenchmarks</Filter>
+    </ClInclude>
+    <ClInclude Include="SimpleMultiMaterialTrianglesBenchmarkSceneGenerator.h">
+      <Filter>Header Files\BenchmarkScenesGenerators</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

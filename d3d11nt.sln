@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28711.60
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "d3d11nt", "d3d11nt\d3d11nt.vcxproj", "{17773CC7-47FD-477D-BE9C-633CCEDB8A1D}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -22,9 +22,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Graphics", "Graphics\Graphi
 		{BAFC0F0E-89FA-4567-AD7C-83E14B34B284} = {BAFC0F0E-89FA-4567-AD7C-83E14B34B284}
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NewFolder1", "NewFolder1", "{FDCC8B3C-2A23-4813-984C-EAB266031654}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Data(Browse)", "Test\Test.vcxproj", "{0B7743F2-985E-4E06-9D85-D1D50FA52EE1}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GenerateBatchedShadersMutations", "GenerateBatchedShaders\GenerateBatchedShaders.vcxproj", "{4FB10A43-6CE7-41A1-8D36-D8378807020F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,7 +49,6 @@ Global
 		{C9FCE2CD-0190-4AB9-A882-D8FFA6A98137}.Release|x64.ActiveCfg = Release|x64
 		{C9FCE2CD-0190-4AB9-A882-D8FFA6A98137}.Release|x64.Build.0 = Release|x64
 		{C9FCE2CD-0190-4AB9-A882-D8FFA6A98137}.Release|x86.ActiveCfg = Release|Win32
-		{C9FCE2CD-0190-4AB9-A882-D8FFA6A98137}.Release|x86.Build.0 = Release|Win32
 		{BAFC0F0E-89FA-4567-AD7C-83E14B34B284}.Debug|x64.ActiveCfg = Debug|x64
 		{BAFC0F0E-89FA-4567-AD7C-83E14B34B284}.Debug|x64.Build.0 = Debug|x64
 		{BAFC0F0E-89FA-4567-AD7C-83E14B34B284}.Debug|x86.ActiveCfg = Debug|Win32
@@ -74,8 +73,19 @@ Global
 		{0B7743F2-985E-4E06-9D85-D1D50FA52EE1}.Release|x64.Build.0 = Release|x64
 		{0B7743F2-985E-4E06-9D85-D1D50FA52EE1}.Release|x86.ActiveCfg = Release|Win32
 		{0B7743F2-985E-4E06-9D85-D1D50FA52EE1}.Release|x86.Build.0 = Release|Win32
+		{4FB10A43-6CE7-41A1-8D36-D8378807020F}.Debug|x64.ActiveCfg = Debug|x64
+		{4FB10A43-6CE7-41A1-8D36-D8378807020F}.Debug|x64.Build.0 = Debug|x64
+		{4FB10A43-6CE7-41A1-8D36-D8378807020F}.Debug|x86.ActiveCfg = Debug|Win32
+		{4FB10A43-6CE7-41A1-8D36-D8378807020F}.Debug|x86.Build.0 = Debug|Win32
+		{4FB10A43-6CE7-41A1-8D36-D8378807020F}.Release|x64.ActiveCfg = Release|x64
+		{4FB10A43-6CE7-41A1-8D36-D8378807020F}.Release|x64.Build.0 = Release|x64
+		{4FB10A43-6CE7-41A1-8D36-D8378807020F}.Release|x86.ActiveCfg = Release|Win32
+		{4FB10A43-6CE7-41A1-8D36-D8378807020F}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {835F5810-6171-4716-BC84-253F7DD208CC}
 	EndGlobalSection
 EndGlobal

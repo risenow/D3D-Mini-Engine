@@ -102,8 +102,8 @@ void GraphicsSwapChain::Validate(GraphicsDevice& device, const Window& window, M
 
             output->Release();
         }
-        if (!m_FullsreenState)
-            D3D_HR_OP(m_SwapChain->SetFullscreenState(false, nullptr));
+        //if (!m_FullsreenState)
+        //    D3D_HR_OP(m_SwapChain->SetFullscreenState(false, nullptr));
 
         D3D_HR_OP(m_SwapChain->ResizeBuffers(1, newSwapchainWidth, newSwapchainHeight, m_Format, DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH));
         InitializeBackBufferSurface(device);

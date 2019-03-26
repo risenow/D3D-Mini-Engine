@@ -3,22 +3,27 @@
 #include <array>
 #include "System/logicsafety.h"
 #include "System/typesalias.h"
+#include "System/hashutils.h"
 
 template<class T>
 class DX11Object
 {
 public:
-    DX11Object() : m_DX11Object(nullptr)
-    {}
-    DX11Object(T* object) : m_DX11Object(object)
-    {}
-    DX11Object(DX11Object& object)
+    DX11Object()
+    {
+		Set(nullptr);
+	}
+    DX11Object(T* object)
+    {
+		Set(object);
+	}
+    DX11Object(const DX11Object& object)
     {
         if (object.Get())
             object.Get()->AddRef();
-        if (m_DX11Object)
+        if (m_DX11Object && IsValid())
             m_DX11Object->Release();
-        m_DX11Object = object.Get();
+        Set(object.Get());
     }
 
     ~DX11Object()
@@ -32,7 +37,7 @@ public:
             object.Get()->AddRef();
         if (m_DX11Object)
             m_DX11Object->Release();
-        m_DX11Object = object.Get();
+        Set(object.Get());
 
         return *this;
     }
@@ -50,16 +55,33 @@ public:
     void Set(T* obj)
     {
         m_DX11Object = obj;
+		InitializeDX11ObjectPointerHash();
     }
 
     void Release()
     {
         if (m_DX11Object)
             m_DX11Object->Release();
-        m_DX11Object = nullptr;
+		Set(nullptr);
     }
+
 private:
+	unsigned long CalcDX11ObjectPointerHash()
+	{
+		unsigned long dx11ObjectPointerAsInt = (unsigned long)m_DX11Object;
+		return FNV((char*)&dx11ObjectPointerAsInt, sizeof(dx11ObjectPointerAsInt) / sizeof(char));
+	}
+	void InitializeDX11ObjectPointerHash()
+	{
+		m_DX11ObjectPointerHash = CalcDX11ObjectPointerHash();
+	}
+	bool IsValid()
+	{
+		return m_DX11ObjectPointerHash == CalcDX11ObjectPointerHash();
+	}
+
     T* m_DX11Object;
+	unsigned long m_DX11ObjectPointerHash;
 };
 
 /*template<class T>
@@ -166,3 +188,4 @@ typedef DX11ObjectWithNameHolder<ID3D11Resource> D3D11ResourceHolder;
 #else
 typedef DX11ObjectHolder<ID3D11Resource> D3D11ResourceHolder;
 #endif
+typedef DX11ObjectHolder<IUnknown> DX11UknownHolder;

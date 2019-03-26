@@ -114,6 +114,15 @@
     <ClInclude Include="..\d3d11nt\System\MouseKeyboardCameraController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\d3d11nt\System\FileChangesMonitor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\d3d11nt\System\pathutils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\d3d11nt\System\hashutils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -180,6 +189,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\d3d11nt\System\MouseKeyboardCameraController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\d3d11nt\System\FileChangesMonitor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\d3d11nt\System\pathutils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

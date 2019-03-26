@@ -128,6 +128,8 @@ private:
 	unsigned long m_CursorX;
 	unsigned long m_CursorY;
 
+	std::thread::id m_WindowThreadID;
+
     std::string m_Title;
 
     HWND m_WindowHandle;

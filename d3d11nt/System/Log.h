@@ -22,6 +22,7 @@ class RuntimeLogStreamBase
 public:
 	virtual void Write(const std::wstring& str) = 0;
 	virtual ~RuntimeLogStreamBase() {}
+	virtual bool IsValid() { return true; }
 };
 
 template<class S> // S = stream with << operator for writing
@@ -44,6 +45,9 @@ public:
 	{
 		m_Stream = stream;
 	}
+
+	virtual bool IsValid() override { return m_Stream != nullptr; }
+
 private:
 	S* m_Stream;
 };
@@ -64,6 +68,8 @@ public:
 	{
 		(*m_DestString) += str;
 	}
+
+	virtual bool IsValid() override { return m_DestString != nullptr; }
 private:
 	std::wstring* m_DestString;
 };
@@ -76,9 +82,12 @@ public:
 
 	virtual void Write(const std::wstring& str) override
 	{
-		(*(std::wofstream*)(this)) << str;
+		(*this) << unitbuf;
+		(*this) << str;
 		flush();
 	}
+
+	virtual bool IsValid() override { return is_open(); }
 };
 
 class RuntimeLog
@@ -101,7 +110,8 @@ public:
 		
 		for (RuntimeLogStreamBase* stream : streams)
 		{
-			stream->Write(compiledStr);
+			if (stream->IsValid())
+				stream->Write(compiledStr);
 		}
 	}
 

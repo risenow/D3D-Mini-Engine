@@ -34,8 +34,8 @@ void RenderSet::CorrectnessGuard()
     popAssert(m_ColorSurface->GetView() || m_DepthStencilSurface->GetView());
     if (m_ColorSurface && m_DepthStencilSurface)
     {
-        popAssert(m_ColorSurface->GetView() && m_DepthStencilSurface->GetView());
-        popAssert(m_ColorSurface->GetWidth() == m_DepthStencilSurface->GetWidth() &&
+        popAssert(m_ColorSurface->GetView()   && m_DepthStencilSurface->GetView());
+        popAssert(m_ColorSurface->GetWidth()  == m_DepthStencilSurface->GetWidth() &&
                   m_ColorSurface->GetHeight() == m_DepthStencilSurface->GetHeight());
     }
 }

@@ -2,11 +2,13 @@
 
 #include "System/stlcontainersintegration.h"
 
-static const unsigned int DEFAULT_FRAME_TIMES_NUM_BUFFERED = 60;
+static const unsigned int DEFAULT_FRAME_TIMES_NUM_BUFFERED = 10;
 
 class FrameMeasurer
 {
 public:
+	typedef double FrameTimeType;
+	
     FrameMeasurer(unsigned int frameTimesNumBuffered = DEFAULT_FRAME_TIMES_NUM_BUFFERED);
 
     void BeginMeasurement();
@@ -14,13 +16,13 @@ public:
 
     unsigned int GetFPSBasedOnPerSecondFrameCounter() const;
     float GetFPSBasedOnAverageFrameTime() const;
-    float GetAverageFrameTime() const;
+	FrameTimeType GetAverageFrameTime() const;
 
     void SetFrameTimesNumBuffered(unsigned int frameTimesNumBuffered);
 
     bool IsPerSecondFramesCountValueIsReady() const;
 private:
-    void AddFrameTime(unsigned int frameTime);
+    void AddFrameTime(FrameTimeType frameTime);
 
     void ResetPerSecondFrameCounter();
     void ResetAverageFrameTimeSolver();
@@ -28,9 +30,9 @@ private:
     bool m_IsPerSecondFramesCountValuedIsReady;
     unsigned int m_PerSecondFramesCount;
     unsigned int m_BufferedPerSecondFramesCount;
-    unsigned int m_FrameStartTime;
-    unsigned int m_SecondMeasurementTime;
+	FrameTimeType m_FrameStartTime;
+	FrameTimeType m_SecondMeasurementTime;
 
     unsigned int m_FrameTimesAllreadyBufferedNum;
-    STLVector<unsigned int> m_BufferedFrameTimes; //used to calculate average frame time
+    STLVector<FrameTimeType> m_BufferedFrameTimes; //used to calculate average frame time
 };

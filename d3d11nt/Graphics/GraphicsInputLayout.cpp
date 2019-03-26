@@ -2,6 +2,7 @@
 #include "Graphics/dxlogicsafety.h"
 #include "Graphics/GraphicsInputLayout.h"
 
+GraphicsInputLayout::GraphicsInputLayout() {}
 GraphicsInputLayout::GraphicsInputLayout(GraphicsDevice& device, const VertexFormat& vertexFormat, const GraphicsVertexShader& shader)
 {
 	std::vector<D3D11_INPUT_ELEMENT_DESC> inputElementsDesc = vertexFormat.GetD3D11InputElementDescs();

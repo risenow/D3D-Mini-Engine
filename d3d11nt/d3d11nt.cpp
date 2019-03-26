@@ -4,8 +4,6 @@
 #include "stdafx.h"
 #include <initguid.h>
 
-#include "Data/Shaders/Test/constants.h"
-
 #include "System/MemoryManager.h"
 #include "System/Window.h"
 #include "System/CommandLineArgs.h"
@@ -22,6 +20,9 @@
 #include "Graphics/GraphicsBuffer.h"
 #include "Graphics/GraphicsConstantsBuffer.h"
 #include "Graphics/VertexData.h"
+#include "Graphics/ShadersCollection.h"
+#include "Graphics/FrameRateLock.h"
+#include "Graphics/SceneGraph.h"
 #include "System/HardwareInfo.h"
 #include "System/memutils.h"
 #include "Extern/glm/gtc/matrix_transform.hpp"
@@ -31,6 +32,7 @@
 #include "System/IniFile.h"
 #include <iostream>
 #include <thread>
+#include <mutex>
 #include <chrono>
 
 const std::string OPTIONS_INI_FILE_NAME = "options.ini";
@@ -43,30 +45,50 @@ void WriteFPSToWindowTitle(Window& window, const FrameMeasurer& frameMeasurer)
     SetWindowText(window.GetWindowHandle(), strtowstr(newWindowTitle).c_str());
 }
 
-Camera CreateInitialCamera()
+float DeserializeCameraFOV(const IniFile& ini)
+{
+	const std::string section = "Graphics";
+	const float defaultFOV = 90;
+	return ini.GetValue(section, "FOV", defaultFOV);
+}
+
+Camera CreateInitialCamera(const IniFile& ini)
 {
 	const glm::vec3 position = glm::vec3(0.0f, .0f, .8f);
 	const glm::vec3 rotation  = glm::vec3(0.0f, 0.0f, 0.0f);
 	Camera camera = Camera(position, rotation);
-	camera.SetProjection(glm::perspective(1.48f, 1.0f, 0.01f, 1000.0f));
+	//camera.SetProjection(glm::perspective(glm::radians(DeserializeCameraFOV(ini)), 1.0f, 0.01f, 1000.0f));
+	camera.SetProjection(glm::perspectiveFov(glm::radians(DeserializeCameraFOV(ini)), 512.0f, 512.0f, 0.01f, 1000.0f));
 	return camera;
 }
 
 int main(int argc, char* argv[])
 {
-    HardwareInfo::GetInstance().Initialize();
+    HardwareInfo::GetInstance().Initialize(); // mb we should "unsignleton" this
     RuntimeLog::GetInstance().SetMode(RuntimeLogMode_WriteTime | RuntimeLogMode_WriteLine);
 
     AutoSaveIniFile iniFile(OPTIONS_INI_FILE_NAME, IniFile::LoadingFlags_FileMayNotExist);
     CommandLineArgs commandLineArgs(iniFile);
     FrameMeasurer frameMeasurer;
-	MouseKeyboardCameraController mouseKeyboardCameraController(CreateInitialCamera(), iniFile);
+	MouseKeyboardCameraController mouseKeyboardCameraController(CreateInitialCamera(iniFile), iniFile);
     GraphicsOptions options(iniFile);
     Window window(iniFile);
     DisplayAdaptersList displayAdaptersList;
     D3D11DeviceCreationFlags deviceCreationFlags(commandLineArgs); 
     GraphicsDevice device(deviceCreationFlags, FEATURE_LEVEL_ONLY_D3D11, nullptr);
     GraphicsSwapChain swapchain(device, window, options.GetMultisampleType());
+
+	ShaderID testVSBATCHID = GetShaderID(L"Test/vs.vs", { GraphicsShaderMacro("BATCH", "1") });
+	ShaderID testPSBATCHID = GetShaderID(L"Test/ps.ps", { GraphicsShaderMacro("BATCH", "1") });
+
+	ShadersCollection shadersCollection(device);
+	shadersCollection.AddShader<GraphicsVertexShader>(L"Test/vs.vs", { { GraphicsShaderMacro("BATCH", "1") } });
+	shadersCollection.AddShader<GraphicsPixelShader> (L"Test/ps.ps", { { GraphicsShaderMacro("BATCH", "1") } });
+	shadersCollection.ExecuteShadersCompilation(device);
+
+	SceneGraph sceneGraph(device, shadersCollection, "Data/scene.xml");
+
+	FrameRateLock frameRateLock(100);
 
 	window.AddCommand(SetCursorVisibilityCommand(false));
 
@@ -88,7 +110,7 @@ int main(int argc, char* argv[])
 
 	//**DRAW FRAMEWORK**//
 
-    const std::string POSITION_PROPERTY_NAME = "POSITION";
+   /* const std::string POSITION_PROPERTY_NAME = "POSITION";
     typedef glm::vec4 PositionType;
 
     VertexFormat vertexFormat;
@@ -104,7 +126,7 @@ int main(int argc, char* argv[])
 	VertexBuffer vertexBuffer(device, vertexData);
 
 	constsTest consts;
-	consts.coef = 0.8f;
+	consts.coef = 0.4f;
 	consts.viewProjection = mouseKeyboardCameraController.GetCamera().GetViewProjectionMatrix();
 	GraphicsConstantsBuffer<constsTest> constantsBuffer(device);
 	//consts.
@@ -112,20 +134,22 @@ int main(int argc, char* argv[])
 	GraphicsVertexShader vertexShader(device, "vs.vs");
 	GraphicsPixelShader pixelShader(device, "ps.ps");
 
-	GraphicsInputLayout inputLayout(device, vertexFormat, vertexShader);
+	GraphicsInputLayout inputLayout(device, vertexFormat, vertexShader);*/
 
 	//**DRAW FRAMEWORK**//
 
     float clearColor[4] = { 0.0f, 1.0f, 0.0f, 1.0f };
 
-	int s = ShowCursor(false);
-
     while (!window.IsClosed())
     {
-		while (!window.IsFocused())
-            std::this_thread::sleep_for(std::chrono::milliseconds(1));
+		//std::lock_guard<std::mutex> lockGuard(shadersCollection.m_ShadersMutex);
+		//while (!window.IsFocused())
+        //    std::this_thread::sleep_for(std::chrono::milliseconds(1));
 
+		frameRateLock.OnFrameBegin();
         frameMeasurer.BeginMeasurement();
+
+		//shadersCollection.ExecuteShadersCompilation(device);
 
         viewport = GraphicsViewport(window);
         if (!swapchain.IsValid(window, options.GetMultisampleType()))
@@ -139,27 +163,17 @@ int main(int argc, char* argv[])
 
         finalRenderSet.Clear(device, clearColor);
 
-		consts.viewProjection = mouseKeyboardCameraController.GetCamera().GetViewProjectionMatrix();
-		constantsBuffer.Update(device, consts);
-
-		vertexShader.Bind(device);
-		pixelShader.Bind(device);
-
-		constantsBuffer.Bind(device, GraphicsShaderMask_Vertex | GraphicsShaderMask_Pixel);
-
-		inputLayout.Bind(device);
-		vertexBuffer.Bind(device);
-
-		device.GetD3D11DeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-		device.GetD3D11DeviceContext()->Draw(VERTEX_COUNT, 0);
+		sceneGraph.GetOrdinaryGraphicsObjectManager()->Render(device, shadersCollection, mouseKeyboardCameraController.GetCamera());
 
         if (swapchain.IsValid(window, options.GetMultisampleType())) //if swapchain is not valid discard the frame //POSSIBLE RACE CONDITION?
             swapchain.Present();
 
-        frameMeasurer.EndMeasurement();
+		frameRateLock.OnFrameEnd();
+		frameMeasurer.EndMeasurement();
+
         WriteFPSToWindowTitle(window, frameMeasurer);
 
+		if (window.IsFocused())
 		mouseKeyboardCameraController.Update(window);
     }
 

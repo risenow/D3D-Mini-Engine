@@ -1,8 +1,11 @@
-[TIME:6] Adapters enumerated:
-[TIME:6] Adapter index: 0
-[TIME:6] Description: NVIDIA GeForce GTX 1070
-[TIME:6] 
-[TIME:6] Adapter index: 1
-[TIME:7] Description: Microsoft Basic Render Driver
-[TIME:7] 
-[TIME:44] Operation error: One or more arguments are not valid Line: 89
+[TIME:26] Adapters enumerated:
+[TIME:27] Adapter index: 0
+[TIME:29] Description: NVIDIA GeForce GTX 1070
+[TIME:29] 
+[TIME:30] Adapter index: 1
+[TIME:31] Description: Microsoft Basic Render Driver
+[TIME:31] 
+[TIME:205] Graphics/ConstantsPreprocessing.h(1,9-12): warning X3568: 'once' : unknown pragma ignored
+
+[TIME:216] Graphics/ConstantsPreprocessing.h(1,9-12): warning X3568: 'once' : unknown pragma ignored
+
