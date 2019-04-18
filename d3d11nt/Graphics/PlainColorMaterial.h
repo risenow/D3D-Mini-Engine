@@ -11,7 +11,7 @@ class GraphicsPlainColorMaterial : public GraphicsMaterial
 {
 public:
 	GraphicsPlainColorMaterial();
-	GraphicsPlainColorMaterial(GraphicsDevice& device, ShadersCollection& shadersCollection, const std::string& name, float redFactor);
+    GraphicsPlainColorMaterial(GraphicsDevice& device, ShadersCollection& shadersCollection, const std::string& name, tinyxml2::XMLElement* element);//float redFactor);
 	GraphicsPlainColorMaterial(GraphicsDevice& device, ShadersCollection& shadersCollection, const std::string& name, const std::vector<GraphicsMaterial*> batchedMaterials);
 
 	bool HasValidConstantsBuffer() const;

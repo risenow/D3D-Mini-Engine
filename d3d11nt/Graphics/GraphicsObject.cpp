@@ -8,4 +8,4 @@ bool GraphicsObject::IsValid() const
 	return m_Valid;
 }
 
-bool GraphicsObject::IsBatched() const { return !!m_MaterialsStructuredBuffer; }
+bool GraphicsObject::IsBatched() const { return true; }

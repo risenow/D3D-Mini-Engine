@@ -23,6 +23,8 @@ public:
 
     ID3D11Texture2D* GetD3D11Texture2D() const;
 
+    ID3D11ShaderResourceView* GetSRV();
+
     bool IsValid() const;
 
     void Release();
@@ -40,6 +42,8 @@ private:
     UINT m_BindFlags;
     UINT m_CPUAccessFlags;
     UINT m_MiscFlags;
+
+    ID3D11ShaderResourceView* m_SRV;
 
     //ID3D11Texture2D* m_D3D11Texture;
 };

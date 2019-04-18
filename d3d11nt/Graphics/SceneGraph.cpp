@@ -4,15 +4,17 @@
 #include "Graphics/SceneGraph.h"
 #include "Graphics/GraphicsObject.h"
 #include "Graphics/GraphicsMaterialsManager.h"
-
+#include <unordered_set>
 
 
 SceneGraph::SceneGraph() : m_Managers({ m_OrdinaryGraphicsObjectManager = popNew(OrdinaryGraphicsObjectManager)(), m_MaterialsManager = popNew(GraphicsMaterialsManager)() }) {}
-SceneGraph::SceneGraph(GraphicsDevice& device, ShadersCollection& shadersCollection, const std::string& sceneGraphFilePath) : SceneGraph()
+SceneGraph::SceneGraph(GraphicsDevice& device, GraphicsTextureCollection& textureCollection, ShadersCollection& shadersCollection, const std::string& sceneGraphFilePath) : SceneGraph()
 {
 	tinyxml2::XMLDocument sceneGraphXML;
 	tinyxml2::XMLError error = sceneGraphXML.LoadFile(sceneGraphFilePath.c_str());
 	tinyxml2::XMLElement* element = sceneGraphXML.RootElement();
+
+    std::unordered_set<tinyxml2::XMLElement*> handledElements;
 
 	while (element)
 	{
@@ -24,22 +26,35 @@ SceneGraph::SceneGraph(GraphicsDevice& device, ShadersCollection& shadersCollect
 
 		for (GraphicsObjectManager* manager : m_Managers)
 		{
-			if (GraphicsObjectManager::HandleResult handleResult = manager->Handle(device, shadersCollection, m_MaterialsManager, element))
-			{
-				if (handleResult.m_SerializableGraphicObject)
-					m_SerializableGraphicsObjects.push_back(handleResult.m_SerializableGraphicObject);
-			}
+            if (handledElements.find(element) == handledElements.cend())
+            {
+                //if ()
+                {
+                    GraphicsObjectManager::HandleResult handleResult = manager->Handle(device, shadersCollection, m_MaterialsManager, element);
+                    if (handleResult.m_SerializableGraphicObject)
+                    {
+                        m_SerializableGraphicsObjects.push_back(handleResult.m_SerializableGraphicObject);
+                        handledElements.insert(element);
+                    }
+                    //continue;
+                }
+            }
 
-			//if (element->Name() == "triangle")
-			//	bool f = true;
-			OrdinaryGraphicsObjectHandler::HandleResult handleResult = m_OrdinaryGraphicsObjectManager->Handle_(device, shadersCollection, m_MaterialsManager, element);
-				m_SerializableGraphicsObjects.push_back(handleResult.m_SerializableGraphicObject);
-
+			//if (std::string(element->Name()) == std::string("triangle"))
+				//bool f = true;
+            if (handledElements.find(element) == handledElements.cend())
+            {
+                OrdinaryGraphicsObjectHandler::HandleResult handleResult = m_OrdinaryGraphicsObjectManager->Handle_(device, shadersCollection, m_MaterialsManager, element);
+                m_SerializableGraphicsObjects.push_back(handleResult.m_SerializableGraphicObject);
+                if (handleResult.m_SerializableGraphicObject != nullptr)
+                    handledElements.insert(element);
+            }
 		}
+
 		element = element->NextSiblingElement();
 	}
 
-	m_OrdinaryGraphicsObjectManager->CompileGraphicObjects(device, shadersCollection, m_MaterialsManager);
+	m_OrdinaryGraphicsObjectManager->CompileGraphicObjects(device, textureCollection, shadersCollection, m_MaterialsManager);
 }
 SceneGraph::~SceneGraph()
 {

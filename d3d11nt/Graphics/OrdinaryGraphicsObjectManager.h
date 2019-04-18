@@ -8,7 +8,7 @@
 #include "Graphics/GraphicsObjectHandler.h"
 #include "Graphics/GraphicsObjectManager.h"
 #include "Graphics/SerializableGraphicsObject.h"
-
+#include "Graphics/GraphicsTextureCollection.h"
 
 class GraphicsObject;
 
@@ -121,7 +121,7 @@ public:
 	GraphicsObjectManager::HandleResult Handle(GraphicsDevice& device, ShadersCollection& shadersCollection, GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* sceneGraphElement);
 	OrdinaryGraphicsObjectHandler::HandleResult Handle_(GraphicsDevice& device, ShadersCollection& shadersCollection, GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* sceneGraphElement);
 
-	void CompileGraphicObjects(GraphicsDevice& device, ShadersCollection& shadersCollection, GraphicsMaterialsManager* materialsManager);
+	void CompileGraphicObjects(GraphicsDevice& device, GraphicsTextureCollection& textureCollection, ShadersCollection& shadersCollection, GraphicsMaterialsManager* materialsManager);
 	//void Render(GraphicsDevice& device, ShadersCollection& shadersCollection, const Camera& camera);
 private:
 	std::vector<OrdinaryGraphicsObjectSignature> m_ObjectSignatures;

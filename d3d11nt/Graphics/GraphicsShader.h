@@ -15,19 +15,27 @@ void CreateShader(GraphicsDevice& device, ID3DBlob* blob, ID3D11PixelShader** sh
 void CreateShader(GraphicsDevice& device, ID3DBlob* blob, ID3D11HullShader** shader);
 void CreateShader(GraphicsDevice& device, ID3DBlob* blob, ID3D11DomainShader** shader);
 void CreateShader(GraphicsDevice& device, ID3DBlob* blob, ID3D11GeometryShader** shader);
+void CreateShader(GraphicsDevice& device, ID3DBlob* blob, ID3D11ComputeShader** shader);
 
 enum GraphicsShaderType { GraphicsShaderType_Vertex = 0,
 						  GraphicsShaderType_Pixel,
+                          GraphicsShaderType_Compute,
+                          GraphicsShaderType_Hull,
+                          GraphicsShaderType_Domain,
                           GraphicsShaderType_Invalid };
 enum GraphicsShaderMask { GraphicsShaderMask_Vertex = (1u << GraphicsShaderType_Vertex),
-						  GraphicsShaderMask_Pixel  = (1u << GraphicsShaderType_Pixel) };
+						  GraphicsShaderMask_Pixel  = (1u << GraphicsShaderType_Pixel),
+                          GraphicsShaderMask_Compute  = (1u << GraphicsShaderType_Compute),
+                          GraphicsShaderMask_Hull = (1u << GraphicsShaderType_Hull),
+                          GraphicsShaderMask_Domain = (1u << GraphicsShaderType_Domain)
+};
 typedef unsigned long GraphicsShaderMaskType;
 
 static const unsigned long GraphicsShaderType_Count = GraphicsShaderType_Invalid;
 
 static const std::string ShaderEntryPointNameBase = "Entry";
-static const std::string ShaderPerTypeEntryPointNamePrefixes[] = { "VS", "PS" };
-static const std::string ShaderPerTypeTargetNamePrefixes[] = { "vs_", "ps_" };
+static const std::string ShaderPerTypeEntryPointNamePrefixes[] = { "VS", "PS", "CS", "HS", "DS"};
+static const std::string ShaderPerTypeTargetNamePrefixes[] = { "vs_", "ps_", "cs_", "hs_", "ds_" };
 static_assert(popGetArraySize(ShaderPerTypeEntryPointNamePrefixes) == popGetArraySize(ShaderPerTypeTargetNamePrefixes), "");
 
 
@@ -45,6 +53,21 @@ template<>
 struct ShaderTypeIndex<ID3D11PixelShader>
 {
 	static const index_t value = GraphicsShaderType_Pixel;
+};
+template<>
+struct ShaderTypeIndex<ID3D11ComputeShader>
+{
+    static const index_t value = GraphicsShaderType_Compute;
+};
+template<>
+struct ShaderTypeIndex<ID3D11HullShader>
+{
+    static const index_t value = GraphicsShaderType_Hull;
+};
+template<>
+struct ShaderTypeIndex<ID3D11DomainShader>
+{
+    static const index_t value = GraphicsShaderType_Domain;
 };
 
 template<class T>
@@ -68,6 +91,9 @@ std::string GetShaderEntryPointName()
 
 void BindShader(GraphicsDevice& device, ID3D11VertexShader* vertexShader);
 void BindShader(GraphicsDevice& device, ID3D11PixelShader* pixelShader);
+void BindShader(GraphicsDevice& device, ID3D11ComputeShader* computeShader);
+void BindShader(GraphicsDevice& device, ID3D11HullShader* hullShader);
+void BindShader(GraphicsDevice& device, ID3D11DomainShader* domainShader);
 
 struct GraphicsShaderMacro
 {
@@ -106,13 +132,17 @@ public:
 		GetD3DShaderMacros(graphicsShaderMacros, shaderMacros);
 
 		D3D_HR_OP(D3DCompileFromFile(strtowstr(fileName).c_str(), shaderMacros.data(), D3D_COMPILE_STANDARD_FILE_INCLUDE,
-									 GetShaderEntryPointName<T>().c_str(), GetShaderD3DTarget<T>().c_str(), 0, 0,
+									 GetShaderEntryPointName<T>().c_str(), GetShaderD3DTarget<T>().c_str(), D3DCOMPILE_PREFER_FLOW_CONTROL | D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, 0,
 									 (ID3DBlob**)&popBlobDX11OBject.GetRef(), &errorMsgs));
 		if (errorMsgs)
 		{
 			LOG_FILE(std::string((char*)errorMsgs->GetBufferPointer()));
+            std::string serror = std::string((char*)errorMsgs->GetBufferPointer());
 			errorMsgs->Release();
 		}
+
+        std::string target = GetShaderD3DTarget<T>();
+        std::string entryPoint = GetShaderEntryPointName<T>().c_str();
 
 		CreateShader(device, (ID3DBlob*)popBlobDX11OBject.Get(), (T**)&popShaderDX11Object.GetRef());
 #ifdef _DEBUG
@@ -131,9 +161,11 @@ public:
 
 		D3D_SHADER_MACRO* macrosTest = shaderMacros.data();
 		macrosTest++;
+        std::string target = GetShaderD3DTarget<T>();
+        std::string entry = GetShaderEntryPointName<T>();
 
 		D3D_HR_OP(D3DCompile(content.c_str(), content.size(), wstrtostr(filePath).c_str(), shaderMacros.data(), D3D_COMPILE_STANDARD_FILE_INCLUDE,
-			GetShaderEntryPointName<T>().c_str(), GetShaderD3DTarget<T>().c_str(), 0, 0,
+			GetShaderEntryPointName<T>().c_str(), GetShaderD3DTarget<T>().c_str(), D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, 0,
 			(ID3DBlob**)&shader.popBlobDX11OBject.GetRef(), &errorMsgs));
 		if (errorMsgs)
 		{
@@ -179,3 +211,6 @@ private:
 
 typedef GraphicsShader<ID3D11VertexShader> GraphicsVertexShader;
 typedef GraphicsShader<ID3D11PixelShader>  GraphicsPixelShader;
+typedef GraphicsShader<ID3D11ComputeShader> GraphicsComputeShader;
+typedef GraphicsShader<ID3D11HullShader>   GraphicsHullShader;
+typedef GraphicsShader<ID3D11DomainShader> GraphicsDomainShader;

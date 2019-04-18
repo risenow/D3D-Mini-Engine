@@ -16,7 +16,7 @@ class SceneGraph
 {
 public:
 	SceneGraph();
-	SceneGraph(GraphicsDevice& device, ShadersCollection& shadersCollection, const std::string& sceneGraphFilePath);
+	SceneGraph(GraphicsDevice& device, GraphicsTextureCollection& textureCollection, ShadersCollection& shadersCollection, const std::string& sceneGraphFilePath);
 	//future non-graphical representation for compile-time operations: SceneGraph(const std::string& sceneGraphFilePath);
 
 	~SceneGraph();

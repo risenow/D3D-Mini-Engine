@@ -129,6 +129,9 @@
     <ClInclude Include="..\d3d11nt\Graphics\GeneralShaderMutationsDefines.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\d3d11nt\Graphics\GraphicsTextureCollection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

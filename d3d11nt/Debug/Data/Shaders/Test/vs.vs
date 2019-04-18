@@ -12,7 +12,8 @@ void VSEntry(in float4 iPos : POSITION
 		)
 {
     // Bypass
-    oPos =  mul(viewProjection, iPos)*10000;
+	//iPos.z=1.0;
+    oPos = iPos;// mul(viewProjection, iPos)*1;//*-100000000;
 #ifdef BATCH
 	oMaterial = iMaterial;//float(iMaterial)/2;
 #endif

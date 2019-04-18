@@ -25,6 +25,10 @@ void CreateShader(GraphicsDevice& device, ID3DBlob* blob, ID3D11GeometryShader**
 {
 	device.GetD3D11Device()->CreateGeometryShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, shader);
 }
+void CreateShader(GraphicsDevice& device, ID3DBlob* blob, ID3D11ComputeShader** shader)
+{
+    device.GetD3D11Device()->CreateComputeShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, shader);
+}
 
 void BindShader(GraphicsDevice& device, ID3D11VertexShader* vertexShader)
 {
@@ -33,6 +37,18 @@ void BindShader(GraphicsDevice& device, ID3D11VertexShader* vertexShader)
 void BindShader(GraphicsDevice& device, ID3D11PixelShader* pixelShader)
 {
 	device.GetD3D11DeviceContext()->PSSetShader(pixelShader, nullptr, 0);
+}
+void BindShader(GraphicsDevice& device, ID3D11ComputeShader* computeShader)
+{
+    device.GetD3D11DeviceContext()->CSSetShader(computeShader, nullptr, 0);
+}
+void BindShader(GraphicsDevice& device, ID3D11HullShader* hullShader)
+{
+    device.GetD3D11DeviceContext()->HSSetShader(hullShader, nullptr, 0);
+}
+void BindShader(GraphicsDevice& device, ID3D11DomainShader* domainShader)
+{
+    device.GetD3D11DeviceContext()->DSSetShader(domainShader, nullptr, 0);
 }
 
 void GetD3DShaderMacros(const std::vector<GraphicsShaderMacro>& inShaderMacros, std::vector<D3D_SHADER_MACRO>& outD3DShaderMacros)

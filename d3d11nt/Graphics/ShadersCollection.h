@@ -44,7 +44,6 @@ public:
 	}
 	T Compile(GraphicsDevice& device, size_t variationIndex) const
 	{
-		//return T(device, ShadersRootPath + m_FilePath);
 		return T::CreateFromTextContent(device, ShadersRootPath + m_FilePath, m_Content, m_ShaderVariations[variationIndex]);
 	}
 };
@@ -74,6 +73,24 @@ public:
 		std::lock_guard<std::mutex> lockGuard(m_ShadersMutex);
 		m_CompilablePixelShaders.push(CompilableShader<GraphicsPixelShader>(filePath, shaderMacros));
 	}
+    template<>
+    void AddShader<GraphicsComputeShader>(const std::wstring& filePath, const std::vector<ShaderVariation>& shaderMacros)
+    {
+        std::lock_guard<std::mutex> lockGuard(m_ShadersMutex);
+        m_CompilableComputeShaders.push(CompilableShader<GraphicsComputeShader>(filePath, shaderMacros));
+    }
+    template<>
+    void AddShader<GraphicsHullShader>(const std::wstring& filePath, const std::vector<ShaderVariation>& shaderMacros)
+    {
+        std::lock_guard<std::mutex> lockGuard(m_ShadersMutex);
+        m_CompilableHullShaders.push(CompilableShader<GraphicsHullShader>(filePath, shaderMacros));
+    }
+    template<>
+    void AddShader<GraphicsDomainShader>(const std::wstring& filePath, const std::vector<ShaderVariation>& shaderMacros)
+    {
+        std::lock_guard<std::mutex> lockGuard(m_ShadersMutex);
+        m_CompilableDomainShaders.push(CompilableShader<GraphicsDomainShader>(filePath, shaderMacros));
+    }
 
 	template<class T>
 	T GetShader(const std::wstring& filePath, const std::vector<GraphicsShaderMacro>& shaderMacros)
@@ -95,6 +112,27 @@ public:
 		return (*m_PixelShaders.find(id)).second;
 	}
 
+    template<>
+    GraphicsComputeShader GetShader<GraphicsComputeShader>(const std::wstring& filePath, const std::vector<GraphicsShaderMacro>& shaderMacros)
+    {
+        ShaderID id = GetShaderID(filePath, shaderMacros);
+        return (*m_ComputeShaders.find(id)).second;
+    }
+
+    template<>
+    GraphicsHullShader GetShader<GraphicsHullShader>(const std::wstring& filePath, const std::vector<GraphicsShaderMacro>& shaderMacros)
+    {
+        ShaderID id = GetShaderID(filePath, shaderMacros);
+        return (*m_HullShaders.find(id)).second;
+    }
+
+    template<>
+    GraphicsDomainShader GetShader<GraphicsDomainShader>(const std::wstring& filePath, const std::vector<GraphicsShaderMacro>& shaderMacros)
+    {
+        ShaderID id = GetShaderID(filePath, shaderMacros);
+        return (*m_DomainShaders.find(id)).second;
+    }
+
 	template<class T>
 	T GetShader(ShaderID)
 	{
@@ -112,6 +150,21 @@ public:
 	{
 		return (*m_PixelShaders.find(id)).second;
 	}
+    template<>
+    GraphicsComputeShader GetShader<GraphicsComputeShader>(ShaderID id)
+    {
+        return (*m_ComputeShaders.find(id)).second;
+    }
+    template<>
+    GraphicsHullShader GetShader<GraphicsHullShader>(ShaderID id)
+    {
+        return (*m_HullShaders.find(id)).second;
+    }
+    template<>
+    GraphicsDomainShader GetShader<GraphicsDomainShader>(ShaderID id)
+    {
+        return (*m_DomainShaders.find(id)).second;
+    }
 
 	std::wstring GetShadersDirFullPath() const;
 
@@ -132,8 +185,14 @@ private:
 	
 	std::queue<CompilableShader<GraphicsVertexShader>> m_CompilableVertexShaders;
 	std::queue<CompilableShader<GraphicsPixelShader>> m_CompilablePixelShaders;
+    std::queue<CompilableShader<GraphicsComputeShader>> m_CompilableComputeShaders;
+    std::queue<CompilableShader<GraphicsHullShader>> m_CompilableHullShaders;
+    std::queue<CompilableShader<GraphicsDomainShader>> m_CompilableDomainShaders;
 	STLMap<FNVhash_t, GraphicsVertexShader> m_VertexShaders;
 	STLMap<FNVhash_t, GraphicsPixelShader>  m_PixelShaders;
-	//STLMap<std::string
+    STLMap<FNVhash_t, GraphicsComputeShader>  m_ComputeShaders;
+    STLMap<FNVhash_t, GraphicsHullShader>  m_HullShaders;
+    STLMap<FNVhash_t, GraphicsDomainShader>  m_DomainShaders;
+
 	GraphicsDevice& m_Device;
 };

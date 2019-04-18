@@ -21,14 +21,17 @@ public:
 
 	std::string GetName() const;
 
+    void SetMaterialsStructuredBuffer(std::shared_ptr<MaterialBatchStructuredBuffer> materialStructuredBuffer);
+    GraphicsBuffer& GetBuffer();// { return m_MaterialStructuredBuffer->GetBuffer(); }
+
 	bool IsBatched();
 protected:
 	std::string m_Name;
 	GraphicsPixelShader m_Shader; // to remove
 	//std::vector<ShaderVariation> m_ShaderVariations;
 	std::vector<ShaderID> m_ShaderVariationIDs;
-	
-static	MaterialBatchStructuredBuffer m_MaterialBatchStructuredBuffer;
+    std::shared_ptr< MaterialBatchStructuredBuffer> m_MaterialStructuredBuffer;
+//static	MaterialBatchStructuredBuffer m_MaterialBatchStructuredBuffer;
 };
 
 typedef GraphicsMaterial*(*GraphicsMaterialHandleFunc)(GraphicsDevice&, ShadersCollection&, tinyxml2::XMLElement*);

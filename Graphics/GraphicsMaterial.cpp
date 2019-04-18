@@ -2,13 +2,16 @@
 #include "Graphics/MaterialBatchStructuredBuffer.h"
 #include "Graphics/GraphicsMaterial.h"
 
-
-
 std::string GraphicsMaterial::GetName() const
 {
 	return m_Name;
 }
 
-bool GraphicsMaterial::IsBatched() { return m_MaterialBatchStructuredBuffer.IsValid(); }
+bool GraphicsMaterial::IsBatched() { return (m_MaterialStructuredBuffer) && m_MaterialStructuredBuffer->IsValid(); }
 
-MaterialBatchStructuredBuffer GraphicsMaterial::m_MaterialBatchStructuredBuffer;
+void GraphicsMaterial::SetMaterialsStructuredBuffer(std::shared_ptr<MaterialBatchStructuredBuffer> materialStructuredBuffer)
+{
+    m_MaterialStructuredBuffer = materialStructuredBuffer;
+}
+
+GraphicsBuffer& GraphicsMaterial::GetBuffer() { return m_MaterialStructuredBuffer->GetBuffer(); }

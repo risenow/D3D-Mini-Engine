@@ -15,8 +15,11 @@ public:
 	void Bind(GraphicsDevice& device);
 	void Update(GraphicsDevice& device, const std::vector<GraphicsMaterial*>& materials);
 
+    GraphicsBuffer& GetBuffer() { return m_StructuredBuffer; }
+
 	bool IsValid() { return m_ElementSize > 0 && m_ElementsNum > 0; }
 private:
+    void UpdateResources(GraphicsDevice& device);
 	bool IsValidMaterialsSequenceForBatch(const std::vector<GraphicsMaterial*>& materials);
 
 	size_t m_ElementSize;

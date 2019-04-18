@@ -22,7 +22,7 @@
     <ProjectGuid>{4FB10A43-6CE7-41A1-8D36-D8378807020F}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>GenerateBatchedShaders</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
     <ProjectName>GenerateBatchedShadersMutations</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />

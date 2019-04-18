@@ -1,19 +1,21 @@
 #include "stdafx.h"
 #include "System/MemoryManager.h"
 #include "Graphics/PlainColorMaterial.h"
+#include "Graphics/MaterialBatchStructuredBuffer.h"
 
 GraphicsConstantsBuffer<PSConsts> GraphicsPlainColorMaterial::m_ConstantsBuffer;
 bool GraphicsPlainColorMaterial::m_ConstantsBufferInitialized = false;
 
 GraphicsPlainColorMaterial::GraphicsPlainColorMaterial() {}
-GraphicsPlainColorMaterial::GraphicsPlainColorMaterial(GraphicsDevice& device, ShadersCollection& shadersCollection, const std::string& name, float redFactor)// :
+GraphicsPlainColorMaterial::GraphicsPlainColorMaterial(GraphicsDevice& device, ShadersCollection& shadersCollection, const std::string& name, tinyxml2::XMLElement* element)//float redFactor)// :
 	//m_ShaderID(GetShaderID(L"Test/ps.ps", { GraphicsShaderMacro("BATCH", "1") }))
 {
-	m_ShaderVariationIDs = { GetShaderID(L"Test/ps.ps", { GraphicsShaderMacro("BATCH", "1") }) };
-
-	m_Data.coef = glm::vec3(redFactor, 0.0f, 0.0f);
+	m_ShaderVariationIDs = { GetShaderID(L"Test/ps.hlsl", { GraphicsShaderMacro("BATCH", "1") }) };
+    
+    Deserialize(element);
+	//m_Data.coef = glm::vec3(redFactor, 0.0f, 0.0f);
 	m_Name = name;
-	m_Shader = shadersCollection.GetShader<GraphicsPixelShader>(m_ShaderVariationIDs[0]);
+    m_Shader = shadersCollection.GetShader<GraphicsPixelShader>(L"Test/tessps.hlsl", { GraphicsShaderMacro("BATCH", "1") });//shadersCollection.GetShader<GraphicsPixelShader>(m_ShaderVariationIDs[0]);
 	if (!m_ConstantsBufferInitialized)
 	{
 		m_ConstantsBuffer = GraphicsConstantsBuffer<PSConsts>(device);
@@ -60,8 +62,15 @@ GraphicsBuffer* GraphicsPlainColorMaterial::GetConstantsBuffer() const
 }
 void GraphicsPlainColorMaterial::Bind(GraphicsDevice& device, ShadersCollection& shadersCollection, size_t variationIndex/* = 0*/)
 {
-	m_Shader = shadersCollection.GetShader<GraphicsPixelShader>(m_ShaderVariationIDs[variationIndex]);
+	m_Shader = shadersCollection.GetShader<GraphicsPixelShader>(L"Test/tessps.hlsl", { GraphicsShaderMacro("BATCH", "1") });//shadersCollection.GetShader<GraphicsPixelShader>(m_ShaderVariationIDs[variationIndex]);
 	m_Shader.Bind(device);
+
+    if (m_MaterialStructuredBuffer)
+    {
+        m_MaterialStructuredBuffer->Bind(device);
+        return;
+    }
+
 	if (m_ConstantsBufferInitialized)
 	{
 		m_ConstantsBuffer.Update(device, m_Data);
@@ -73,10 +82,7 @@ GraphicsMaterial* GraphicsPlainColorMaterial::Handle(GraphicsDevice& device, Sha
 {
 	if (std::string(sceneGraphElement->Name()) != std::string("plain_color_material"))
 		return nullptr;
-	std::string sc = std::string(sceneGraphElement->Name());
-	std::string s1 = sceneGraphElement->Attribute("name");
-	float s2 = sceneGraphElement->FirstChildElement("color")->FloatAttribute("r");
 
 	return (std::string(sceneGraphElement->Name()) == std::string("plain_color_material")) ? 
-		popNew(GraphicsPlainColorMaterial)(device, shadersCollection, sceneGraphElement->Attribute("name"), sceneGraphElement->FirstChildElement("color")->FloatAttribute("r")) : nullptr;
+		popNew(GraphicsPlainColorMaterial)(device, shadersCollection, sceneGraphElement->Attribute("name"), sceneGraphElement) : nullptr;
 }

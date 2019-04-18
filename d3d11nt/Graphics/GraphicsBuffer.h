@@ -13,16 +13,21 @@ private:
 #define popBufferDX11Object m_DX11Objects[BUFFER_INDEX]
 #define popShaderResourceDX11Object m_DX11Objects[SHADER_RESOURCE_INDEX]
 public:
-    enum BindFlags { BindFlag_Vertex, BindFlag_Index, BindFlag_Constant, BindFlag_Shader };
+    enum BindFlags { BindFlag_Vertex, BindFlag_Index, BindFlag_Constant, BindFlag_Shader, BindFlag_UAV };
     enum UsageFlags { UsageFlag_Dynamic, UsageFlag_Staging, UsageFlag_Immutable, UsageFlag_Default };
     enum MiscFlags { MiscFlag_Default, MiscFlag_Structured };
 
 	GraphicsBuffer() {}
     GraphicsBuffer(GraphicsDevice& device, size_t size, BindFlags bindFlag, 
                    UsageFlags usageFlag, MiscFlags miscFlag = MiscFlag_Default, 
-                   void* data = nullptr, size_t structureByteStride = 0, DXGI_FORMAT format = DXGI_FORMAT_UNKNOWN);
+                   void* data = nullptr, size_t numElements = 0, size_t structureByteStride = 0, DXGI_FORMAT format = DXGI_FORMAT_UNKNOWN);
 
 	void Bind(GraphicsDevice& device, GraphicsShaderMaskType stageMask);
+
+    ID3D11ShaderResourceView* GetSRV()
+    {
+        return (ID3D11ShaderResourceView * )popShaderResourceDX11Object.Get();
+    }
 
 	virtual ~GraphicsBuffer()
 	{

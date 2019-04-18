@@ -178,7 +178,7 @@ void Window::InitializeIniProperties()
     AddProperty(popNew(IniNumberProperty<unsigned int>)(section, "WindowHeight", popGetScreenHeight(), &m_Height));
     AddProperty(popNew(IniNumberProperty<unsigned int>)(section, "WindowPosX", 0, &m_X));
     AddProperty(popNew(IniNumberProperty<unsigned int>)(section, "WindowPosY", 0, &m_Y));
-    AddProperty(popNew(IniEnumProperty)(section, "WindowMode", WindowMode_WINDOWED, (int*)&m_WindowMode, windowModeAcceptableIntValues));
+    AddProperty(popNew(IniEnumProperty)(section, "WindowMode", WindowMode_FULLSCREEN, (int*)&m_WindowMode, windowModeAcceptableIntValues));
 
     AddProperty(popNew(IniStringProperty)(section, "WindowTitle", "", &m_Title));
 }

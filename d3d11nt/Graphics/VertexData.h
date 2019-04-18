@@ -35,7 +35,7 @@ struct VertexPropertyPrototype
 
 	 bool operator == (const VertexPropertyPrototype& other) const
 	{
-		return m_Name == other.m_Name && m_Size == other.m_Size && m_SlotIndex == other.m_Size && m_SemanticIndex == other.m_SemanticIndex && m_DXGIFormat == other.m_DXGIFormat;
+		return m_Name == other.m_Name && m_Size == other.m_Size && m_SlotIndex == other.m_SlotIndex && m_SemanticIndex == other.m_SemanticIndex && m_DXGIFormat == other.m_DXGIFormat;
 	}
 };
 

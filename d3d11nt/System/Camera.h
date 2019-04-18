@@ -18,6 +18,7 @@ public:
     void SetProjection(const glm::mat4x4& projectionMatrix);
 
     const glm::mat4x4& GetViewProjectionMatrix() const;
+    const glm::mat4x4& GetProjectionMatrix() const;
 private:
     void UpdateViewProjectionMatrix();
 

@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{0B7743F2-985E-4E06-9D85-D1D50FA52EE1}</ProjectGuid>
     <RootNamespace>Test</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
     <ProjectName>Data(Browse)</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -113,8 +113,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="..\d3d11nt\Data\Shaders\Test\ps.ps" />
-    <None Include="..\d3d11nt\Data\Shaders\Test\vs.vs" />
+    <None Include="..\d3d11nt\options.ini" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\d3d11nt\Data\Shaders\Test\psconstants.h" />

@@ -124,6 +124,31 @@ void ShadersCollection::ExecuteShadersCompilation(GraphicsDevice& device)
 		for (size_t i = 0; i < compilableShader.GetVariationsCount(); i++)
 			m_PixelShaders[compilableShader.GetVariationID(i)] = compilableShader.Compile(device, i);
 	}
+    while (m_CompilableComputeShaders.size())
+    {
+        CompilableShader<GraphicsComputeShader> compilableShader = m_CompilableComputeShaders.front();
+        m_CompilableComputeShaders.pop();
+
+        for (size_t i = 0; i < compilableShader.GetVariationsCount(); i++)
+            m_ComputeShaders[compilableShader.GetVariationID(i)] = compilableShader.Compile(device, i);
+    }
+
+    while (m_CompilableHullShaders.size())
+    {
+        CompilableShader<GraphicsHullShader> compilableShader = m_CompilableHullShaders.front();
+        m_CompilableHullShaders.pop();
+
+        for (size_t i = 0; i < compilableShader.GetVariationsCount(); i++)
+            m_HullShaders[compilableShader.GetVariationID(i)] = compilableShader.Compile(device, i);
+    }
+    while (m_CompilableDomainShaders.size())
+    {
+        CompilableShader<GraphicsDomainShader> compilableShader = m_CompilableDomainShaders.front();
+        m_CompilableDomainShaders.pop();
+
+        for (size_t i = 0; i < compilableShader.GetVariationsCount(); i++)
+            m_DomainShaders[compilableShader.GetVariationID(i)] = compilableShader.Compile(device, i);
+    }
 }
 
 void ShadersCollection::CalculatePaths()

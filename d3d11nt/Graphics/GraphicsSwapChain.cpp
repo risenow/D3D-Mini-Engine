@@ -9,7 +9,7 @@
 
 GraphicsSwapChain::GraphicsSwapChain() {}
 GraphicsSwapChain::GraphicsSwapChain(GraphicsDevice& device, const Window& window, MultisampleType multisample)
-                                   : m_Format(DXGI_FORMAT_R8G8B8A8_UNORM), m_SwapChain(nullptr), m_FullsreenState(false)
+                                   : m_Format(DXGI_FORMAT_R16G16B16A16_FLOAT), m_SwapChain(nullptr), m_FullsreenState(false)
 {
     DXGI_SWAP_CHAIN_DESC swapChainDesc;
     FillSwapChainDesc(window, swapChainDesc, GetSampleDesc(device, m_Format, multisample));
@@ -85,6 +85,10 @@ void GraphicsSwapChain::Validate(GraphicsDevice& device, const Window& window, M
         unsigned int newSwapchainWidth = window.GetWidth();
         unsigned int newSwapchainHeight = window.GetHeight();
 
+        //IDXGIOutput* output;
+        //D3D_HR_OP(m_SwapChain->GetContainingOutput(&output));
+        //UpdateDisplayModesList(output);
+        //output->Release();
         if (fullscreen)
         {
             IDXGIOutput* output;
@@ -149,7 +153,7 @@ void GraphicsSwapChain::FillSwapChainDesc(const Window& window, DXGI_SWAP_CHAIN_
     desc.SampleDesc = sampleDesc;
 
     desc.BufferCount = 1;
-    desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+    desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT | DXGI_USAGE_UNORDERED_ACCESS | DXGI_USAGE_SHADER_INPUT;
 
     desc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
     desc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;

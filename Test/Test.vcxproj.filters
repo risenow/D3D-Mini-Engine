@@ -12,11 +12,8 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\d3d11nt\Data\Shaders\Test\ps.ps">
-      <Filter>Data\Shaders\Test</Filter>
-    </None>
-    <None Include="..\d3d11nt\Data\Shaders\Test\vs.vs">
-      <Filter>Data\Shaders\Test</Filter>
+    <None Include="..\d3d11nt\options.ini">
+      <Filter>Data</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

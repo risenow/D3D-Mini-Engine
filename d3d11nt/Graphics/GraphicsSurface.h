@@ -38,6 +38,7 @@ public:
 
     size_t GetWidth() const;
     size_t GetHeight() const;
+    Texture2D* GetTexture() { return m_Texture; }
 
     void Release();
 private:

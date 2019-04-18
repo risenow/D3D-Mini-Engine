@@ -1,9 +1,9 @@
 #include "stdafx.h"
+#include <set>
 #include "GraphicsObject.h"
 #include "System/MemoryManager.h"
 #include "Graphics/OrdinaryGraphicsObjectManager.h"
 #include "Graphics/GraphicsMaterialsManager.h"
-
 
 class GraphicObject;
 
@@ -58,11 +58,6 @@ void SerializableTriangleGraphicObject::Deserialize(tinyxml2::XMLElement* elemen
 			attr = attr->Next();
 		}
 
-
-	//const char* nameAttr = element->Attribute("material");
-	//assert(nameAttr);
-	//m_MaterialName = nameAttr;
-
 	tinyxml2::XMLElement* vertexElement = element->FirstChildElement();
 	for (unsigned long i = 0; i < m_Vertexes.size(); i++)
 	{
@@ -78,58 +73,9 @@ TriangleGraphicsObjectHandler::HandleResult TriangleGraphicsObjectHandler::Handl
 	std::string nm = std::string(sceneGraphElement->Name());
 	if (std::string(sceneGraphElement->Name()) != m_TypeName)
 		return result;
-	else
-		bool sh = true;
-
-	/*const std::string POSITION_PROPERTY_NAME = "POSITION";
-
-	VertexFormat vertexFormat;
-
-	vertexFormat.AddVertexProperty(CreateVertexPropertyPrototype<PositionType>(POSITION_PROPERTY_NAME));
-
-	const count_t VERTEX_COUNT = 3;
-	VertexData vertexData(vertexFormat, VERTEX_COUNT);
-	VertexProperty positionProperty = vertexData.GetVertexPropertyByName(POSITION_PROPERTY_NAME);
-
-	tinyxml2::XMLElement* vertexElement = sceneGraphElement->FirstChildElement();
-	for (unsigned long i = 0; i < VERTEX_COUNT; i++)
-	{
-		(*(PositionType*)vertexData.GetVertexPropertyDataPtrForVertexWithIndex(i, positionProperty)) = ParseVertex(vertexElement);
-		vertexElement = vertexElement->NextSiblingElement();
-	}*/
-
-	/*std::array<SerializableTriangleGraphicObject::PositionType, 3> vertexes;
-	tinyxml2::XMLElement* vertexElement = sceneGraphElement->FirstChildElement();
-	for (unsigned long i = 0; i < vertexes.szie(); i++)
-	{
-		(*(PositionType*)vertexData.GetVertexPropertyDataPtrForVertexWithIndex(i, positionProperty)) = ParseVertex(vertexElement);
-		vertexElement = vertexElement->NextSiblingElement();
-	}*/
 
 	SerializableTriangleGraphicObject* serializableTrangleGraphicObject = popNew(SerializableTriangleGraphicObject)(sceneGraphElement);
 	result.m_SerializableGraphicObject = serializableTrangleGraphicObject;
-	/*
-	const std::string POSITION_PROPERTY_NAME = "POSITION";
-	const std::string MATERIAL_PROPERTY_NAME = "TEXCOORD";
-	VertexFormat vertexFormat({ CreateVertexPropertyPrototype<SerializableTriangleGraphicObject::PositionType>(POSITION_PROPERTY_NAME) , CreateVertexPropertyPrototype<uint32_t>(MATERIAL_PROPERTY_NAME, 0, 1)});
-	VertexData vertexData(vertexFormat, serializableTrangleGraphicObject->m_Vertexes.size());
-	VertexProperty positionProperty = vertexData.GetVertexPropertyByName(POSITION_PROPERTY_NAME);
-	VertexProperty materialProperty = vertexData.GetVertexPropertyByName(MATERIAL_PROPERTY_NAME);
-
-	unsigned long k = 0;
-	SerializableTriangleGraphicObject::PositionType* vertexPositionPropertyDataForVertex = (SerializableTriangleGraphicObject::PositionType*)vertexData.GetVertexPropertyDataPtr(positionProperty);
-	uint32_t* vertexMaterialPropertyDataForVertex = (uint32_t*)vertexData.GetVertexPropertyDataPtr(materialProperty);
-	for (SerializableTriangleGraphicObject::PositionType& triangleVertexPosition : serializableTrangleGraphicObject->m_Vertexes)
-	{
-		(*(vertexPositionPropertyDataForVertex++)) = triangleVertexPosition;
-		(*vertexMaterialPropertyDataForVertex) = k;
-		k++;
-	}
-
-
-	result.m_GraphicObject.m_Topology = GraphicsTopology(device, shadersCollection, vertexData);
-	result.m_GraphicObject.m_Material = materialsManager->GetMaterial(sceneGraphElement->Attribute("material"));
-	result.m_GraphicObject.m_Valid = true;*/
 
 	const std::string TEXCOORD_PROPERTY_NAME = "TEXCOORD";
 	const std::string POSITION_PROPERTY_NAME = "POSITION";
@@ -144,9 +90,6 @@ TriangleGraphicsObjectHandler::HandleResult TriangleGraphicsObjectHandler::Handl
 
 	while (currentAtttrControl = sceneGraphElement->Attribute((std::string("material") + std::to_string(i)).c_str(), currentAtttr))
 	{ 
-		//const std::string currentAtttrValue = currentAtttr;
-		//int i = std::stol(currentAtttrValue);
-
 		result.m_GraphicsObjectSignature.m_Materials.push_back(materialsManager->GetMaterial(sceneGraphElement->Attribute((std::string("material") + std::to_string(i)).c_str())));
 		i++;
 	}
@@ -213,103 +156,99 @@ OrdinaryGraphicsObjectHandler::HandleResult OrdinaryGraphicsObjectManager::Handl
 
 std::map<unsigned int, std::shared_ptr<MaterialBatchStructuredBuffer>> MaterialBatchStructuredBuffers;
 
-void OrdinaryGraphicsObjectManager::CompileGraphicObjects(GraphicsDevice& device, ShadersCollection& shadersCollection, GraphicsMaterialsManager* materialsManager)
+void OrdinaryGraphicsObjectManager::CompileGraphicObjects(GraphicsDevice& device, GraphicsTextureCollection& textureCollection, ShadersCollection& shadersCollection, GraphicsMaterialsManager* materialsManager)
 {
-	std::vector<size_t> batchedObjectsIndexes;
-	while (m_ObjectSignatures.size())
+    std::set<size_t> allreadyBatched;
+
+    for (size_t m = 0; m < m_ObjectSignatures.size(); m++)
 	{
+        if (allreadyBatched.find(m) != allreadyBatched.end())
+            continue;
 
 		struct 
 		{
 			glm::uint begin;
 			glm::uint end;
 		} _range;
-		batchedObjectsIndexes.resize(0);
+
+        std::vector<uint32_t> batchSet;
+
         size_t z = 1;
-		for (size_t i = 0; i < m_ObjectSignatures.size() - 1; i++)
+		for (size_t i = 0; i < m_ObjectSignatures.size(); i++)
 		{
-			if (m_ObjectSignatures[i].m_VertexFormat == m_ObjectSignatures[0].m_VertexFormat)
+			if (m_ObjectSignatures[i].m_VertexFormat == m_ObjectSignatures[m].m_VertexFormat && m_ObjectSignatures[i].m_Materials.size() == m_ObjectSignatures[m].m_Materials.size())
 			{
-				bool match = false;
-                for (size_t k = 0; k < m_ObjectSignatures[i].m_Materials.size(); k++)
+				bool match = true;
+                for (size_t k = 0; k < m_ObjectSignatures[m].m_Materials.size(); k++)
                 {
-                    for (size_t j = k + 1; j < m_ObjectSignatures[i + 1].m_Materials.size(); j++)
-                        if (m_ObjectSignatures[i].m_Materials[k] != m_ObjectSignatures[i + z].m_Materials[k])
-                            match = true;
-                    if (!match)
-                    {
-                        batchedObjectsIndexes.push_back(i);
-                        continue;
-                    }
-                    z++;
+                    if (m_ObjectSignatures[m].m_Materials[k] != m_ObjectSignatures[i].m_Materials[k])
+                        match = false;
                 }
 			
-				batchedObjectsIndexes.push_back(i);
+                if (match)
+                {
+                    batchSet.push_back(i);
+                }
 			}
 		}
 
+     
 		size_t overallVertexesNum = 0;
-		for (size_t i : batchedObjectsIndexes)
+		for (size_t i : batchSet)
 		{
+            m_ObjectSignatures[i].m_VertexDataStream->Open();
 			overallVertexesNum += m_ObjectSignatures[i].m_VertexDataStream->GetNumVertexes();
 		}
 
-		//typedef UVType glm::vec2;
-		//vertexFormat.AddVertexProperty(CreateVertexPropertyPrototype<PositionType>(POSITION_PROPERTY_NAME));
 
 		size_t vertexesWritten = 0;
-		VertexData vertexData(m_ObjectSignatures[0].m_VertexFormat, overallVertexesNum);
-		for (size_t i : batchedObjectsIndexes)
+		VertexData vertexData(m_ObjectSignatures[m].m_VertexFormat, overallVertexesNum);
+		for (size_t i : batchSet)
 		{
 			VertexFormat& vertexFormat = m_ObjectSignatures[i].m_VertexFormat;
-			//vertexFormat.AddVertexProperty(CreateVertexPropertyPrototype<PositionType>(POSITION_PROPERTY_NAME));
 			OrdinaryGraphicsObjectSignature& signature = m_ObjectSignatures[i];
-			signature.m_VertexDataStream->Open();
 			signature.m_VertexDataStream->WriteTo(vertexData, vertexesWritten);
 			signature.m_VertexDataStream->Close();
 
 			vertexesWritten += signature.m_VertexDataStream->GetNumVertexes();
+
+            allreadyBatched.insert(i);
 		}
-
-		std::vector<GraphicsMaterial*> batchedMaterials;
-		for (size_t i : batchedObjectsIndexes)
-		{
-			batchedMaterials.push_back(m_ObjectSignatures[i].m_Materials[i]);
-
-			std::shared_ptr<VertexDataStreamBase> vertexDataStream = m_ObjectSignatures[i].m_VertexDataStream;
-			vertexDataStream->Open();
-			VertexData vertexData(m_ObjectSignatures[i].m_VertexFormat, vertexDataStream->GetNumVertexes());
-			vertexDataStream->WriteTo(vertexData);
-			vertexDataStream->Close();
 
 			GraphicsObject object;
 			object.m_Valid = true;
-			object.m_Topology = GraphicsTopology(device, shadersCollection, vertexData);
+			object.m_Topology = GraphicsTopology(device, textureCollection, shadersCollection, vertexData, true);
 
 			bool singleMaterial = false;
-			if (m_ObjectSignatures[i].m_Materials.size() == 1)
+			if (m_ObjectSignatures[m].m_Materials.size() == 1)
 			{
-				object.m_Material = m_ObjectSignatures[i].m_Materials[0];
+				object.m_Material = m_ObjectSignatures[m].m_Materials[0];
 				singleMaterial = true;
 			}
 
 			if (!singleMaterial)
 			{
 				std::vector<GraphicsMaterial*> tempMaterials;
-				for (unsigned int k = 0; k < m_ObjectSignatures[i].m_Materials.size(); k++)
-					tempMaterials[k] = m_ObjectSignatures[i].m_Materials[k];
+				for (unsigned int k = 0; k < m_ObjectSignatures[m].m_Materials.size(); k++)
+					tempMaterials.push_back(m_ObjectSignatures[m].m_Materials[k]);
 
-				if (MaterialBatchStructuredBuffers.find(i) == MaterialBatchStructuredBuffers.end())
-					MaterialBatchStructuredBuffers[i] = std::make_shared<MaterialBatchStructuredBuffer>(MaterialBatchStructuredBuffer(device, tempMaterials));
-				else
-					object.m_MaterialsStructuredBuffer = MaterialBatchStructuredBuffers[i];
-				//object.m_MaterialsStructuredBuffer = MaterialBatchStructuredBuffer(device, tempMaterials);
+                object.m_Materials = tempMaterials;
+
+                if (MaterialBatchStructuredBuffers.find(m) == MaterialBatchStructuredBuffers.end())
+                {
+                    MaterialBatchStructuredBuffers[m] = std::make_shared<MaterialBatchStructuredBuffer>(MaterialBatchStructuredBuffer(device, tempMaterials));
+                    for (size_t i = 0; i < object.m_Materials.size(); i++)
+                        object.m_Materials[i]->SetMaterialsStructuredBuffer(MaterialBatchStructuredBuffers[m]);
+                }
+                else
+                {
+                    for (size_t i = 0; i< object.m_Materials.size(); i++)
+                        object.m_Materials[i]->SetMaterialsStructuredBuffer(MaterialBatchStructuredBuffers[m]);
+                }
 			}
 
 			m_Objects.push_back(object);
 
-			i++;
-		}
 	}
 
 	size_t i = 0;
@@ -323,10 +262,12 @@ void OrdinaryGraphicsObjectManager::Render(GraphicsDevice& device, ShadersCollec
 {
 	for (GraphicsObject& object : m_Objects)
 	{
-		object.m_Topology.Bind(device, camera);
-		object.m_Material->Bind(device, shadersCollection);
-		//BindMultipleGraphicsConstantBuffers(device, 0, { object.m_Topology.GetConstantsBuffer()  },  GraphicsShaderMask_Vertex );
-		//BindMultipleGraphicsConstantBuffers(device, 0, { object.m_Material->GetConstantsBuffer() }, GraphicsShaderMask_Pixel  );
+        if (object.m_Material != nullptr)
+            object.m_Material->Bind(device, shadersCollection);
+        else
+            object.m_Materials[0]->Bind(device, shadersCollection);
+
+		object.m_Topology.Bind(device, object.m_Materials[0]->GetBuffer(), camera, Topology_Basic);
 
 		object.m_Topology.DrawCall(device);
 	}

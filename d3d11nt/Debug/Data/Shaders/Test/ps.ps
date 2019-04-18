@@ -15,7 +15,7 @@ float4 PSEntry(float4 pos : SV_POSITION
     //}
 #ifdef BATCH
 	//return float4(PSConstsStructured[material].coef, 1.0);
-	return float4(1, 0.0, 0.0, 1.0);
+	return float4(1.0, 0.0, 0.0, 1.0);
 #else
     return float4(1, 0.0, 0.0, 1.0);
 #endif

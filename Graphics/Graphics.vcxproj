@@ -22,7 +22,7 @@
     <ProjectGuid>{8B3E459B-4B92-4736-8AB4-3529B5CE5A85}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Graphics</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -167,6 +167,7 @@
     <ClInclude Include="..\d3d11nt\Graphics\GraphicsShader.h" />
     <ClInclude Include="..\d3d11nt\graphics\GraphicsSurface.h" />
     <ClInclude Include="..\d3d11nt\graphics\GraphicsSwapchain.h" />
+    <ClInclude Include="..\d3d11nt\Graphics\GraphicsTextureCollection.h" />
     <ClInclude Include="..\d3d11nt\Graphics\GraphicsTopology.h" />
     <ClInclude Include="..\d3d11nt\graphics\GraphicsViewport.h" />
     <ClInclude Include="..\d3d11nt\Graphics\GraphicsMaterialsManager.h" />

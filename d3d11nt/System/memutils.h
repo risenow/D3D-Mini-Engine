@@ -17,3 +17,6 @@ std::string BytesNumberToFormattedString(size_t size); // should it even be in m
 
 #define DECLARE_THREAD_LOCAL_ALLOCATOR(name, type) \
 thread_local ##type * g_##name;
+
+
+void __strictmemcpy(void* dest, void* src, size_t sz);

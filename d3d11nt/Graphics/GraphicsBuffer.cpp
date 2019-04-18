@@ -85,18 +85,18 @@ void CreateDesc(const size_t size, const GraphicsBuffer::BindFlags bindFlag,
     resourceData.SysMemSlicePitch = 0;
 }
 
-void CreateSRVDesc(size_t size, size_t structureByteStride, DXGI_FORMAT format, D3D11_SHADER_RESOURCE_VIEW_DESC& desc)
+void CreateSRVDesc(size_t size, size_t numElements, size_t structureByteStride, DXGI_FORMAT format, D3D11_SHADER_RESOURCE_VIEW_DESC& desc)
 {
 	desc.ViewDimension = D3D11_SRV_DIMENSION_BUFFER;
 	desc.Format = format;
 
 	desc.Buffer.ElementOffset = 0;
-	desc.Buffer.ElementWidth = structureByteStride ? structureByteStride : size;
+    desc.Buffer.ElementWidth = numElements;//structureByteStride ? structureByteStride : size;
 }
 
 GraphicsBuffer::GraphicsBuffer(GraphicsDevice& device, size_t size, BindFlags bindFlag,
                                 UsageFlags usageFlag, MiscFlags miscFlag/* = MiscFlag_Default*/,
-                                void* data/* = nullptr*/, size_t structureByteStride/* = 0*/, DXGI_FORMAT format/* = DXGI_FORMAT_UNKNOWN*/)
+                                void* data/* = nullptr*/, size_t numElements, size_t structureByteStride/* = 0*/, DXGI_FORMAT format/* = DXGI_FORMAT_UNKNOWN*/)
 {
     D3D11_BUFFER_DESC bufferDesc;
     D3D11_SUBRESOURCE_DATA subresourceData;
@@ -104,10 +104,12 @@ GraphicsBuffer::GraphicsBuffer(GraphicsDevice& device, size_t size, BindFlags bi
     CreateDesc(size, bindFlag, usageFlag, miscFlag, data, structureByteStride, bufferDesc, subresourceData);
     D3D_HR_OP(device.GetD3D11Device()->CreateBuffer(&bufferDesc, (data) ? &subresourceData : nullptr, (ID3D11Buffer**)&popBufferDX11Object.GetRef()));
 
-	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
-	CreateSRVDesc(size, structureByteStride, format, srvDesc);
-
-	//D3D_HR_OP(device.GetD3D11Device()->CreateShaderResourceView((ID3D11Resource*)popBufferDX11Object.Get(), &srvDesc, (ID3D11ShaderResourceView**)&popShaderResourceDX11Object.GetRef()));
+    if (bindFlag != BindFlag_Vertex && bindFlag != BindFlag_Constant)
+    {
+        D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+        CreateSRVDesc(size, numElements, structureByteStride, format, srvDesc);
+        D3D_HR_OP(device.GetD3D11Device()->CreateShaderResourceView((ID3D11Resource*)popBufferDX11Object.Get(), &srvDesc, (ID3D11ShaderResourceView * *)& popShaderResourceDX11Object.GetRef()));
+    }
 }
 void GraphicsBuffer::Bind(GraphicsDevice& device, GraphicsShaderMaskType stageMask) 
 {
@@ -116,6 +118,7 @@ void GraphicsBuffer::Bind(GraphicsDevice& device, GraphicsShaderMaskType stageMa
 	void(__stdcall ID3D11DeviceContext::*setShaderResources[GraphicsShaderType_Count])(UINT, UINT, ID3D11ShaderResourceView*const*);
 	setShaderResources[GraphicsShaderType_Vertex] = &ID3D11DeviceContext::VSSetShaderResources;
 	setShaderResources[GraphicsShaderType_Pixel] = &ID3D11DeviceContext::PSSetShaderResources;
+    setShaderResources[GraphicsShaderType_Domain] = &ID3D11DeviceContext::DSSetShaderResources;
 
 	for (unsigned long i = 0; i < GraphicsShaderType_Count; i++)
 	{
@@ -137,8 +140,8 @@ VertexBuffer::VertexBuffer(GraphicsDevice& device, VertexData& vertexData, index
 void VertexBuffer::Bind(GraphicsDevice& device)
 {
 	BindVertexBuffers(device, { *this });
-    //offset_t offset = 0;
-    //device.GetD3D11DeviceContext()->IASetVertexBuffers(0, 1, (ID3D11Buffer**)&GetDX11ObjectReference(), &m_VertexSizeInBytes, (unsigned int*)&offset);
+    offset_t offset = 0;
+    device.GetD3D11DeviceContext()->IASetVertexBuffers(0, 1, (ID3D11Buffer**)&GetDX11ObjectReference(), &m_VertexSizeInBytes, (unsigned int*)&offset);
 }
 
 size_t VertexBuffer::GetVertexSizeInBytes() const
