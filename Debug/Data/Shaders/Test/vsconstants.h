@@ -4,11 +4,43 @@
 
 DECLARE_CONSTANT_STRUCTURE VSConsts
 {
-	DECLARE_FLOAT3 offset1;
-    DECLARE_FLOAT offset2;
+    DECLARE_FLOAT4 wcenter;
+    DECLARE_FLOAT4 wnormal;
+    DECLARE_FLOAT4 wpos;
+    DECLARE_FLOAT4 p2;
+
+    DECLARE_FLOAT4 p3;
+    DECLARE_FLOAT4 p4;
+    DECLARE_FLOAT4 p5;
+    DECLARE_FLOAT4 p6;
+
+    DECLARE_FLOAT4 p7;
+    DECLARE_FLOAT4 p8;
+    DECLARE_FLOAT4 p9;
+    DECLARE_FLOAT4 p10;
+
+    DECLARE_FLOAT4 p11;
+    DECLARE_FLOAT4 p12;
+    DECLARE_FLOAT4 p13;
+    DECLARE_FLOAT4 p14;
+
+    DECLARE_FLOAT4X4 projection;
+    DECLARE_FLOAT4X4 view;//32
     DECLARE_FLOAT4X4 viewProjection;
-    DECLARE_FLOAT tessellationAmount;
-    DECLARE_FLOAT3 padding;
+    DECLARE_FLOAT4X4 normalMatrix;//48
+    DECLARE_FLOAT tessellationAmount;//49
+    DECLARE_FLOAT3 padding;//52
+    DECLARE_FLOAT3 offset1;//55
+    DECLARE_FLOAT offset2;//56
+    DECLARE_FLOAT offset3;//57
+    DECLARE_FLOAT4 offset4;//61
+    DECLARE_FLOAT4 offset5;//65
+    DECLARE_FLOAT4 offset6;//69
+    DECLARE_FLOAT offset7;//70
+    DECLARE_FLOAT offset8;//71
+    DECLARE_FLOAT4 offset9;//75
+    DECLARE_FLOAT4 offset10;//79
+    DECLARE_FLOAT offset11;//80
 //DECLARE_FLOAT coef1;
 //DECLARE_FLOAT coef2;
 //DECLARE_FLOAT coef3;

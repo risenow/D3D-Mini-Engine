@@ -28,23 +28,19 @@ SceneGraph::SceneGraph(GraphicsDevice& device, GraphicsTextureCollection& textur
 		{
             if (handledElements.find(element) == handledElements.cend())
             {
-                //if ()
                 {
-                    GraphicsObjectManager::HandleResult handleResult = manager->Handle(device, shadersCollection, m_MaterialsManager, element);
+                    GraphicsObjectManager::HandleResult handleResult = manager->Handle(device, textureCollection, shadersCollection, m_MaterialsManager, element);
                     if (handleResult.m_SerializableGraphicObject)
                     {
                         m_SerializableGraphicsObjects.push_back(handleResult.m_SerializableGraphicObject);
                         handledElements.insert(element);
                     }
-                    //continue;
                 }
             }
 
-			//if (std::string(element->Name()) == std::string("triangle"))
-				//bool f = true;
             if (handledElements.find(element) == handledElements.cend())
             {
-                OrdinaryGraphicsObjectHandler::HandleResult handleResult = m_OrdinaryGraphicsObjectManager->Handle_(device, shadersCollection, m_MaterialsManager, element);
+                OrdinaryGraphicsObjectHandler::HandleResult handleResult = m_OrdinaryGraphicsObjectManager->Handle_(device, textureCollection, shadersCollection, m_MaterialsManager, element);
                 m_SerializableGraphicsObjects.push_back(handleResult.m_SerializableGraphicObject);
                 if (handleResult.m_SerializableGraphicObject != nullptr)
                     handledElements.insert(element);

@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "Graphics/GraphicsTopology.h"
 #include "Graphics/GeneralShaderMutationsDefines.h"
+#include "System/Camera.h"
+#include "Extern/glm/gtc/matrix_transform.hpp"
+#include "Extern/glm/gtx/matrix_major_storage.hpp"
 
 GraphicsConstantsBuffer<VSConsts> GraphicsTopology::m_ConstantsBuffer;
 bool GraphicsTopology::m_ConstantsBufferInitialized = false;
@@ -54,13 +57,16 @@ void GraphicsTopology::Bind(GraphicsDevice& device, GraphicsBuffer& buffer, cons
 
     BindVertexBuffers(device, m_VertexBuffers);
 
-	//m_VertexBuffer.Bind(device);
 	if (m_ConstantsBufferInitialized)
 	{
 		VSConsts consts;
-		consts.viewProjection = camera.GetViewProjectionMatrix();
+        //consts.translatedview.Set(camera.translatedview);
+		consts.view.Set(camera.GetViewMatrix());
+        consts.projection.Set(camera.GetProjectionMatrix());
+        consts.normalMatrix.Set((camera.GetViewMatrix()));
+        consts.viewProjection.Set(camera.GetViewProjectionMatrix());
         consts.tessellationAmount = 5.0f;
-
+        consts.wpos = -glm::vec4( camera.GetPosition(), 1.0);
 		m_ConstantsBuffer.Update(device, consts);
         BindMultipleGraphicsConstantBuffers(device, 0, { &m_ConstantsBuffer }, GraphicsShaderMask_Vertex | GraphicsShaderMask_Pixel | GraphicsShaderMask_Hull | GraphicsShaderMask_Domain);
 	}

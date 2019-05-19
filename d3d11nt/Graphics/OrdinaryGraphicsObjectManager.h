@@ -83,7 +83,7 @@ public:
 private:
 	VertexType ParseVertex(tinyxml2::XMLElement* vertexElement);
 
-	std::array<VertexType, NumVertexes> m_Vertexes;
+	std::array<SerializableTriangleGraphicObject::VertexType, NumVertexes> m_Vertexes;
 	std::vector<std::string> m_MaterialNames;
 };
 
@@ -110,6 +110,57 @@ public:
 private:
 };
 
+class SerializableSphereGraphicObject : public SerializableGraphicsObject
+{
+    friend class SphereGraphicsObjectHandler;
+public:
+    struct VertexType {
+
+        VertexType(glm::vec4 pos,/* glm::vec3 normal,*/ glm::uint texCoord) : m_Position(pos), /*m_Normal(normal),*/ m_TexCoord(texCoord) {}
+        glm::vec4 m_Position;
+        //glm::vec3 m_Normal;
+        glm::uint m_TexCoord;
+    };
+    typedef glm::uvec2 TexCoordType;
+
+    SerializableSphereGraphicObject(glm::vec3 center, float r, const std::string& materialName, const std::string name);
+    SerializableSphereGraphicObject(tinyxml2::XMLElement* element);
+
+    void Serialize(tinyxml2::XMLElement* element, tinyxml2::XMLDocument& document);
+    void Deserialize(tinyxml2::XMLElement* element);
+
+private:
+    glm::vec3 m_Center;
+    float m_R;
+    std::vector<std::string> m_MaterialNames;
+};
+
+class SphereGraphicsObjectHandler : public OrdinaryGraphicsObjectHandler
+{
+public:
+    SphereGraphicsObjectHandler();
+    HandleResult Handle(GraphicsDevice& device, ShadersCollection& shadersCollection, GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* sceneGraphElement) const;
+
+    class VertexDataStream : public VertexDataStreamBase
+    {
+    public:
+        VertexDataStream();
+        VertexDataStream(const OrdinaryGraphicsObjectSignature& signature, glm::vec3 center, float r);
+
+        virtual void Open();
+        virtual void Close();
+        virtual void WriteTo(VertexData& data, size_t vertexesOffset = 0);
+    private:
+        OrdinaryGraphicsObjectSignature m_Signature;
+        glm::vec3 m_Center;
+        float m_R;
+        std::vector<SerializableSphereGraphicObject::VertexType> m_Vertexes;
+    };
+
+    //virtual std::shared_ptr<VertexDataStreamBase> GetVertexDataStream() { return std::make_shared<VertexDataStream>(); }
+private:
+};
+
 class OrdinaryGraphicsObjectManager : public GraphicsObjectManager
 {
 public:
@@ -118,11 +169,10 @@ public:
 
 	void Render(GraphicsDevice& device, ShadersCollection& shaderCollection, const Camera& camera);
 
-	GraphicsObjectManager::HandleResult Handle(GraphicsDevice& device, ShadersCollection& shadersCollection, GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* sceneGraphElement);
-	OrdinaryGraphicsObjectHandler::HandleResult Handle_(GraphicsDevice& device, ShadersCollection& shadersCollection, GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* sceneGraphElement);
+	GraphicsObjectManager::HandleResult Handle(GraphicsDevice& device, GraphicsTextureCollection& textureCollection, ShadersCollection& shadersCollection, GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* sceneGraphElement);
+	OrdinaryGraphicsObjectHandler::HandleResult Handle_(GraphicsDevice& device, GraphicsTextureCollection& textureCollection, ShadersCollection& shadersCollection, GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* sceneGraphElement);
 
 	void CompileGraphicObjects(GraphicsDevice& device, GraphicsTextureCollection& textureCollection, ShadersCollection& shadersCollection, GraphicsMaterialsManager* materialsManager);
-	//void Render(GraphicsDevice& device, ShadersCollection& shadersCollection, const Camera& camera);
 private:
 	std::vector<OrdinaryGraphicsObjectSignature> m_ObjectSignatures;
 	std::vector<GraphicsObject> m_Objects;

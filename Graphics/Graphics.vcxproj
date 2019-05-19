@@ -22,7 +22,7 @@
     <ProjectGuid>{8B3E459B-4B92-4736-8AB4-3529B5CE5A85}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Graphics</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -70,8 +70,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)d3d11nt;$(IncludePath)</IncludePath>
+    <IncludePath>$(IncludePath);$(SolutionDir)d3d11nt\</IncludePath>
     <SourcePath>$(SolutionDir)d3d11nt\Graphics\;$(SourcePath)</SourcePath>
+    <LibraryPath>
+    </LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>$(SolutionDir)d3d11nt;$(IncludePath)</IncludePath>
@@ -148,6 +150,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\d3d11nt\Extern\WICTextureLoader.h" />
     <ClInclude Include="..\d3d11nt\Graphics\ConstantsPreprocessing.h" />
     <ClInclude Include="..\d3d11nt\graphics\DisplayAdaptersList.h" />
     <ClInclude Include="..\d3d11nt\graphics\DX11Object.h" />
@@ -202,6 +205,7 @@
     <ClCompile Include="..\d3d11nt\Graphics\GraphicsShader.cpp" />
     <ClCompile Include="..\d3d11nt\graphics\GraphicsSurface.cpp" />
     <ClCompile Include="..\d3d11nt\graphics\GraphicsSwapChain.cpp" />
+    <ClCompile Include="..\d3d11nt\Graphics\GraphicsTextureCollection.cpp" />
     <ClCompile Include="..\d3d11nt\Graphics\GraphicsTopology.cpp" />
     <ClCompile Include="..\d3d11nt\graphics\GraphicsViewport.cpp" />
     <ClCompile Include="..\d3d11nt\Graphics\MaterialBatchStructuredBuffer.cpp" />

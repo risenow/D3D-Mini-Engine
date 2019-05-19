@@ -24,15 +24,18 @@
 #include "Graphics/GraphicsTextureCollection.h"
 #include "Graphics/FrameRateLock.h"
 #include "Graphics/SceneGraph.h"
+#include "Graphics/GraphicsCubemapTexture.h"
 #include "System/HardwareInfo.h"
 #include "System/memutils.h"
 #define cimg_use_jpeg
 #define cimg_use_png
-#include "CImg.h"
-#include "IL/il.h"
+//#include "CImg.h"
+//#include "IL/il.h"
 #include "Extern/glm/gtc/matrix_transform.hpp"
 #include "Extern/glm/gtx/common.hpp"
 #include <d3d11.h>
+//#include <D3DX11.h>
+//#include "D3D11X.h"//D3DX11.H
 #include <dxgidebug.h>
 #include "Graphics/RenderSet.h"
 #include "System/IniFile.h"
@@ -65,7 +68,7 @@ Camera CreateInitialCamera(const IniFile& ini)
 	Camera camera = Camera(position, rotation);
     float deg = DeserializeCameraFOV(ini);
 	//camera.SetProjection(glm::perspective(glm::radians(DeserializeCameraFOV(ini)), 1.0f, 0.01f, 1000.0f));
-	camera.SetProjection(glm::perspectiveFov(glm::radians(45.0f), 512.0f, 512.0f, 1.0f, 1000.0f));
+	camera.SetProjection((glm::perspectiveFov(glm::radians(45.0f), 512.0f, 512.0f, 1.0f, 1000.0f)));
 
     glm::vec4 tposition = glm::vec4(0.5f, .5f, 1.5f,1.0);
     //tposition = // tposition * camera.GetProjectionMatrix();
@@ -75,6 +78,7 @@ Camera CreateInitialCamera(const IniFile& ini)
 
 int main(int argc, char* argv[])
 {
+    CoInitialize(nullptr);
     HardwareInfo::GetInstance().Initialize(); // mb we should "unsignleton" this
     RuntimeLog::GetInstance().SetMode(RuntimeLogMode_WriteTime | RuntimeLogMode_WriteLine);
 
@@ -90,8 +94,8 @@ int main(int argc, char* argv[])
     DisplayAdaptersList displayAdaptersList;
     D3D11DeviceCreationFlags deviceCreationFlags(commandLineArgs); 
 
-    //int a;
-    //std::cin >> a;
+    int a;
+    std::cin >> a;
 
     GraphicsDevice device(deviceCreationFlags, FEATURE_LEVEL_ONLY_D3D11, nullptr);
     GraphicsSwapChain swapchain(device, window, options.GetMultisampleType());
@@ -112,6 +116,8 @@ int main(int argc, char* argv[])
 
     GraphicsTextureCollection textureCollection;
     textureCollection.Add(device, "displ.png");
+    textureCollection.Add(device, "cubemap.dds", DXGI_FORMAT_R8G8B8A8_UNORM);
+    //textureCollection.Add(device, "spherem1.jpg", DXGI_FORMAT_BC1_UNORM);
     //device.GetD3D11DeviceContext()->Dispatch()
 
     //int a;
@@ -175,7 +181,7 @@ int main(int argc, char* argv[])
     D3D11_RASTERIZER_DESC rastState;
     rastState.AntialiasedLineEnable = true;
     rastState.CullMode = D3D11_CULL_NONE;
-    rastState.FillMode = D3D11_FILL_WIREFRAME;
+    rastState.FillMode = D3D11_FILL_SOLID;
     rastState.FrontCounterClockwise = FALSE;
     rastState.DepthBias = 0;
     rastState.SlopeScaledDepthBias = 0.0f;
@@ -234,42 +240,43 @@ int main(int argc, char* argv[])
 
     device.GetD3D11Device()->CreateUnorderedAccessView(swapchain.GetBackBufferSurface()->GetTexture()->GetD3D11Texture2D(), &uavDesc, &uav);
 
-    ilInit();
+//    ilInit();
 
-    ILuint image;
-    ilGenImages(1, &image);
-    ilBindImage(image);
+  //  ILuint image;
+   // ilGenImages(1, &image);
+   // ilBindImage(image);
 
-    ILboolean b = ilLoadImage(L"displ.jpg");
+   // ILboolean b = ilLoadImage(L"displ.jpg");
 
-    ILenum error = ilGetError();
+    //ILenum error = ilGetError();
 
-    if (error == 1291)
-        LOG(std::string("IL NOT FING WORK"));
+    //if (error == 1291)
+    //    LOG(std::string("IL NOT FING WORK"));
 
-    ILuint width, height, bytesPerPixel;
-    width = ilGetInteger(IL_IMAGE_WIDTH);
-    height = ilGetInteger(IL_IMAGE_HEIGHT);
-    bytesPerPixel = ilGetInteger(IL_IMAGE_BYTES_PER_PIXEL);
-    using namespace cimg_library;
+    //ILuint width, height, bytesPerPixel;
+    //width = ilGetInteger(IL_IMAGE_WIDTH);
+    //height = ilGetInteger(IL_IMAGE_HEIGHT);
+    //bytesPerPixel = ilGetInteger(IL_IMAGE_BYTES_PER_PIXEL);
+    //using namespace cimg_library;
 
-    const CImg<unsigned char> img = CImg<>("displ.png");
-    const unsigned char* data = img.data();
-    unsigned char d1 = *(data+600);
-    unsigned char d2 = *(data+601);
-    unsigned char d3 = *(data+602);
-    unsigned char d4 = *(data+ 603);
+    //const CImg<unsigned char> img = CImg<>("displ.png");
+    //const unsigned char* data = img.data();
+    //unsigned char d1 = *(data+600);
+    //unsigned char d2 = *(data+601);
+    //unsigned char d3 = *(data+602);
+    //unsigned char d4 = *(data+ 603);
 
-    DXGI_SAMPLE_DESC desc;
-    desc.Count = 1;
-    desc.Quality = 0;
-    D3D11_SUBRESOURCE_DATA subr;
-    subr.pSysMem = data;
-    subr.SysMemPitch = img.width() * sizeof(char) * 4;
-    subr.SysMemSlicePitch = img.width() * img.height() * sizeof(char) * 4;
+    //DXGI_SAMPLE_DESC desc;
+    //desc.Count = 1;
+    //desc.Quality = 0;
+    //D3D11_SUBRESOURCE_DATA subr;
+    //subr.pSysMem = data;
+    //subr.SysMemPitch = img.width() * sizeof(char) * 4;
+    //subr.SysMemSlicePitch = img.width() * img.height() * sizeof(char) * 4;
     //Texture2D t = Texture2D(device, img.width(), img.height(), 1, 1, DXGI_FORMAT_R8G8B8A8_UINT, desc, D3D11_USAGE_DEFAULT, D3D11_BIND_SHADER_RESOURCE, 0, 0, (D3D11_SUBRESOURCE_DATA*)&subr);
 
     //device.GetD3D11DeviceContext()->OMSetDepthStencilState()
+    GraphicsCubemapTexture cubemap(device, "cubemap.dds");
     while (!window.IsClosed())
     {
 		//std::lock_guard<std::mutex> lockGuard(shadersCollection.m_ShadersMutex);
@@ -328,7 +335,7 @@ int main(int argc, char* argv[])
         WriteFPSToWindowTitle(window, frameMeasurer);
 
 		if (window.IsFocused())
-		mouseKeyboardCameraController.Update(window);
+		    mouseKeyboardCameraController.Update(window);
     }
 
     if (device.GetD3D11DeviceContext())

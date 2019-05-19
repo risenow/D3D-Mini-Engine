@@ -2,16 +2,39 @@
 #include "System/MemoryManager.h"
 #include "Graphics/PlainColorMaterial.h"
 #include "Graphics/MaterialBatchStructuredBuffer.h"
+#include <d3d11.h>
 
 GraphicsConstantsBuffer<PSConsts> GraphicsPlainColorMaterial::m_ConstantsBuffer;
 bool GraphicsPlainColorMaterial::m_ConstantsBufferInitialized = false;
 
 GraphicsPlainColorMaterial::GraphicsPlainColorMaterial() {}
-GraphicsPlainColorMaterial::GraphicsPlainColorMaterial(GraphicsDevice& device, ShadersCollection& shadersCollection, const std::string& name, tinyxml2::XMLElement* element)//float redFactor)// :
+GraphicsPlainColorMaterial::GraphicsPlainColorMaterial(GraphicsDevice& device, GraphicsTextureCollection& textureCollection, ShadersCollection& shadersCollection, const std::string& name, tinyxml2::XMLElement* element)//float redFactor)// :
 	//m_ShaderID(GetShaderID(L"Test/ps.ps", { GraphicsShaderMacro("BATCH", "1") }))
 {
+
+    //D3DX11CreateShaderResourceViewFromFile(device.GetD3D11Device(), L"spherem.png", nullptr, nullptr, &m_SM, NULL);
 	m_ShaderVariationIDs = { GetShaderID(L"Test/ps.hlsl", { GraphicsShaderMacro("BATCH", "1") }) };
     
+    D3D11_SAMPLER_DESC samplerDesc;
+    samplerDesc.Filter = D3D11_FILTER_MIN_LINEAR_MAG_POINT_MIP_LINEAR;
+    samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+    samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+    samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+    samplerDesc.MipLODBias = 0.0f;
+    samplerDesc.MaxAnisotropy = 1;
+    samplerDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
+    samplerDesc.BorderColor[0] = 0;
+    samplerDesc.BorderColor[1] = 0;
+    samplerDesc.BorderColor[2] = 0;
+    samplerDesc.BorderColor[3] = 0;
+    samplerDesc.MinLOD = 0;
+    samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
+
+    // Create the texture sampler state.
+    device.GetD3D11Device()->CreateSamplerState(&samplerDesc, &m_SamplerState);
+
+    m_Cubemap = textureCollection["cubemap.dds"];
+
     Deserialize(element);
 	//m_Data.coef = glm::vec3(redFactor, 0.0f, 0.0f);
 	m_Name = name;
@@ -62,8 +85,12 @@ GraphicsBuffer* GraphicsPlainColorMaterial::GetConstantsBuffer() const
 }
 void GraphicsPlainColorMaterial::Bind(GraphicsDevice& device, ShadersCollection& shadersCollection, size_t variationIndex/* = 0*/)
 {
-	m_Shader = shadersCollection.GetShader<GraphicsPixelShader>(L"Test/tessps.hlsl", { GraphicsShaderMacro("BATCH", "1") });//shadersCollection.GetShader<GraphicsPixelShader>(m_ShaderVariationIDs[variationIndex]);
+	m_Shader = shadersCollection.GetShader<GraphicsPixelShader>(L"Test/ps.hlsl", { GraphicsShaderMacro("BATCH", "1") });//shadersCollection.GetShader<GraphicsPixelShader>(m_ShaderVariationIDs[variationIndex]);
 	m_Shader.Bind(device);
+
+    ID3D11ShaderResourceView* textureSRV = m_Cubemap->GetSRV();
+    device.GetD3D11DeviceContext()->PSSetShaderResources(0, 1, (ID3D11ShaderResourceView * *)& textureSRV);
+    device.GetD3D11DeviceContext()->PSSetSamplers(0, 1, &m_SamplerState);
 
     if (m_MaterialStructuredBuffer)
     {
@@ -78,11 +105,11 @@ void GraphicsPlainColorMaterial::Bind(GraphicsDevice& device, ShadersCollection&
 	}
 }
 
-GraphicsMaterial* GraphicsPlainColorMaterial::Handle(GraphicsDevice& device, ShadersCollection& shadersCollection, tinyxml2::XMLElement* sceneGraphElement)
+GraphicsMaterial* GraphicsPlainColorMaterial::Handle(GraphicsDevice& device, GraphicsTextureCollection& textureCollection, ShadersCollection& shadersCollection, tinyxml2::XMLElement* sceneGraphElement)
 {
 	if (std::string(sceneGraphElement->Name()) != std::string("plain_color_material"))
 		return nullptr;
 
 	return (std::string(sceneGraphElement->Name()) == std::string("plain_color_material")) ? 
-		popNew(GraphicsPlainColorMaterial)(device, shadersCollection, sceneGraphElement->Attribute("name"), sceneGraphElement) : nullptr;
+		popNew(GraphicsPlainColorMaterial)(device, textureCollection, shadersCollection, sceneGraphElement->Attribute("name"), sceneGraphElement) : nullptr;
 }

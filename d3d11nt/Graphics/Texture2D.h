@@ -8,7 +8,7 @@ class Texture2D : public D3D11ResourceHolder
 {
 public:
     Texture2D();
-    Texture2D(ID3D11Texture2D* texture);
+    Texture2D(ID3D11Texture2D* texture, ID3D11ShaderResourceView* srv = nullptr);
     Texture2D(GraphicsDevice& device, size_t width, size_t height, 
               unsigned int mipLevels, unsigned int arraySize, DXGI_FORMAT dxgiFormat, 
               DXGI_SAMPLE_DESC sampleDesc, D3D11_USAGE usage, UINT bindFlags,
@@ -28,6 +28,8 @@ public:
     bool IsValid() const;
 
     void Release();
+
+    static Texture2D LoadDeprecated(GraphicsDevice& device, const std::string& file); //loads only png
 private:
     void FillDesc(D3D11_TEXTURE2D_DESC& desc);
     size_t GetBytesPerPixelForDXGIFormat(DXGI_FORMAT format);

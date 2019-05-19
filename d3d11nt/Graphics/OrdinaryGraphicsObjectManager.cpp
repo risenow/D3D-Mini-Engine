@@ -103,6 +103,85 @@ TriangleGraphicsObjectHandler::HandleResult TriangleGraphicsObjectHandler::Handl
 	return result;
 }
 
+SerializableSphereGraphicObject::SerializableSphereGraphicObject(tinyxml2::XMLElement* element)
+{
+    Deserialize(element);
+}
+
+void SerializableSphereGraphicObject::Serialize(tinyxml2::XMLElement* element, tinyxml2::XMLDocument& document)
+{
+    element->SetName(m_Type.c_str());
+    for (size_t i = 0; i < m_MaterialNames.size(); i++)
+        element->SetAttribute((std::string("material") + std::to_string(i)).c_str(), m_MaterialNames[i].c_str());
+
+    tinyxml2::XMLElement* centerElement = document.NewElement("center");
+    centerElement->SetAttribute("x", m_Center.x);
+    centerElement->SetAttribute("y", m_Center.y);
+    centerElement->SetAttribute("z", m_Center.z);
+    element->InsertEndChild(centerElement);
+
+    tinyxml2::XMLElement* radiusElement = document.NewElement("radius");
+    centerElement->SetAttribute("r", m_R);
+    element->InsertEndChild(centerElement);
+}
+
+void SerializableSphereGraphicObject::Deserialize(tinyxml2::XMLElement* element)
+{
+
+    const tinyxml2::XMLAttribute* attr = element->FirstAttribute();
+    if (attr)
+        while (attr)
+        {
+            std::string attrValue = std::string(attr->Value());
+            m_MaterialNames.push_back(attrValue);
+            attr = attr->Next();
+        }
+
+    tinyxml2::XMLElement* paramElement = element->FirstChildElement();
+    m_Center = glm::vec3(paramElement->FloatAttribute("x"), paramElement->FloatAttribute("y"), paramElement->FloatAttribute("z"));
+    paramElement = paramElement->NextSiblingElement();
+    m_R = paramElement->FloatAttribute("r");
+}
+
+SphereGraphicsObjectHandler::HandleResult SphereGraphicsObjectHandler::Handle(GraphicsDevice& device, ShadersCollection& shadersCollection, GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* sceneGraphElement) const
+{
+    HandleResult result;
+    std::string nm = std::string(sceneGraphElement->Name());
+    if (std::string(sceneGraphElement->Name()) != m_TypeName)
+        return result;
+
+    SerializableSphereGraphicObject * serializableSphereGraphicObject = popNew(SerializableSphereGraphicObject)(sceneGraphElement);
+    result.m_SerializableGraphicObject = serializableSphereGraphicObject;
+
+    const std::string TEXCOORD_PROPERTY_NAME = "TEXCOORD";
+    const std::string POSITION_PROPERTY_NAME = "POSITION";
+    typedef glm::uint LocalTexCoordType;
+
+    VertexFormat vertexFormat({ CreateVertexPropertyPrototype<glm::vec4>(POSITION_PROPERTY_NAME), CreateVertexPropertyPrototype<LocalTexCoordType>(TEXCOORD_PROPERTY_NAME) });// , CreateVertexPropertyPrototype<uint32_t>(MATERIAL_PROPERTY_NAME, 0, 1) });
+
+    std::vector<std::string> attrs;
+    size_t i = 0;
+    const char* currentAtttrControl = 0;
+    const char* currentAtttr = 0;
+
+    while (currentAtttrControl = sceneGraphElement->Attribute((std::string("material") + std::to_string(i)).c_str(), currentAtttr))
+    {
+        result.m_GraphicsObjectSignature.m_Materials.push_back(materialsManager->GetMaterial(sceneGraphElement->Attribute((std::string("material") + std::to_string(i)).c_str())));
+        i++;
+    }
+
+    result.m_GraphicsObjectSignature.m_SerializableGraphicsObject = serializableSphereGraphicObject;
+    result.m_GraphicsObjectSignature.m_VertexFormat = vertexFormat;
+    result.m_GraphicsObjectSignature.m_XMLElement = sceneGraphElement;
+    result.m_GraphicsObjectSignature.m_VertexDataStream = std::make_shared<VertexDataStream>(result.m_GraphicsObjectSignature, serializableSphereGraphicObject->m_Center, serializableSphereGraphicObject->m_R);
+    result.m_GraphicsObjectSignature.m_Valid = true;
+
+    return result;
+}
+
+SphereGraphicsObjectHandler::SphereGraphicsObjectHandler() : OrdinaryGraphicsObjectHandler("sphere") {}
+
+
 TriangleGraphicsObjectHandler::VertexDataStream::VertexDataStream()
 {}
 TriangleGraphicsObjectHandler::VertexDataStream::VertexDataStream(const OrdinaryGraphicsObjectSignature& signature) : m_Signature(signature)
@@ -118,12 +197,76 @@ void TriangleGraphicsObjectHandler::VertexDataStream::Close()
 void TriangleGraphicsObjectHandler::VertexDataStream::WriteTo(VertexData& data, size_t vertexesOffset)
 {
 	SerializableTriangleGraphicObject* serializableGraphicsObject = (SerializableTriangleGraphicObject*)m_Signature.m_SerializableGraphicsObject;
-	
 	memcpy((void*)((SerializableTriangleGraphicObject::VertexType*)data.GetDataPtrForSlot(0) + vertexesOffset), serializableGraphicsObject->m_Vertexes.data(), sizeof(SerializableTriangleGraphicObject::VertexType)*m_NumVertexes);
 }
 
+SphereGraphicsObjectHandler::VertexDataStream::VertexDataStream()
+{}
+SphereGraphicsObjectHandler::VertexDataStream::VertexDataStream(const OrdinaryGraphicsObjectSignature& signature, glm::vec3 center, float r) : m_Signature(signature), m_Center(center), m_R(r)
+{}
 
-OrdinaryGraphicsObjectManager::OrdinaryGraphicsObjectManager() : m_Handlers({ popNew(TriangleGraphicsObjectHandler)() })
+void SphereGraphicsObjectHandler::VertexDataStream::Open()
+{
+    const size_t stepsNum = 20;
+    float radL = 0.0;
+    float maxRadL = glm::pi<float>();
+    float radLStep = maxRadL / stepsNum;
+
+    float l = m_Center.z - m_R;
+    float maxL = 2 * m_R;
+    float lStep =( maxL) / stepsNum;
+
+    float minRadStep = (2 * glm::pi<float>()) / stepsNum;
+
+    m_NumVertexes = 6 * (stepsNum) * (stepsNum);
+    m_Vertexes.reserve(m_NumVertexes);
+
+    int majCount = 0;
+    for (float currentSlice = l; currentSlice < maxL + l; currentSlice += lStep)
+    {
+        float majR = m_R * glm::sin(radL);
+        float majRNext = m_R * glm::sin(radL + radLStep);
+        float nextSlice = currentSlice + lStep;
+        int minCount = 0;
+        for (float minRad = 0.0; minRad < 2 * glm::pi<float>(); minRad += minRadStep)
+        {
+            glm::vec4 spherePosOffset = glm::vec4(m_Center.x, m_Center.y, 0.0, 0.0);
+            glm::vec4 v1 = glm::vec4(glm::cos(minRad) * majR, glm::sin(minRad) * majR, currentSlice, 1.0) + spherePosOffset;
+            SerializableSphereGraphicObject::VertexType vertex1 = SerializableSphereGraphicObject::VertexType(v1, (glm::uint)(rand() % 2));
+
+            glm::vec4 v2 = glm::vec4(glm::cos(minRad) * majRNext, glm::sin(minRad) * majRNext, nextSlice, 1.0) + spherePosOffset;
+            SerializableSphereGraphicObject::VertexType vertex2 = SerializableSphereGraphicObject::VertexType(v2, (glm::uint)(rand() % 2));
+
+            glm::vec4 v3 = glm::vec4(glm::cos(minRad + minRadStep) * majRNext, glm::sin(minRad + minRadStep) * majRNext, nextSlice, 1.0) + spherePosOffset;
+            SerializableSphereGraphicObject::VertexType vertex3 = SerializableSphereGraphicObject::VertexType(v3, (glm::uint)(rand() % 2));
+
+            glm::vec4 v4 = glm::vec4(glm::cos(minRad + minRadStep) * majR, glm::sin(minRad + minRadStep) * majR, currentSlice, 1.0) + spherePosOffset;
+            SerializableSphereGraphicObject::VertexType vertex4 = SerializableSphereGraphicObject::VertexType(v4, (glm::uint)(rand() % 2));
+
+            m_Vertexes.push_back(vertex1);
+            m_Vertexes.push_back(vertex2);
+            m_Vertexes.push_back(vertex3);
+
+            m_Vertexes.push_back(vertex3);
+            m_Vertexes.push_back(vertex4);
+            m_Vertexes.push_back(vertex1);
+
+            minCount += 6;
+        }
+        majCount++;
+        radL += radLStep;
+    }
+}
+void SphereGraphicsObjectHandler::VertexDataStream::Close()
+{
+}
+void SphereGraphicsObjectHandler::VertexDataStream::WriteTo(VertexData& data, size_t vertexesOffset)
+{
+    SerializableTriangleGraphicObject* serializableGraphicsObject = (SerializableTriangleGraphicObject*)m_Signature.m_SerializableGraphicsObject;
+    memcpy((void*)((SerializableTriangleGraphicObject::VertexType*)data.GetDataPtrForSlot(0) + vertexesOffset), m_Vertexes.data(), sizeof(SerializableTriangleGraphicObject::VertexType) * m_NumVertexes);
+}
+
+OrdinaryGraphicsObjectManager::OrdinaryGraphicsObjectManager() : m_Handlers({ popNew(TriangleGraphicsObjectHandler)(), popNew(SphereGraphicsObjectHandler)() })
 {
 }
 OrdinaryGraphicsObjectManager::~OrdinaryGraphicsObjectManager()
@@ -133,13 +276,13 @@ OrdinaryGraphicsObjectManager::~OrdinaryGraphicsObjectManager()
 			popDelete(handler);
 }
 
-GraphicsObjectManager::HandleResult OrdinaryGraphicsObjectManager::Handle(GraphicsDevice& device, ShadersCollection& shadersCollection, GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* sceneGraphElement)
+GraphicsObjectManager::HandleResult OrdinaryGraphicsObjectManager::Handle(GraphicsDevice& device, GraphicsTextureCollection& textureColection, ShadersCollection& shadersCollection, GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* sceneGraphElement)
 {
 	return HandleResult();
 }
 
 
-OrdinaryGraphicsObjectHandler::HandleResult OrdinaryGraphicsObjectManager::Handle_(GraphicsDevice& device, ShadersCollection& shadersCollection, GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* sceneGraphElement)
+OrdinaryGraphicsObjectHandler::HandleResult OrdinaryGraphicsObjectManager::Handle_(GraphicsDevice& device, GraphicsTextureCollection& textureColection, ShadersCollection& shadersCollection, GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* sceneGraphElement)
 {
 	for (OrdinaryGraphicsObjectHandler* handler : m_Handlers)
 	{

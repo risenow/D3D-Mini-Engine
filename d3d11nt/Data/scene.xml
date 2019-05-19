@@ -8,9 +8,9 @@
 </plain_color_material>
 
 <triangle material0="red_material" material1="green_material">
-<vertex x="0.5" y="0.5" z="-1.5" uv="0"/>
-<vertex x="-0.5" y="0.5" z="-1.5" uv="1"/>
-<vertex x="-0.5" y="-0.5" z="-1.5" uv="1"/>
+<vertex x="0.5" y="0.5" z="-10.5" uv="0"/>
+<vertex x="-0.5" y="0.5" z="-10.5" uv="1"/>
+<vertex x="-0.5" y="-0.5" z="-10.5" uv="1"/>
 </triangle>
 
   <triangle material0="red_material" material1="green_material">
@@ -18,5 +18,10 @@
 <vertex x="-1.5" y="0.5" z="-1.5" uv="1"/>
 <vertex x="-1.5" y="-0.5" z="-1.5" uv="1"/>
 </triangle>
+  
+<sphere material0="red_material" material1="green_material">
+<center x="-5.0" y="0.0" z="-3.0"/>
+<radius r="2.0"/>
+</sphere>   
  
 </root0>                                                                                                                                                                                                                                                                                                                                                                                                                             

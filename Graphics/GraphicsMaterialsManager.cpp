@@ -18,11 +18,11 @@ GraphicsMaterial* GraphicsMaterialsManager::GetMaterial(const std::string& name)
 		return (*materialIt).second;
 	return nullptr;
 }
-GraphicsObjectManager::HandleResult GraphicsMaterialsManager::Handle(GraphicsDevice& device, ShadersCollection& shadersCollection, GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* sceneGraphElement)
+GraphicsObjectManager::HandleResult GraphicsMaterialsManager::Handle(GraphicsDevice& device, GraphicsTextureCollection& textureCollection, ShadersCollection& shadersCollection, GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* sceneGraphElement)
 {
 	for (GraphicsMaterialHandleFunc handle : m_Handlers)
 	{
-		GraphicsMaterial* material = handle(device, shadersCollection, sceneGraphElement);
+		GraphicsMaterial* material = handle(device, textureCollection, shadersCollection, sceneGraphElement);
 		if (material)
 		{
 			m_Materials[material->GetName()] = material;

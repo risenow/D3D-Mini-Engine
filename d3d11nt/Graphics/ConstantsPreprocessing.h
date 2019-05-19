@@ -2,12 +2,14 @@
 #define CONSTANTS_PREPROCESSING
 
 #ifdef CPU_SIDE_CODE
+#include "System/Mat4x4Storage.h"
 #define DECLARE_CONSTANT_STRUCTURE struct
 #define DECLARE_MATERIAL_CONSTANT_STRUCTURE struct
 #define DECLARE_FLOAT float
 #define DECLARE_FLOAT3 glm::vec3
 #define DECLARE_FLOAT4 glm::vec4
-#define DECLARE_FLOAT4X4 glm::mat4x4
+#define DECLARE_FLOAT3X3 glm::mat3x3
+#define DECLARE_FLOAT4X4 Mat4x4Storage//glm::mat4x4
 #define DEFINE_MATERIAL_CONSTANT_STRUCTURE(name, type)
 #else
 #define DECLARE_CONSTANT_STRUCTURE cbuffer
@@ -21,6 +23,7 @@
 #define DECLARE_FLOAT float
 #define DECLARE_FLOAT3 float3
 #define DECLARE_FLOAT4 float4
+#define DECLARE_FLOAT3X3 float3x3
 #define DECLARE_FLOAT4X4 float4x4
 #endif
 

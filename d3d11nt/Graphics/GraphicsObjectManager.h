@@ -5,6 +5,7 @@
 #include "SerializableGraphicsObject.h"
 #include "Graphics/GraphicsDevice.h"
 #include "Graphics/ShadersCollection.h"
+#include "Graphics/GraphicsTextureCollection.h"
 #include <functional>
 //#include "Graphics/GraphicsObject.h"
 
@@ -33,7 +34,7 @@ public:
 
 	GraphicsObjectManager();
 	
-	virtual HandleResult Handle(GraphicsDevice& device, ShadersCollection& shadersCollection, GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* sceneGraphElement) = 0;
+	virtual HandleResult Handle(GraphicsDevice& device, GraphicsTextureCollection& textureCollection, ShadersCollection& shadersCollection, GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* sceneGraphElement) = 0;
 
 protected:
 };

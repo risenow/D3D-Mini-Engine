@@ -22,7 +22,7 @@
     <ProjectGuid>{BAFC0F0E-89FA-4567-AD7C-83E14B34B284}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>System</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -90,6 +90,9 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <Lib>
+      <AdditionalLibraryDirectories>kernel32.lib;user32.lib;</AdditionalLibraryDirectories>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -162,6 +165,7 @@
     <ClInclude Include="..\d3d11nt\System\IniSerializable.h" />
     <ClInclude Include="..\d3d11nt\System\Log.h" />
     <ClInclude Include="..\d3d11nt\System\logicsafety.h" />
+    <ClInclude Include="..\d3d11nt\System\Mat4x4Storage.h" />
     <ClInclude Include="..\d3d11nt\System\MemoryAllocator.h" />
     <ClInclude Include="..\d3d11nt\System\MemoryManager.h" />
     <ClInclude Include="..\d3d11nt\System\memutils.h" />
@@ -189,6 +193,7 @@
     <ClCompile Include="..\d3d11nt\System\FileChangesMonitor.cpp" />
     <ClCompile Include="..\d3d11nt\System\fileutils.cpp" />
     <ClCompile Include="..\d3d11nt\System\HardwareInfo.cpp" />
+    <ClCompile Include="..\d3d11nt\System\helperutil.cpp" />
     <ClCompile Include="..\d3d11nt\System\IniFile.cpp" />
     <ClCompile Include="..\d3d11nt\System\IniSerializable.cpp" />
     <ClCompile Include="..\d3d11nt\System\Log.cpp" />

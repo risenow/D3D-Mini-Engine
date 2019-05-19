@@ -6,7 +6,7 @@
 #include <d3dcommon.h>
 
 Texture2D::Texture2D() {}
-Texture2D::Texture2D(ID3D11Texture2D* texture) : D3D11ResourceHolder({ texture })
+Texture2D::Texture2D(ID3D11Texture2D* texture, ID3D11ShaderResourceView* srv) : D3D11ResourceHolder({ texture }), m_SRV(srv)
 {
     popAssert(texture);
 

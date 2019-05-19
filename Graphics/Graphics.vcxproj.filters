@@ -132,6 +132,9 @@
     <ClInclude Include="..\d3d11nt\Graphics\GraphicsTextureCollection.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\d3d11nt\Extern\WICTextureLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -216,6 +219,9 @@
       <Filter>Header Files</Filter>
     </ClCompile>
     <ClCompile Include="..\d3d11nt\Graphics\MaterialBatchStructuredBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\d3d11nt\Graphics\GraphicsTextureCollection.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -27,9 +27,3 @@ private:
 	void* m_Data;
 	GraphicsBuffer m_StructuredBuffer;
 };
-
-//extern std::map<unsigned int, std::shared_ptr<MaterialBatchStructuredBuffer>> MaterialBatchStructuredBuffers;
-//struct GraphicsMaterials
-//{
-
-//};

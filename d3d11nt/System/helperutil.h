@@ -3,6 +3,8 @@
 #include "System/stlcontainersintegration.h"
 #include <limits>
 
+size_t clamp(size_t x, size_t min, size_t max);
+
 template<class T>
 struct NumberRange;
 

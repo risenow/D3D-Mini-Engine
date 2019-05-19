@@ -1,12 +1,14 @@
-2[TIME:216] Adapters enumerated:
-[TIME:217] Adapter index: 0
-[TIME:218] Description: NVIDIA GeForce GTX 1070
-[TIME:219] 
-[TIME:220] Adapter index: 1
-[TIME:221] Description: Microsoft Basic Render Driver
-[TIME:222] 
-2[TIME:713] C:\D3D11Engine\D3D-Mini-Engine\d3d11nt\Data\Shaders\Test\cs.hlsl(40,11): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used
+2[TIME:634] Adapters enumerated:
+[TIME:636] Adapter index: 0
+[TIME:637] Description: NVIDIA GeForce GTX 1070
+[TIME:638] 
+[TIME:639] Adapter index: 1
+[TIME:640] Description: Microsoft Basic Render Driver
+[TIME:641] 
+2[TIME:2210] C:\D3D11Engine\D3D-Mini-Engine\d3d11nt\Data\Shaders\Test\vs.hlsl(35,15-22): warning X3578: Output value 'oICenter' is not completely initialized
+C:\D3D11Engine\D3D-Mini-Engine\d3d11nt\Data\Shaders\Test\vs.hlsl(37,15-23): warning X3578: Output value 'oVsNormal' is not completely initialized
 
-2[TIME:988] C:\D3D11Engine\D3D-Mini-Engine\d3d11nt\Data\Shaders\Test\cs.hlsl(40,11): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used
+2[TIME:2446] C:\D3D11Engine\D3D-Mini-Engine\d3d11nt\Data\Shaders\Test\cs.hlsl(40,11): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used
 
-2[TIME:1141] IL NOT FING WORK
+2[TIME:2642] C:\D3D11Engine\D3D-Mini-Engine\d3d11nt\Data\Shaders\Test\cs.hlsl(40,11): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used
+

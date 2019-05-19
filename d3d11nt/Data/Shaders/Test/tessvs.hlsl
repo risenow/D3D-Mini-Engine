@@ -22,7 +22,7 @@ HullInputType VSEntry(VertexInputType input)
 
     // Pass the vertex position into the hull shader.
     output.position = input.position;
-	output.material = input.material;//*PSConstsStructured[input.material].coef.x;
+    output.material = input.material;//*PSConstsStructured[input.material].coef.x;
 
     // Pass the input color into the hull shader.
     //output.color = float4(PSConstsStructured[input.material].coef, 1.0);//input.color;

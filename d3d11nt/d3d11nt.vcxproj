@@ -22,7 +22,7 @@
     <ProjectGuid>{17773CC7-47FD-477D-BE9C-633CCEDB8A1D}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>d3d11nt</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -73,6 +73,7 @@
     <LinkIncremental>true</LinkIncremental>
     <LibraryPath>$(SolutionDir)Debug;$(LibraryPath)</LibraryPath>
     <SourcePath>$(VC_SourcePath);..\d3d11nt\Data\Shaders\Test\ps.hlsl;</SourcePath>
+    <IncludePath>$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -97,7 +98,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;dxgi.lib;dxguid.lib;graphics.lib;system.lib;devil.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>WICLoader.lib;DDSLoader.lib;Graphics.lib;System.lib;d3d11.lib;d3dcompiler.lib;dxgi.lib;user32.lib;kernel32.lib;gdi32.lib;ole32.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
