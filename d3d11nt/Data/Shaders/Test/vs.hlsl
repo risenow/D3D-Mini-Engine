@@ -4,6 +4,7 @@
 
 
 void VSEntry(in float4 iPos : POSITION 
+            ,in float3 iNormal : NORMAL0
 #ifdef BATCH
         ,in uint iMaterial : TEXCOORD0
 
@@ -20,14 +21,15 @@ void VSEntry(in float4 iPos : POSITION
     uint height;
     uint levels;
 
-    float3 normal = iPos.xyz - wcenter.xyz;
-    float4x4 viewProjection1 = mul((view), (projection));
+    //float4x4 viewProjection1 = mul((view), (projection));
 
-    float3 r = reflect(normalize(iPos.xyz - wpos.xyz), normalize(normal.xyz));
+    float3 viewVec = normalize(iPos.xyz - wpos.xyz);
+
+    float3 r = reflect(viewVec, normalize(iNormal));
     stc = r;
 	
-    oWPos = mul(translatedview, iPos);
-    oPos = mul(projection, oWPos);
+    oWPos = mul(view, iPos);
+    oPos = mul(projection, oWPos);//mul(projection, oWPos);
 #ifdef BATCH
     color =float4(PSConstsStructured[iMaterial].coef, 1.0);
 #endif

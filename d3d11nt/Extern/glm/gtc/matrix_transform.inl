@@ -330,8 +330,8 @@ namespace glm
 			Result[2][2] = zFar / (zNear - zFar);
 			Result[3][2] = -(zFar * zNear) / (zFar - zNear);
 #		else
-			Result[2][2] = - (zFar + zNear) / (zFar - zNear);
-			Result[3][2] = - (static_cast<T>(2) * zFar * zNear) / (zFar - zNear);
+            Result[2][2] = -(zFar + zNear) / (zFar - zNear); //zFar*(zFar - zNear);//- (zFar + zNear) / (zFar - zNear);
+            Result[3][2] = -(static_cast<T>(2) * zFar * zNear) / (zFar - zNear); //(-zNear * zFar) / (zFar - zNear);//- (static_cast<T>(2) * zFar * zNear) / (zFar - zNear);
 #		endif
 
 		return Result;

@@ -69,6 +69,7 @@ public:
 	typedef 
 		struct {
 			glm::vec4 m_Position;
+            glm::vec3 m_Normal;
 			glm::uint m_TexCoord;
 		}
 		VertexType;
@@ -116,9 +117,9 @@ class SerializableSphereGraphicObject : public SerializableGraphicsObject
 public:
     struct VertexType {
 
-        VertexType(glm::vec4 pos,/* glm::vec3 normal,*/ glm::uint texCoord) : m_Position(pos), /*m_Normal(normal),*/ m_TexCoord(texCoord) {}
+        VertexType(glm::vec4 pos, glm::vec3 normal, glm::uint texCoord) : m_Position(pos), m_Normal(normal), m_TexCoord(texCoord) {}
         glm::vec4 m_Position;
-        //glm::vec3 m_Normal;
+        glm::vec3 m_Normal;
         glm::uint m_TexCoord;
     };
     typedef glm::uvec2 TexCoordType;

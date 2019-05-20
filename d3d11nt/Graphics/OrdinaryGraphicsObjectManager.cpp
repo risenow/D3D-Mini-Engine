@@ -20,6 +20,37 @@ bool OrdinaryGraphicsObjectHandler::CanHandle(tinyxml2::XMLElement* sceneGraphEl
 	return sceneGraphElement->Name() == m_TypeName;
 }
 
+glm::vec4 ParsePos(const std::string& pos)
+{
+    std::string temp;
+    temp.reserve(6);
+    glm::vec4 result;
+    size_t compx = 0;
+    for (size_t i = 0; i < pos.size(); i++)
+    {
+        if (pos[i] != ' ')
+            temp.push_back(pos[i]);
+        if (pos[i] == ' ' || i == pos.size()-1 )
+        {
+            result[compx] = std::stof(temp);
+            compx++;
+            temp = "";
+        }
+    }
+    if (compx != 4)
+        result[compx] = 1.0;
+
+    return result;
+}
+
+std::string MakePosStr(const glm::vec3& pos)
+{
+    std::string p;
+    p.reserve(18);
+    p = std::to_string(pos.x) + " " + std::to_string(pos.y) + " " + std::to_string(pos.z);
+    return p;
+}
+
 TriangleGraphicsObjectHandler::TriangleGraphicsObjectHandler() : OrdinaryGraphicsObjectHandler("triangle") {}
 SerializableTriangleGraphicObject::SerializableTriangleGraphicObject(tinyxml2::XMLElement* element)
 {
@@ -27,7 +58,7 @@ SerializableTriangleGraphicObject::SerializableTriangleGraphicObject(tinyxml2::X
 }
 SerializableTriangleGraphicObject::VertexType  SerializableTriangleGraphicObject::ParseVertex(tinyxml2::XMLElement* vertexElement)
 {
-	return SerializableTriangleGraphicObject::VertexType({ glm::vec4(vertexElement->FloatAttribute("x"), vertexElement->FloatAttribute("y"), vertexElement->FloatAttribute("z"), 1.0f), vertexElement->UnsignedAttribute("uv", 0) });
+	return SerializableTriangleGraphicObject::VertexType({ ParsePos(std::string(vertexElement->Attribute("p"))), glm::vec3(ParsePos(std::string(vertexElement->Attribute("n")))), vertexElement->UnsignedAttribute("uv", 0) });
 
 }
 void SerializableTriangleGraphicObject::Serialize(tinyxml2::XMLElement* element, tinyxml2::XMLDocument& document)
@@ -39,10 +70,9 @@ void SerializableTriangleGraphicObject::Serialize(tinyxml2::XMLElement* element,
 	for (const VertexType& vertexPosition : m_Vertexes)
 	{
 		tinyxml2::XMLElement* vertexElement = document.NewElement("vertex");
-		vertexElement->SetAttribute("x", vertexPosition.m_Position.x);
-		vertexElement->SetAttribute("y", vertexPosition.m_Position.y);
-		vertexElement->SetAttribute("z", vertexPosition.m_Position.z);
-		vertexElement->SetAttribute("uv", vertexPosition.m_TexCoord);
+        
+        vertexElement->SetAttribute("p", MakePosStr(glm::vec3(vertexPosition.m_Position)).c_str());
+        vertexElement->SetAttribute("n", MakePosStr(vertexPosition.m_Normal).c_str());
 		element->InsertEndChild(vertexElement);
 	}
 }
@@ -78,10 +108,11 @@ TriangleGraphicsObjectHandler::HandleResult TriangleGraphicsObjectHandler::Handl
 	result.m_SerializableGraphicObject = serializableTrangleGraphicObject;
 
 	const std::string TEXCOORD_PROPERTY_NAME = "TEXCOORD";
+    const std::string NORMAL_PROPERTY_NAME = "NORMAL";
 	const std::string POSITION_PROPERTY_NAME = "POSITION";
 	typedef glm::uint LocalTexCoordType ;
 
-	VertexFormat vertexFormat({ CreateVertexPropertyPrototype<glm::vec4>(POSITION_PROPERTY_NAME), CreateVertexPropertyPrototype<LocalTexCoordType>(TEXCOORD_PROPERTY_NAME) });// , CreateVertexPropertyPrototype<uint32_t>(MATERIAL_PROPERTY_NAME, 0, 1) });
+	VertexFormat vertexFormat({ CreateVertexPropertyPrototype<glm::vec4>(POSITION_PROPERTY_NAME), CreateVertexPropertyPrototype<glm::vec3>(NORMAL_PROPERTY_NAME), CreateVertexPropertyPrototype<LocalTexCoordType>(TEXCOORD_PROPERTY_NAME) });// , CreateVertexPropertyPrototype<uint32_t>(MATERIAL_PROPERTY_NAME, 0, 1) });
 
 	std::vector<std::string> attrs;
 	size_t i = 0;
@@ -115,9 +146,7 @@ void SerializableSphereGraphicObject::Serialize(tinyxml2::XMLElement* element, t
         element->SetAttribute((std::string("material") + std::to_string(i)).c_str(), m_MaterialNames[i].c_str());
 
     tinyxml2::XMLElement* centerElement = document.NewElement("center");
-    centerElement->SetAttribute("x", m_Center.x);
-    centerElement->SetAttribute("y", m_Center.y);
-    centerElement->SetAttribute("z", m_Center.z);
+    centerElement->SetAttribute("p", MakePosStr(m_Center).c_str());
     element->InsertEndChild(centerElement);
 
     tinyxml2::XMLElement* radiusElement = document.NewElement("radius");
@@ -138,7 +167,7 @@ void SerializableSphereGraphicObject::Deserialize(tinyxml2::XMLElement* element)
         }
 
     tinyxml2::XMLElement* paramElement = element->FirstChildElement();
-    m_Center = glm::vec3(paramElement->FloatAttribute("x"), paramElement->FloatAttribute("y"), paramElement->FloatAttribute("z"));
+    m_Center = glm::vec3(ParsePos(std::string(paramElement->Attribute("p"))));//paramElement->FloatAttribute("x"), paramElement->FloatAttribute("y"), paramElement->FloatAttribute("z"));
     paramElement = paramElement->NextSiblingElement();
     m_R = paramElement->FloatAttribute("r");
 }
@@ -154,10 +183,11 @@ SphereGraphicsObjectHandler::HandleResult SphereGraphicsObjectHandler::Handle(Gr
     result.m_SerializableGraphicObject = serializableSphereGraphicObject;
 
     const std::string TEXCOORD_PROPERTY_NAME = "TEXCOORD";
+    const std::string NORMAL_PROPERTY_NAME = "NORMAL";
     const std::string POSITION_PROPERTY_NAME = "POSITION";
     typedef glm::uint LocalTexCoordType;
 
-    VertexFormat vertexFormat({ CreateVertexPropertyPrototype<glm::vec4>(POSITION_PROPERTY_NAME), CreateVertexPropertyPrototype<LocalTexCoordType>(TEXCOORD_PROPERTY_NAME) });// , CreateVertexPropertyPrototype<uint32_t>(MATERIAL_PROPERTY_NAME, 0, 1) });
+    VertexFormat vertexFormat({ CreateVertexPropertyPrototype<glm::vec4>(POSITION_PROPERTY_NAME), CreateVertexPropertyPrototype<glm::vec3>(NORMAL_PROPERTY_NAME), CreateVertexPropertyPrototype<LocalTexCoordType>(TEXCOORD_PROPERTY_NAME) });// , CreateVertexPropertyPrototype<uint32_t>(MATERIAL_PROPERTY_NAME, 0, 1) });
 
     std::vector<std::string> attrs;
     size_t i = 0;
@@ -232,16 +262,20 @@ void SphereGraphicsObjectHandler::VertexDataStream::Open()
         {
             glm::vec4 spherePosOffset = glm::vec4(m_Center.x, m_Center.y, 0.0, 0.0);
             glm::vec4 v1 = glm::vec4(glm::cos(minRad) * majR, glm::sin(minRad) * majR, currentSlice, 1.0) + spherePosOffset;
-            SerializableSphereGraphicObject::VertexType vertex1 = SerializableSphereGraphicObject::VertexType(v1, (glm::uint)(rand() % 2));
+            glm::vec3 n1 = glm::vec3(v1) - m_Center;
+            SerializableSphereGraphicObject::VertexType vertex1 = SerializableSphereGraphicObject::VertexType(v1, n1, (glm::uint)(rand() % 2));
 
             glm::vec4 v2 = glm::vec4(glm::cos(minRad) * majRNext, glm::sin(minRad) * majRNext, nextSlice, 1.0) + spherePosOffset;
-            SerializableSphereGraphicObject::VertexType vertex2 = SerializableSphereGraphicObject::VertexType(v2, (glm::uint)(rand() % 2));
+            glm::vec3 n2 = glm::vec3(v2) - m_Center;
+            SerializableSphereGraphicObject::VertexType vertex2 = SerializableSphereGraphicObject::VertexType(v2, n2, (glm::uint)(rand() % 2));
 
             glm::vec4 v3 = glm::vec4(glm::cos(minRad + minRadStep) * majRNext, glm::sin(minRad + minRadStep) * majRNext, nextSlice, 1.0) + spherePosOffset;
-            SerializableSphereGraphicObject::VertexType vertex3 = SerializableSphereGraphicObject::VertexType(v3, (glm::uint)(rand() % 2));
+            glm::vec3 n3 = glm::vec3(v3) - m_Center;
+            SerializableSphereGraphicObject::VertexType vertex3 = SerializableSphereGraphicObject::VertexType(v3, n3, (glm::uint)(rand() % 2));
 
             glm::vec4 v4 = glm::vec4(glm::cos(minRad + minRadStep) * majR, glm::sin(minRad + minRadStep) * majR, currentSlice, 1.0) + spherePosOffset;
-            SerializableSphereGraphicObject::VertexType vertex4 = SerializableSphereGraphicObject::VertexType(v4, (glm::uint)(rand() % 2));
+            glm::vec3 n4 = glm::vec3(v4) - m_Center;
+            SerializableSphereGraphicObject::VertexType vertex4 = SerializableSphereGraphicObject::VertexType(v4, n4, (glm::uint)(rand() % 2));
 
             m_Vertexes.push_back(vertex1);
             m_Vertexes.push_back(vertex2);

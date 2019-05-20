@@ -198,7 +198,7 @@ int main(int argc, char* argv[])
     D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
     depthStencilDesc.DepthEnable = TRUE;
     depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-    depthStencilDesc.DepthFunc = D3D11_COMPARISON_ALWAYS;
+    depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS;
     depthStencilDesc.StencilEnable = FALSE;
     depthStencilDesc.StencilReadMask = 0xFF;
     depthStencilDesc.StencilWriteMask = 0xFF;
