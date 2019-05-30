@@ -24,6 +24,7 @@ public:
     ID3D11Texture2D* GetD3D11Texture2D() const;
 
     ID3D11ShaderResourceView* GetSRV();
+    ID3D11UnorderedAccessView* GetUAV();
 
     bool IsValid() const;
 
@@ -46,8 +47,7 @@ private:
     UINT m_MiscFlags;
 
     ID3D11ShaderResourceView* m_SRV;
-
-    //ID3D11Texture2D* m_D3D11Texture;
+    ID3D11UnorderedAccessView* m_UAV;
 };
 
 class Texture2DHelper 

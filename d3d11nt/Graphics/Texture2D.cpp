@@ -46,22 +46,25 @@ Texture2D::Texture2D(GraphicsDevice& device, size_t width, size_t height, unsign
     srvDesc.Format = dxgiFormat;
     srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
 
-    D3D11_SHADER_RESOURCE_VIEW_DESC* dp = (D3D11_SHADER_RESOURCE_VIEW_DESC*)& srvDesc;
-    ID3D11ShaderResourceView** srvpp = (ID3D11ShaderResourceView * *)& m_SRV;
-    ID3D11Texture2D* tp = (ID3D11Texture2D*)(GetDX11Object(0));
+    D3D11_UNORDERED_ACCESS_VIEW_DESC uavDesc;
+    uavDesc.Texture2D.MipSlice = 0;
 
-
-    if (!(bindFlags & D3D11_BIND_DEPTH_STENCIL))
+    if (!(bindFlags & D3D11_BIND_DEPTH_STENCIL) && (bindFlags & D3D11_BIND_SHADER_RESOURCE ))
         device.GetD3D11Device()->CreateShaderResourceView((ID3D11Texture2D*)(GetDX11Object(0)), (D3D11_SHADER_RESOURCE_VIEW_DESC*)&srvDesc, (ID3D11ShaderResourceView**)&m_SRV);
-
-    //D3D11_SUBRESOURCE_DATA d;
-    //d.
+    if (!(bindFlags & D3D11_BIND_DEPTH_STENCIL) && (bindFlags & D3D11_BIND_UNORDERED_ACCESS ))
+        device.GetD3D11Device()->CreateUnorderedAccessView((ID3D11Texture2D*)(GetDX11Object(0)), (D3D11_UNORDERED_ACCESS_VIEW_DESC*)& uavDesc, (ID3D11UnorderedAccessView * *)& m_UAV);
 }
 
 ID3D11ShaderResourceView* Texture2D::GetSRV()
 {
     return m_SRV;
 }
+
+ID3D11UnorderedAccessView* Texture2D::GetUAV()
+{
+    return m_UAV;
+}
+
 
 Texture2D::~Texture2D()
 {

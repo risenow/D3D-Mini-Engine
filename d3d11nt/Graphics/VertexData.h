@@ -106,7 +106,6 @@ public:
 protected:
     VertexFormat m_VertexFormat;
     count_t m_NumVertexes;
-	//count_t m_NumVertexesCapacity;
     count_t m_NumSlots;
 
     typedef STLVector<byte_t> RawData;

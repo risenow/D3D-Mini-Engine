@@ -11,7 +11,7 @@ class GraphicsObject
 {
 public:
 	GraphicsTopology m_Topology;
-	std::vector<GraphicsMaterial*> m_Materials; // if m_Matarials.size() > 1 then GraphicsObject is batched || all meterials should be of the same type
+	std::vector<GraphicsMaterial*> m_Materials; // if m_Materials.size() > 1 then GraphicsObject is batched || all meterials should be of the same type
 	GraphicsMaterial* m_Material;
 	//std::shared_ptr<MaterialBatchStructuredBuffer> m_MaterialsStructuredBuffer;
 

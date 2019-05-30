@@ -133,6 +133,7 @@ public:
 private:
     glm::vec3 m_Center;
     float m_R;
+    glm::uint m_MatX;
     std::vector<std::string> m_MaterialNames;
 };
 
@@ -146,7 +147,7 @@ public:
     {
     public:
         VertexDataStream();
-        VertexDataStream(const OrdinaryGraphicsObjectSignature& signature, glm::vec3 center, float r);
+        VertexDataStream(const OrdinaryGraphicsObjectSignature& signature, glm::vec3 center, float r, glm::uint matx);
 
         virtual void Open();
         virtual void Close();
@@ -155,6 +156,7 @@ public:
         OrdinaryGraphicsObjectSignature m_Signature;
         glm::vec3 m_Center;
         float m_R;
+        glm::uint m_MatX;
         std::vector<SerializableSphereGraphicObject::VertexType> m_Vertexes;
     };
 
@@ -168,7 +170,7 @@ public:
 	OrdinaryGraphicsObjectManager();
 	~OrdinaryGraphicsObjectManager();
 
-	void Render(GraphicsDevice& device, ShadersCollection& shaderCollection, const Camera& camera);
+	void Render(GraphicsDevice& device, ShadersCollection& shaderCollection, const std::vector<GraphicsShaderMacro>& passMacros, const Camera& camera);
 
 	GraphicsObjectManager::HandleResult Handle(GraphicsDevice& device, GraphicsTextureCollection& textureCollection, ShadersCollection& shadersCollection, GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* sceneGraphElement);
 	OrdinaryGraphicsObjectHandler::HandleResult Handle_(GraphicsDevice& device, GraphicsTextureCollection& textureCollection, ShadersCollection& shadersCollection, GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* sceneGraphElement);

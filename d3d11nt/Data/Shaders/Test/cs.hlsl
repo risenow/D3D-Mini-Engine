@@ -24,21 +24,27 @@ return lds[c.y*32 + c.x];
 [numthreads(32,32,1)]
 void CSEntry(uint3 Gid : SV_GroupID, uint3 Tid : SV_GroupThreadID, uint3 id : SV_DispatchThreadID)
 {
-lds[Tid.y*32 + Tid.x] = backbuffer[id.xy];
+    lds[Tid.y*32 + Tid.x] = backbuffer[id.xy];
 
-GroupMemoryBarrierWithGroupSync();
+    GroupMemoryBarrierWithGroupSync();
 
-
-float4 color = LoadLDS(Tid.xy) * 0.20236f;
-
+    float4 color = LoadLDS(Tid.xy) * 0.20236f;
 
 //#ifdef HORIZONTAL
-float temp[4];
-for (uint i = 0; i < 4; i++)
-color += LoadLDS(uint2(clamp((int2(Tid.xy) - int2(offset_x*(i+1), offset_y*(i+1))), 0, 31))) * gauss[3 - i];
+    float temp[4];
+    for (uint i = 0; i < 4; i++)
+        if (any((int2(Tid.xy) - int2(offset_x*(i+1), offset_y*(i+1))) < int2(0,0)))
+            color += backbuffer[id.xy - int2(offset_x*(i+1), offset_y*(i+1))] * gauss[3 - i];
+        else
+            color += LoadLDS(uint2(clamp((int2(Tid.xy) - int2(offset_x*(i+1), offset_y*(i+1))), 0, 31))) * gauss[3 - i];
+            //LoadLDS(uint2(clamp((int2(Tid.xy) - int2(offset_x*(i+1), offset_y*(i+1))), 0, 31))) * gauss[3 - i];
 //#endif
-for (uint i = 0; i < 4; i++)
-color += LoadLDS(uint2(clamp((int2(Tid.xy) + int2(offset_x*(i+1), offset_y*(i+1))), 0, 31))) * gauss[3 - i];
+    for (uint i = 0; i < 4; i++)
+         if (any((int2(Tid.xy) + int2(offset_x*(i+1), offset_y*(i+1))) <= int2(31,31)))
+            color += backbuffer[id.xy + int2(offset_x*(i+1), offset_y*(i+1))] * gauss[3 - i];
+        else
+            color += LoadLDS(uint2(clamp((int2(Tid.xy) + int2(offset_x*(i+1), offset_y*(i+1))), 0, 31))) * gauss[3 - i];
+        //color += LoadLDS(uint2(clamp((int2(Tid.xy) + int2(offset_x*(i+1), offset_y*(i+1))), 0, 31))) * gauss[3 - i];
 
 //uint2 temp1 = uint2(clamp((int2(Tid.xy) - int2(1, 0)), 0, 31));
 //uint2 temp2 = uint2(clamp((int2(Tid.xy) - int2(2, 0)), 0, 31));
@@ -63,7 +69,7 @@ color += LoadLDS(uint2(clamp((int2(Tid.xy) + int2(offset_x*(i+1), offset_y*(i+1)
 //color += LoadLDS(temp3 ) * 0.067234f;
 //color += LoadLDS(temp4 ) * 0.028532f;
 
-backbuffer[id.xy] = color;
+    backbuffer[id.xy] = color;
 
 
 //backbuffer[id.xy] = float4(1.0, 0.0, 0.0, 1.0);

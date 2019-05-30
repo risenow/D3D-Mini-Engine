@@ -23,6 +23,9 @@
     <ClInclude Include="..\d3d11nt\Data\Shaders\Test\psconstants.h">
       <Filter>Data\Shaders\Test</Filter>
     </ClInclude>
+    <ClInclude Include="..\d3d11nt\Data\Shaders\Test\deferredshadingpsconstants.h">
+      <Filter>Data\Shaders\Test</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\d3d11nt\Data\scene.xml">

@@ -8,11 +8,8 @@ GraphicsConstantsBuffer<PSConsts> GraphicsPlainColorMaterial::m_ConstantsBuffer;
 bool GraphicsPlainColorMaterial::m_ConstantsBufferInitialized = false;
 
 GraphicsPlainColorMaterial::GraphicsPlainColorMaterial() {}
-GraphicsPlainColorMaterial::GraphicsPlainColorMaterial(GraphicsDevice& device, GraphicsTextureCollection& textureCollection, ShadersCollection& shadersCollection, const std::string& name, tinyxml2::XMLElement* element)//float redFactor)// :
-	//m_ShaderID(GetShaderID(L"Test/ps.ps", { GraphicsShaderMacro("BATCH", "1") }))
+GraphicsPlainColorMaterial::GraphicsPlainColorMaterial(GraphicsDevice& device, GraphicsTextureCollection& textureCollection, ShadersCollection& shadersCollection, const std::string& name, tinyxml2::XMLElement* element)
 {
-
-    //D3DX11CreateShaderResourceViewFromFile(device.GetD3D11Device(), L"spherem.png", nullptr, nullptr, &m_SM, NULL);
 	m_ShaderVariationIDs = { GetShaderID(L"Test/ps.hlsl", { GraphicsShaderMacro("BATCH", "1") }) };
     
     D3D11_SAMPLER_DESC samplerDesc;
@@ -83,9 +80,15 @@ GraphicsBuffer* GraphicsPlainColorMaterial::GetConstantsBuffer() const
 {
 	return (GraphicsBuffer*)&m_ConstantsBuffer;
 }
-void GraphicsPlainColorMaterial::Bind(GraphicsDevice& device, ShadersCollection& shadersCollection, size_t variationIndex/* = 0*/)
+void GraphicsPlainColorMaterial::Bind(GraphicsDevice& device, ShadersCollection& shadersCollection, const std::vector<GraphicsShaderMacro>& passMacros, size_t variationIndex/* = 0*/)
 {
-	m_Shader = shadersCollection.GetShader<GraphicsPixelShader>(L"Test/ps.hlsl", { GraphicsShaderMacro("BATCH", "1") });//shadersCollection.GetShader<GraphicsPixelShader>(m_ShaderVariationIDs[variationIndex]);
+    std::vector<GraphicsShaderMacro> macros;
+    macros.reserve(1 + passMacros.size());
+    macros.push_back(GraphicsShaderMacro("BATCH", "1"));
+    for (size_t i = 0; i < passMacros.size(); i++)
+        macros.push_back(passMacros[i]);
+
+	m_Shader = shadersCollection.GetShader<GraphicsPixelShader>(L"Test/ps.hlsl", macros);
 	m_Shader.Bind(device);
 
     ID3D11ShaderResourceView* textureSRV = m_Cubemap->GetSRV();

@@ -15,7 +15,7 @@ public:
     void Present();
 
     ID3D11Texture2D* GetBackBufferTexture();
-    ColorSurface* GetBackBufferSurface();
+    ColorSurface GetBackBufferSurface();
 
     IDXGISwapChain* GetDXGISwapChain();
 

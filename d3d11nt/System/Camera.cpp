@@ -15,30 +15,34 @@ void Camera::UpdateViewProjectionMatrix()
     static const glm::vec3 xAxis = glm::vec3(1.0f, 0.0f, 0.0f);
     static const glm::vec3 yAxis = glm::vec3(0.0f, 1.0f, 0.0f);
     static const glm::vec3 zAxis = glm::vec3(0.0f, 0.0f, 1.0f);
-    
+
     m_ViewMatrix = glm::mat4x4();
     m_ViewMatrix = glm::rotate(m_ViewMatrix, m_Rotation.x, xAxis);
     m_ViewMatrix = glm::rotate(m_ViewMatrix, m_Rotation.y, yAxis);
-    
-    m_ViewMatrix = glm::translate(m_ViewMatrix, m_Position);
+    m_ViewMatrix = (glm::translate(m_ViewMatrix, m_Position));
+    m_ViewMatrix = glm::transpose(m_ViewMatrix);
+
+    //m_ViewMatrix = glm::inverse(m_ViewMatrix);
 
     m_ViewVec = glm::vec3(0.0, 0.0, 1.0);
-    m_ViewVec = m_ViewVec * glm::mat3x3(m_ViewMatrix);
+    m_ViewVec = glm::mat3x3(m_ViewMatrix) * m_ViewVec;
     m_LeftVec = glm::vec3(1.0, 0.0, 0.0);
-    m_LeftVec = m_LeftVec*glm::mat3x3(m_ViewMatrix);
+    m_LeftVec = glm::mat3x3(m_ViewMatrix) * m_LeftVec;
 
+    glm::vec4 v = glm::vec4(1.0, 0.0, 0.0, 1.0);
+    v = m_ViewMatrix * v;
 
     m_ViewProjectionMatrix = m_ViewMatrix * m_ProjectionMatrix;
 }
 
 void Camera::StepForward(float step)
 {
-    m_Position += m_ViewVec * step;
+    m_Position -= m_ViewVec * step;
 }
 
 void Camera::StepLeft(float step)
 {
-    m_Position += m_LeftVec * step;
+    m_Position -= m_LeftVec * step;
 }
 
 

@@ -15,7 +15,7 @@ class GraphicsMaterial : public SerializableGraphicsObject
 public:
 	virtual bool HasValidConstantsBuffer() const = 0;
 	virtual GraphicsBuffer* GetConstantsBuffer() const = 0;
-	virtual void Bind(GraphicsDevice& device, ShadersCollection& shadersCollection, size_t variationIndex = 0) = 0;
+	virtual void Bind(GraphicsDevice& device, ShadersCollection& shadersCollection, const std::vector<GraphicsShaderMacro>& passMacros, size_t variationIndex = 0) = 0;
 
 	virtual void* GetDataPtr() = 0;
 	virtual size_t GetDataSize() = 0;

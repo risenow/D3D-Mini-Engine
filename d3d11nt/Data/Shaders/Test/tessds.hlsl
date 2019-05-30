@@ -32,7 +32,6 @@ PixelInputType DSEntry(ConstantOutputType input, float3 uvwCoord : SV_DomainLoca
     float4 vertexPosition;
     PixelInputType output;
  
-		
 
     // Determine the position of the new vertex.
     vertexPosition = uvwCoord.x * patch[0].position + uvwCoord.y * patch[1].position + uvwCoord.z * patch[2].position;
@@ -45,11 +44,10 @@ PixelInputType DSEntry(ConstantOutputType input, float3 uvwCoord : SV_DomainLoca
     uint3 sampleCoord = uint3(vertexPosition.x*(float)width, vertexPosition.y*(float)height, 0);
 
     float height_ = (float)tex0.Load(sampleCoord).r/255.0;
-
-	vertexPosition.z += height_/2.0; 
+    vertexPosition.z += height_/2.0; 
     // Calculate the position of the new vertex against the world, view, and projection matrices.
-    float4 vsVertexPosition = mul(vertexPosition, view);
-    output.position = mul(vsVertexPosition, projection);//mul(float4(vertexPosition, 1.0f), worldMatrix);
+    float4 vsVertexPosition = mul(view, vertexPosition);
+    output.position = mul(projection, vsVertexPosition);//mul(float4(vertexPosition, 1.0f), worldMatrix);
     //output.position = mul(output.position, viewMatrix);
     //output.position = mul(output.position, projectionMatrix);
 

@@ -170,6 +170,8 @@ void SerializableSphereGraphicObject::Deserialize(tinyxml2::XMLElement* element)
     m_Center = glm::vec3(ParsePos(std::string(paramElement->Attribute("p"))));//paramElement->FloatAttribute("x"), paramElement->FloatAttribute("y"), paramElement->FloatAttribute("z"));
     paramElement = paramElement->NextSiblingElement();
     m_R = paramElement->FloatAttribute("r");
+
+    m_MatX = element->FirstChildElement("matx")->UnsignedAttribute("x");
 }
 
 SphereGraphicsObjectHandler::HandleResult SphereGraphicsObjectHandler::Handle(GraphicsDevice& device, ShadersCollection& shadersCollection, GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* sceneGraphElement) const
@@ -203,7 +205,7 @@ SphereGraphicsObjectHandler::HandleResult SphereGraphicsObjectHandler::Handle(Gr
     result.m_GraphicsObjectSignature.m_SerializableGraphicsObject = serializableSphereGraphicObject;
     result.m_GraphicsObjectSignature.m_VertexFormat = vertexFormat;
     result.m_GraphicsObjectSignature.m_XMLElement = sceneGraphElement;
-    result.m_GraphicsObjectSignature.m_VertexDataStream = std::make_shared<VertexDataStream>(result.m_GraphicsObjectSignature, serializableSphereGraphicObject->m_Center, serializableSphereGraphicObject->m_R);
+    result.m_GraphicsObjectSignature.m_VertexDataStream = std::make_shared<VertexDataStream>(result.m_GraphicsObjectSignature, serializableSphereGraphicObject->m_Center, serializableSphereGraphicObject->m_R, serializableSphereGraphicObject->m_MatX);
     result.m_GraphicsObjectSignature.m_Valid = true;
 
     return result;
@@ -232,7 +234,7 @@ void TriangleGraphicsObjectHandler::VertexDataStream::WriteTo(VertexData& data, 
 
 SphereGraphicsObjectHandler::VertexDataStream::VertexDataStream()
 {}
-SphereGraphicsObjectHandler::VertexDataStream::VertexDataStream(const OrdinaryGraphicsObjectSignature& signature, glm::vec3 center, float r) : m_Signature(signature), m_Center(center), m_R(r)
+SphereGraphicsObjectHandler::VertexDataStream::VertexDataStream(const OrdinaryGraphicsObjectSignature& signature, glm::vec3 center, float r, glm::uint matX) : m_Signature(signature), m_Center(center), m_R(r), m_MatX(matX)
 {}
 
 void SphereGraphicsObjectHandler::VertexDataStream::Open()
@@ -254,28 +256,28 @@ void SphereGraphicsObjectHandler::VertexDataStream::Open()
     int majCount = 0;
     for (float currentSlice = l; currentSlice < maxL + l; currentSlice += lStep)
     {
-        float majR = m_R * glm::sin(radL);
-        float majRNext = m_R * glm::sin(radL + radLStep);
+        float majR = m_R * (glm::sin(radL));
+        float majRNext = m_R * (glm::sin(radL + radLStep));
         float nextSlice = currentSlice + lStep;
         int minCount = 0;
         for (float minRad = 0.0; minRad < 2 * glm::pi<float>(); minRad += minRadStep)
         {
             glm::vec4 spherePosOffset = glm::vec4(m_Center.x, m_Center.y, 0.0, 0.0);
-            glm::vec4 v1 = glm::vec4(glm::cos(minRad) * majR, glm::sin(minRad) * majR, currentSlice, 1.0) + spherePosOffset;
+            glm::vec4 v1 = glm::vec4(glm::cos(minRad) * majR, glm::sin(minRad) * majR, cos(radL)*m_R + l + m_R, 1.0) + spherePosOffset;
             glm::vec3 n1 = glm::vec3(v1) - m_Center;
-            SerializableSphereGraphicObject::VertexType vertex1 = SerializableSphereGraphicObject::VertexType(v1, n1, (glm::uint)(rand() % 2));
+            SerializableSphereGraphicObject::VertexType vertex1 = SerializableSphereGraphicObject::VertexType(v1, n1, m_MatX);
 
-            glm::vec4 v2 = glm::vec4(glm::cos(minRad) * majRNext, glm::sin(minRad) * majRNext, nextSlice, 1.0) + spherePosOffset;
+            glm::vec4 v2 = glm::vec4(glm::cos(minRad) * majRNext, glm::sin(minRad) * majRNext, cos(radL+radLStep) * m_R + l + m_R, 1.0) + spherePosOffset;
             glm::vec3 n2 = glm::vec3(v2) - m_Center;
-            SerializableSphereGraphicObject::VertexType vertex2 = SerializableSphereGraphicObject::VertexType(v2, n2, (glm::uint)(rand() % 2));
+            SerializableSphereGraphicObject::VertexType vertex2 = SerializableSphereGraphicObject::VertexType(v2, n2, m_MatX);
 
-            glm::vec4 v3 = glm::vec4(glm::cos(minRad + minRadStep) * majRNext, glm::sin(minRad + minRadStep) * majRNext, nextSlice, 1.0) + spherePosOffset;
+            glm::vec4 v3 = glm::vec4(glm::cos(minRad + minRadStep) * majRNext, glm::sin(minRad + minRadStep) * majRNext, cos(radL + radLStep) * m_R + l + m_R, 1.0) + spherePosOffset;
             glm::vec3 n3 = glm::vec3(v3) - m_Center;
-            SerializableSphereGraphicObject::VertexType vertex3 = SerializableSphereGraphicObject::VertexType(v3, n3, (glm::uint)(rand() % 2));
+            SerializableSphereGraphicObject::VertexType vertex3 = SerializableSphereGraphicObject::VertexType(v3, n3, m_MatX);
 
-            glm::vec4 v4 = glm::vec4(glm::cos(minRad + minRadStep) * majR, glm::sin(minRad + minRadStep) * majR, currentSlice, 1.0) + spherePosOffset;
+            glm::vec4 v4 = glm::vec4(glm::cos(minRad + minRadStep) * majR, glm::sin(minRad + minRadStep) * majR, cos(radL) * m_R + l + m_R, 1.0) + spherePosOffset;
             glm::vec3 n4 = glm::vec3(v4) - m_Center;
-            SerializableSphereGraphicObject::VertexType vertex4 = SerializableSphereGraphicObject::VertexType(v4, n4, (glm::uint)(rand() % 2));
+            SerializableSphereGraphicObject::VertexType vertex4 = SerializableSphereGraphicObject::VertexType(v4, n4, m_MatX);
 
             m_Vertexes.push_back(vertex1);
             m_Vertexes.push_back(vertex2);
@@ -435,14 +437,14 @@ void OrdinaryGraphicsObjectManager::CompileGraphicObjects(GraphicsDevice& device
 	}
 }
 
-void OrdinaryGraphicsObjectManager::Render(GraphicsDevice& device, ShadersCollection& shadersCollection, const Camera& camera)
+void OrdinaryGraphicsObjectManager::Render(GraphicsDevice& device, ShadersCollection& shadersCollection, const std::vector<GraphicsShaderMacro>& passMacros, const Camera& camera)
 {
 	for (GraphicsObject& object : m_Objects)
 	{
         if (object.m_Material != nullptr)
-            object.m_Material->Bind(device, shadersCollection);
+            object.m_Material->Bind(device, shadersCollection, passMacros);
         else
-            object.m_Materials[0]->Bind(device, shadersCollection);
+            object.m_Materials[0]->Bind(device, shadersCollection, passMacros);
 
 		object.m_Topology.Bind(device, object.m_Materials[0]->GetBuffer(), camera, Topology_Basic);
 

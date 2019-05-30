@@ -1,51 +1,90 @@
 #include "stdafx.h"
 #include "Graphics/RenderSet.h"
+#include "Texture2D.h"
 #include "System/logicsafety.h"
 #include "Graphics/dxlogicsafety.h"
 
 RenderSet::RenderSet() {}
 
-RenderSet::RenderSet(ColorSurface* colorSurface, DepthSurface* depthStencilSurface) 
-                   : m_ColorSurface(colorSurface), m_DepthStencilSurface(depthStencilSurface) 
+RenderSet::RenderSet(const std::vector<ColorSurface>& colorSurfaces, const DepthSurface& depthStencilSurface) 
+                   : m_ColorSurfaces(colorSurfaces), m_DepthStencilSurface(depthStencilSurface) 
 {
     CorrectnessGuard();
 }
 
+RenderSet::RenderSet(GraphicsDevice& device, size_t w, size_t h, MultisampleType ms, const std::vector<DXGI_FORMAT>& formats)
+{
+    m_DepthStencilTexture = Texture2DHelper::CreateCommonTexture(device,
+        w,
+        h,
+        1,
+        DXGI_FORMAT_D24_UNORM_S8_UINT,
+        ms,
+        D3D11_BIND_DEPTH_STENCIL);
+    m_DepthStencilSurface = DepthSurface(device, &m_DepthStencilTexture);
+
+    m_ColorSurfaces.resize(formats.size());
+    m_RenderTargetTextures.resize(formats.size());
+    for (size_t i = 0; i < formats.size(); i++)
+    {
+        m_RenderTargetTextures[i] = Texture2DHelper::CreateCommonTexture(device,
+            w,
+            h,
+            1,
+            formats[i],
+            ms,
+            D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_UNORDERED_ACCESS);
+        m_ColorSurfaces[i] = ColorSurface(device, &m_RenderTargetTextures[i]);
+    }
+}
+
 size_t RenderSet::GetWidth() const
 {
-    return m_ColorSurface->GetWidth();
+    assert(m_ColorSurfaces.size());
+    return m_ColorSurfaces[0].GetWidth();
 }
 size_t RenderSet::GetHeight() const
 {
-    return m_ColorSurface->GetHeight();
+    assert(m_ColorSurfaces.size());
+    return m_ColorSurfaces[0].GetHeight();
 }
 
 void RenderSet::Set(GraphicsDevice& device)
 {
     CorrectnessGuard();
 
-    ID3D11RenderTargetView* renderTargetViews = m_ColorSurface->GetView();
-    device.GetD3D11DeviceContext()->OMSetRenderTargets(1, &renderTargetViews, 
-                                                          m_DepthStencilSurface->GetView());
+    std::vector<ID3D11RenderTargetView*> renderTargetViews;
+    renderTargetViews.reserve(m_ColorSurfaces.size());
+    for (size_t i = 0; i < m_ColorSurfaces.size(); i++)
+        renderTargetViews.push_back(m_ColorSurfaces[i].GetView());
+    device.GetD3D11DeviceContext()->OMSetRenderTargets(renderTargetViews.size(), renderTargetViews.data(),
+                                                          m_DepthStencilSurface.GetView());
 }
 
 void RenderSet::CorrectnessGuard()
 {
-    popAssert(m_ColorSurface->GetView() || m_DepthStencilSurface->GetView());
-    if (m_ColorSurface && m_DepthStencilSurface)
+#ifdef _DEBUG
+    bool correctColorView = false;
+    for (ColorSurface& surface : m_ColorSurfaces)
+        if (surface.GetView())
+            correctColorView = true;
+    popAssert(correctColorView || m_DepthStencilSurface.GetView());
+    if (correctColorView && m_DepthStencilSurface.GetView())
     {
-        popAssert(m_ColorSurface->GetView()   && m_DepthStencilSurface->GetView());
-        popAssert(m_ColorSurface->GetWidth()  == m_DepthStencilSurface->GetWidth() &&
-                  m_ColorSurface->GetHeight() == m_DepthStencilSurface->GetHeight());
+        for (size_t i = 0; i < m_ColorSurfaces.size(); i++)
+            popAssert(m_ColorSurfaces[i].GetWidth()  == m_DepthStencilSurface.GetWidth() &&
+                        m_ColorSurfaces[i].GetHeight() == m_DepthStencilSurface.GetHeight());
     }
+#endif
 }
 void RenderSet::Clear(GraphicsDevice& device, float color[4])
 {
     CorrectnessGuard();
 
     ID3D11DeviceContext* context = device.GetD3D11DeviceContext();
-    if (m_ColorSurface)
-        context->ClearRenderTargetView(m_ColorSurface->GetView(), color);
-    if (m_DepthStencilSurface)
-        context->ClearDepthStencilView(m_DepthStencilSurface->GetView(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+    for (size_t i = 0; i < m_ColorSurfaces.size(); i++)
+        if (m_ColorSurfaces[i].GetTexture())
+            context->ClearRenderTargetView(m_ColorSurfaces[i].GetView(), color);
+    if (m_DepthStencilSurface.GetTexture())
+        context->ClearDepthStencilView(m_DepthStencilSurface.GetView(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 }

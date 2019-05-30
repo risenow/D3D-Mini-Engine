@@ -119,9 +119,9 @@ ID3D11Texture2D* GraphicsSwapChain::GetBackBufferTexture()
 {
     return nullptr;
 }
-ColorSurface* GraphicsSwapChain::GetBackBufferSurface()
+ColorSurface GraphicsSwapChain::GetBackBufferSurface()
 {
-    return &m_BackBufferSurface;
+    return m_BackBufferSurface;
 }
 
 void GraphicsSwapChain::UpdateDisplayModesList()

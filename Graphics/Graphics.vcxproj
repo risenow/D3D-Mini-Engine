@@ -152,12 +152,15 @@
   <ItemGroup>
     <ClInclude Include="..\d3d11nt\Extern\WICTextureLoader.h" />
     <ClInclude Include="..\d3d11nt\Graphics\ConstantsPreprocessing.h" />
+    <ClInclude Include="..\d3d11nt\Graphics\DeferredShadingFullscreenQuad.h" />
     <ClInclude Include="..\d3d11nt\graphics\DisplayAdaptersList.h" />
     <ClInclude Include="..\d3d11nt\graphics\DX11Object.h" />
     <ClInclude Include="..\d3d11nt\graphics\dxerrorcodesinterpreteutil.h" />
     <ClInclude Include="..\d3d11nt\graphics\dxlogicsafety.h" />
     <ClInclude Include="..\d3d11nt\Graphics\FrameMeasurer.h" />
     <ClInclude Include="..\d3d11nt\Graphics\FrameRateLock.h" />
+    <ClInclude Include="..\d3d11nt\Graphics\FullscreenQuad.h" />
+    <ClInclude Include="..\d3d11nt\Graphics\GBuffer.h" />
     <ClInclude Include="..\d3d11nt\Graphics\GeneralShaderMutationsDefines.h" />
     <ClInclude Include="..\d3d11nt\Graphics\GraphicsMaterial.h" />
     <ClInclude Include="..\d3d11nt\Graphics\GraphicsObject.h" />

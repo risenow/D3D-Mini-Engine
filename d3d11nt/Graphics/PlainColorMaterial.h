@@ -17,7 +17,7 @@ public:
 
 	bool HasValidConstantsBuffer() const;
 	GraphicsBuffer* GetConstantsBuffer() const;
-	void Bind(GraphicsDevice& device, ShadersCollection& shadersCollection, size_t variationIndex = 0);
+	void Bind(GraphicsDevice& device, ShadersCollection& shadersCollection, const std::vector<GraphicsShaderMacro>& passMacros, size_t variationIndex = 0);
 
 	virtual void Serialize(tinyxml2::XMLElement* element, tinyxml2::XMLDocument& document);
 	virtual void Deserialize(tinyxml2::XMLElement* element);

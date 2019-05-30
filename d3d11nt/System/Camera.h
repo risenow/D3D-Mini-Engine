@@ -25,7 +25,6 @@ public:
     const glm::mat4x4& GetProjectionMatrix() const;
     const glm::vec3& GetPosition() const;
 
-    //glm::mat4x4 translatedview;
 private:
     void UpdateViewProjectionMatrix();
     glm::vec3 m_ViewVec;

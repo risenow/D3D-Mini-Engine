@@ -116,6 +116,7 @@
     <None Include="..\d3d11nt\options.ini" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\d3d11nt\Data\Shaders\Test\deferredshadingpsconstants.h" />
     <ClInclude Include="..\d3d11nt\Data\Shaders\Test\psconstants.h" />
     <ClInclude Include="..\d3d11nt\Data\Shaders\Test\vsconstants.h" />
   </ItemGroup>
