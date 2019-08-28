@@ -26,19 +26,19 @@ void MouseKeyboardCameraController::Update(Window& window)
 
     if (GetAsyncKeyState(VK_UP))
     {
-        m_Camera.StepForward(-0.005);
+        m_Camera.StepForward(0.005);
     }
     if (GetAsyncKeyState(VK_DOWN))
     {
-        m_Camera.StepForward(0.005);
+        m_Camera.StepForward(-0.005);
     }
     if (GetAsyncKeyState(VK_LEFT))
     {
-        m_Camera.StepLeft(-0.005);
+        m_Camera.StepLeft(0.005);
     }
     if (GetAsyncKeyState(VK_RIGHT))
     {
-        m_Camera.StepLeft(0.005);
+        m_Camera.StepLeft(-0.005);
     }
 	m_Camera.SetRotation(glm::vec3(m_RotationAxisX, m_RotationAxisY, 0));
 }

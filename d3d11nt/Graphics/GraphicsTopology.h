@@ -22,7 +22,7 @@ public:
 	GraphicsTopology();
 	GraphicsTopology(GraphicsDevice& device, GraphicsTextureCollection& textureCollection, ShadersCollection& shadersCollection, VertexData& vertexData, bool isBatch = false);
 
-	void Bind(GraphicsDevice& device, GraphicsBuffer& buffer, const Camera& camera, TopologyType type);
+	void Bind(GraphicsDevice& device, ShadersCollection& shadersCollection, GraphicsBuffer& buffer, const Camera& camera, TopologyType type);
 	GraphicsBuffer* GetConstantsBuffer() const;
 
 	void DrawCall(GraphicsDevice& device);

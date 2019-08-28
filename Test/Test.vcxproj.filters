@@ -15,6 +15,9 @@
     <None Include="..\d3d11nt\options.ini">
       <Filter>Data</Filter>
     </None>
+    <None Include="..\d3d11nt\Data\Shaders\Test\deferredshadingps.hlsl">
+      <Filter>Data\Shaders\Test</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\d3d11nt\Data\Shaders\Test\vsconstants.h">

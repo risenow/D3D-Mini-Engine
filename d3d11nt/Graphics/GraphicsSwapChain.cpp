@@ -46,7 +46,6 @@ void GraphicsSwapChain::InitializeBackBufferSurface(GraphicsDevice& device)
     DEBUG_ONLY(m_BackBufferTexture.SetDebugName("Backbuffer Texture"));
 
     m_BackBufferSurface = ColorSurface(device, &m_BackBufferTexture);      
-
     backBuffer->Release();
 }
 

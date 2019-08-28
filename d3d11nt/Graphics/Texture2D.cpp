@@ -48,6 +48,8 @@ Texture2D::Texture2D(GraphicsDevice& device, size_t width, size_t height, unsign
 
     D3D11_UNORDERED_ACCESS_VIEW_DESC uavDesc;
     uavDesc.Texture2D.MipSlice = 0;
+    uavDesc.Format = dxgiFormat;
+    uavDesc.ViewDimension = D3D11_UAV_DIMENSION_TEXTURE2D;
 
     if (!(bindFlags & D3D11_BIND_DEPTH_STENCIL) && (bindFlags & D3D11_BIND_SHADER_RESOURCE ))
         device.GetD3D11Device()->CreateShaderResourceView((ID3D11Texture2D*)(GetDX11Object(0)), (D3D11_SHADER_RESOURCE_VIEW_DESC*)&srvDesc, (ID3D11ShaderResourceView**)&m_SRV);

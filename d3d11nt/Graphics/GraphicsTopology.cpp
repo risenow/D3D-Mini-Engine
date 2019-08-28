@@ -30,8 +30,9 @@ GraphicsTopology::GraphicsTopology(GraphicsDevice& device, GraphicsTextureCollec
 	}
 }
 
-void GraphicsTopology::Bind(GraphicsDevice& device, GraphicsBuffer& buffer, const Camera& camera, TopologyType type)
+void GraphicsTopology::Bind(GraphicsDevice& device, ShadersCollection& shadersCollection, GraphicsBuffer& buffer, const Camera& camera, TopologyType type)
 {
+    m_Shader = shadersCollection.GetShader<GraphicsVertexShader>(L"Test/vs.hlsl", ShaderVariation({ SHADER_MACRO_BATCH }));
     ID3D11ShaderResourceView* bufferSRV = buffer.GetSRV();
     switch (type)
     {
@@ -61,12 +62,14 @@ void GraphicsTopology::Bind(GraphicsDevice& device, GraphicsBuffer& buffer, cons
 	{
 		VSConsts consts;
         //consts.translatedview.Set(camera.translatedview);
-		consts.view.Set(camera.GetViewMatrix());
-        consts.projection.Set(camera.GetProjectionMatrix());
-        consts.normalMatrix.Set((camera.GetViewMatrix()));
-        consts.viewProjection.Set(camera.GetViewProjectionMatrix());
+        consts.view = camera.GetViewMatrix();//.Set(camera.GetViewMatrix());
+        consts.projection = camera.GetProjectionMatrix();//.Set(camera.GetProjectionMatrix());
+        consts.normalMatrix = camera.GetViewMatrix();//.Set((camera.GetViewMatrix()));
+        consts.viewProjection = camera.GetViewProjectionMatrix();//.Set(camera.GetViewProjectionMatrix());
         consts.tessellationAmount = 5.0f;
-        consts.wpos = -glm::vec4( camera.GetPosition(), 1.0);
+
+        SimpleMath::Vector3 pos = camera.GetPosition();
+        consts.wpos = -SimpleMath::Vector4(pos.x, pos.y, pos.z, 1.0);//glm::vec4( camera.GetPosition(), 1.0);
 		m_ConstantsBuffer.Update(device, consts);
         BindMultipleGraphicsConstantBuffers(device, 0, { &m_ConstantsBuffer }, GraphicsShaderMask_Vertex | GraphicsShaderMask_Pixel | GraphicsShaderMask_Hull | GraphicsShaderMask_Domain);
 	}

@@ -30,7 +30,7 @@ void CommandLineArgs::WriteToConsole()
     LOG_BUFFER(std::string("Commandline Args:\n"), logBuffer);
     for (std::string& arg : m_Args)
     {
-		popGetLogger().WriteUsingMode({ &logBufferStream }, arg + " ", 0);
+		popGetLogger().WriteUsingMode({ &logBufferStream }, std::string(arg + " "), 0);
     }
 	popGetLogger().WriteUsingMode({ &LOG_CONSOLE_STREAM() }, logBuffer, 0);
 }

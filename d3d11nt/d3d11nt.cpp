@@ -60,14 +60,12 @@ float DeserializeCameraFOV(const IniFile& ini)
 
 Camera CreateInitialCamera(const IniFile& ini)
 {
-	const glm::vec3 position = glm::vec3(0.0f, .0f, .0f);
+	const SimpleMath::Vector3 position = SimpleMath::Vector3(0.0f, .0f, .0f);
 	const glm::vec3 rotation  = glm::vec3(0.0f, 0.0f, 0.0f);
 	Camera camera = Camera(position, rotation);
     float deg = DeserializeCameraFOV(ini);
 	//camera.SetProjection(glm::perspective(glm::radians(DeserializeCameraFOV(ini)), 1.0f, 0.01f, 1000.0f));
-	camera.SetProjection((glm::perspectiveFov(glm::radians(45.0f), 512.0f, 512.0f, 0.1f, 1000.0f)));
-
-    glm::vec4 tposition = glm::vec4(0.5f, .5f, 1.5f,1.0);
+    camera.SetProjection(45.0f, 1.0f, 0.1f, 1000.0f);//(glm::perspectiveFov(glm::radians(45.0f), 512.0f, 512.0f, 0.1f, 1000.0f)));
 
 	return camera;
 }
@@ -135,9 +133,9 @@ int main(int argc, char* argv[])
     DepthSurface depthStencilSurface(device, &depthStencilTexture);
     RenderSet finalRenderSet({ backBufferSurface }, depthStencilSurface);
 
-    RenderSet GBuffer = RenderSet(device, backBufferSurface.GetWidth(), backBufferSurface.GetHeight(), options.GetMultisampleType(), { DXGI_FORMAT_R32G32B32A32_FLOAT , DXGI_FORMAT_R16G16B16A16_FLOAT, DXGI_FORMAT_R8G8B8A8_UNORM });
+    RenderSet GBuffer = RenderSet(device, backBufferSurface.GetWidth(), backBufferSurface.GetHeight(), options.GetMultisampleType(), { DXGI_FORMAT_R32G32B32A32_FLOAT , DXGI_FORMAT_R32G32B32A32_FLOAT, DXGI_FORMAT_R8G8B8A8_UNORM });
     
-    DeferredShadingFullscreenQuad deferredShadingFullscreenQuad(device, GBuffer, shadersCollection);
+    DeferredShadingFullscreenQuad deferredShadingFullscreenQuad(device, GBuffer, shadersCollection, textureCollection);
 
     GraphicsViewport viewport(finalRenderSet);
 
@@ -229,9 +227,13 @@ int main(int argc, char* argv[])
 
     device.GetD3D11Device()->CreateUnorderedAccessView(swapchain.GetBackBufferSurface().GetTexture()->GetD3D11Texture2D(), &uavDesc, &uav);
 
-    //bool pause = false;
+    bool deferredShading = true;
+
+    bool pause = false;
     while (!window.IsClosed())
     {
+        shadersCollection.ExecuteShadersCompilation(device);
+
 		frameRateLock.OnFrameBegin();
         frameMeasurer.BeginMeasurement();
 
@@ -240,6 +242,7 @@ int main(int argc, char* argv[])
         {
             swapchain.Validate(device, window, options.GetMultisampleType());
             depthStencilSurface.Resize(device, backBufferSurface.GetWidth(), backBufferSurface.GetHeight());
+            GBuffer.Resize(device, backBufferSurface.GetWidth(), backBufferSurface.GetHeight());
         }
         //TO INCAPSULATE IN RENDERPASS class
         //finalRenderSet.Set(device);
@@ -258,43 +261,78 @@ int main(int argc, char* argv[])
         */
 
         //gbuffer pass
-        viewport.Set(device);
-        GBuffer.Set(device);
-        GBuffer.Clear(device, clearColor);
-        device.GetD3D11DeviceContext()->RSSetState(d3dRastState);
-        device.GetD3D11DeviceContext()->OMSetDepthStencilState(m_DepthStencilState, 0);
 
-        sceneGraph.GetOrdinaryGraphicsObjectManager()->Render(device, shadersCollection, { GraphicsShaderMacro("GBUFFER_PASS", "1") }, mouseKeyboardCameraController.GetCamera());
+        if (deferredShading)
+        {
+            viewport.Set(device);
+            GBuffer.Set(device);
+            GBuffer.Clear(device, clearColor);
+            device.GetD3D11DeviceContext()->RSSetState(d3dRastState);
+            device.GetD3D11DeviceContext()->OMSetDepthStencilState(m_DepthStencilState, 0);
 
-        device.GetD3D11DeviceContext()->ClearState();
+            sceneGraph.GetOrdinaryGraphicsObjectManager()->Render(device, shadersCollection, { GraphicsShaderMacro("GBUFFER_PASS", "1") }, mouseKeyboardCameraController.GetCamera());
 
-        //lighting pass
-        viewport.Set(device);
-        finalRenderSet.Set(device);
-        finalRenderSet.Clear(device, clearColor);
-        device.GetD3D11DeviceContext()->RSSetState(d3dRastState);
-        device.GetD3D11DeviceContext()->OMSetDepthStencilState(m_FSQDepthStencilState, 0);
+            device.GetD3D11DeviceContext()->ClearState();
 
-        deferredShadingFullscreenQuad.Render(device, mouseKeyboardCameraController.GetCamera());
+            //lighting pass
+            viewport.Set(device);
+            finalRenderSet.Set(device);
+            finalRenderSet.Clear(device, clearColor);
+            device.GetD3D11DeviceContext()->RSSetState(d3dRastState);
+            device.GetD3D11DeviceContext()->OMSetDepthStencilState(m_FSQDepthStencilState, 0);
 
-        device.GetD3D11DeviceContext()->ClearState();
+            deferredShadingFullscreenQuad.Render(device, shadersCollection, mouseKeyboardCameraController.GetCamera());
 
-        device.GetD3D11DeviceContext()->CSSetShader(horBlurComputeShader.GetShader(), nullptr, 0);
+            device.GetD3D11DeviceContext()->ClearState();
 
-        device.GetD3D11DeviceContext()->CSSetUnorderedAccessViews(0, 1, &uav, 0);
+            /*device.GetD3D11DeviceContext()->ClearState();
 
-        device.GetD3D11DeviceContext()->Dispatch(UINT(ceil(float(backBufferSurface.GetWidth())/32.0f)), UINT(ceil(float(backBufferSurface.GetHeight()) / 32.0f)), 1);
+            device.GetD3D11DeviceContext()->CSSetShader(horBlurComputeShader.GetShader(), nullptr, 0);
 
+            device.GetD3D11DeviceContext()->CSSetUnorderedAccessViews(0, 1, &uav, 0);
 
-        device.GetD3D11DeviceContext()->CSSetShader(verBlurComputeShader.GetShader(), nullptr, 0);
-
-        device.GetD3D11DeviceContext()->CSSetUnorderedAccessViews(0, 1, &uav, 0);
-
-        device.GetD3D11DeviceContext()->Dispatch(UINT(ceil(float(backBufferSurface.GetWidth()) / 32.0f)), UINT(ceil(float(backBufferSurface.GetHeight()) / 32.0f)), 1);
-
-        device.GetD3D11DeviceContext()->ClearState();
+            device.GetD3D11DeviceContext()->Dispatch(UINT(ceil(float(backBufferSurface.GetWidth()) / 32.0f)), UINT(ceil(float(backBufferSurface.GetHeight()) / 32.0f)), 1);
 
 
+            device.GetD3D11DeviceContext()->CSSetShader(verBlurComputeShader.GetShader(), nullptr, 0);
+
+            device.GetD3D11DeviceContext()->CSSetUnorderedAccessViews(0, 1, &uav, 0);
+
+            device.GetD3D11DeviceContext()->Dispatch(UINT(ceil(float(backBufferSurface.GetWidth()) / 32.0f)), UINT(ceil(float(backBufferSurface.GetHeight()) / 32.0f)), 1);
+
+            device.GetD3D11DeviceContext()->ClearState();*/
+        }
+    
+        else
+        {
+            
+            viewport.Set(device);
+            finalRenderSet.Set(device);
+            finalRenderSet.Clear(device, clearColor);
+            device.GetD3D11DeviceContext()->RSSetState(d3dRastState);
+            device.GetD3D11DeviceContext()->OMSetDepthStencilState(m_DepthStencilState, 0);
+
+            sceneGraph.GetOrdinaryGraphicsObjectManager()->Render(device, shadersCollection, { }, mouseKeyboardCameraController.GetCamera());
+
+            device.GetD3D11DeviceContext()->ClearState();
+
+            device.GetD3D11DeviceContext()->CSSetShader(horBlurComputeShader.GetShader(), nullptr, 0);
+
+            device.GetD3D11DeviceContext()->CSSetUnorderedAccessViews(0, 1, &uav, 0);
+
+            device.GetD3D11DeviceContext()->Dispatch(UINT(ceil(float(backBufferSurface.GetWidth()) / 32.0f)), UINT(ceil(float(backBufferSurface.GetHeight()) / 32.0f)), 1);
+
+
+            device.GetD3D11DeviceContext()->CSSetShader(verBlurComputeShader.GetShader(), nullptr, 0);
+
+            device.GetD3D11DeviceContext()->CSSetUnorderedAccessViews(0, 1, &uav, 0);
+
+            device.GetD3D11DeviceContext()->Dispatch(UINT(ceil(float(backBufferSurface.GetWidth()) / 32.0f)), UINT(ceil(float(backBufferSurface.GetHeight()) / 32.0f)), 1);
+
+            device.GetD3D11DeviceContext()->ClearState();
+
+        }
+        
         if (swapchain.IsValid(window, options.GetMultisampleType())) //if swapchain is not valid discard the frame //POSSIBLE RACE CONDITION?
             swapchain.Present();
 
@@ -303,11 +341,16 @@ int main(int argc, char* argv[])
 
         WriteFPSToWindowTitle(window, frameMeasurer);
 
-		if (window.IsFocused())// && !pause)
+		if (window.IsFocused() && !pause)
 		    mouseKeyboardCameraController.Update(window);
+        if (pause)
+            mouseKeyboardCameraController.GetCamera().UpdateViewProjectionMatrix();
 
-        //if (GetAsyncKeyState(0x50))
-            //pause = !pause;
+        std::cout << mouseKeyboardCameraController.GetCamera().GetRotation().y << std::endl;
+
+        if (GetAsyncKeyState(0x50))
+            pause = !pause;
+        //    deferredShading = !deferredShading;
     }
 
     if (device.GetD3D11DeviceContext())

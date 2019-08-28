@@ -131,9 +131,9 @@ public:
 		std::vector<D3D_SHADER_MACRO> shaderMacros;
 		GetD3DShaderMacros(graphicsShaderMacros, shaderMacros);
 
-		D3D_HR_OP(D3DCompileFromFile(strtowstr(fileName).c_str(), shaderMacros.data(), D3D_COMPILE_STANDARD_FILE_INCLUDE,
-									 GetShaderEntryPointName<T>().c_str(), GetShaderD3DTarget<T>().c_str(), D3DCOMPILE_PREFER_FLOW_CONTROL | D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, 0,
-									 (ID3DBlob**)&popBlobDX11OBject.GetRef(), &errorMsgs));
+		//D3D_HR_OP(D3DCompileFromFile(strtowstr(fileName).c_str(), shaderMacros.data(), D3D_COMPILE_STANDARD_FILE_INCLUDE,
+		//							 GetShaderEntryPointName<T>().c_str(), GetShaderD3DTarget<T>().c_str(), D3DCOMPILE_PREFER_FLOW_CONTROL | D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, 0,
+		//							 (ID3DBlob**)&popBlobDX11OBject.GetRef(), &errorMsgs));
 		if (errorMsgs)
 		{
 			LOG_FILE(std::string((char*)errorMsgs->GetBufferPointer()));
@@ -165,7 +165,7 @@ public:
         std::string entry = GetShaderEntryPointName<T>();
 
 		D3D_HR_OP(D3DCompile(content.c_str(), content.size(), wstrtostr(filePath).c_str(), shaderMacros.data(), D3D_COMPILE_STANDARD_FILE_INCLUDE,
-			GetShaderEntryPointName<T>().c_str(), GetShaderD3DTarget<T>().c_str(), D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, 0,
+			GetShaderEntryPointName<T>().c_str(), GetShaderD3DTarget<T>().c_str(), D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION | D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_PACK_MATRIX_ROW_MAJOR, 0,
 			(ID3DBlob**)&shader.popBlobDX11OBject.GetRef(), &errorMsgs));
 		if (errorMsgs)
 		{

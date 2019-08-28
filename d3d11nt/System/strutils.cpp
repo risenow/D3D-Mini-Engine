@@ -64,7 +64,16 @@ std::wstring GetWideString(const cptr& str)
 {
     return strtowstr(std::string(str));
 }
-
+/*template<>
+std::wstring GetWideString(wcptr str)
+{
+    return std::wstring(str);
+}
+template<>
+std::wstring GetWideString(cptr str)
+{
+    return strtowstr(std::string(str));
+}*/
 
 template<>
 cptr GetStringContent(const cptr& str)

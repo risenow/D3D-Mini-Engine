@@ -8,7 +8,6 @@ FileChangesMonitor::FileChangesMonitor() : m_DirHandle(NULL)
 }
 FileChangesMonitor::FileChangesMonitor(const std::wstring& dirPath) : m_DirPath(dirPath)
 {
-	m_DirPath = L"C:/D3D11Engine/D3D-Mini-Engine/d3d11nt/Data/Shaders";
 	m_DirHandle = CreateFile(
 		m_DirPath.c_str(),
 		FILE_LIST_DIRECTORY,

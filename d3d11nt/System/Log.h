@@ -105,7 +105,7 @@ public:
 		if (!m_Enabled)
 			return;
 
-		std::wstring compiledStr = GetWideString(str);
+        std::wstring compiledStr = GetWideString(str);
 		CompileStr(compiledStr, mode);
 		
 		for (RuntimeLogStreamBase* stream : streams)

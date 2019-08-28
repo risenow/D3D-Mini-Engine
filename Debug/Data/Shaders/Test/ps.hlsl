@@ -2,7 +2,6 @@
 #include "vsconstants.h"
 #include "psconstants.h"
 
-
 SamplerState SampleType;
 
 TextureCube cubemap: register( t0 );
@@ -20,7 +19,7 @@ struct PS_OUTPUT
 
 PS_OUTPUT PSEntry(float4 pos : SV_POSITION
 #ifdef BATCH
-            , in float4 diffuse : COLOR0
+            , in float4 diffuseRoughness : COLOR0
             , in float4 vPos : POSITION1
             , in float4 iCenter : POSITION2
             , in float3 stc : TEXCOORD1
@@ -31,6 +30,8 @@ PS_OUTPUT PSEntry(float4 pos : SV_POSITION
 {
 #ifdef BATCH
 
+    float3 diffuse = diffuseRoughness.rgb;
+    float rough = diffuseRoughness.a;
     
     //float4 diffuse = float4(1.0, 0.0, 0.0, 1.0);
     PS_OUTPUT output;
@@ -41,10 +42,10 @@ PS_OUTPUT PSEntry(float4 pos : SV_POSITION
     float coef = dot(normalize(lightvec), normalize(vnormal));//(0.1*pow(length(lightvec),2.0));
 
     float reflectionweight = 0.6;
-    output.Color = (diffuse * (1.0 - reflectionweight) + cubemap.Sample(SampleType, stc).xyzw * reflectionweight) *  coef;
+    output.Color = float4((diffuse *coef), 1.0);// (1.0 - reflectionweight) + cubemap.Sample(SampleType, stc).xyzw * reflectionweight) *  coef;
 #else
-    output.Color = diffuse;
-    output.Normal = float4(vnormal, 1.0);
+    output.Color = float4(diffuse, rough);
+    output.Normal = float4(vnormal, vPos.z);
     output.Position = vPos;
 #endif
     

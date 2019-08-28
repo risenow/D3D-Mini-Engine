@@ -19,7 +19,7 @@ template<class T>
 class CompilableShader
 {
 public:
-	CompilableShader(const std::wstring& filePath, const std::vector<ShaderVariation>& shaderVariations = {}) : m_FilePath(filePath), m_ShaderVariations(shaderVariations) { Load(ShadersRootPath + filePath); }
+	CompilableShader(const std::wstring& filePath, const std::vector<ShaderVariation>& shaderVariations = {}) : m_Changed(true), m_FilePath(filePath), m_ShaderVariations(shaderVariations) { Load(ShadersRootPath + filePath); }
 
 	//bool m_Loaded;
 	std::wstring m_FilePath;
@@ -36,16 +36,48 @@ public:
 		return m_ShaderVariations.size();
 	}
 
-	void Load(const std::wstring& filePath)
+	bool Load(const std::wstring& filePath)
 	{
 		std::ifstream shaderFile(filePath);
-		m_Content = std::string(std::istreambuf_iterator<char>(shaderFile), std::istreambuf_iterator<char>());
+        std::stringstream buffer;
+        buffer << shaderFile.rdbuf();
+
+        m_Content = buffer.str();//std::string(std::istreambuf_iterator<char>(shaderFile), std::istreambuf_iterator<char>());
+
+        bool isf = shaderFile.fail();
 		shaderFile.close();
+
+        /*shaderFile.open(filePath);
+        //std::stringstream buffer;
+        std::string buffer2;
+        shaderFile >> buffer2;//buffer2 << shaderFile.rdbuf();
+        shaderFile.close();*/
+        //m_Content = buffer.str();//std::string(std::istreambuf_iterator<char>(shaderFile), std::istreambuf_iterator<char>());
+        
+
+        //assert(m_Content.size() != 0);
+        if (m_Content.size() != 0)
+            m_Changed = true;
+
+        return m_Changed;
 	}
-	T Compile(GraphicsDevice& device, size_t variationIndex) const
+	T Compile(GraphicsDevice& device, size_t variationIndex)
 	{
+        m_Changed = false;
 		return T::CreateFromTextContent(device, ShadersRootPath + m_FilePath, m_Content, m_ShaderVariations[variationIndex]);
 	}
+
+    bool IsChanged() const
+    {
+        return m_Changed;
+    }
+
+    void SetChanged()
+    {
+        m_Changed = true;
+    }
+private:
+    bool m_Changed;
 };
 
 ShaderID GetShaderID(const std::wstring& filePath, const std::vector<GraphicsShaderMacro>& shaderMacros);
@@ -58,119 +90,120 @@ public:
 	template<class T>
 	void AddShader(const std::wstring& filePath, const std::vector<ShaderVariation>& shaderMacros = {})
 	{
-		LOG("Shader type is not supported");
+		LOG(std::string("Shader type is not supported"));
 		popAssert(false);
 	}
-	template<>
-	void AddShader<GraphicsVertexShader>(const std::wstring& filePath, const std::vector<ShaderVariation>& shaderMacros) //filePath relatively to shaders root
-	{
-		std::lock_guard<std::mutex> lockGuard(m_ShadersMutex);
-		m_CompilableVertexShaders.push(CompilableShader<GraphicsVertexShader>(filePath, shaderMacros));
-	}
-	template<>
-	void AddShader<GraphicsPixelShader>(const std::wstring& filePath, const std::vector<ShaderVariation>& shaderMacros)
-	{
-		std::lock_guard<std::mutex> lockGuard(m_ShadersMutex);
-		m_CompilablePixelShaders.push(CompilableShader<GraphicsPixelShader>(filePath, shaderMacros));
-	}
-    template<>
-    void AddShader<GraphicsComputeShader>(const std::wstring& filePath, const std::vector<ShaderVariation>& shaderMacros)
-    {
-        std::lock_guard<std::mutex> lockGuard(m_ShadersMutex);
-        m_CompilableComputeShaders.push(CompilableShader<GraphicsComputeShader>(filePath, shaderMacros));
-    }
-    template<>
-    void AddShader<GraphicsHullShader>(const std::wstring& filePath, const std::vector<ShaderVariation>& shaderMacros)
-    {
-        std::lock_guard<std::mutex> lockGuard(m_ShadersMutex);
-        m_CompilableHullShaders.push(CompilableShader<GraphicsHullShader>(filePath, shaderMacros));
-    }
-    template<>
-    void AddShader<GraphicsDomainShader>(const std::wstring& filePath, const std::vector<ShaderVariation>& shaderMacros)
-    {
-        std::lock_guard<std::mutex> lockGuard(m_ShadersMutex);
-        m_CompilableDomainShaders.push(CompilableShader<GraphicsDomainShader>(filePath, shaderMacros));
+
+#define DeclAddShader(type, v) \
+    template<> \
+    void AddShader<##type>(const std::wstring& filePath, const std::vector<ShaderVariation>& shaderMacros) \
+    { \
+        std::lock_guard<std::mutex> lockGuard(m_ShadersLoadingMutex); \
+        ##v .push_back(CompilableShader< ##type >(filePath, shaderMacros)); \
     }
 
+    DeclAddShader(GraphicsVertexShader, m_CompilableVertexShaders)
+    DeclAddShader(GraphicsPixelShader, m_CompilablePixelShaders)
+    DeclAddShader(GraphicsComputeShader, m_CompilableComputeShaders)
+    DeclAddShader(GraphicsHullShader, m_CompilableHullShaders)
+    DeclAddShader(GraphicsDomainShader, m_CompilableDomainShaders)
+  
+    
 	template<class T>
 	T GetShader(const std::wstring& filePath, const std::vector<GraphicsShaderMacro>& shaderMacros)
 	{
-		LOG("Shader type is not supported");
+		LOG(std::string("Shader type is not supported"));
 		popAssert(false);
 		return T();
 	}
-	template<>
-	GraphicsVertexShader GetShader<GraphicsVertexShader>(const std::wstring& filePath, const std::vector<GraphicsShaderMacro>& shaderMacros)
-	{
-		ShaderID id = GetShaderID(filePath, shaderMacros);
-		return (*m_VertexShaders.find(id)).second;
-	}
-	template<>
-	GraphicsPixelShader GetShader<GraphicsPixelShader>(const std::wstring& filePath, const std::vector<GraphicsShaderMacro>& shaderMacros)
-	{
-		ShaderID id = GetShaderID(filePath, shaderMacros);
-		return (*m_PixelShaders.find(id)).second;
-	}
 
-    template<>
-    GraphicsComputeShader GetShader<GraphicsComputeShader>(const std::wstring& filePath, const std::vector<GraphicsShaderMacro>& shaderMacros)
-    {
-        ShaderID id = GetShaderID(filePath, shaderMacros);
-        return (*m_ComputeShaders.find(id)).second;
+
+#define DeclGetShader(type, v) \
+    template<> \
+    ##type GetShader< ##type >(const std::wstring& filePath, const std::vector<GraphicsShaderMacro>& shaderMacros) \
+    { \
+       std::lock_guard<std::mutex> lockGuard(m_ShadersLoadingMutex); \
+       ShaderID id = GetShaderID(filePath, shaderMacros);  \
+       return (* ##v .find(id)).second; \
     }
 
-    template<>
-    GraphicsHullShader GetShader<GraphicsHullShader>(const std::wstring& filePath, const std::vector<GraphicsShaderMacro>& shaderMacros)
-    {
-        ShaderID id = GetShaderID(filePath, shaderMacros);
-        return (*m_HullShaders.find(id)).second;
-    }
+    DeclGetShader(GraphicsVertexShader, m_VertexShaders)
+    DeclGetShader(GraphicsPixelShader, m_PixelShaders)
+    DeclGetShader(GraphicsComputeShader, m_ComputeShaders)
+    DeclGetShader(GraphicsDomainShader, m_DomainShaders)
+    DeclGetShader(GraphicsHullShader, m_HullShaders)
 
-    template<>
-    GraphicsDomainShader GetShader<GraphicsDomainShader>(const std::wstring& filePath, const std::vector<GraphicsShaderMacro>& shaderMacros)
-    {
-        ShaderID id = GetShaderID(filePath, shaderMacros);
-        return (*m_DomainShaders.find(id)).second;
-    }
 
 	template<class T>
 	T GetShader(ShaderID)
 	{
-		LOG("Shader type is not supported");
+		LOG(std::string("Shader type is not supported"));
 		popAssert(false);
 		return T();
 	}
-	template<>
-	GraphicsVertexShader GetShader<GraphicsVertexShader>(ShaderID id)
-	{
-		return (*m_VertexShaders.find(id)).second;
-	}
-	template<>
-	GraphicsPixelShader GetShader<GraphicsPixelShader>(ShaderID id)
-	{
-		return (*m_PixelShaders.find(id)).second;
-	}
-    template<>
-    GraphicsComputeShader GetShader<GraphicsComputeShader>(ShaderID id)
-    {
-        return (*m_ComputeShaders.find(id)).second;
+
+#define DeclGetShaderByID(type, v) \
+    template<> \
+    ##type GetShader< ##type >(ShaderID id) \
+    { \
+       std::lock_guard<std::mutex> lockGuard(m_ShadersLoadingMutex); \
+       return (* ##v .find(id)).second; \
     }
-    template<>
-    GraphicsHullShader GetShader<GraphicsHullShader>(ShaderID id)
-    {
-        return (*m_HullShaders.find(id)).second;
+
+    DeclGetShaderByID(GraphicsVertexShader, m_VertexShaders)
+    DeclGetShaderByID(GraphicsPixelShader, m_PixelShaders)
+    DeclGetShaderByID(GraphicsComputeShader, m_ComputeShaders)
+    DeclGetShaderByID(GraphicsDomainShader, m_DomainShaders)
+    DeclGetShaderByID(GraphicsHullShader, m_HullShaders)
+
+#define DeclFindComilableShader(type, fname, v) \
+    CompilableShader<##type>& ##fname(const std::wstring& file) \
+    {\
+        for (size_t i = 0; i < ##v.size(); i++) \
+            if (##v[i].m_FilePath == (file)) \
+            return (##v[i]); \
     }
-    template<>
-    GraphicsDomainShader GetShader<GraphicsDomainShader>(ShaderID id)
+
+    DeclFindComilableShader(GraphicsVertexShader, FindVertexCompilableShader, m_CompilableVertexShaders)
+    DeclFindComilableShader(GraphicsPixelShader, FindPixelCompilableShader, m_CompilablePixelShaders)
+
+    /*CompilableShader<GraphicsVertexShader>& FindVertexCompilableShader(const std::wstring& file)
     {
-        return (*m_DomainShaders.find(id)).second;
+        for (size_t i = 0; i < m_CompilableVertexShaders.size(); i++)
+            if (m_CompilableVertexShaders[i].m_FilePath == (file))
+                return m_CompilableVertexShaders[i];
     }
+    CompilableShader<GraphicsPixelShader>& FindPixelCompilableShader(const std::wstring& file)
+    {
+        for (size_t i = 0; i < m_CompilablePixelShaders.size(); i++)
+            if (m_CompilablePixelShaders[i].m_FilePath == (file))
+                return m_CompilablePixelShaders[i];
+    }
+    CompilableShader<GraphicsComputeShader>& FindComputeCompilableShader(const std::wstring& file)
+    {
+        for (size_t i = 0; i < m_CompilableComputeShaders.size(); i++)
+            if (m_CompilableComputeShaders[i].m_FilePath == (file))
+                return m_CompilableComputeShaders[i];
+    }
+    CompilableShader<GraphicsHullShader>& FindHullCompilableShader(const std::wstring& file)
+    {
+        for (size_t i = 0; i < m_CompilableHullShaders.size(); i++)
+            if (m_CompilableHullShaders[i].m_FilePath == (file))
+                return m_CompilableHullShaders[i];
+    }
+    CompilableShader<GraphicsDomainShader>& FindDomainCompilableShader(const std::wstring& file)
+    {
+        for (size_t i = 0; i < m_CompilableDomainShaders.size(); i++)
+            if (m_CompilableDomainShaders[i].m_FilePath == (file))
+                return m_CompilableDomainShaders[i];
+    }*/
 
 	std::wstring GetShadersDirFullPath() const;
 
 	void ExecuteShadersCompilation(GraphicsDevice& device);
 
 	std::mutex m_ShadersMutex;
+    std::mutex m_ShadersLoadingMutex;
 private:
 	void CalculatePaths();
 	std::wstring ReducePath(const std::wstring& path);
@@ -182,12 +215,13 @@ private:
 	std::wstring m_ShadersRootPathRelativelyToMainRootPath; // has format "x1/x2/x3/"(attention to last char)
 
 	FileChangesMonitor m_FileChangesMonitor;
-	
-	std::queue<CompilableShader<GraphicsVertexShader>> m_CompilableVertexShaders;
-	std::queue<CompilableShader<GraphicsPixelShader>> m_CompilablePixelShaders;
-    std::queue<CompilableShader<GraphicsComputeShader>> m_CompilableComputeShaders;
-    std::queue<CompilableShader<GraphicsHullShader>> m_CompilableHullShaders;
-    std::queue<CompilableShader<GraphicsDomainShader>> m_CompilableDomainShaders;
+    std::vector<std::wstring> m_ShadersChanged;
+
+	std::vector<CompilableShader<GraphicsVertexShader>> m_CompilableVertexShaders;
+	std::vector<CompilableShader<GraphicsPixelShader>> m_CompilablePixelShaders;
+    std::vector<CompilableShader<GraphicsComputeShader>> m_CompilableComputeShaders;
+    std::vector<CompilableShader<GraphicsHullShader>> m_CompilableHullShaders;
+    std::vector<CompilableShader<GraphicsDomainShader>> m_CompilableDomainShaders;
 	STLMap<FNVhash_t, GraphicsVertexShader> m_VertexShaders;
 	STLMap<FNVhash_t, GraphicsPixelShader>  m_PixelShaders;
     STLMap<FNVhash_t, GraphicsComputeShader>  m_ComputeShaders;

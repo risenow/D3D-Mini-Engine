@@ -20,7 +20,7 @@ public:
     DX11Object(const DX11Object& object)
     {
         if (object.Get())
-            object.Get()->AddRef();
+            m_RefCount = object.Get()->AddRef();
         if (m_DX11Object && IsValid())
             m_DX11Object->Release();
         Set(object.Get());
@@ -34,7 +34,7 @@ public:
     DX11Object& operator = (const DX11Object& object)
     {
         if (object.Get())
-            object.Get()->AddRef();
+            m_RefCount = object.Get()->AddRef();
         if (m_DX11Object)
             m_DX11Object->Release();
         Set(object.Get());
@@ -61,7 +61,7 @@ public:
     void Release()
     {
         if (m_DX11Object)
-            m_DX11Object->Release();
+            m_RefCount = m_DX11Object->Release();
 		Set(nullptr);
     }
 
@@ -82,6 +82,7 @@ private:
 
     T* m_DX11Object;
 	unsigned long m_DX11ObjectPointerHash;
+    size_t m_RefCount;
 };
 
 /*template<class T>

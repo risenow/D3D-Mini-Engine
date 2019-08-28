@@ -70,7 +70,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(IncludePath);$(SolutionDir)d3d11nt\</IncludePath>
+    <IncludePath>C:\D3D11Engine\D3D-Mini-Engine\d3d11nt\Extern\DirectXTK\Inc;$(IncludePath);$(SolutionDir)d3d11nt\</IncludePath>
     <SourcePath>$(SolutionDir)d3d11nt\Graphics\;$(SourcePath)</SourcePath>
     <LibraryPath>
     </LibraryPath>
@@ -87,6 +87,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>CPU_SIDE_CODE;USE_CUSTOM_ALLOCATORS;_DEBUG;WIN32;_LIB;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <PreprocessToFile>false</PreprocessToFile>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -228,6 +229,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cpp.hint" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

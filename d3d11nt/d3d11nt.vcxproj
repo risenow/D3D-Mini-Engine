@@ -73,7 +73,7 @@
     <LinkIncremental>true</LinkIncremental>
     <LibraryPath>$(SolutionDir)Debug;$(LibraryPath)</LibraryPath>
     <SourcePath>$(VC_SourcePath);..\d3d11nt\Data\Shaders\Test\ps.hlsl;</SourcePath>
-    <IncludePath>$(IncludePath)</IncludePath>
+    <IncludePath>C:\D3D11Engine\D3D-Mini-Engine\d3d11nt\Extern\DirectXTK\Inc;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>

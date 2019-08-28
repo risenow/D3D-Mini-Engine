@@ -25,6 +25,18 @@ public:
     void Set(GraphicsDevice& device);
     void Clear(GraphicsDevice& device, float color[4]);
 
+    void Resize(GraphicsDevice& device, float w, float h)
+    {
+        for (ColorSurface& surface : m_ColorSurfaces)
+            if (surface.GetView())
+                surface.Resize(device, w, h);
+
+        if (m_DepthStencilSurface.GetView())
+        {
+            m_DepthStencilSurface.Resize(device, w, h);
+        }
+    }
+
     Texture2D& GetColorTexture(size_t idx)
     {
         assert(idx < m_RenderTargetTextures.size());
