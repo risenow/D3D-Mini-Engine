@@ -1,7 +1,8 @@
 void VSEntry(
-             out float4 oPos : SV_POSITION
+            out float2 tc : TEXCOORD0
+            ,out float4 oPos : SV_POSITION
             ,uint id : SV_VertexID
-            ,out float2 tc : TEXCOORD0)
+            )
 {
     
     float x = -1, y = -1;

@@ -1,10 +1,12 @@
 <root0>
 <plain_color_material name="red_material">
 <color r="1.0" g="0.0" b="0.0"/>
+<pbr roughness="0.5"/>
 </plain_color_material>
 
 <plain_color_material name="green_material">
 <color r="1.0" g="1.0" b="0.0"/>
+<pbr roughness="0.5"/>
 </plain_color_material>
 
 <triangle material0="red_material" material1="green_material">

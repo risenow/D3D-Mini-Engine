@@ -12,4 +12,4 @@
 #define popAssert(op)
 #endif
 
-#define WIN_HR_OP(op) { HRESULT hr = op; if (hr != S_OK){ LOG("Operation error: " + WinHRtoStr(hr) + " Line: " + std::to_string(__LINE__)); popAssert(false); }}
+#define WIN_HR_OP(op) { HRESULT hr = op; if (hr != S_OK){ LOG(std::string("Operation error: " + WinHRtoStr(hr) + " Line: " + std::to_string(__LINE__))); popAssert(false); }}

@@ -48,9 +48,9 @@ void GraphicsPlainColorMaterial::Serialize(tinyxml2::XMLElement* element, tinyxm
 	element->SetAttribute("name", m_Name.c_str());
 
 	tinyxml2::XMLElement* colorElement = document.NewElement("color");
-	colorElement->SetAttribute("r", m_Data.coef.r);
-	colorElement->SetAttribute("g", m_Data.coef.g);
-	colorElement->SetAttribute("b", m_Data.coef.b);
+	colorElement->SetAttribute("r", m_Data.colorRoughness.x);
+	colorElement->SetAttribute("g", m_Data.colorRoughness.y);
+	colorElement->SetAttribute("b", m_Data.colorRoughness.z);
 	element->InsertEndChild(colorElement);
 }
 void GraphicsPlainColorMaterial::Deserialize(tinyxml2::XMLElement* element)
@@ -60,9 +60,12 @@ void GraphicsPlainColorMaterial::Deserialize(tinyxml2::XMLElement* element)
 	m_Name = nameAttr;
 	tinyxml2::XMLElement* colorElement = element->FirstChildElement("color");
 	assert(colorElement);
-	m_Data.coef.r = colorElement->FloatAttribute("r");
-	m_Data.coef.g = colorElement->FloatAttribute("g");
-	m_Data.coef.b = colorElement->FloatAttribute("b");
+	m_Data.colorRoughness.x = colorElement->FloatAttribute("r");
+	m_Data.colorRoughness.y = colorElement->FloatAttribute("g");
+	m_Data.colorRoughness.z = colorElement->FloatAttribute("b");
+
+    tinyxml2::XMLElement* pbrElement = element->FirstChildElement("pbr");
+    m_Data.colorRoughness.w = pbrElement->FloatAttribute("roughness");
 }
 void* GraphicsPlainColorMaterial::GetDataPtr()
 {

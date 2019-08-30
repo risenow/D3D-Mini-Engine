@@ -2,12 +2,16 @@
 #include <thread>
 #include <mutex>
 #include <algorithm>
+#include <set>
 #include "Graphics/ShadersCollection.h"
 #include "System/mtutils.h"
 #include "System/pathutils.h"
 
 const wchar_t* VERTEX_SHADER_FILE_TYPE = L".vs";
 const wchar_t* PIXEL_SHADER_FILE_TYPE = L".ps";
+
+const wchar_t* VERTEX_SHADER_FILE_SIGN = L"vs";
+const wchar_t* PIXEL_SHADER_FILE_SIGN = L"ps";
 
 ShaderID GetShaderID(const std::wstring& filePath, const std::vector<GraphicsShaderMacro>& shaderMacros)
 {
@@ -59,32 +63,59 @@ std::wstring GetFileTypeStr(const std::wstring& filePath) // returns .type
 	return filePath.substr(dotIndex, filePath.size() - i);
 }
 
+std::wstring GetFileNameStr(const std::wstring& filePath) // returns .type
+{
+    long i = filePath.size() - 1;
+    unsigned long dotIndex = 0;
+    size_t lastSlashIndex = 0;
+    for (i; i >= 0; i--)
+    {
+        if (filePath[i] == L'/')
+            lastSlashIndex = i;
+        if (filePath[i] == L'.')
+            dotIndex = i;
+    }
+    return filePath.substr(lastSlashIndex + 1, dotIndex - lastSlashIndex - 1);
+}
+
+std::wstring GetShaderFileNameSign(const std::wstring& filename)
+{
+    return filename.substr(filename.size() - 2, 2);
+}
+
 void ShadersCollection::ShaderMonitorThreadFunc()
 {
 	STLVector<std::wstring> changedFilesPaths;
+
 	while (m_FileChangesMonitor.GatherChanges(changedFilesPaths, FileChangesMonitor::Flag_NoRepeatingFileNames))
 	{
-		//DynamicConditionalLockGuard lockGuard(m_ShadersMutex, changedFilesPaths.size() > 0);
 		for (std::wstring& filePath : changedFilesPaths)
 		{
-			std::lock_guard<std::mutex> lockGuard(m_ShadersMutex);
 			NormalizePath(filePath);
-			std::wstring fileType = GetFileTypeStr(filePath);
-			if (fileType == VERTEX_SHADER_FILE_TYPE)
-			{
-				m_CompilableVertexShaders.push(CompilableShader<GraphicsVertexShader>(filePath, { {} }));
-				//decltype(m_VertexShaders)::iterator correspondingVertexShaderEntry = m_VertexShaders.find(filePath);
-				//if (correspondingVertexShaderEntry != m_VertexShaders.end())
-					//(*correspondingVertexShaderEntry).second = GraphicsVertexShader(m_Device, ShadersRootPath + filePath);
-			} else
-		    if (fileType == PIXEL_SHADER_FILE_TYPE)
-			{
-				m_CompilablePixelShaders.push(CompilableShader<GraphicsPixelShader>(filePath, { {} }));
-				//decltype(m_PixelShaders)::iterator correspondingPixelShaderEntry = m_PixelShaders.find(filePath);
-				//if (correspondingPixelShaderEntry != m_PixelShaders.end())
-				//	(*correspondingPixelShaderEntry).second = GraphicsPixelShader(m_Device, ShadersRootPath + filePath);
-			}
+            m_ShadersChanged.push_back(filePath);
 		}
+
+        for (size_t i = 0; i < m_ShadersChanged.size(); i++)
+        {
+            std::wstring& filePath  = m_ShadersChanged[i];
+
+            std::wstring shaderSign = GetShaderFileNameSign(GetFileNameStr(filePath));
+            if (shaderSign == VERTEX_SHADER_FILE_SIGN)
+            {
+                std::lock_guard<std::mutex> lockGuard(m_ShadersLoadingMutex);
+                bool loaded = FindVertexCompilableShader(filePath).Load(ShadersRootPath + filePath);
+                if (loaded)
+                    m_ShadersChanged.erase(m_ShadersChanged.begin() + i);
+            } else
+            if (shaderSign == PIXEL_SHADER_FILE_SIGN)
+            {
+                std::lock_guard<std::mutex> lockGuard(m_ShadersLoadingMutex);
+                bool loaded = FindPixelCompilableShader(filePath).Load(ShadersRootPath + filePath);
+                if (loaded)
+                    m_ShadersChanged.erase(m_ShadersChanged.begin() + i);
+            }
+        }
+
 		changedFilesPaths.resize(0);
 	}
 }
@@ -103,48 +134,59 @@ std::wstring ShadersCollection::GetShadersDirFullPath() const
 
 	NormalizePath(rootPath);
 
-	return rootPath + ShadersRootPath;
+	return rootPath + L'/' + ShadersRootPath;
 }
 
 void ShadersCollection::ExecuteShadersCompilation(GraphicsDevice& device)
 {
-	while (m_CompilableVertexShaders.size())
+    std::lock_guard<std::mutex> lockGuard(m_ShadersLoadingMutex);
+	for (size_t i = 0; i < m_CompilableVertexShaders.size(); i++)
 	{
-		CompilableShader<GraphicsVertexShader> compilableShader = m_CompilableVertexShaders.front();
-		m_CompilableVertexShaders.pop();
+		CompilableShader<GraphicsVertexShader>& compilableShader = m_CompilableVertexShaders[i];
+
+        if (!compilableShader.IsChanged())
+            continue;
 
 		for (size_t i = 0; i < compilableShader.GetVariationsCount(); i++)
 			m_VertexShaders[compilableShader.GetVariationID(i)] = compilableShader.Compile(device, i);
 	}
-	while (m_CompilablePixelShaders.size())
+    for (size_t i = 0; i < m_CompilablePixelShaders.size(); i++)
 	{
-		CompilableShader<GraphicsPixelShader> compilableShader = m_CompilablePixelShaders.front();
-		m_CompilablePixelShaders.pop();
+		CompilableShader<GraphicsPixelShader>& compilableShader = m_CompilablePixelShaders[i];
+		
+        if (!compilableShader.IsChanged())
+            continue;
 
 		for (size_t i = 0; i < compilableShader.GetVariationsCount(); i++)
 			m_PixelShaders[compilableShader.GetVariationID(i)] = compilableShader.Compile(device, i);
 	}
-    while (m_CompilableComputeShaders.size())
+    for (size_t i = 0; i < m_CompilableComputeShaders.size(); i++)
     {
-        CompilableShader<GraphicsComputeShader> compilableShader = m_CompilableComputeShaders.front();
-        m_CompilableComputeShaders.pop();
+        CompilableShader<GraphicsComputeShader>& compilableShader = m_CompilableComputeShaders[i];
+        
+        if (!compilableShader.IsChanged())
+            continue;
 
         for (size_t i = 0; i < compilableShader.GetVariationsCount(); i++)
             m_ComputeShaders[compilableShader.GetVariationID(i)] = compilableShader.Compile(device, i);
     }
 
-    while (m_CompilableHullShaders.size())
+    for (size_t i = 0; i < m_CompilableHullShaders.size(); i++)
     {
-        CompilableShader<GraphicsHullShader> compilableShader = m_CompilableHullShaders.front();
-        m_CompilableHullShaders.pop();
+        CompilableShader<GraphicsHullShader>& compilableShader = m_CompilableHullShaders[i];
+
+        if (!compilableShader.IsChanged())
+            continue;
 
         for (size_t i = 0; i < compilableShader.GetVariationsCount(); i++)
             m_HullShaders[compilableShader.GetVariationID(i)] = compilableShader.Compile(device, i);
     }
-    while (m_CompilableDomainShaders.size())
+    for (size_t i = 0; i < m_CompilableHullShaders.size(); i++)
     {
-        CompilableShader<GraphicsDomainShader> compilableShader = m_CompilableDomainShaders.front();
-        m_CompilableDomainShaders.pop();
+        CompilableShader<GraphicsDomainShader>& compilableShader = m_CompilableDomainShaders[i];
+        
+        if (!compilableShader.IsChanged())
+            continue;
 
         for (size_t i = 0; i < compilableShader.GetVariationsCount(); i++)
             m_DomainShaders[compilableShader.GetVariationID(i)] = compilableShader.Compile(device, i);

@@ -7,7 +7,6 @@
 #include "Graphics/SerializableGraphicsObject.h"
 #include "Graphics/GraphicsObjectManager.h"
 #include "Graphics/OrdinaryGraphicsObjectManager.h"
-//#include "Graphics/GraphicsObject.h"
 
 class GraphicObject;
 

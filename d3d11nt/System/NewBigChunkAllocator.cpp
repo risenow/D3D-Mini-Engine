@@ -333,8 +333,8 @@ void BigChunkAllocator::WriteAllocationDebugInfo(size_t requestedAllocationSize,
 
 void BigChunkAllocator::WriteDeallocationDebugInfo(size_t deallocatedSize)
 {
-	LOG_CONS("Big Chunk Allocator deallocation, size: " + std::to_string(deallocatedSize) +
-		", free memory: " + BytesNumberToFormattedString(m_Size - m_AllocatedMemorySize));
+	LOG_CONS(std::string("Big Chunk Allocator deallocation, size: " + std::to_string(deallocatedSize) +
+		", free memory: " + BytesNumberToFormattedString(m_Size - m_AllocatedMemorySize)));
 }
 #endif // _DEBUG
 

@@ -1,14 +1,17 @@
-2[TIME:309] Adapters enumerated:
-[TIME:310] Adapter index: 0
-[TIME:312] Description: NVIDIA GeForce GTX 1070
-[TIME:313] 
-[TIME:314] Adapter index: 1
-[TIME:315] Description: Microsoft Basic Render Driver
-[TIME:315] 
-2[TIME:1862] C:\D3D11Engine\D3D-Mini-Engine\d3d11nt\Data\Shaders\Test\vs.hlsl(16,21-28): warning X3578: Output value 'oICenter' is not completely initialized
-C:\D3D11Engine\D3D-Mini-Engine\d3d11nt\Data\Shaders\Test\vs.hlsl(18,21-29): warning X3578: Output value 'oVsNormal' is not completely initialized
+2[TIME:223] Adapters enumerated:
+[TIME:224] Adapter index: 0
+[TIME:225] Description: NVIDIA GeForce GTX 1070
+[TIME:226] 
+[TIME:226] Adapter index: 1
+[TIME:228] Description: Microsoft Basic Render Driver
+[TIME:229] 
+2[TIME:2708] C:\D3D11Engine\D3D-Mini-Engine\d3d11nt\Data\Shaders\Test\vs.hlsl(15,21-28): warning X3578: Output value 'oICenter' is not completely initialized
 
-2[TIME:2133] C:\D3D11Engine\D3D-Mini-Engine\d3d11nt\Data\Shaders\Test\cs.hlsl(40,11): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used
+2[TIME:2735] C:\D3D11Engine\D3D-Mini-Engine\d3d11nt\Data\Shaders\Test\deferredshadingps.hlsl(77,12-51): warning X3206: implicit truncation of vector type
+C:\D3D11Engine\D3D-Mini-Engine\d3d11nt\Data\Shaders\Test\deferredshadingps.hlsl(90,11-47): warning X3206: implicit truncation of vector type
+C:\D3D11Engine\D3D-Mini-Engine\d3d11nt\Data\Shaders\Test\deferredshadingps.hlsl(91,11-44): warning X3206: implicit truncation of vector type
 
-2[TIME:2327] C:\D3D11Engine\D3D-Mini-Engine\d3d11nt\Data\Shaders\Test\cs.hlsl(40,11): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used
+2[TIME:2937] C:\D3D11Engine\D3D-Mini-Engine\d3d11nt\Data\Shaders\Test\cs.hlsl(42,15): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used
+
+2[TIME:3088] C:\D3D11Engine\D3D-Mini-Engine\d3d11nt\Data\Shaders\Test\cs.hlsl(42,15): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used
 

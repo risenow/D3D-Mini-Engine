@@ -446,7 +446,7 @@ void OrdinaryGraphicsObjectManager::Render(GraphicsDevice& device, ShadersCollec
         else
             object.m_Materials[0]->Bind(device, shadersCollection, passMacros);
 
-		object.m_Topology.Bind(device, object.m_Materials[0]->GetBuffer(), camera, Topology_Basic);
+		object.m_Topology.Bind(device, shadersCollection, object.m_Materials[0]->GetBuffer(), camera, Topology_Basic);
 
 		object.m_Topology.DrawCall(device);
 	}
