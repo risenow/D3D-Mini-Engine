@@ -40,20 +40,16 @@ public:
     {
         m_PixelShader = shadersCollection.GetShader<GraphicsPixelShader>(L"Test/deferredshadingps.hlsl", {});
 
-        const SimpleMath::Vector4 lightPos = SimpleMath::Vector4(1000.0,1000.0, -2.0, 1.0);
+        const glm::vec4 lightPos = glm::vec4(1000.0,1000.0, -2.0, 1.0);
         const glm::vec2 projFactors = camera.GetProjectionFactors();
 
         DeferredShadingPSConsts consts;
-        consts.vLightPos = SimpleMath::Vector4::Transform(lightPos, camera.GetViewMatrix()); //lightPos * camera.GetViewMatrix();
-        consts.projFactors = SimpleMath::Vector4(projFactors.x, projFactors.y, 0.0f, 0.0f);
-        //consts.roughness = .3;//glm::vec4(projFactors, 0.0f, 0.0f);
-
-        SimpleMath::Matrix iv = camera.GetViewMatrix();
-        iv = iv.Invert();
-        consts.invView = iv;//glm::inverse(camera.GetViewMatrix()));
-        consts.f0roughness = SimpleMath::Vector4(0.52, 0.0, 0.0, 0.1);
-        SimpleMath::Vector3 pos = camera.GetPosition();
-        consts.wCamPos = -SimpleMath::Vector4(pos.x, pos.y, pos.z, 1.);
+        consts.vLightPos = camera.GetViewMatrix() * lightPos;
+        consts.projFactors = glm::vec4(projFactors.x, projFactors.y, 0.0f, 0.0f);
+        consts.invView = (glm::inverse(camera.GetViewMatrix()));
+        consts.f0roughness = glm::vec4(0.52, 0.0, 0.0, 0.1);
+        glm::vec3 pos = camera.GetPosition();
+        consts.wCamPos = -glm::vec4(pos.x, pos.y, pos.z, 1.);
 
         m_ConstantsBuffer.Update(device, consts);
         m_ConstantsBuffer.Bind(device, GraphicsShaderMask_Pixel, 0);

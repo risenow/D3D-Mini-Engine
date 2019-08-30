@@ -20,21 +20,16 @@ void VSEntry(in float4 iPos : POSITION
     uint height;
     uint levels;
 
-    //float4x4 viewProjection1 = mul((view), (projection));
-
-    oVNormal = mul(iNormal, (float3x3)view);
-    oVPos = mul(iPos, view);;
+    oVNormal = mul((float3x3)view, iNormal);
+    oVPos = mul(view, iPos);
 
     float3 viewVec = normalize(iPos.xyz - wpos.xyz);
 
     float3 r = reflect(viewVec, normalize(iNormal));
     stc = r;
 	
-    
-    float4 vPos = mul(iPos, view);
-    oPos = mul(vPos, projection);
-    //float4 vPos = mul(view, iPos);
-    //oPos = mul(projection, vPos);
+    float4 vPos = mul(view, iPos);
+    oPos = mul(projection, vPos);
 #ifdef BATCH
     diffuseRoughness =PSConstsStructured[iMaterial].colorRoughness;//float4(PSConstsStructured[iMaterial].coef, 1.0);
 #endif

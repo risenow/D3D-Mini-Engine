@@ -62,14 +62,14 @@ void GraphicsTopology::Bind(GraphicsDevice& device, ShadersCollection& shadersCo
 	{
 		VSConsts consts;
         //consts.translatedview.Set(camera.translatedview);
-        consts.view = camera.GetViewMatrix();//.Set(camera.GetViewMatrix());
-        consts.projection = camera.GetProjectionMatrix();//.Set(camera.GetProjectionMatrix());
-        consts.normalMatrix = camera.GetViewMatrix();//.Set((camera.GetViewMatrix()));
-        consts.viewProjection = camera.GetViewProjectionMatrix();//.Set(camera.GetViewProjectionMatrix());
+        consts.view = (camera.GetViewMatrix());
+        consts.projection = (camera.GetProjectionMatrix());
+        consts.normalMatrix  = ((camera.GetViewMatrix()));
+        consts.viewProjection = (camera.GetViewProjectionMatrix());
         consts.tessellationAmount = 5.0f;
 
-        SimpleMath::Vector3 pos = camera.GetPosition();
-        consts.wpos = -SimpleMath::Vector4(pos.x, pos.y, pos.z, 1.0);//glm::vec4( camera.GetPosition(), 1.0);
+        glm::vec3 pos = camera.GetPosition();
+        consts.wpos = -glm::vec4(pos.x, pos.y, pos.z, 1.0);//glm::vec4( camera.GetPosition(), 1.0);
 		m_ConstantsBuffer.Update(device, consts);
         BindMultipleGraphicsConstantBuffers(device, 0, { &m_ConstantsBuffer }, GraphicsShaderMask_Vertex | GraphicsShaderMask_Pixel | GraphicsShaderMask_Hull | GraphicsShaderMask_Domain);
 	}

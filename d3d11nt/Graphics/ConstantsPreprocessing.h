@@ -3,13 +3,14 @@
 
 #ifdef CPU_SIDE_CODE
 #include "System/Mat4x4Storage.h"
+#include <SimpleMath.h>
 #define DECLARE_CONSTANT_STRUCTURE struct
 #define DECLARE_MATERIAL_CONSTANT_STRUCTURE struct
 #define DECLARE_FLOAT float
 #define DECLARE_FLOAT3 SimpleMath::Vector3
 #define DECLARE_FLOAT4 SimpleMath::Vector4
-#define DECLARE_FLOAT3X3 XMFLOAT3X3
-#define DECLARE_FLOAT4X4 SimpleMath::Matrix//glm::mat4x4
+#define DECLARE_FLOAT3X3 glm::mat3x3
+#define DECLARE_FLOAT4X4 SimpleMath::Matrix
 #define DEFINE_MATERIAL_CONSTANT_STRUCTURE(name, type)
 #else
 #define DECLARE_CONSTANT_STRUCTURE cbuffer
