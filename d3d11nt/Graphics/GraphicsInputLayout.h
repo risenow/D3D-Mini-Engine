@@ -4,6 +4,7 @@
 #include "Graphics/VertexData.h"
 #include "Graphics/GraphicsShader.h"
 
+class GraphicsInputLayout
 {
 public:
 	GraphicsInputLayout();

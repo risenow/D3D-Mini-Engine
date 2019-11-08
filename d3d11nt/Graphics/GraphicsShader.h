@@ -107,6 +107,7 @@ struct GraphicsShaderMacro
 void GetD3DShaderMacros(const std::vector<GraphicsShaderMacro>& inShaderMacros, std::vector<D3D_SHADER_MACRO>& outD3DShaderMacros);
 
 template<class T>
+class GraphicsShader
 {
 private:
 	static const index_t BLOB_INDEX = 0;

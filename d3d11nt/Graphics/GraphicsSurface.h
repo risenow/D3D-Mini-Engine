@@ -19,6 +19,7 @@ template<>
 void CreateView(GraphicsDevice& device, Texture2D* texture, ID3D11DepthStencilView** view);
 
 template<class T>
+class GraphicsSurface
 {
 public:
     GraphicsSurface();

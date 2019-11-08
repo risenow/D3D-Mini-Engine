@@ -4,6 +4,7 @@
 #include "Graphics/GraphicsOptions.h"
 #include "Graphics/DX11Object.h"
 
+class Texture2D
 {
 public:
     Texture2D();

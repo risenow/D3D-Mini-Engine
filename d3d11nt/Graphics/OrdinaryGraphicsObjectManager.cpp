@@ -239,6 +239,7 @@ SphereGraphicsObjectHandler::VertexDataStream::VertexDataStream(const OrdinaryGr
 
 void SphereGraphicsObjectHandler::VertexDataStream::Open()
 {
+    const size_t stepsNum = 20;//30;
     float radL = 0.0;
     float maxRadL = glm::pi<float>();
     float radLStep = maxRadL / stepsNum;
