@@ -288,7 +288,6 @@ int main(int argc, char* argv[])
     //device.GetD3D11Device()->CreateUnorderedAccessView(swapchain.GetBackBufferSurface().GetTexture()->GetD3D11Texture2D(), &uavDesc, &uav);
 
     int c = ShowCursor(true);
-    //c = ShowCursor(false);
 
     bool deferredShading = true;
     bool pause = false;
@@ -425,12 +424,9 @@ int main(int argc, char* argv[])
 
             ImGui::Begin("Lighting");
 
-            //ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-            //ImGui::Checkbox("Another Window", &show_another_window);
-
             //ImGui::SliderFloat("F0", &f0override, 0.0f, 1.0f); 
             ImGui::SliderFloat("Roughness", &roverride, 0.0f, 1.0f);
-            ImGui::ColorEdit3("F0", (float*)& f0override255); // Edit 3 floats representing a color
+            ImGui::ColorEdit3("F0", (float*)& f0override255);
             f0overridetrunc = f0override255 * 0.1f;
             //ImGui::SameLine();
 
