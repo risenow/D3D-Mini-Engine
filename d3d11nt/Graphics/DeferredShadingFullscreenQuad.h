@@ -36,18 +36,18 @@ public:
         m_EnvMap = textureCollection["cubemap.dds"];
     }
 
-    void Render(GraphicsDevice& device, ShadersCollection& shadersCollection, Camera& camera)
+    void Render(GraphicsDevice& device, ShadersCollection& shadersCollection, Camera& camera, glm::vec3 f0override =glm::vec3(), float roverride = 0.0f)
     {
         m_PixelShader = shadersCollection.GetShader<GraphicsPixelShader>(L"Test/deferredshadingps.hlsl", {});
 
-        const glm::vec4 lightPos = glm::vec4(1000.0,1000.0, -2.0, 1.0);
+        const glm::vec4 lightPos = glm::vec4(100.0, 100.0, 100.0, 1.0);
         const glm::vec2 projFactors = camera.GetProjectionFactors();
 
         DeferredShadingPSConsts consts;
         consts.vLightPos = camera.GetViewMatrix() * lightPos;
         consts.projFactors = glm::vec4(projFactors.x, projFactors.y, 0.0f, 0.0f);
         consts.invView = (glm::inverse(camera.GetViewMatrix()));
-        consts.f0roughness = glm::vec4(0.52, 0.0, 0.0, 0.1);
+        consts.f0roughness = glm::vec4(f0override.r, f0override.g, f0override.b, roverride);
         glm::vec3 pos = camera.GetPosition();
         consts.wCamPos = -glm::vec4(pos.x, pos.y, pos.z, 1.);
 

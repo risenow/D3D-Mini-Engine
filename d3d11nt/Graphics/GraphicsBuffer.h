@@ -4,14 +4,12 @@
 #include "Graphics/VertexData.h"
 #include "Graphics/GraphicsShader.h"
 
-class GraphicsBuffer : public DX11MultipleObjectsHolder<IUnknown, 2>
+class GraphicsBuffer
 {
 private:
 	static const index_t BUFFER_INDEX = 0;
 	static const index_t SHADER_RESOURCE_INDEX = 1;
 
-#define popBufferDX11Object m_DX11Objects[BUFFER_INDEX]
-#define popShaderResourceDX11Object m_DX11Objects[SHADER_RESOURCE_INDEX]
 public:
     enum BindFlags { BindFlag_Vertex, BindFlag_Index, BindFlag_Constant, BindFlag_Shader, BindFlag_UAV };
     enum UsageFlags { UsageFlag_Dynamic, UsageFlag_Staging, UsageFlag_Immutable, UsageFlag_Default };
@@ -24,17 +22,29 @@ public:
 
 	void Bind(GraphicsDevice& device, GraphicsShaderMaskType stageMask);
 
-    ID3D11ShaderResourceView* GetSRV()
+    ID3D11ShaderResourceView* GetSRV() const
     {
-        return (ID3D11ShaderResourceView * )popShaderResourceDX11Object.Get();
+        return m_SRV;
+    }
+    ID3D11Buffer* GetBuffer() const
+    {
+        return m_Buffer;
     }
 
+    void ReleaseGPUData() 
+    {
+        m_SRV->Release(); 
+        m_SRV = nullptr;
+
+        m_Buffer->Release();
+        m_Buffer = nullptr;
+    }
 	virtual ~GraphicsBuffer()
 	{
-		//ReleaseDX11Objects();
 	}
 protected:
-
+    ID3D11Buffer* m_Buffer;
+    ID3D11ShaderResourceView* m_SRV;
     //void CreateDesc(const size_t size, const BindFlags bindFlag, 
     //                const UsageFlags usageFlag, const MiscFlags miscFlag, void* data, size_t structureByStride, 
     //                D3D11_BUFFER_DESC& bufferDesc, D3D11_SUBRESOURCE_DATA& resourceData);

@@ -4,7 +4,7 @@
 #include "System/logicsafety.h"
 #include "System/typesalias.h"
 #include "System/hashutils.h"
-
+/*
 template<class T>
 class DX11Object
 {
@@ -84,7 +84,7 @@ private:
 	unsigned long m_DX11ObjectPointerHash;
     size_t m_RefCount;
 };
-
+*/
 /*template<class T>
 class DX11ObjectHolder
 {
@@ -117,7 +117,7 @@ protected:
     }
     DX11Object<T> m_DX11Object;
 };*/
-
+/*
 template<class T, size_t num>
 class DX11MultipleObjectsHolder
 {
@@ -130,13 +130,13 @@ public:
 		for (unsigned long i = 0; i < num; i++)
 		{
 			m_DX11Objects[i].Set(objs[i]);
-			objs[i]->AddRef();
+			//objs[i]->AddRef();
 		}
 	}
-    //DX11ObjectHolder(T* obj) : m_DX11Object(obj)
-    //{
-    //    m_DX11Object.Get()->AddRef();
-    //}
+    DX11ObjectHolder(T* obj) : m_DX11Object(obj)
+    {
+        m_DX11Object.Get()->AddRef();
+    }
 
     T* GetDX11Object(index_t index = 0) const
     {
@@ -190,3 +190,4 @@ typedef DX11ObjectWithNameHolder<ID3D11Resource> D3D11ResourceHolder;
 typedef DX11ObjectHolder<ID3D11Resource> D3D11ResourceHolder;
 #endif
 typedef DX11ObjectHolder<IUnknown> DX11UknownHolder;
+*/

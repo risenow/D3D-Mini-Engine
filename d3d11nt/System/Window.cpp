@@ -14,9 +14,13 @@ Window::Window() : m_Width(DEFAULT_WINDOW_WIDTH), m_Height(DEFAULT_WINDOW_HEIGHT
                    m_Title(DEFAULT_WINDOW_TITLE), m_Closed(false), 
                    m_WindowMode(WindowMode_WINDOWED)
 {
+#ifdef MT_WINDOW
     std::thread windowThreadWorker(&Window::WindowThreadWorker, this);
-	m_WindowThreadID = windowThreadWorker.get_id();
+    m_WindowThreadID = windowThreadWorker.get_id();
     windowThreadWorker.detach();
+#else
+    Window::WindowThreadWorker(this);
+#endif
 }
 
 Window::Window(const std::string& title, unsigned int posX, unsigned int posY, 
@@ -26,19 +30,26 @@ Window::Window(const std::string& title, unsigned int posX, unsigned int posY,
                m_Title(title), m_Closed(false), 
                m_WindowMode(WindowMode_WINDOWED)
 {
+#ifdef MT_WINDOW
     std::thread windowThreadWorker(&Window::WindowThreadWorker, this);
-	m_WindowThreadID = windowThreadWorker.get_id();
+    m_WindowThreadID = windowThreadWorker.get_id();
     windowThreadWorker.detach();
+#else
+    Window::WindowThreadWorker(this);
+#endif
 }
 
 
 Window::Window(const IniFile& ini) : m_Closed(false)
 {
     DeserializeFromIni(ini);
-	//Window::WindowThreadWorker(this);
+#ifdef MT_WINDOW
     std::thread windowThreadWorker(&Window::WindowThreadWorker, this);
 	m_WindowThreadID = windowThreadWorker.get_id();
     windowThreadWorker.detach();
+#else
+    Window::WindowThreadWorker(this);
+#endif
 }
 /*Window::Window(const WindowAttributes& attributes) : m_Width(attributes.GetWidth()), m_Height(attributes.GetHeight()), 
                                                      m_X(attributes.GetPosX()), m_Y(attributes.GetPosY()), 
@@ -96,7 +107,9 @@ void Window::InternalCreateWindow(Window* target)
 void Window::WindowThreadWorker(Window* owner)
 {
     InternalCreateWindow(owner);
+#ifdef MT_WINDOW
     UpdateLoop(owner);
+#endif
 }
 void Window::SetTitle(const std::string& title)
 {
@@ -198,7 +211,7 @@ void Window::WindowCreationDebugOutput()
 }
 void Window::UpdateCursorPos()
 {
-	popAssert(std::this_thread::get_id() == m_WindowThreadID);
+	//popAssert(std::this_thread::get_id() == m_WindowThreadID);
 
 	POINT p;
 	GetCursorPos(&p);
@@ -233,8 +246,12 @@ HINSTANCE Window::GetConsoleHInstance()
     return hInstance;
 }
 
+extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK Window::WndProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam)
 {
+    if (ImGui_ImplWin32_WndProcHandler(hwnd, message, wparam, lparam))
+        return true;
+
     switch (message)
     {
     case WM_SYSKEYDOWN:
@@ -258,6 +275,7 @@ LRESULT CALLBACK Window::WndProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM 
         switch (wparam)
         {
         case SIZE_RESTORED:
+        case SIZE_MAXIMIZED:
         {
             Window* window = ((Window*)GetWindowLong(hwnd, GWLP_USERDATA));
             window->m_Width = LOWORD(lparam);
@@ -270,6 +288,10 @@ LRESULT CALLBACK Window::WndProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM 
     }
 	case WM_MOVE:
 	{
+        Window* window = ((Window*)GetWindowLong(hwnd, GWLP_USERDATA));
+        window->m_X = LOWORD(lparam);
+        window->m_Y = HIWORD(lparam);
+
 		switch (wparam)
 		{
 		case SIZE_RESTORED:

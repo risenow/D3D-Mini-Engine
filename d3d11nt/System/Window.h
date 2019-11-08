@@ -8,6 +8,8 @@
 #include "System/IniFile.h"
 #include "System/IniSerializable.h"
 
+#define MT_WINDOW
+
 constexpr size_t DEFAULT_WINDOW_WIDTH = 512;
 constexpr size_t DEFAULT_WINDOW_HEIGHT = 512;
 
@@ -55,9 +57,24 @@ public:
 
 	virtual void Execute() override
 	{
-		ShowCursor(m_Visible);
+        CURSORINFO ci = { sizeof(CURSORINFO) };
+
+        if (GetCursorInfo(&ci))
+        {
+            if (!m_Visible && ci.flags)
+            {
+                ShowCursor(false);
+                ShowCursor(false);
+            }
+            if (m_Visible && !ci.flags)
+            {
+                ShowCursor(true);
+                ShowCursor(true);
+            }
+        }
 	}
 private:
+    static bool m_CurrentState;
 	bool m_Visible;
 };
 
@@ -92,6 +109,17 @@ public:
 	unsigned long GetCursorY() const;
 
     void SwitchMode();
+
+    bool ExplicitUpdate() 
+    {
+        MSG msg;
+        if (::PeekMessage(&msg, m_WindowHandle, 0, 0, PM_REMOVE))
+        {
+            ::TranslateMessage(&msg);
+            ::DispatchMessage(&msg);
+            return true;
+        }
+    }
 
 	template<class T>
 	void AddCommand(const T& command)

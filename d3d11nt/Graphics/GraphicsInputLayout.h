@@ -4,7 +4,6 @@
 #include "Graphics/VertexData.h"
 #include "Graphics/GraphicsShader.h"
 
-class GraphicsInputLayout : public D3D11ResourceHolder
 {
 public:
 	GraphicsInputLayout();
@@ -12,6 +11,13 @@ public:
 
 	void Bind(GraphicsDevice& device);
 
+    void ReleaseGPUData()
+    {
+        m_InputLayout->Release();
+        m_InputLayout = nullptr;
+    }
+
 	ID3D11InputLayout* GetD3D11InputLayout();
 private:
+    ID3D11InputLayout* m_InputLayout;
 };

@@ -33,6 +33,8 @@ public:
     ID3D11Device* GetD3D11Device() const;
     ID3D11DeviceContext* GetD3D11DeviceContext() const;
 
+    void ReleaseGPUData();
+
     void ReportAllLiveObjects();
 private:
     typedef STLVector<D3D_FEATURE_LEVEL> AcceptableFeatureLevels;

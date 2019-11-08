@@ -102,13 +102,13 @@ GraphicsBuffer::GraphicsBuffer(GraphicsDevice& device, size_t size, BindFlags bi
     D3D11_SUBRESOURCE_DATA subresourceData;
 
     CreateDesc(size, bindFlag, usageFlag, miscFlag, data, structureByteStride, bufferDesc, subresourceData);
-    D3D_HR_OP(device.GetD3D11Device()->CreateBuffer(&bufferDesc, (data) ? &subresourceData : nullptr, (ID3D11Buffer**)&popBufferDX11Object.GetRef()));
+    D3D_HR_OP(device.GetD3D11Device()->CreateBuffer(&bufferDesc, (data) ? &subresourceData : nullptr, (ID3D11Buffer**)&m_Buffer));
 
     if (bindFlag != BindFlag_Vertex && bindFlag != BindFlag_Constant)
     {
         D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
         CreateSRVDesc(size, numElements, structureByteStride, format, srvDesc);
-        D3D_HR_OP(device.GetD3D11Device()->CreateShaderResourceView((ID3D11Resource*)popBufferDX11Object.Get(), &srvDesc, (ID3D11ShaderResourceView * *)& popShaderResourceDX11Object.GetRef()));
+        D3D_HR_OP(device.GetD3D11Device()->CreateShaderResourceView(m_Buffer, &srvDesc, (ID3D11ShaderResourceView * *)& m_SRV));
     }
 }
 void GraphicsBuffer::Bind(GraphicsDevice& device, GraphicsShaderMaskType stageMask) 
@@ -123,7 +123,7 @@ void GraphicsBuffer::Bind(GraphicsDevice& device, GraphicsShaderMaskType stageMa
 	for (unsigned long i = 0; i < GraphicsShaderType_Count; i++)
 	{
 		if (stageMask & (1u << i))
-			(device.GetD3D11DeviceContext()->*setShaderResources[i])(0, 1, (ID3D11ShaderResourceView**)&popShaderResourceDX11Object.GetRef());
+			(device.GetD3D11DeviceContext()->*setShaderResources[i])(0, 1, (ID3D11ShaderResourceView**)&m_SRV);
 	}
 }
 
@@ -141,7 +141,7 @@ void VertexBuffer::Bind(GraphicsDevice& device)
 {
 	BindVertexBuffers(device, { *this });
     offset_t offset = 0;
-    device.GetD3D11DeviceContext()->IASetVertexBuffers(0, 1, (ID3D11Buffer**)&GetDX11ObjectReference(), &m_VertexSizeInBytes, (unsigned int*)&offset);
+    device.GetD3D11DeviceContext()->IASetVertexBuffers(0, 1, (ID3D11Buffer**)&m_Buffer, &m_VertexSizeInBytes, (unsigned int*)&offset);
 }
 
 size_t VertexBuffer::GetVertexSizeInBytes() const
@@ -158,7 +158,7 @@ void BindVertexBuffers(GraphicsDevice& device, const std::vector<VertexBuffer>& 
 	{
 		offsets[i] = 0;
 		sizesPerVertex[i] = vertexBuffers[i].GetVertexSizeInBytes();
-		buffers[i] = (ID3D11Buffer*)vertexBuffers[i].GetDX11Object();
+		buffers[i] = (ID3D11Buffer*)vertexBuffers[i].GetBuffer();
 	}
 
 	device.GetD3D11DeviceContext()->IASetVertexBuffers(0, vertexBuffers.size(), buffers, sizesPerVertex, offsets);

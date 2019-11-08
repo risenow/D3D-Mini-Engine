@@ -6,7 +6,7 @@
 #include <d3dcommon.h>
 
 Texture2D::Texture2D() {}
-Texture2D::Texture2D(ID3D11Texture2D* texture, ID3D11ShaderResourceView* srv) : D3D11ResourceHolder({ texture }), m_SRV(srv)
+Texture2D::Texture2D(ID3D11Texture2D* texture, ID3D11ShaderResourceView* srv) : m_Texture(texture), m_SRV(srv), m_UAV(nullptr)
 {
     popAssert(texture);
 
@@ -33,12 +33,12 @@ Texture2D::Texture2D(GraphicsDevice& device, size_t width, size_t height, unsign
                        m_ArraySize(arraySize), m_DXGIFormat(dxgiFormat),
                        m_SampleDesc(sampleDesc), m_Usage(usage),
                        m_BindFlags(bindFlags), m_CPUAccessFlags(cpuAccessFlags),
-                       m_MiscFlags(miscFlags)
+                       m_MiscFlags(miscFlags), m_UAV(nullptr), m_SRV(nullptr)
 {
     D3D11_TEXTURE2D_DESC desc;
     FillDesc(desc);
 
-    D3D_HR_OP(device.GetD3D11Device()->CreateTexture2D(&desc, initialData, (ID3D11Texture2D**)(&GetDX11ObjectReference())));
+    D3D_HR_OP(device.GetD3D11Device()->CreateTexture2D(&desc, initialData, (ID3D11Texture2D**)(&m_Texture)));
 
     D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
     srvDesc.Texture2D.MipLevels = 1;
@@ -52,9 +52,9 @@ Texture2D::Texture2D(GraphicsDevice& device, size_t width, size_t height, unsign
     uavDesc.ViewDimension = D3D11_UAV_DIMENSION_TEXTURE2D;
 
     if (!(bindFlags & D3D11_BIND_DEPTH_STENCIL) && (bindFlags & D3D11_BIND_SHADER_RESOURCE ))
-        device.GetD3D11Device()->CreateShaderResourceView((ID3D11Texture2D*)(GetDX11Object(0)), (D3D11_SHADER_RESOURCE_VIEW_DESC*)&srvDesc, (ID3D11ShaderResourceView**)&m_SRV);
+        device.GetD3D11Device()->CreateShaderResourceView((ID3D11Texture2D*)(m_Texture), (D3D11_SHADER_RESOURCE_VIEW_DESC*)&srvDesc, (ID3D11ShaderResourceView**)&m_SRV);
     if (!(bindFlags & D3D11_BIND_DEPTH_STENCIL) && (bindFlags & D3D11_BIND_UNORDERED_ACCESS ))
-        device.GetD3D11Device()->CreateUnorderedAccessView((ID3D11Texture2D*)(GetDX11Object(0)), (D3D11_UNORDERED_ACCESS_VIEW_DESC*)& uavDesc, (ID3D11UnorderedAccessView * *)& m_UAV);
+        device.GetD3D11Device()->CreateUnorderedAccessView((ID3D11Texture2D*)(m_Texture), (D3D11_UNORDERED_ACCESS_VIEW_DESC*)& uavDesc, (ID3D11UnorderedAccessView * *)& m_UAV);
 }
 
 ID3D11ShaderResourceView* Texture2D::GetSRV()
@@ -101,7 +101,7 @@ size_t Texture2D::GetConsumedVideoMemorySize()
 
 ID3D11Texture2D* Texture2D::GetD3D11Texture2D() const
 {
-    return (ID3D11Texture2D*)GetDX11Object();
+    return (ID3D11Texture2D*)m_Texture;
 }
 
 void Texture2D::FillDesc(D3D11_TEXTURE2D_DESC& desc)
@@ -139,12 +139,19 @@ size_t Texture2D::GetBytesPerPixelForDXGIFormat(DXGI_FORMAT format)
 
 bool Texture2D::IsValid() const
 {
-    return GetDX11Object() != nullptr;
+    return m_Texture != nullptr;
 }
 
-void Texture2D::Release() 
+void Texture2D::ReleaseGPUData() 
 {
-    ReleaseDX11Object(); //we ve got auto release, right? wtf? errors got without this line, to investigate
+    int rc = m_Texture->Release();//we ve got auto release, right? wtf? errors got without this line, to investigate
+    m_Texture = nullptr;
+    if (m_SRV)
+        rc = m_SRV->Release();
+    m_SRV = nullptr;
+    if (m_UAV)
+        rc = m_UAV->Release();
+    m_UAV = nullptr;
 }
 
 Texture2D Texture2DHelper::CreateCommonTexture(GraphicsDevice& device, size_t width, size_t height,

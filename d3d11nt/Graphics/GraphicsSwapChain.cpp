@@ -9,7 +9,7 @@
 
 GraphicsSwapChain::GraphicsSwapChain() {}
 GraphicsSwapChain::GraphicsSwapChain(GraphicsDevice& device, const Window& window, MultisampleType multisample)
-                                   : m_Format(DXGI_FORMAT_R16G16B16A16_FLOAT), m_SwapChain(nullptr), m_FullsreenState(false)
+                                   : m_Format(DXGI_FORMAT_R8G8B8A8_UNORM), m_SwapChain(nullptr), m_FullsreenState(false)
 {
     DXGI_SWAP_CHAIN_DESC swapChainDesc;
     FillSwapChainDesc(window, swapChainDesc, GetSampleDesc(device, m_Format, multisample));
@@ -34,7 +34,6 @@ GraphicsSwapChain::GraphicsSwapChain(GraphicsDevice& device, const Window& windo
 
 GraphicsSwapChain::~GraphicsSwapChain()
 {
-    m_SwapChain->Release();
 }
 
 void GraphicsSwapChain::InitializeBackBufferSurface(GraphicsDevice& device)
@@ -43,10 +42,10 @@ void GraphicsSwapChain::InitializeBackBufferSurface(GraphicsDevice& device)
     D3D_HR_OP(m_SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)(&backBuffer)));
 
     m_BackBufferTexture = Texture2D(backBuffer);
-    DEBUG_ONLY(m_BackBufferTexture.SetDebugName("Backbuffer Texture"));
+    //DEBUG_ONLY(m_BackBufferTexture.SetDebugName("Backbuffer Texture"));
 
-    m_BackBufferSurface = ColorSurface(device, &m_BackBufferTexture);      
-    backBuffer->Release();
+    m_BackBufferSurface = ColorSurface(device, &m_BackBufferTexture);   
+    //backBuffer->Release();
 }
 
 IDXGISwapChain* GraphicsSwapChain::GetDXGISwapChain()
@@ -75,8 +74,8 @@ void GraphicsSwapChain::Validate(GraphicsDevice& device, const Window& window, M
 {
     if (!IsValid(window, currentlySelectedMultisampleType))
     {
-        m_BackBufferSurface.Release();
-        m_BackBufferTexture.Release();
+        m_BackBufferSurface.ReleaseGPUData();
+        m_BackBufferTexture.ReleaseGPUData();
 
         bool fullscreen = window.GetWindowMode() == WindowMode_FULLSCREEN;
         m_FullsreenState = false;
@@ -169,3 +168,12 @@ void GraphicsSwapChain::SetFullcreenState(bool state)
         //m_FullscreenStateChanged = true;
     }
 }
+
+void GraphicsSwapChain::ReleaseGPUData()
+{
+    m_SwapChain->Release();
+    m_SwapChain = nullptr;
+
+    m_BackBufferTexture.ReleaseGPUData();
+}
+

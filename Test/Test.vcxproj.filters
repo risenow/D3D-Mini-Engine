@@ -18,6 +18,9 @@
     <None Include="..\d3d11nt\Data\Shaders\Test\deferredshadingps.hlsl">
       <Filter>Data\Shaders\Test</Filter>
     </None>
+    <None Include="..\d3d11nt\Data\Shaders\Test\ps.hlsl">
+      <Filter>Data\Shaders\Test</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\d3d11nt\Data\Shaders\Test\vsconstants.h">
@@ -34,5 +37,10 @@
     <Xml Include="..\d3d11nt\Data\scene.xml">
       <Filter>Data</Filter>
     </Xml>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\d3d11nt\Data\Shaders\Test\vs.hlsl">
+      <Filter>Data\Shaders\Test</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

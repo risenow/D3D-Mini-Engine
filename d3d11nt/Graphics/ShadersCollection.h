@@ -202,6 +202,8 @@ public:
 
 	void ExecuteShadersCompilation(GraphicsDevice& device);
 
+    void ReleaseGPUData();
+
 	std::mutex m_ShadersMutex;
     std::mutex m_ShadersLoadingMutex;
 private:

@@ -15,18 +15,19 @@ bool isCorrectNormal(float3 n)
 
 float3 F0()
 {
-    return float3(1.0, 1.0, 1.0);//f0roughness.xyz;
+    return f0roughness.xyz;
 }
 
 float Roughness()
 {
-    return 0.9;//f0roughness.w;
+    return f0roughness.w;
 }
 
 float3 shlick(float3 l, float3 h)
 {
     float f = pow(1.0 - dot(h,l), 5.0);
-    return F0() + (1.0 - F0())*f;//(1-pow(saturate(dot(h,l)), 5.00));
+    float3 f0 = f0roughness.xyz;//F0();
+    return f0 + (float3(1.0, 1.0, 1.0) - f0)*f;//(1-pow(saturate(dot(h,l)), 5.00));
 }
 
 float Dggx(float3 h, float3 n, float a)
@@ -63,15 +64,15 @@ float Gsmith(float3 l, float3 v, float3 h, float a)
     return Gggx(l, h, a)*Gggx(v, h, a);
 }
 
-float3 CookTorrance(float3 v, float3 n, float3 l, float3 wv, float3 wn, float a)
+float3 CookTorrance(float3 v, float3 n, float3 l, float3 wv, float3 wn, float3 diff, float a)
 {
-    a = 0.05;
+    a = Roughness();
     float3 zeros = float3(0.0, 0.0, 0.0);
     
     float NL = dot(n, l);
-    //if (NL <= 0.0) return zeros;
+    if (NL <= 0.0) return zeros;
     float NV = dot(n, v);
-    //if (NV <= 0.0) return zeros;
+    if (NV <= 0.0) return zeros;
  
     float3 r = reflect(wv, normalize(wn));
     float3 envColor = reflEnv.Sample(SampleType, r);
@@ -87,10 +88,10 @@ float3 CookTorrance(float3 v, float3 n, float3 l, float3 wv, float3 wn, float a)
     float d = Dggx(h, n, a);
     float3 s = shlick(v, h);
     
-    float spec = (g * d * s * 0.25) / dot(n, v);
+    float3 spec = (g * d * s * 0.25) / dot(n, v);
     float spec2 = max(spec, float3(0, 0, 0));
 
-    return spec;//s * envColor*NL/3.14;//s;//(1-s)*float3(1.0, 1.0, 0.0)*NL/3.14 + spec2;
+    return 3.0*diff/3.14 * NL + spec*3.0;//s * envColor*NL/3.14;//s;//(1-s)*float3(1.0, 1.0, 0.0)*NL/3.14 + spec2;-
     //return (Gsmith(l, v, n)*Dggx(h, n)*shlick(v, h)*0.25)/*(dot(n, l)*//dot(n, v);
 }    
 
@@ -101,6 +102,10 @@ float4 PSEntry(
     float2 tc_ = float2(tc.x, 1.0 - tc.y);
     float4 vPos1 = gbufferPos.Sample(SampleType, tc_);
     float4 vNormalDepth = gbufferNormal.Sample(SampleType, tc_).xyzw;
+
+    if (vNormalDepth.x == 0.0 && vNormalDepth.y == 0.0 && vNormalDepth.z == 0.0)
+        return float4(0.0, 0.0, 0.0, 1.0);
+
     float z = vNormalDepth.w;
     float3 vNormal = normalize(vNormalDepth.xyz);
     float4 diffuseRoughness = gbufferColor.Sample(SampleType, tc_);
@@ -121,5 +126,7 @@ float4 PSEntry(
     //float coef = dot(normalize(lightVec), isCorrectNormal(vNormal) ? normalize(vNormal) : float3(0.0, 0.0, 0.0));
 
     //float reflectionWeight = 0.6;
-    return float4(CookTorrance(v, vNormal, l, wViewVec, wNormal, rough), 1.0);//(diffuse * coef);//(1.0 - reflectionWeigheight) + cubemap.Sample(SampleType, stc).xyzw * reflectionweight) *  coef;
-}
+    float3 ct = CookTorrance(v, vNormal, l, wViewVec, wNormal, diffuse, rough);
+    float4 result = float4(ct + diffuse * 0.1 * 1.0 , 1.0);
+    return pow(result/(result/2.2 + 1.0), (1.0/2.2));//(diffuse * coef);//(1.0 - reflectionWeigheight) + cubemap.Sample(SampleType, stc).xyzw * reflectionweight) *  coef;
+}

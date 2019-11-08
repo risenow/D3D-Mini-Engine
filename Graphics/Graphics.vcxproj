@@ -163,6 +163,7 @@
     <ClInclude Include="..\d3d11nt\Graphics\FullscreenQuad.h" />
     <ClInclude Include="..\d3d11nt\Graphics\GBuffer.h" />
     <ClInclude Include="..\d3d11nt\Graphics\GeneralShaderMutationsDefines.h" />
+    <ClInclude Include="..\d3d11nt\Graphics\GraphicsGPUResident.h" />
     <ClInclude Include="..\d3d11nt\Graphics\GraphicsMaterial.h" />
     <ClInclude Include="..\d3d11nt\Graphics\GraphicsObject.h" />
     <ClInclude Include="..\d3d11nt\Graphics\GraphicsObjectManager.h" />

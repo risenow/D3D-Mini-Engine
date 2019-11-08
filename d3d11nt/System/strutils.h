@@ -2,9 +2,11 @@
 #include <vector>
 #include <iostream>
 #include <string>
+#include <vector>
 #include <cstring>
 #include <codecvt>
 #include <algorithm>
+#include <assert.h>
 
 std::wstring strtowstr(const std::string& str);
 std::string wstrtostr(const std::wstring& wstr);
@@ -80,3 +82,6 @@ void EraseAllSpacesFromString(T& str)
 {
     str.erase(std::remove_if(str.begin(), str.end(), IsSpace<T::value_type>), str.end());
 }
+
+void ExtractWords(const std::string& src, std::vector<std::string>& words);
+void FirstWord(const std::string& src, std::string& word);

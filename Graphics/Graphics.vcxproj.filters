@@ -144,6 +144,9 @@
     <ClInclude Include="..\d3d11nt\Graphics\DeferredShadingFullscreenQuad.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\d3d11nt\Graphics\GraphicsGPUResident.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

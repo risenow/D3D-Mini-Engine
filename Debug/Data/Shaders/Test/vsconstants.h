@@ -25,6 +25,7 @@ DECLARE_CONSTANT_STRUCTURE VSConsts
     DECLARE_FLOAT4 p14;
 
     DECLARE_FLOAT4X4 translatedview;
+    DECLARE_FLOAT4X4 model;
     DECLARE_FLOAT4X4 projection;
     DECLARE_FLOAT4X4 view;//32
     DECLARE_FLOAT4X4 viewProjection;

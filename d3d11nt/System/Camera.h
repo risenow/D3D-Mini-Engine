@@ -21,6 +21,7 @@ public:
     void SetPositionRotation(const glm::vec3& position, const glm::vec3& rotation);
 
     void SetProjection(float fov, float aspect, float near, float far);
+    void UpdateProjection(float aspect);
 
     void StepForward(float step);
     void StepLeft(float step);

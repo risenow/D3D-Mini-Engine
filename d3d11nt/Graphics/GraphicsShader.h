@@ -107,7 +107,6 @@ struct GraphicsShaderMacro
 void GetD3DShaderMacros(const std::vector<GraphicsShaderMacro>& inShaderMacros, std::vector<D3D_SHADER_MACRO>& outD3DShaderMacros);
 
 template<class T>
-class GraphicsShader : public DX11MultipleObjectsHolder<IUnknown, 2>
 {
 private:
 	static const index_t BLOB_INDEX = 0;
@@ -144,7 +143,7 @@ public:
         std::string target = GetShaderD3DTarget<T>();
         std::string entryPoint = GetShaderEntryPointName<T>().c_str();
 
-		CreateShader(device, (ID3DBlob*)popBlobDX11OBject.Get(), (T**)&popShaderDX11Object.GetRef());
+		CreateShader(device, (ID3DBlob*)m_Blob, (T**)&m_Shader);
 #ifdef _DEBUG
 		GetShader()->SetPrivateData(WKPDID_D3DDebugObjectName, fileName.size(), fileName.c_str());
 #endif
@@ -166,14 +165,14 @@ public:
 
 		D3D_HR_OP(D3DCompile(content.c_str(), content.size(), wstrtostr(filePath).c_str(), shaderMacros.data(), D3D_COMPILE_STANDARD_FILE_INCLUDE,
             GetShaderEntryPointName<T>().c_str(), GetShaderD3DTarget<T>().c_str(), D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION | D3DCOMPILE_ENABLE_STRICTNESS |D3DCOMPILE_PACK_MATRIX_COLUMN_MAJOR, 0,
-			(ID3DBlob**)&shader.popBlobDX11OBject.GetRef(), &errorMsgs));
+			(ID3DBlob**)&shader.GetBlobRef(), &errorMsgs));
 		if (errorMsgs)
 		{
 			LOG(std::string((char*)errorMsgs->GetBufferPointer()));
 			errorMsgs->Release();
 		}
 
-		CreateShader(device, (ID3DBlob*)shader.popBlobDX11OBject.Get(), (T**)&shader.popShaderDX11Object.GetRef());
+		CreateShader(device, (ID3DBlob*)shader.GetBlob(), (T**)&shader.GetShaderRef());
 #ifdef _DEBUG
 		//shader.GetShader()->SetPrivateData(WKPDID_D3DDebugObjectName, fileName.size(), fileName.c_str());
 #endif
@@ -183,7 +182,7 @@ public:
 
 	virtual ~GraphicsShader()
 	{
-		ReleaseDX11Objects();
+		//ReleaseDX11Objects();
 	}
 
 	void Bind(GraphicsDevice& device)
@@ -193,19 +192,42 @@ public:
 
     ID3DBlob* GetBlob() const
 	{
-		return (ID3DBlob*)popBlobDX11OBject.Get();
+		return (ID3DBlob*)m_Blob;
 	}
 
 	T* GetShader() const
 	{
-		return (T*)popShaderDX11Object.Get();
+		return (T*)m_Shader;
 	}
+
+    ID3DBlob*& GetBlobRef()
+    {
+        return m_Blob;
+    }
+
+    typedef T* Tptr;
+
+    Tptr& GetShaderRef()
+    {
+        return m_Shader;
+    }
 
 	bool IsValid() const
 	{
-		return (popShaderDX11Object.Get() != nullptr);
+		return (m_Shader != nullptr);
 	}
+
+    void ReleaseGPUData()
+    {
+        m_Blob->Release();
+        m_Blob = nullptr;
+
+        m_Shader->Release();
+        m_Shader = nullptr;
+    }
 private:
+    ID3DBlob* m_Blob;
+    T* m_Shader;
 };
 
 

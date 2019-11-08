@@ -81,6 +81,37 @@ cptr GetStringContent(const cptr& str)
     return (cptr)str;
 }
 
+void ExtractWords(const std::string& src, std::vector<std::string>& words)
+{
+    int pl = 1;
+    size_t i = 0;
+    while (pl && src[i])
+    {
+        size_t cbi = i;
+        while (src[i] && src[i] != ' ') i++;
+        pl = src[i];
+        words.push_back(src.substr(cbi, i - cbi));
+        i++;
+    }
+}
+
+void FirstWord(const std::string& src, std::string& word)
+{
+    assert(src.size() != 0);
+    int pl = 1;
+    size_t i = 0;
+    //while (pl && src[i])
+    //{
+    size_t cbi = i;
+    while (src[i] && src[i] != ' ') i++;
+    pl = src[i];
+    word = src.substr(cbi, i - cbi);
+    return;
+    //words.push_back();
+  //  i++;
+//}
+}
+
 template<>
 void WriteToConsole(const std::wstring& str)
 {

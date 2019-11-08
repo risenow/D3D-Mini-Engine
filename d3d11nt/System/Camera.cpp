@@ -68,6 +68,13 @@ void Camera::SetProjection(float fov, float aspect, float _near, float _far) // 
     UpdateViewProjectionMatrix();
 }
 
+void Camera::UpdateProjection(float aspect)
+{
+    m_Aspect = aspect;
+    m_ProjectionMatrix = (glm::perspectiveFov(glm::radians(m_Fov), m_Aspect, 1.0f, m_Near, m_Far));
+    UpdateViewProjectionMatrix();
+}
+
 const glm::vec3& Camera::GetRotation() const
 {
     return m_Rotation;

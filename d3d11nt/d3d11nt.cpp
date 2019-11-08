@@ -9,6 +9,7 @@
 #include "System/CommandLineArgs.h"
 #include "System/Camera.h"
 #include "System/MouseKeyboardCameraController.h"
+#include "System/strutils.h"
 #include "Graphics/FrameMeasurer.h"
 #include "Graphics/GraphicsDevice.h"
 #include "Graphics/GraphicsOptions.h"
@@ -27,11 +28,11 @@
 #include "Graphics/DeferredShadingFullscreenQuad.h"
 #include "System/HardwareInfo.h"
 #include "System/memutils.h"
-//#define cimg_use_jpeg
-//#define cimg_use_png
-//#include "CImg.h"
 #include "Extern/glm/gtc/matrix_transform.hpp"
 #include "Extern/glm/gtx/common.hpp"
+#include "Extern/imgui/imgui.h"
+#include "Extern/imgui/examples/imgui_impl_dx11.h"
+#include "Extern/imgui/examples/imgui_impl_win32.h"
 #include <d3d11.h>
 #include <dxgidebug.h>
 #include "Graphics/RenderSet.h"
@@ -40,6 +41,8 @@
 #include <thread>
 #include <mutex>
 #include <chrono>
+
+#include "imguiConsole.h"
 
 const std::string OPTIONS_INI_FILE_NAME = "options.ini";
 
@@ -58,18 +61,64 @@ float DeserializeCameraFOV(const IniFile& ini)
 	return ini.GetValue(section, "FOV", defaultFOV);
 }
 
-Camera CreateInitialCamera(const IniFile& ini)
+Camera CreateInitialCamera(const IniFile& ini, float aspect)
 {
 	const glm::vec3 position = glm::vec3(0.0f, .0f, .0f);
 	const glm::vec3 rotation  = glm::vec3(0.0f, 0.0f, 0.0f);
 	Camera camera = Camera(position, rotation);
     float deg = DeserializeCameraFOV(ini);
-    camera.SetProjection(45.0f, 1.0f, 0.1f, 1000.0f);
+    camera.SetProjection(45.0f, aspect, 0.1f, 1000.0f);
 	//camera.SetProjection(glm::perspective(glm::radians(DeserializeCameraFOV(ini)), 1.0f, 0.01f, 1000.0f));
 
 	return camera;
 }
 
+struct BasicVariablesContext
+{
+    float m_LightIntensity;
+};
+
+class BasicVariablesCommandProducer : public Console::CommandProducer
+{
+public:
+    static const std::string Signature;
+
+    BasicVariablesCommandProducer() : Console::CommandProducer(Signature) {}
+
+    class BasicVariablesCommand : public Console::Command
+    {
+    public:
+        BasicVariablesCommand(const std::string& args) : Console::Command(BasicVariablesCommandProducer::Signature) 
+        {
+            ExtractWords(args, m_ArgWords);
+        }
+        void Execute(void* context)
+        {
+            BasicVariablesContext* ctx = (BasicVariablesContext*)context;
+
+            if (m_ArgWords.size() < 2)
+                return;
+
+            if (m_ArgWords[0] == "light_int")
+            {
+                ctx->m_LightIntensity = atof(m_ArgWords[1].c_str());
+            }
+        }
+    private:
+        std::vector<std::string> m_ArgWords;
+    };
+    
+    virtual Console::Command* Produce(const std::string& args)
+    {
+        return new BasicVariablesCommand(args);
+        
+
+        //if (words.size() < 2)
+        //    return;
+        //if (words[0] == "")
+    }
+};
+const std::string BasicVariablesCommandProducer::Signature = "basicvar";
 int main(int argc, char* argv[])
 {
     CoInitialize(nullptr);
@@ -79,18 +128,29 @@ int main(int argc, char* argv[])
     AutoSaveIniFile iniFile(OPTIONS_INI_FILE_NAME, IniFile::LoadingFlags_FileMayNotExist);
     CommandLineArgs commandLineArgs(iniFile);
     FrameMeasurer frameMeasurer;
-	MouseKeyboardCameraController mouseKeyboardCameraController(CreateInitialCamera(iniFile), iniFile);
     GraphicsOptions options(iniFile);
     Window window(iniFile);
+    MouseKeyboardCameraController mouseKeyboardCameraController(CreateInitialCamera(iniFile, (float)window.GetWidth()/(float)window.GetHeight()), iniFile);
     DisplayAdaptersList displayAdaptersList;
     D3D11DeviceCreationFlags deviceCreationFlags(commandLineArgs);
 
+    BasicVariablesCommandProducer basicvarProducer;
+    Console cons({ &basicvarProducer });
+
     int a;
-    std::cin >> a; // pause for injection
+    //std::cin >> a; // pause for injection
 
     GraphicsDevice device(deviceCreationFlags, FEATURE_LEVEL_ONLY_D3D11, nullptr);
     GraphicsSwapChain swapchain(device, window, options.GetMultisampleType());
 
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+
+    ImGui::StyleColorsDark();
+
+    ImGui_ImplWin32_Init(window.GetWindowHandle());
+    ImGui_ImplDX11_Init(device.GetD3D11Device(), device.GetD3D11DeviceContext());
 
 	ShaderID testVSBATCHID = GetShaderID(L"Test/vs.hlsl", { GraphicsShaderMacro("BATCH", "1") });
 	ShaderID testPSBATCHID = GetShaderID(L"Test/ps.hlsl", { GraphicsShaderMacro("BATCH", "1") });
@@ -128,7 +188,7 @@ int main(int argc, char* argv[])
                                                                          DXGI_FORMAT_D24_UNORM_S8_UINT,
                                                                          options.GetMultisampleType(),
                                                                          D3D11_BIND_DEPTH_STENCIL);
-    DEBUG_ONLY(depthStencilTexture.SetDebugName("Depth Stencil"));
+    //DEBUG_ONLY(depthStencilTexture.SetDebugName("Depth Stencil"));
 
     DepthSurface depthStencilSurface(device, &depthStencilTexture);
     RenderSet finalRenderSet({ backBufferSurface }, depthStencilSurface);
@@ -183,9 +243,9 @@ int main(int argc, char* argv[])
 
 
 
-    ID3D11DepthStencilState* m_FSQDepthStencilState;
-    D3D_HR_OP(device.GetD3D11Device()->CreateDepthStencilState(&depthStencilDesc, &m_FSQDepthStencilState));
-    device.GetD3D11DeviceContext()->OMSetDepthStencilState(m_FSQDepthStencilState, 0);
+    ID3D11DepthStencilState* FSQDepthStencilState;
+    D3D_HR_OP(device.GetD3D11Device()->CreateDepthStencilState(&depthStencilDesc, &FSQDepthStencilState));
+    device.GetD3D11DeviceContext()->OMSetDepthStencilState(FSQDepthStencilState, 0);
 
     //D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
     depthStencilDesc.DepthEnable = TRUE;
@@ -207,9 +267,9 @@ int main(int argc, char* argv[])
     depthStencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
     depthStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
 
-    ID3D11DepthStencilState* m_DepthStencilState;
-    D3D_HR_OP(device.GetD3D11Device()->CreateDepthStencilState(&depthStencilDesc, &m_DepthStencilState));
-    device.GetD3D11DeviceContext()->OMSetDepthStencilState(m_DepthStencilState, 0);
+    ID3D11DepthStencilState* depthStencilState;
+    D3D_HR_OP(device.GetD3D11Device()->CreateDepthStencilState(&depthStencilDesc, &depthStencilState));
+    device.GetD3D11DeviceContext()->OMSetDepthStencilState(depthStencilState, 0);
 
     GraphicsComputeShader horBlurComputeShader = shadersCollection.GetShader<GraphicsComputeShader>(L"Test/cs.hlsl", { GraphicsShaderMacro("BATCH", "1"), GraphicsShaderMacro("HORIZONTAL", "0") });
     GraphicsComputeShader verBlurComputeShader = shadersCollection.GetShader<GraphicsComputeShader>(L"Test/cs.hlsl", { GraphicsShaderMacro("BATCH", "1"), GraphicsShaderMacro("VERTICAL", "0") });
@@ -225,40 +285,65 @@ int main(int argc, char* argv[])
 
     ID3D11UnorderedAccessView* uav;
 
-    device.GetD3D11Device()->CreateUnorderedAccessView(swapchain.GetBackBufferSurface().GetTexture()->GetD3D11Texture2D(), &uavDesc, &uav);
+    //device.GetD3D11Device()->CreateUnorderedAccessView(swapchain.GetBackBufferSurface().GetTexture()->GetD3D11Texture2D(), &uavDesc, &uav);
+
+    int c = ShowCursor(true);
+    //c = ShowCursor(false);
 
     bool deferredShading = true;
-
     bool pause = false;
+    bool cameraRotationActive = false;
+    glm::vec3 f0override255 = glm::vec3(0.45f, 0.55f, 0.60f);
+    glm::vec3 f0overridetrunc;
+    float roverride = 0.5;
+
+    BasicVariablesContext basicVars;
+    basicVars.m_LightIntensity = 1.0f;
+
     while (!window.IsClosed())
     {
+#ifndef MT_WINDOW
+        if (window.ExplicitUpdate())
+            continue;
+#endif
+
         shadersCollection.ExecuteShadersCompilation(device);
 
 		frameRateLock.OnFrameBegin();
         frameMeasurer.BeginMeasurement();
 
+        if (GetAsyncKeyState(VK_RBUTTON))
+        {
+            cameraRotationActive = true;
+        }
+        else
+            cameraRotationActive = false;
+
+        ImGui_ImplDX11_NewFrame();
+        ImGui_ImplWin32_NewFrame();
+        ImGui::NewFrame();
+
+        std::vector<Console::Command*> basicvarCommands;
+        cons.FetchCommands(BasicVariablesCommandProducer::Signature, basicvarCommands);
+
+        for (Console::Command* command : basicvarCommands)
+        {
+            ((BasicVariablesCommandProducer::BasicVariablesCommand*)command)->Execute((void*)&basicVars);
+        }
+
         viewport = GraphicsViewport(window);
         if (!swapchain.IsValid(window, options.GetMultisampleType()))
         {
+            device.GetD3D11DeviceContext()->ClearState();
             swapchain.Validate(device, window, options.GetMultisampleType());
+
+            backBufferSurface = swapchain.GetBackBufferSurface();
             depthStencilSurface.Resize(device, backBufferSurface.GetWidth(), backBufferSurface.GetHeight());
+            finalRenderSet.SetColorSurface(0, backBufferSurface);
+            finalRenderSet.SetDepthSurface(depthStencilSurface);
+
             GBuffer.Resize(device, backBufferSurface.GetWidth(), backBufferSurface.GetHeight());
         }
-        //TO INCAPSULATE IN RENDERPASS class
-        //finalRenderSet.Set(device);
-        //ID3D11RenderTargetView* renderTargetViews = backBufferSurface->GetView();
-        //device.GetD3D11DeviceContext()->OMSetRenderTargets(1, &renderTargetViews,
-        //    nullptr);
-
-        /*viewport.Set(device);
-
-        device.GetD3D11DeviceContext()->RSSetState(d3dRastState);
-        device.GetD3D11DeviceContext()->OMSetDepthStencilState(m_DepthStencilState, 0);
-
-        finalRenderSet.Clear(device, clearColor);
-        
-		sceneGraph.GetOrdinaryGraphicsObjectManager()->Render(device, shadersCollection, { }, mouseKeyboardCameraController.GetCamera());
-        */
 
         //gbuffer pass
 
@@ -268,7 +353,7 @@ int main(int argc, char* argv[])
             GBuffer.Set(device);
             GBuffer.Clear(device, clearColor);
             device.GetD3D11DeviceContext()->RSSetState(d3dRastState);
-            device.GetD3D11DeviceContext()->OMSetDepthStencilState(m_DepthStencilState, 0);
+            device.GetD3D11DeviceContext()->OMSetDepthStencilState(depthStencilState, 0);
 
             sceneGraph.GetOrdinaryGraphicsObjectManager()->Render(device, shadersCollection, { GraphicsShaderMacro("GBUFFER_PASS", "1") }, mouseKeyboardCameraController.GetCamera());
 
@@ -279,9 +364,9 @@ int main(int argc, char* argv[])
             finalRenderSet.Set(device);
             finalRenderSet.Clear(device, clearColor);
             device.GetD3D11DeviceContext()->RSSetState(d3dRastState);
-            device.GetD3D11DeviceContext()->OMSetDepthStencilState(m_FSQDepthStencilState, 0);
+            device.GetD3D11DeviceContext()->OMSetDepthStencilState(FSQDepthStencilState, 0);
 
-            deferredShadingFullscreenQuad.Render(device, shadersCollection, mouseKeyboardCameraController.GetCamera());
+            deferredShadingFullscreenQuad.Render(device, shadersCollection, mouseKeyboardCameraController.GetCamera(), f0overridetrunc, roverride);
 
             device.GetD3D11DeviceContext()->ClearState();
 
@@ -310,7 +395,7 @@ int main(int argc, char* argv[])
             finalRenderSet.Set(device);
             finalRenderSet.Clear(device, clearColor);
             device.GetD3D11DeviceContext()->RSSetState(d3dRastState);
-            device.GetD3D11DeviceContext()->OMSetDepthStencilState(m_DepthStencilState, 0);
+            device.GetD3D11DeviceContext()->OMSetDepthStencilState(depthStencilState, 0);
 
             sceneGraph.GetOrdinaryGraphicsObjectManager()->Render(device, shadersCollection, { }, mouseKeyboardCameraController.GetCamera());
 
@@ -333,6 +418,36 @@ int main(int argc, char* argv[])
 
         }
         
+
+        {
+            //static float f0 = 0.0f;
+            static int counter = 0;
+
+            ImGui::Begin("Lighting");
+
+            //ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
+            //ImGui::Checkbox("Another Window", &show_another_window);
+
+            //ImGui::SliderFloat("F0", &f0override, 0.0f, 1.0f); 
+            ImGui::SliderFloat("Roughness", &roverride, 0.0f, 1.0f);
+            ImGui::ColorEdit3("F0", (float*)& f0override255); // Edit 3 floats representing a color
+            f0overridetrunc = f0override255 * 0.1f;
+            //ImGui::SameLine();
+
+            ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+            ImGui::End();
+        }
+        cons.Process();
+
+        ImGui::Render();
+        finalRenderSet.Set(device);
+        //finalRenderSet.Clear(device, clearColor);
+        ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+
+
+
+
+
         if (swapchain.IsValid(window, options.GetMultisampleType())) //if swapchain is not valid discard the frame //POSSIBLE RACE CONDITION?
             swapchain.Present();
 
@@ -343,18 +458,36 @@ int main(int argc, char* argv[])
 
 		if (window.IsFocused() && !pause)
 		    mouseKeyboardCameraController.Update(window);
+
+        window.AddCommand(SetCursorVisibilityCommand(!mouseKeyboardCameraController.GetMouseCameraRotationActive()));
+       
         if (pause)
             mouseKeyboardCameraController.GetCamera().UpdateViewProjectionMatrix();
 
-        std::cout << mouseKeyboardCameraController.GetCamera().GetRotation().y << std::endl;
-
         if (GetAsyncKeyState(0x50))
+        {
             pause = !pause;
-        //    deferredShading = !deferredShading;
+        }
+        if (GetAsyncKeyState(192))
+        {
+            cons.Show();
+        }
     }
 
     if (device.GetD3D11DeviceContext())
         device.GetD3D11DeviceContext()->ClearState();
+
+
+    d3dRastState->Release();
+    depthStencilState->Release();
+    FSQDepthStencilState->Release();
+    shadersCollection.ReleaseGPUData();
+    backBufferSurface.ReleaseGPUData();
+    depthStencilTexture.ReleaseGPUData();
+    depthStencilSurface.ReleaseGPUData();
+
+    swapchain.ReleaseGPUData();
+    device.ReleaseGPUData();
 
     DEBUG_ONLY(device.ReportAllLiveObjects());
 

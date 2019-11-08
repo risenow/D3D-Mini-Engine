@@ -77,7 +77,7 @@ size_t GraphicsPlainColorMaterial::GetDataSize()
 }
 bool GraphicsPlainColorMaterial::HasValidConstantsBuffer() const
 {
-	return m_ConstantsBuffer.GetDX11Object() != nullptr;
+	return m_ConstantsBuffer.GetBuffer() != nullptr;
 }
 GraphicsBuffer* GraphicsPlainColorMaterial::GetConstantsBuffer() const
 {

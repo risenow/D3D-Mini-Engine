@@ -37,6 +37,17 @@ public:
         }
     }
 
+    void SetColorSurface(size_t idx, const ColorSurface& surface)
+    {
+        m_ColorSurfaces[idx] = surface;
+        //m_RenderTargetTextures[idx] = &surface.GetTexture();
+    }
+    void SetDepthSurface(const DepthSurface& surface)
+    {
+        m_DepthStencilSurface = surface;
+        //m_RenderTargetTextures[idx] = &surface.GetTexture();
+    }
+
     Texture2D& GetColorTexture(size_t idx)
     {
         assert(idx < m_RenderTargetTextures.size());

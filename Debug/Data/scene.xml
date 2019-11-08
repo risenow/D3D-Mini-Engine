@@ -1,7 +1,7 @@
 <root0>
 <plain_color_material name="red_material">
 <color r="1.0" g="0.0" b="0.0"/>
-<pbr roughness="0.5"/>
+<pbr roughness="0.9"/>
 </plain_color_material>
 
 <plain_color_material name="green_material">
@@ -15,14 +15,10 @@
 <vertex p="-0.5 -0.5 -10.5" n="0.0 0.0 1.0" uv="0"/>
 </triangle>
 
-<triangle material0="red_material" material1="green_material">
-<vertex p="1.5 0.5 -0.11" n="0.0 0.0 1.0" uv="1"/>
-<vertex p="-1.5 0.5 -0.11" n="0.0 0.0 1.0" uv="1"/>
-<vertex p="-1.5 -0.5 -0.11" n="0.0 0.0 1.0" uv="1"/>
-</triangle>
+
   
 <sphere material0="red_material" material1="green_material">
-<center p="-5.0 0.0 -3.0"/>
+<center p="0.0 0.0 -6.0"/>
 <radius r="2.0"/>
 <matx x="1"/>
 </sphere>   

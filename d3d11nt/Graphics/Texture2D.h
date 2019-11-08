@@ -4,7 +4,6 @@
 #include "Graphics/GraphicsOptions.h"
 #include "Graphics/DX11Object.h"
 
-class Texture2D : public D3D11ResourceHolder
 {
 public:
     Texture2D();
@@ -28,7 +27,7 @@ public:
 
     bool IsValid() const;
 
-    void Release();
+    void ReleaseGPUData();
 
     static Texture2D LoadDeprecated(GraphicsDevice& device, const std::string& file); //loads only png
 private:
@@ -46,6 +45,7 @@ private:
     UINT m_CPUAccessFlags;
     UINT m_MiscFlags;
 
+    ID3D11Texture2D* m_Texture;
     ID3D11ShaderResourceView* m_SRV;
     ID3D11UnorderedAccessView* m_UAV;
 };

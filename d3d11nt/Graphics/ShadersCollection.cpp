@@ -193,6 +193,20 @@ void ShadersCollection::ExecuteShadersCompilation(GraphicsDevice& device)
     }
 }
 
+void ShadersCollection::ReleaseGPUData()
+{
+    for (auto& sp : m_VertexShaders)
+        sp.second.ReleaseGPUData();
+    for (auto& sp : m_PixelShaders)
+        sp.second.ReleaseGPUData();
+    for (auto& sp : m_ComputeShaders)
+        sp.second.ReleaseGPUData();
+    for (auto& sp : m_DomainShaders)
+        sp.second.ReleaseGPUData();
+    for (auto& sp : m_HullShaders)
+        sp.second.ReleaseGPUData();
+}
+
 void ShadersCollection::CalculatePaths()
 {
 	wchar_t buffer[1024];

@@ -25,6 +25,8 @@ public:
 
     void InitializeBackBufferSurface(GraphicsDevice& device);
     void SetFullcreenState(bool state);
+
+    void ReleaseGPUData();
     //ID3D11RenderTargetView* GetBackBufferRenderTargetView();
 private:
     void FillSwapChainDesc(const Window& window, DXGI_SWAP_CHAIN_DESC& desc, const DXGI_SAMPLE_DESC& sampleDesc);

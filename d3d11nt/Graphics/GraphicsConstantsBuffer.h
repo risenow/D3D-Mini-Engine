@@ -22,7 +22,7 @@ public:
 	void Update(GraphicsDevice& device, T constants)
 	{
 		//need a perfomance test vs map unmap seq
-		device.GetD3D11DeviceContext()->UpdateSubresource((ID3D11Resource*)GetDX11Object(), 0, nullptr, &constants, sizeof(constants), 0);
+		device.GetD3D11DeviceContext()->UpdateSubresource((ID3D11Resource*)GetBuffer(), 0, nullptr, &constants, sizeof(constants), 0);
 	}
 private:
 };

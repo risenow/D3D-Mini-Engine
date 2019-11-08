@@ -13,9 +13,9 @@ void MaterialBatchStructuredBuffer::UpdateResources(GraphicsDevice& device)
 {
     ID3D11DeviceContext* deviceContext = device.GetD3D11DeviceContext();
     D3D11_MAPPED_SUBRESOURCE mappedResource;
-    D3D_HR_OP(deviceContext->Map((ID3D11Resource*)m_StructuredBuffer.GetDX11Object(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource));
+    D3D_HR_OP(deviceContext->Map((ID3D11Resource*)m_StructuredBuffer.GetBuffer(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource));
     memcpy(mappedResource.pData, m_Data, m_ElementSize * m_ElementsNum);
-    deviceContext->Unmap((ID3D11Resource*)m_StructuredBuffer.GetDX11Object(), 0);
+    deviceContext->Unmap((ID3D11Resource*)m_StructuredBuffer.GetBuffer(), 0);
 }
 
 void MaterialBatchStructuredBuffer::Update(GraphicsDevice& device, const std::vector<GraphicsMaterial*>& materials)

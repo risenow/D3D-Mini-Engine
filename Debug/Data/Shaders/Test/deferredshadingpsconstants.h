@@ -1,4 +1,4 @@
-#include "C:/D3D11Engine/D3D-Mini-Engine/d3d11nt/Graphics/ConstantsPreprocessing.h"
+#include "Graphics/ConstantsPreprocessing.h"
 
 DECLARE_CONSTANT_STRUCTURE DeferredShadingPSConsts
 {

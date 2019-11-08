@@ -19,7 +19,6 @@ template<>
 void CreateView(GraphicsDevice& device, Texture2D* texture, ID3D11DepthStencilView** view);
 
 template<class T>
-class GraphicsSurface : public D3D11ResourceHolder
 {
 public:
     GraphicsSurface();
@@ -33,15 +32,16 @@ public:
 
     T* GetView()
     {
-        return (T*)GetDX11Object();
+        return (T*)m_View;
     }
 
     size_t GetWidth() const;
     size_t GetHeight() const;
     Texture2D* GetTexture() { return m_Texture; }
 
-    void Release();
+    void ReleaseGPUData();
 private:
+    T* m_View;
     Texture2D* m_Texture;
 };
 

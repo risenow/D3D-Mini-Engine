@@ -62,6 +62,7 @@ void GraphicsTopology::Bind(GraphicsDevice& device, ShadersCollection& shadersCo
 	{
 		VSConsts consts;
         //consts.translatedview.Set(camera.translatedview);
+        consts.model = glm::mat4x4();
         consts.view = (camera.GetViewMatrix());
         consts.projection = (camera.GetProjectionMatrix());
         consts.normalMatrix  = ((camera.GetViewMatrix()));

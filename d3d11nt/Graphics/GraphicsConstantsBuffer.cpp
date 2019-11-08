@@ -16,7 +16,7 @@ void BindMultipleGraphicsConstantBuffers(GraphicsDevice& device, index_t startSl
 	std::vector<ID3D11Buffer*> buffers(constantBuffers.size());
 	for (unsigned long i = 0; i < constantBuffers.size(); i++)
 	{
-		buffers[i] = (ID3D11Buffer*)constantBuffers[i]->GetDX11Object();
+		buffers[i] = (ID3D11Buffer*)constantBuffers[i]->GetBuffer();
 	}
 
 	for (unsigned long i = 0; i < GraphicsShaderType_Count; i++)

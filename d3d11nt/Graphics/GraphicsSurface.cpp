@@ -27,7 +27,7 @@ template<class T>
 GraphicsSurface<T>::GraphicsSurface(GraphicsDevice& device, Texture2D* texture)
                                 : m_Texture(texture)
 {
-    CreateView(device, texture, (T**)(&GetDX11ObjectReference()));
+    CreateView(device, texture, (T**)(&m_View));
 }
 template<class T>
 GraphicsSurface<T>::~GraphicsSurface()
@@ -38,15 +38,16 @@ template<class T>
 void GraphicsSurface<T>::Resize(GraphicsDevice& device, size_t width, size_t height)
 {
     popAssert(m_Texture);
-    popAssert(GetDX11Object());
+    popAssert(m_View);
 
     if (m_Texture->GetWidth() != width || m_Texture->GetWidth() != height)
     {
-        ReleaseDX11Object();
+        //ReleaseDX11Object();
+        m_View->Release();
 
         m_Texture->Resize(device, width, height);
 
-        CreateView(device, m_Texture, (T**)(&GetDX11ObjectReference()));
+        CreateView(device, m_Texture, (T**)(&m_View));
     }
 }
 
@@ -62,9 +63,11 @@ size_t GraphicsSurface<T>::GetHeight() const
 }
 
 template<class T>
-void GraphicsSurface<T>::Release()
+void GraphicsSurface<T>::ReleaseGPUData()
 {
-    ReleaseDX11Object();
+    int rc = m_View->Release();
+    m_View = nullptr;
+    //ReleaseDX11Object();
 }
 
 template class GraphicsSurface<ID3D11RenderTargetView>;

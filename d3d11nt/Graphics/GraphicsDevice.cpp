@@ -84,6 +84,15 @@ ID3D11DeviceContext* GraphicsDevice::GetD3D11DeviceContext() const
     return m_D3D11DeviceContext;
 }
 
+void GraphicsDevice::ReleaseGPUData()
+{
+    m_D3D11Device->Release();
+    m_D3D11Device = nullptr;
+
+    m_D3D11DeviceContext->Release();
+    m_D3D11DeviceContext = nullptr;
+}
+
 void GraphicsDevice::ReportAllLiveObjects()
 {
     typedef HRESULT(WINAPI * LPDXGIGETDEBUGINTERFACE)(REFIID, void **);
@@ -96,5 +105,6 @@ void GraphicsDevice::ReportAllLiveObjects()
         IDXGIDebug* dxgiDebug;
         dxgiGetDebugInterface(__uuidof(IDXGIDebug), (void**)&dxgiDebug);
         dxgiDebug->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_ALL);
+        dxgiDebug->Release();
     }
 }
