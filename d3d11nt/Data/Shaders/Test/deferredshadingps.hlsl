@@ -6,7 +6,6 @@ Texture2D gbufferPos: register( t0 );
 Texture2D gbufferNormal : register( t1 );
 Texture2D gbufferColor : register( t2 );
 TextureCube reflEnv : register(t3);
-//float _f0;
 
 bool isCorrectNormal(float3 n)
 {
@@ -23,11 +22,22 @@ float Roughness()
     return f0roughness.w;
 }
 
-float3 shlick(float3 l, float3 h)
+float3 schlick(float hl)
 {
-    float f = pow(1.0 - dot(h,l), 5.0);
-    float3 f0 = f0roughness.xyz;//F0();
-    return f0 + (float3(1.0, 1.0, 1.0) - f0)*f;//(1-pow(saturate(dot(h,l)), 5.00));
+    float f = pow(1.0 - hl, 5.0);
+    float3 f0 = f0roughness.xyz;
+    return f0 + (float3(1.0, 1.0, 1.0) - f0)*f;
+}
+
+float3 schlick_epic(float hl)
+{
+#ifdef OPTIMIZED_SCHLICK
+    float f = exp2((-5.55473*hl-6.98316)*hl);
+    float3 f0 = f0roughness.xyz;
+    return f0 + (float3(1.0, 1.0, 1.0) - f0)*f;
+#else
+    return schlick(hl);
+#endif
 }
 
 float Dggx(float3 h, float3 n, float a)
@@ -36,6 +46,21 @@ float Dggx(float3 h, float3 n, float a)
     float nhsqr = saturate(pow(dot(n, h), 2.0));
     
     return isCorrectNormal(n)?rsqr/(3.14*pow(nhsqr*rsqr - nhsqr + 1, 2.0)):0.0;
+}
+
+float Dggxtrow_epic(float hn, float a)
+{
+    float asqr = a*a;
+    float nhsqr = saturate(hn*hn);
+    float denom = nhsqr*asqr - nhsqr + 1;
+    //return isCorrectNormal(n)?asqr/(3.14*denom*denom)):0.0;
+    return asqr/(3.14*denom*denom);
+}
+
+float Gggx_epic(float3 nv, float rough)
+{
+    float k = ((rough + 1)*(rough + 1))/8;
+    return nv/(nv * (1 - k) + k);
 }
 
 float Gct(float3 l, float3 v, float3 h, float3 n)
@@ -48,51 +73,54 @@ float Gct(float3 l, float3 v, float3 h, float3 n)
     return min(min(1, t1), t2);
 }
 
-float Gggx(float3 e, float3 n, float a)
+float Gggx(float nv, float a)
 {
-    float cosThetaN = dot(n, e);
+    float cosThetaN = nv;
     float cosTheta_sqr = saturate(cosThetaN*cosThetaN);
     float tan2 = ( 1 - cosTheta_sqr ) / cosTheta_sqr;
     float GP = 2 / ( 1 + sqrt( 1 + a*a * tan2 ) );
     return GP;
-    //float ne = saturate(dot(n, e));// + 0.0001;
-    //float rsqr = roughness*roughness;
-    //return (2*ne)/(ne + sqrt(rsqr + (1+rsqr)*(ne*ne)));
 }
-float Gsmith(float3 l, float3 v, float3 h, float a)
+float Gsmith(float nl, float nv, float a)
 {
-    return Gggx(l, h, a)*Gggx(v, h, a);
+    return Gggx(nl, a)*Gggx(nv, a);
+}
+float Gsmith_epic(float nl, float nv, float a)
+{
+    return Gggx_epic(nl, a)*Gggx_epic(nv, a);
 }
 
 float3 CookTorrance(float3 v, float3 n, float3 l, float3 wv, float3 wn, float3 diff, float a)
 {
-    a = Roughness();
-    float3 zeros = float3(0.0, 0.0, 0.0);
+    float roughness = Roughness();
+    a = roughness*roughness;
     
-    float NL = dot(n, l);
-    if (NL <= 0.0) return zeros;
-    float NV = dot(n, v);
-    if (NV <= 0.0) return zeros;
- 
-    float3 r = reflect(wv, normalize(wn));
-    float3 envColor = reflEnv.Sample(SampleType, r);
+    float3 zeros = float3(0.0, 0.0, 0.0);
     
     v = normalize(v);
     n = normalize(n);
     l = normalize(l);
     float3 h = normalize(v + l);
-    //float3(Dggx(h, n), Dggx(h, n), Dggx(h, n));
-    //float3(Gsmith(l, v, n)/NV, Gsmith(l, v, n)/NV, Gsmith(l, v, n)/NV);
- 
-    float g = Gsmith(l, v, n, a);//Gct(l, v, h, n);//
-    float d = Dggx(h, n, a);
-    float3 s = shlick(v, h);
     
-    float3 spec = (g * d * s * 0.25) / dot(n, v);
-    float spec2 = max(spec, float3(0, 0, 0));
+    float nl = dot(n, l);
+    float nv = dot(n, v);
+    float hn = dot(h, n);
+    float hv = dot(h, v);
 
-    return 3.0*diff/3.14 * NL + spec*3.0;//s * envColor*NL/3.14;//s;//(1-s)*float3(1.0, 1.0, 0.0)*NL/3.14 + spec2;-
-    //return (Gsmith(l, v, n)*Dggx(h, n)*shlick(v, h)*0.25)/*(dot(n, l)*//dot(n, v);
+    if (nl <= 0.0) return zeros;
+    if (nv <= 0.0) return zeros;
+ 
+    float3 r = reflect(wv, normalize(wn));
+    float3 envColor = reflEnv.Sample(SampleType, r);
+ 
+    float g = Gsmith_epic(nl, nv, roughness);
+    float d = Dggxtrow_epic(hn, a);
+    float3 s = schlick_epic(hv);
+    
+    float3 spec = (g * d * s * 0.25) / ( dot(n, v));
+    //float spec2 = max(spec, float3(0, 0, 0));
+
+    return 3.14*spec + diff*nl;
 }    
 
 float4 PSEntry(
@@ -128,5 +156,7 @@ float4 PSEntry(
     //float reflectionWeight = 0.6;
     float3 ct = CookTorrance(v, vNormal, l, wViewVec, wNormal, diffuse, rough);
     float4 result = float4(ct + diffuse * 0.1 * 1.0 , 1.0);
-    return pow(result/(result/2.2 + 1.0), (1.0/2.2));//(diffuse * coef);//(1.0 - reflectionWeigheight) + cubemap.Sample(SampleType, stc).xyzw * reflectionweight) *  coef;
+    
+    //gamma correction
+    return pow(result/(result/2.2 + 1.0), (1.0/2.2));
 }

@@ -76,6 +76,11 @@ Camera CreateInitialCamera(const IniFile& ini, float aspect)
 struct BasicVariablesContext
 {
     float m_LightIntensity;
+    glm::vec3 f0override255;
+    float f0ampl;
+    glm::vec3 f0overridetrunc;
+    float roverride;
+    bool useOptimizedSchlick;
 };
 
 class BasicVariablesCommandProducer : public Console::CommandProducer
@@ -138,7 +143,7 @@ int main(int argc, char* argv[])
     Console cons({ &basicvarProducer });
 
     int a;
-    //std::cin >> a; // pause for injection
+    std::cin >> a; // pause for injection
 
     GraphicsDevice device(deviceCreationFlags, FEATURE_LEVEL_ONLY_D3D11, nullptr);
     GraphicsSwapChain swapchain(device, window, options.GetMultisampleType());
@@ -157,7 +162,7 @@ int main(int argc, char* argv[])
 
 	ShadersCollection shadersCollection(device);
     shadersCollection.AddShader<GraphicsVertexShader>(L"Test/fsqvs.hlsl", { {} });
-    shadersCollection.AddShader<GraphicsPixelShader>(L"Test/deferredshadingps.hlsl", { {} });
+    shadersCollection.AddShader<GraphicsPixelShader>(L"Test/deferredshadingps.hlsl", { {}, { GraphicsShaderMacro("OPTIMIZED_SCHLICK", "1") } });
 	shadersCollection.AddShader<GraphicsVertexShader>(L"Test/vs.hlsl", { { GraphicsShaderMacro("BATCH", "1") } });
 	shadersCollection.AddShader<GraphicsPixelShader> (L"Test/ps.hlsl", { { GraphicsShaderMacro("BATCH", "1") } });
     shadersCollection.AddShader<GraphicsPixelShader> (L"Test/ps.hlsl",  { { GraphicsShaderMacro("BATCH", "1") }, { GraphicsShaderMacro("BATCH", "1"), GraphicsShaderMacro("GBUFFER_PASS", "1") } });
@@ -292,12 +297,14 @@ int main(int argc, char* argv[])
     bool deferredShading = true;
     bool pause = false;
     bool cameraRotationActive = false;
-    glm::vec3 f0override255 = glm::vec3(0.45f, 0.55f, 0.60f);
-    glm::vec3 f0overridetrunc;
-    float roverride = 0.5;
 
     BasicVariablesContext basicVars;
     basicVars.m_LightIntensity = 1.0f;
+    basicVars.f0override255 = glm::vec3(0.45f, 0.55f, 0.60f);
+    basicVars.f0ampl = 0.1f;
+    basicVars.f0overridetrunc;
+    basicVars.useOptimizedSchlick = true;
+    float roverride = 0.5;
 
     while (!window.IsClosed())
     {
@@ -365,7 +372,11 @@ int main(int argc, char* argv[])
             device.GetD3D11DeviceContext()->RSSetState(d3dRastState);
             device.GetD3D11DeviceContext()->OMSetDepthStencilState(FSQDepthStencilState, 0);
 
-            deferredShadingFullscreenQuad.Render(device, shadersCollection, mouseKeyboardCameraController.GetCamera(), f0overridetrunc, roverride);
+            std::vector<GraphicsShaderMacro> psMacros;
+            if (basicVars.useOptimizedSchlick)
+                psMacros.push_back(GraphicsShaderMacro("OPTIMIZED_SCHLICK", "1"));
+            
+            deferredShadingFullscreenQuad.Render(device, shadersCollection, mouseKeyboardCameraController.GetCamera(), basicVars.f0overridetrunc, roverride, psMacros);
 
             device.GetD3D11DeviceContext()->ClearState();
 
@@ -426,8 +437,10 @@ int main(int argc, char* argv[])
 
             //ImGui::SliderFloat("F0", &f0override, 0.0f, 1.0f); 
             ImGui::SliderFloat("Roughness", &roverride, 0.0f, 1.0f);
-            ImGui::ColorEdit3("F0", (float*)& f0override255);
-            f0overridetrunc = f0override255 * 0.1f;
+            ImGui::Checkbox("Optimize Schlick", &basicVars.useOptimizedSchlick);
+            ImGui::ColorEdit3("F0", (float*)& basicVars.f0override255);
+            ImGui::SliderFloat("F0 ampl", &basicVars.f0ampl, 0.0f, 1.0f);
+            basicVars.f0overridetrunc = basicVars.f0override255 * basicVars.f0ampl;
             //ImGui::SameLine();
 
             ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
