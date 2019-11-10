@@ -200,6 +200,8 @@
     <ClCompile Include="..\d3d11nt\graphics\dxerrorcodesinterpreteutil.cpp" />
     <ClCompile Include="..\d3d11nt\Graphics\FrameMeasurer.cpp" />
     <ClCompile Include="..\d3d11nt\Graphics\FrameRateLock.cpp" />
+    <ClCompile Include="..\d3d11nt\Graphics\GraphicsMaterial.cpp" />
+    <ClCompile Include="..\d3d11nt\Graphics\GraphicsMaterialsManager.cpp" />
     <ClCompile Include="..\d3d11nt\Graphics\GraphicsObject.cpp" />
     <ClCompile Include="..\d3d11nt\Graphics\GraphicsObjectManager.cpp" />
     <ClCompile Include="..\d3d11nt\Graphics\GraphicsBuffer.cpp" />
@@ -216,14 +218,12 @@
     <ClCompile Include="..\d3d11nt\Graphics\MaterialBatchStructuredBuffer.cpp" />
     <ClCompile Include="..\d3d11nt\graphics\multisampleutils.cpp" />
     <ClCompile Include="..\d3d11nt\Graphics\OrdinaryGraphicsObjectManager.cpp" />
+    <ClCompile Include="..\d3d11nt\Graphics\PlainColorMaterial.cpp" />
     <ClCompile Include="..\d3d11nt\graphics\RenderSet.cpp" />
     <ClCompile Include="..\d3d11nt\Graphics\SceneGraph.cpp" />
     <ClCompile Include="..\d3d11nt\Graphics\ShadersCollection.cpp" />
     <ClCompile Include="..\d3d11nt\graphics\Texture2D.cpp" />
     <ClCompile Include="..\d3d11nt\Graphics\VertexData.cpp" />
-    <ClCompile Include="GraphicsMaterial.cpp" />
-    <ClCompile Include="GraphicsMaterialsManager.cpp" />
-    <ClCompile Include="PlainColorMaterial.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

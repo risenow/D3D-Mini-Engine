@@ -171,7 +171,6 @@ int main(int argc, char* argv[])
     GetAllMacrosCombinations(dsMacroSet, dsPermutations); //add includ/exclude processing rules
     shadersCollection.AddShader<GraphicsPixelShader>(L"Test/deferredshadingps.hlsl", dsPermutations );
 
-
 	shadersCollection.AddShader<GraphicsVertexShader>(L"Test/vs.hlsl", { { GraphicsShaderMacro("BATCH", "1") } });
 	shadersCollection.AddShader<GraphicsPixelShader> (L"Test/ps.hlsl", { { GraphicsShaderMacro("BATCH", "1") } });
     shadersCollection.AddShader<GraphicsPixelShader> (L"Test/ps.hlsl",  { { GraphicsShaderMacro("BATCH", "1") }, { GraphicsShaderMacro("BATCH", "1"), GraphicsShaderMacro("GBUFFER_PASS", "1") } });

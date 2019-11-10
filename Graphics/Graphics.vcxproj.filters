@@ -206,34 +206,34 @@
     <ClCompile Include="..\d3d11nt\Graphics\FrameRateLock.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\d3d11nt\Graphics\SceneGraph.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\d3d11nt\Graphics\GraphicsObject.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\d3d11nt\Graphics\GraphicsObjectManager.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\d3d11nt\Graphics\OrdinaryGraphicsObjectManager.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PlainColorMaterial.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GraphicsMaterialsManager.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GraphicsMaterial.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\d3d11nt\Graphics\GraphicsTopology.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\d3d11nt\Graphics\MaterialBatchStructuredBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\d3d11nt\Graphics\GraphicsTextureCollection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\d3d11nt\Graphics\GraphicsMaterialsManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\d3d11nt\Graphics\PlainColorMaterial.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\d3d11nt\Graphics\GraphicsMaterial.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\d3d11nt\Graphics\OrdinaryGraphicsObjectManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\d3d11nt\Graphics\SceneGraph.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\d3d11nt\Graphics\GraphicsTopology.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\d3d11nt\Graphics\GraphicsObjectManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\d3d11nt\Graphics\GraphicsObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
