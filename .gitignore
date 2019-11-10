@@ -1,6 +1,9 @@
 *.opendb
 *.db-shm
 *.db-wal
+*.ilk
+Debug/Graphics.lib
+Debug/System.lib
 .vs/d3d11nt/v14/.suo
 d3d11nt.opensdf
 d3d11nt.sdf
@@ -22,6 +25,8 @@ d3d11nt/Release/d3d11nt.tlog/unsuccessfulbuild
 *.suo
 *.ipch
 *.tlog
+*.log
+*.CopyComplete
 d3d11nt/Release/d3d11nt.pch
 *.idb
 d3d11nt/Debug/vc140.pdb
@@ -41,6 +46,7 @@ Graphics/Debug/Graphics.Build.CppClean.log
 Debug/SystemBenchmark.ilk
 Release/d3d11nt.ipdb
 *.iobj
+*.FileListAbsolute.txt
 Graphics/Release/Graphics.pch
 Release/SystemBenchmark.ipdb
 *.pch
