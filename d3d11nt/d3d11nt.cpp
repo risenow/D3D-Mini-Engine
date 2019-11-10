@@ -79,8 +79,10 @@ struct BasicVariablesContext
     glm::vec3 f0override255;
     float f0ampl;
     glm::vec3 f0overridetrunc;
+    glm::vec3 diffuseOverride;
     float roverride;
     bool useOptimizedSchlick;
+    bool overrideDiffuse;
 };
 
 class BasicVariablesCommandProducer : public Console::CommandProducer
@@ -143,7 +145,7 @@ int main(int argc, char* argv[])
     Console cons({ &basicvarProducer });
 
     int a;
-    std::cin >> a; // pause for injection
+    //std::cin >> a; // pause for injection
 
     GraphicsDevice device(deviceCreationFlags, FEATURE_LEVEL_ONLY_D3D11, nullptr);
     GraphicsSwapChain swapchain(device, window, options.GetMultisampleType());
@@ -162,7 +164,13 @@ int main(int argc, char* argv[])
 
 	ShadersCollection shadersCollection(device);
     shadersCollection.AddShader<GraphicsVertexShader>(L"Test/fsqvs.hlsl", { {} });
-    shadersCollection.AddShader<GraphicsPixelShader>(L"Test/deferredshadingps.hlsl", { {}, { GraphicsShaderMacro("OPTIMIZED_SCHLICK", "1") } });
+
+    std::vector<GraphicsShaderMacro> dsMacroSet = { GraphicsShaderMacro("OPTIMIZED_SCHLICK", "1"), GraphicsShaderMacro("OVERRIDE_DIFFUSE", "1") };
+    std::vector<ShaderVariation> dsPermutations;
+    GetAllMacrosCombinations(dsMacroSet, dsPermutations); //add includ/exclude processing rules
+    shadersCollection.AddShader<GraphicsPixelShader>(L"Test/deferredshadingps.hlsl", dsPermutations );
+
+
 	shadersCollection.AddShader<GraphicsVertexShader>(L"Test/vs.hlsl", { { GraphicsShaderMacro("BATCH", "1") } });
 	shadersCollection.AddShader<GraphicsPixelShader> (L"Test/ps.hlsl", { { GraphicsShaderMacro("BATCH", "1") } });
     shadersCollection.AddShader<GraphicsPixelShader> (L"Test/ps.hlsl",  { { GraphicsShaderMacro("BATCH", "1") }, { GraphicsShaderMacro("BATCH", "1"), GraphicsShaderMacro("GBUFFER_PASS", "1") } });
@@ -304,6 +312,7 @@ int main(int argc, char* argv[])
     basicVars.f0ampl = 0.1f;
     basicVars.f0overridetrunc;
     basicVars.useOptimizedSchlick = true;
+    basicVars.overrideDiffuse = false;
     float roverride = 0.5;
 
     while (!window.IsClosed())
@@ -375,8 +384,10 @@ int main(int argc, char* argv[])
             std::vector<GraphicsShaderMacro> psMacros;
             if (basicVars.useOptimizedSchlick)
                 psMacros.push_back(GraphicsShaderMacro("OPTIMIZED_SCHLICK", "1"));
-            
-            deferredShadingFullscreenQuad.Render(device, shadersCollection, mouseKeyboardCameraController.GetCamera(), basicVars.f0overridetrunc, roverride, psMacros);
+            if (basicVars.overrideDiffuse)
+                psMacros.push_back(GraphicsShaderMacro("OVERRIDE_DIFFUSE", "1"));
+
+            deferredShadingFullscreenQuad.Render(device, shadersCollection, mouseKeyboardCameraController.GetCamera(), basicVars.f0overridetrunc, basicVars.diffuseOverride, roverride, psMacros);
 
             device.GetD3D11DeviceContext()->ClearState();
 
@@ -440,6 +451,8 @@ int main(int argc, char* argv[])
             ImGui::Checkbox("Optimize Schlick", &basicVars.useOptimizedSchlick);
             ImGui::ColorEdit3("F0", (float*)& basicVars.f0override255);
             ImGui::SliderFloat("F0 ampl", &basicVars.f0ampl, 0.0f, 1.0f);
+            ImGui::Checkbox("Override diffuse", &basicVars.overrideDiffuse);
+            ImGui::ColorEdit3("Diffuse", (float*)& basicVars.diffuseOverride);
             basicVars.f0overridetrunc = basicVars.f0override255 * basicVars.f0ampl;
             //ImGui::SameLine();
 

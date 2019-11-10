@@ -7,8 +7,9 @@ DECLARE_CONSTANT_STRUCTURE DeferredShadingPSConsts
     DECLARE_FLOAT4 projFactors;
     DECLARE_FLOAT4 wCamPos;
     DECLARE_FLOAT4 f0roughness;
+    DECLARE_FLOAT4 diffuseOverride;
     //DECLARE_FLOAT roughness;
-    DECLARE_FLOAT4X4 padd1;
+    DECLARE_FLOAT4X3 padd1;
     //DECLARE_FLOAT padd2;
     //DECLARE_FLOAT3X3 padd2;
     //DECLARE_FLOAT padd4;

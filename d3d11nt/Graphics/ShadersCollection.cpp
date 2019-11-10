@@ -7,6 +7,22 @@
 #include "System/mtutils.h"
 #include "System/pathutils.h"
 
+void GetAllMacrosCombinations(const std::vector<GraphicsShaderMacro>& macroSet, std::vector<std::vector<GraphicsShaderMacro>>& permutations)
+{
+    size_t setBitmask = pow(2, macroSet.size()) - 1;
+    for (size_t i = 0; i <= setBitmask; i++)
+    {
+        permutations.push_back(ShaderVariation());
+        ShaderVariation& currentMutation = permutations.back();
+        for (size_t j = 0; j < macroSet.size(); j++)
+        {
+            if (i & (1 << j))
+                currentMutation.push_back(macroSet[j]);
+        }
+    }
+}
+
+
 const wchar_t* VERTEX_SHADER_FILE_TYPE = L".vs";
 const wchar_t* PIXEL_SHADER_FILE_TYPE = L".ps";
 

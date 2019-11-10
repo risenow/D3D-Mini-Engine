@@ -136,8 +136,12 @@ float4 PSEntry(
 
     float z = vNormalDepth.w;
     float3 vNormal = normalize(vNormalDepth.xyz);
+
     float4 diffuseRoughness = gbufferColor.Sample(SampleType, tc_);
     float3 diffuse = diffuseRoughness.rbg;
+#ifdef OVERRIDE_DIFFUSE
+    diffuse = diffuseOverride.rgb;
+#endif
     float rough = diffuseRoughness.a;
     //_f0 = gbufferColor.Sample(SampleType, tc_);
     //float4 diffuse = gbufferColor.Sample(SampleType, tc_);
