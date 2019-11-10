@@ -36,11 +36,10 @@ public:
         m_EnvMap = textureCollection["cubemap.dds"];
     }
 
-    void Render(GraphicsDevice& device, ShadersCollection& shadersCollection, Camera& camera, glm::vec3 f0override = glm::vec3(), glm::vec3 diffuseOverride = glm::vec3(), float roverride = 0.0f, const std::vector<GraphicsShaderMacro> & psmacros = {})
+    void Render(GraphicsDevice& device, ShadersCollection& shadersCollection, Camera& camera, const glm::vec4 lightPos = glm::vec4(), const glm::vec3& f0override = glm::vec3(), const glm::vec3& diffuseOverride = glm::vec3(), float roverride = 0.0f, const std::vector<GraphicsShaderMacro> & psmacros = {})
     {
         m_PixelShader = shadersCollection.GetShader<GraphicsPixelShader>(L"Test/deferredshadingps.hlsl", psmacros);
 
-        const glm::vec4 lightPos = glm::vec4(100.0, 100.0, 100.0, 1.0);
         const glm::vec2 projFactors = camera.GetProjectionFactors();
 
         DeferredShadingPSConsts consts;

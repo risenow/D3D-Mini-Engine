@@ -80,6 +80,7 @@ struct BasicVariablesContext
     float f0ampl;
     glm::vec3 f0overridetrunc;
     glm::vec3 diffuseOverride;
+    glm::vec4 lightPos;
     float roverride;
     bool useOptimizedSchlick;
     bool overrideDiffuse;
@@ -313,6 +314,7 @@ int main(int argc, char* argv[])
     basicVars.f0overridetrunc;
     basicVars.useOptimizedSchlick = true;
     basicVars.overrideDiffuse = false;
+    basicVars.lightPos = glm::vec4(100.0, 100.0, 100.0, 1.0);
     float roverride = 0.5;
 
     while (!window.IsClosed())
@@ -387,7 +389,7 @@ int main(int argc, char* argv[])
             if (basicVars.overrideDiffuse)
                 psMacros.push_back(GraphicsShaderMacro("OVERRIDE_DIFFUSE", "1"));
 
-            deferredShadingFullscreenQuad.Render(device, shadersCollection, mouseKeyboardCameraController.GetCamera(), basicVars.f0overridetrunc, basicVars.diffuseOverride, roverride, psMacros);
+            deferredShadingFullscreenQuad.Render(device, shadersCollection, mouseKeyboardCameraController.GetCamera(), basicVars.lightPos, basicVars.f0overridetrunc, basicVars.diffuseOverride, roverride, psMacros);
 
             device.GetD3D11DeviceContext()->ClearState();
 
@@ -447,6 +449,7 @@ int main(int argc, char* argv[])
             ImGui::Begin("Lighting");
 
             //ImGui::SliderFloat("F0", &f0override, 0.0f, 1.0f); 
+            ImGui::SliderFloat3("Light pos", (float*)&basicVars.lightPos, -1000.0f, 1000.0f);
             ImGui::SliderFloat("Roughness", &roverride, 0.0f, 1.0f);
             ImGui::Checkbox("Optimize Schlick", &basicVars.useOptimizedSchlick);
             ImGui::ColorEdit3("F0", (float*)& basicVars.f0override255);

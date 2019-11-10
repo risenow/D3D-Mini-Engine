@@ -1,29 +1,29 @@
-2[TIME:369] Adapters enumerated:
+2[TIME:368] Adapters enumerated:
 [TIME:369] Adapter index: 0
-[TIME:370] Description: NVIDIA GeForce GTX 1070
-[TIME:371] 
-[TIME:371] Adapter index: 1
-[TIME:372] Description: Microsoft Basic Render Driver
-[TIME:373] 
-2[TIME:15999] C:\D3D11Engine\D3D-Mini-Engine\d3d11nt\Data\Shaders\Test\vs.hlsl(15,21-28): warning X3578: Output value 'oICenter' is not completely initialized
+[TIME:371] Description: NVIDIA GeForce GTX 1070
+[TIME:372] 
+[TIME:373] Adapter index: 1
+[TIME:375] Description: Microsoft Basic Render Driver
+[TIME:376] 
+2[TIME:621] C:\D3D11Engine\D3D-Mini-Engine\d3d11nt\Data\Shaders\Test\vs.hlsl(15,21-28): warning X3578: Output value 'oICenter' is not completely initialized
 
-2[TIME:16039] C:\D3D11Engine\D3D-Mini-Engine\d3d11nt\Data\Shaders\Test\deferredshadingps.hlsl(63,5-33): warning X3206: implicit truncation of vector type
+2[TIME:671] C:\D3D11Engine\D3D-Mini-Engine\d3d11nt\Data\Shaders\Test\deferredshadingps.hlsl(63,5-33): warning X3206: implicit truncation of vector type
 C:\D3D11Engine\D3D-Mini-Engine\d3d11nt\Data\Shaders\Test\deferredshadingps.hlsl(114,12-51): warning X3206: implicit truncation of vector type
 C:\D3D11Engine\D3D-Mini-Engine\d3d11nt\Data\Shaders\Test\deferredshadingps.hlsl(110,32): warning X4000: use of potentially uninitialized variable (CookTorrance)
 
-2[TIME:16098] C:\D3D11Engine\D3D-Mini-Engine\d3d11nt\Data\Shaders\Test\deferredshadingps.hlsl(63,5-33): warning X3206: implicit truncation of vector type
+2[TIME:733] C:\D3D11Engine\D3D-Mini-Engine\d3d11nt\Data\Shaders\Test\deferredshadingps.hlsl(63,5-33): warning X3206: implicit truncation of vector type
 C:\D3D11Engine\D3D-Mini-Engine\d3d11nt\Data\Shaders\Test\deferredshadingps.hlsl(114,12-51): warning X3206: implicit truncation of vector type
 C:\D3D11Engine\D3D-Mini-Engine\d3d11nt\Data\Shaders\Test\deferredshadingps.hlsl(110,32): warning X4000: use of potentially uninitialized variable (CookTorrance)
 
-2[TIME:16156] C:\D3D11Engine\D3D-Mini-Engine\d3d11nt\Data\Shaders\Test\deferredshadingps.hlsl(63,5-33): warning X3206: implicit truncation of vector type
+2[TIME:801] C:\D3D11Engine\D3D-Mini-Engine\d3d11nt\Data\Shaders\Test\deferredshadingps.hlsl(63,5-33): warning X3206: implicit truncation of vector type
 C:\D3D11Engine\D3D-Mini-Engine\d3d11nt\Data\Shaders\Test\deferredshadingps.hlsl(114,12-51): warning X3206: implicit truncation of vector type
 C:\D3D11Engine\D3D-Mini-Engine\d3d11nt\Data\Shaders\Test\deferredshadingps.hlsl(110,32): warning X4000: use of potentially uninitialized variable (CookTorrance)
 
-2[TIME:16240] C:\D3D11Engine\D3D-Mini-Engine\d3d11nt\Data\Shaders\Test\deferredshadingps.hlsl(63,5-33): warning X3206: implicit truncation of vector type
+2[TIME:877] C:\D3D11Engine\D3D-Mini-Engine\d3d11nt\Data\Shaders\Test\deferredshadingps.hlsl(63,5-33): warning X3206: implicit truncation of vector type
 C:\D3D11Engine\D3D-Mini-Engine\d3d11nt\Data\Shaders\Test\deferredshadingps.hlsl(114,12-51): warning X3206: implicit truncation of vector type
 C:\D3D11Engine\D3D-Mini-Engine\d3d11nt\Data\Shaders\Test\deferredshadingps.hlsl(110,32): warning X4000: use of potentially uninitialized variable (CookTorrance)
 
-2[TIME:16512] C:\D3D11Engine\D3D-Mini-Engine\d3d11nt\Data\Shaders\Test\cs.hlsl(42,15): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used
+2[TIME:1226] C:\D3D11Engine\D3D-Mini-Engine\d3d11nt\Data\Shaders\Test\cs.hlsl(42,15): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used
 
-2[TIME:16728] C:\D3D11Engine\D3D-Mini-Engine\d3d11nt\Data\Shaders\Test\cs.hlsl(42,15): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used
+2[TIME:1461] C:\D3D11Engine\D3D-Mini-Engine\d3d11nt\Data\Shaders\Test\cs.hlsl(42,15): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used
 
