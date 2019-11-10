@@ -51,10 +51,10 @@ float Dggx(float3 h, float3 n, float a)
 float Dggxtrow_epic(float hn, float a)
 {
     float asqr = a*a;
-    float nhsqr = saturate(pow(hn, 2.0));
-    
-    //return isCorrectNormal(n)?asqr/(3.14*pow(nhsqr*asqr - nhsqr + 1, 2.0)):0.0;
-    return asqr/(3.14*pow(nhsqr*asqr - nhsqr + 1, 2.0));
+    float nhsqr = saturate(hn*hn);
+    float denom = nhsqr*asqr - nhsqr + 1;
+    //return isCorrectNormal(n)?asqr/(3.14*denom*denom)):0.0;
+    return asqr/(3.14*denom*denom);
 }
 
 float Gggx_epic(float3 nv, float rough)
@@ -73,17 +73,17 @@ float Gct(float3 l, float3 v, float3 h, float3 n)
     return min(min(1, t1), t2);
 }
 
-float Gggx(float3 e, float3 n, float a)
+float Gggx(float nv, float a)
 {
-    float cosThetaN = dot(n, e);
+    float cosThetaN = nv;
     float cosTheta_sqr = saturate(cosThetaN*cosThetaN);
     float tan2 = ( 1 - cosTheta_sqr ) / cosTheta_sqr;
     float GP = 2 / ( 1 + sqrt( 1 + a*a * tan2 ) );
     return GP;
 }
-float Gsmith(float3 l, float3 v, float3 h, float a)
+float Gsmith(float nl, float nv, float a)
 {
-    return Gggx(l, h, a)*Gggx(v, h, a);
+    return Gggx(nl, a)*Gggx(nv, a);
 }
 float Gsmith_epic(float nl, float nv, float a)
 {
@@ -120,7 +120,7 @@ float3 CookTorrance(float3 v, float3 n, float3 l, float3 wv, float3 wn, float3 d
     float3 spec = (g * d * s * 0.25) / ( dot(n, v));
     //float spec2 = max(spec, float3(0, 0, 0));
 
-    return spec + diff*nl;
+    return 3.14*spec + diff*nl;
 }    
 
 float4 PSEntry(
@@ -136,8 +136,12 @@ float4 PSEntry(
 
     float z = vNormalDepth.w;
     float3 vNormal = normalize(vNormalDepth.xyz);
+
     float4 diffuseRoughness = gbufferColor.Sample(SampleType, tc_);
     float3 diffuse = diffuseRoughness.rbg;
+#ifdef OVERRIDE_DIFFUSE
+    diffuse = diffuseOverride.rgb;
+#endif
     float rough = diffuseRoughness.a;
     //_f0 = gbufferColor.Sample(SampleType, tc_);
     //float4 diffuse = gbufferColor.Sample(SampleType, tc_);

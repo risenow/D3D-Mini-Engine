@@ -2,6 +2,7 @@
 *.db-shm
 *.db-wal
 *.ilk
+*.cache
 Debug/Graphics.lib
 Debug/System.lib
 .vs/d3d11nt/v14/.suo
