@@ -32,6 +32,7 @@ SceneGraph::SceneGraph(GraphicsDevice& device, GraphicsTextureCollection& textur
                     GraphicsObjectManager::HandleResult handleResult = manager->Handle(device, textureCollection, shadersCollection, m_MaterialsManager, element);
                     if (handleResult.m_SerializableGraphicObject)
                     {
+                        //id dont sure se should collect objects in this entity
                         m_SerializableGraphicsObjects.push_back(handleResult.m_SerializableGraphicObject);
                         handledElements.insert(element);
                     }
@@ -41,8 +42,8 @@ SceneGraph::SceneGraph(GraphicsDevice& device, GraphicsTextureCollection& textur
             if (handledElements.find(element) == handledElements.cend())
             {
                 OrdinaryGraphicsObjectHandler::HandleResult handleResult = m_OrdinaryGraphicsObjectManager->Handle_(device, textureCollection, shadersCollection, m_MaterialsManager, element);
-                m_SerializableGraphicsObjects.push_back(handleResult.m_SerializableGraphicObject);
-                if (handleResult.m_SerializableGraphicObject != nullptr)
+                m_SerializableGraphicsObjects.push_back(handleResult.m_OrdinaryGraphicsObject);
+                if (handleResult.m_OrdinaryGraphicsObject != nullptr)
                     handledElements.insert(element);
             }
 		}

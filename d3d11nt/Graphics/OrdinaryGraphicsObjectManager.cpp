@@ -2,16 +2,37 @@
 #include <set>
 #include "GraphicsObject.h"
 #include "System/MemoryManager.h"
+#include "System/hashutils.h"
 #include "Graphics/OrdinaryGraphicsObjectManager.h"
 #include "Graphics/GraphicsMaterialsManager.h"
 
-class GraphicObject;
+class GraphicObject; //immediate drawable
 
-size_t VertexDataStreamBase::GetNumVertexes() const
+//create SceneDrawableObject:SerializableGraphicObject
+//dynamic material indexes generation !!!! todo
+
+void OrdinaryGraphicsObject::SetTransform(const glm::mat4x4& t) const
 {
-	return m_NumVertexes;
+    assert(m_Drawable);
+    m_Drawable->m_Transform = t;
+};
 
-}
+// preparation for several batches
+//+ realtime material index calc
+struct OrdinaryObjectsKey
+{
+    VertexFormat m_VertexFormat;
+    std::vector<GraphicsMaterial*> m_Materials; // reduce to store only materials type
+
+    FNVhash_t Hash()
+    {
+        FNVhash_t r = FNV((char*)& m_VertexFormat, sizeof(VertexFormat));
+        for (GraphicsMaterial* m : m_Materials)
+            r ^= FNV((char*)&m, sizeof(GraphicsMaterial*));
+        return r;
+    }
+};
+
 OrdinaryGraphicsObjectHandler::OrdinaryGraphicsObjectHandler() {}
 OrdinaryGraphicsObjectHandler::OrdinaryGraphicsObjectHandler(const std::string& typeName) : m_TypeName(typeName) {}
 
@@ -52,94 +73,193 @@ std::string MakePosStr(const glm::vec3& pos)
 }
 
 TriangleGraphicsObjectHandler::TriangleGraphicsObjectHandler() : OrdinaryGraphicsObjectHandler("triangle") {}
-SerializableTriangleGraphicObject::SerializableTriangleGraphicObject(tinyxml2::XMLElement* element)
+
+TriangleOrdinaryGraphicsObject::TriangleOrdinaryGraphicsObject(GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* element)
 {
-	Deserialize(element);
+    Deserialize(element);
+
+    const std::string TEXCOORD_PROPERTY_NAME = "TEXCOORD";
+    const std::string NORMAL_PROPERTY_NAME = "NORMAL";
+    const std::string POSITION_PROPERTY_NAME = "POSITION";
+    typedef glm::uint LocalTexCoordType;
+
+    VertexFormat vertexFormat({ CreateVertexPropertyPrototype<glm::vec4>(POSITION_PROPERTY_NAME), CreateVertexPropertyPrototype<glm::vec3>(NORMAL_PROPERTY_NAME), CreateVertexPropertyPrototype<LocalTexCoordType>(TEXCOORD_PROPERTY_NAME) });// , CreateVertexPropertyPrototype<uint32_t>(MATERIAL_PROPERTY_NAME, 0, 1) });
+
+    std::vector<std::string> attrs;
+    size_t i = 0;
+    const char* currentAtttrControl = 0;
+    const char* currentAtttr = 0;
+
+    while (currentAtttrControl = element->Attribute((std::string("material") + std::to_string(i)).c_str(), currentAtttr))
+    {
+        m_Materials.push_back(materialsManager->GetMaterial(element->Attribute((std::string("material") + std::to_string(i)).c_str())));
+        i++;
+    }
+
+    m_VertexFormat = vertexFormat;
+    m_XMLElement = element;
+
+    m_VertexData = VertexData(m_VertexFormat, NumVertexes);
+    memcpy((void*)((TriangleOrdinaryGraphicsObject::VertexType*)m_VertexData.GetDataPtrForSlot(0)), m_Vertexes.data(), sizeof(TriangleOrdinaryGraphicsObject::VertexType) * NumVertexes);
 }
-SerializableTriangleGraphicObject::VertexType  SerializableTriangleGraphicObject::ParseVertex(tinyxml2::XMLElement* vertexElement)
+//VertexData& TriangleOrdinaryGraphicsObject::GetVertexData()
+TriangleOrdinaryGraphicsObject::VertexType  TriangleOrdinaryGraphicsObject::ParseVertex(tinyxml2::XMLElement* vertexElement)
 {
-	return SerializableTriangleGraphicObject::VertexType({ ParsePos(std::string(vertexElement->Attribute("p"))), glm::vec3(ParsePos(std::string(vertexElement->Attribute("n")))), vertexElement->UnsignedAttribute("uv", 0) });
+    return TriangleOrdinaryGraphicsObject::VertexType({ ParsePos(std::string(vertexElement->Attribute("p"))), glm::vec3(ParsePos(std::string(vertexElement->Attribute("n")))), vertexElement->UnsignedAttribute("uv", 0) });
 
 }
-void SerializableTriangleGraphicObject::Serialize(tinyxml2::XMLElement* element, tinyxml2::XMLDocument& document)
+void TriangleOrdinaryGraphicsObject::Serialize(tinyxml2::XMLElement* element, tinyxml2::XMLDocument& document)
 {
-	element->SetName(m_Type.c_str());
-	for (size_t i = 0; i < m_MaterialNames.size(); i++)
-		element->SetAttribute((std::string("material") + std::to_string(i)).c_str(), m_MaterialNames[i].c_str());
+    element->SetName(m_Type.c_str());
+    for (size_t i = 0; i < m_MaterialNames.size(); i++)
+        element->SetAttribute((std::string("material") + std::to_string(i)).c_str(), m_MaterialNames[i].c_str());
 
-	for (const VertexType& vertexPosition : m_Vertexes)
-	{
-		tinyxml2::XMLElement* vertexElement = document.NewElement("vertex");
-        
+    for (const VertexType& vertexPosition : m_Vertexes)
+    {
+        tinyxml2::XMLElement* vertexElement = document.NewElement("vertex");
+
         vertexElement->SetAttribute("p", MakePosStr(glm::vec3(vertexPosition.m_Position)).c_str());
         vertexElement->SetAttribute("n", MakePosStr(vertexPosition.m_Normal).c_str());
-		element->InsertEndChild(vertexElement);
-	}
+        element->InsertEndChild(vertexElement);
+    }
 }
-void SerializableTriangleGraphicObject::Deserialize(tinyxml2::XMLElement* element)
+void TriangleOrdinaryGraphicsObject::Deserialize(tinyxml2::XMLElement* element)
 {
 
-	const tinyxml2::XMLAttribute* attr = element->FirstAttribute();
-	if (attr)
-		while (attr)
-		{
-			std::string attrValue = std::string(attr->Value());
-			m_MaterialNames.push_back(attrValue);
-			attr = attr->Next();
-		}
+    const tinyxml2::XMLAttribute* attr = element->FirstAttribute();
+    if (attr)
+        while (attr)
+        {
+            std::string attrValue = std::string(attr->Value());
+            m_MaterialNames.push_back(attrValue);
+            attr = attr->Next();
+        }
 
-	tinyxml2::XMLElement* vertexElement = element->FirstChildElement();
-	for (unsigned long i = 0; i < m_Vertexes.size(); i++)
-	{
-		assert(vertexElement);
+    tinyxml2::XMLElement* vertexElement = element->FirstChildElement();
+    for (unsigned long i = 0; i < m_Vertexes.size(); i++)
+    {
+        assert(vertexElement);
 
-		m_Vertexes[i] = ParseVertex(vertexElement);
-		vertexElement = vertexElement->NextSiblingElement();
-	}
+        m_Vertexes[i] = ParseVertex(vertexElement);
+        vertexElement = vertexElement->NextSiblingElement();
+    }
 }
+size_t TriangleOrdinaryGraphicsObject::GetNumVertexes() const
+{
+    return NumVertexes;
+}
+void TriangleOrdinaryGraphicsObject::WriteGeometry(VertexData& data, size_t vertexesOffset)
+{
+    memcpy((void*)((TriangleOrdinaryGraphicsObject::VertexType*)data.GetDataPtrForSlot(0) + vertexesOffset), m_Vertexes.data(), sizeof(TriangleOrdinaryGraphicsObject::VertexType) * NumVertexes);
+}
+
+
 TriangleGraphicsObjectHandler::HandleResult TriangleGraphicsObjectHandler::Handle(GraphicsDevice& device, ShadersCollection& shadersCollection, GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* sceneGraphElement) const
 {
-	HandleResult result;
-	std::string nm = std::string(sceneGraphElement->Name());
+    HandleResult result = { nullptr };
 	if (std::string(sceneGraphElement->Name()) != m_TypeName)
 		return result;
 
-	SerializableTriangleGraphicObject* serializableTrangleGraphicObject = popNew(SerializableTriangleGraphicObject)(sceneGraphElement);
-	result.m_SerializableGraphicObject = serializableTrangleGraphicObject;
-
-	const std::string TEXCOORD_PROPERTY_NAME = "TEXCOORD";
-    const std::string NORMAL_PROPERTY_NAME = "NORMAL";
-	const std::string POSITION_PROPERTY_NAME = "POSITION";
-	typedef glm::uint LocalTexCoordType ;
-
-	VertexFormat vertexFormat({ CreateVertexPropertyPrototype<glm::vec4>(POSITION_PROPERTY_NAME), CreateVertexPropertyPrototype<glm::vec3>(NORMAL_PROPERTY_NAME), CreateVertexPropertyPrototype<LocalTexCoordType>(TEXCOORD_PROPERTY_NAME) });// , CreateVertexPropertyPrototype<uint32_t>(MATERIAL_PROPERTY_NAME, 0, 1) });
-
-	std::vector<std::string> attrs;
-	size_t i = 0;
-	const char* currentAtttrControl = 0;
-	const char* currentAtttr = 0;
-
-	while (currentAtttrControl = sceneGraphElement->Attribute((std::string("material") + std::to_string(i)).c_str(), currentAtttr))
-	{ 
-		result.m_GraphicsObjectSignature.m_Materials.push_back(materialsManager->GetMaterial(sceneGraphElement->Attribute((std::string("material") + std::to_string(i)).c_str())));
-		i++;
-	}
-
-	result.m_GraphicsObjectSignature.m_SerializableGraphicsObject = serializableTrangleGraphicObject;
-	result.m_GraphicsObjectSignature.m_VertexFormat = vertexFormat;
-	result.m_GraphicsObjectSignature.m_XMLElement = sceneGraphElement;
-	result.m_GraphicsObjectSignature.m_VertexDataStream = std::make_shared<VertexDataStream>(result.m_GraphicsObjectSignature);
-	result.m_GraphicsObjectSignature.m_Valid = true;
+    TriangleOrdinaryGraphicsObject* triangleOrdinaryGraphicsObject = popNew(TriangleOrdinaryGraphicsObject)(materialsManager, sceneGraphElement);
+	result.m_OrdinaryGraphicsObject = triangleOrdinaryGraphicsObject;
 
 	return result;
 }
 
-SerializableSphereGraphicObject::SerializableSphereGraphicObject(tinyxml2::XMLElement* element)
+void GenerateSphereGeometry(const glm::vec3& center, float r, size_t matX, std::vector<SphereOrdinaryGraphicsObject::VertexType>& vertexes)
 {
-    Deserialize(element);
+    const size_t stepsNum = 20;//30;
+    float radL = 0.0;
+    float maxRadL = glm::pi<float>();
+    float radLStep = maxRadL / stepsNum;
+
+    float l = center.z - r;
+    float maxL = 2 * r;
+    float lStep = (maxL) / stepsNum;
+
+    float minRadStep = (2 * glm::pi<float>()) / stepsNum;
+
+    size_t numVertexes = 6 * (stepsNum) * (stepsNum);
+    vertexes.reserve(numVertexes);
+
+    int majCount = 0;
+    for (float currentSlice = l; currentSlice < maxL + l; currentSlice += lStep)
+    {
+        float majR = r * (glm::sin(radL));
+        float majRNext = r * (glm::sin(radL + radLStep));
+        float nextSlice = currentSlice + lStep;
+        int minCount = 0;
+        for (float minRad = 0.0; minRad < 2 * glm::pi<float>(); minRad += minRadStep)
+        {
+            glm::vec4 spherePosOffset = glm::vec4(center.x, center.y, 0.0, 0.0);
+            glm::vec4 v1 = glm::vec4(glm::cos(minRad) * majR, glm::sin(minRad) * majR, cos(radL) * r + l + r, 1.0) + spherePosOffset;
+            glm::vec3 n1 = glm::vec3(v1) - center;
+            SphereOrdinaryGraphicsObject::VertexType vertex1 = SphereOrdinaryGraphicsObject::VertexType(v1, n1, matX);
+
+            glm::vec4 v2 = glm::vec4(glm::cos(minRad) * majRNext, glm::sin(minRad) * majRNext, cos(radL + radLStep) * r + l + r, 1.0) + spherePosOffset;
+            glm::vec3 n2 = glm::vec3(v2) - center;
+            SphereOrdinaryGraphicsObject::VertexType vertex2 = SphereOrdinaryGraphicsObject::VertexType(v2, n2, matX);
+
+            glm::vec4 v3 = glm::vec4(glm::cos(minRad + minRadStep) * majRNext, glm::sin(minRad + minRadStep) * majRNext, cos(radL + radLStep) * r + l + r, 1.0) + spherePosOffset;
+            glm::vec3 n3 = glm::vec3(v3) - center;
+            SphereOrdinaryGraphicsObject::VertexType vertex3 = SphereOrdinaryGraphicsObject::VertexType(v3, n3, matX);
+
+            glm::vec4 v4 = glm::vec4(glm::cos(minRad + minRadStep) * majR, glm::sin(minRad + minRadStep) * majR, cos(radL) * r + l + r, 1.0) + spherePosOffset;
+            glm::vec3 n4 = glm::vec3(v4) - center;
+            SphereOrdinaryGraphicsObject::VertexType vertex4 = SphereOrdinaryGraphicsObject::VertexType(v4, n4, matX);
+
+            vertexes.push_back(vertex1);
+            vertexes.push_back(vertex2);
+            vertexes.push_back(vertex3);
+
+            vertexes.push_back(vertex3);
+            vertexes.push_back(vertex4);
+            vertexes.push_back(vertex1);
+
+            minCount += 6;
+        }
+        majCount++;
+        radL += radLStep;
+    }
 }
 
-void SerializableSphereGraphicObject::Serialize(tinyxml2::XMLElement* element, tinyxml2::XMLDocument& document)
+SphereOrdinaryGraphicsObject::SphereOrdinaryGraphicsObject(GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* element)
+{
+    Deserialize(element);
+
+    const std::string TEXCOORD_PROPERTY_NAME = "TEXCOORD";
+    const std::string NORMAL_PROPERTY_NAME = "NORMAL";
+    const std::string POSITION_PROPERTY_NAME = "POSITION";
+    typedef glm::uint LocalTexCoordType;
+
+    VertexFormat vertexFormat({ CreateVertexPropertyPrototype<glm::vec4>(POSITION_PROPERTY_NAME), CreateVertexPropertyPrototype<glm::vec3>(NORMAL_PROPERTY_NAME), CreateVertexPropertyPrototype<LocalTexCoordType>(TEXCOORD_PROPERTY_NAME) });// , CreateVertexPropertyPrototype<uint32_t>(MATERIAL_PROPERTY_NAME, 0, 1) });
+
+    std::vector<std::string> attrs;
+    size_t i = 0;
+    const char* currentAtttrControl = 0;
+    const char* currentAtttr = 0;
+
+    while (currentAtttrControl = element->Attribute((std::string("material") + std::to_string(i)).c_str(), currentAtttr))
+    {
+        m_Materials.push_back(materialsManager->GetMaterial(element->Attribute((std::string("material") + std::to_string(i)).c_str())));
+        i++;
+    }
+
+    m_VertexFormat = vertexFormat;
+    m_XMLElement = element;
+
+    GenerateSphereGeometry(m_Center, m_R, m_MatX, m_Vertexes);
+}
+size_t SphereOrdinaryGraphicsObject::GetNumVertexes() const
+{
+    return m_Vertexes.size();
+}
+void SphereOrdinaryGraphicsObject::WriteGeometry(VertexData& data, size_t vertexesOffset)
+{
+    memcpy((void*)((SphereOrdinaryGraphicsObject::VertexType*)data.GetDataPtrForSlot(0) + vertexesOffset), m_Vertexes.data(), sizeof(SphereOrdinaryGraphicsObject::VertexType) * m_Vertexes.size());
+}
+
+void SphereOrdinaryGraphicsObject::Serialize(tinyxml2::XMLElement* element, tinyxml2::XMLDocument& document)
 {
     element->SetName(m_Type.c_str());
     for (size_t i = 0; i < m_MaterialNames.size(); i++)
@@ -154,7 +274,7 @@ void SerializableSphereGraphicObject::Serialize(tinyxml2::XMLElement* element, t
     element->InsertEndChild(centerElement);
 }
 
-void SerializableSphereGraphicObject::Deserialize(tinyxml2::XMLElement* element)
+void SphereOrdinaryGraphicsObject::Deserialize(tinyxml2::XMLElement* element)
 {
 
     const tinyxml2::XMLAttribute* attr = element->FirstAttribute();
@@ -176,137 +296,27 @@ void SerializableSphereGraphicObject::Deserialize(tinyxml2::XMLElement* element)
 
 SphereGraphicsObjectHandler::HandleResult SphereGraphicsObjectHandler::Handle(GraphicsDevice& device, ShadersCollection& shadersCollection, GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* sceneGraphElement) const
 {
-    HandleResult result;
+    HandleResult result = {nullptr};
     std::string nm = std::string(sceneGraphElement->Name());
     if (std::string(sceneGraphElement->Name()) != m_TypeName)
         return result;
 
-    SerializableSphereGraphicObject * serializableSphereGraphicObject = popNew(SerializableSphereGraphicObject)(sceneGraphElement);
-    result.m_SerializableGraphicObject = serializableSphereGraphicObject;
-
-    const std::string TEXCOORD_PROPERTY_NAME = "TEXCOORD";
-    const std::string NORMAL_PROPERTY_NAME = "NORMAL";
-    const std::string POSITION_PROPERTY_NAME = "POSITION";
-    typedef glm::uint LocalTexCoordType;
-
-    VertexFormat vertexFormat({ CreateVertexPropertyPrototype<glm::vec4>(POSITION_PROPERTY_NAME), CreateVertexPropertyPrototype<glm::vec3>(NORMAL_PROPERTY_NAME), CreateVertexPropertyPrototype<LocalTexCoordType>(TEXCOORD_PROPERTY_NAME) });// , CreateVertexPropertyPrototype<uint32_t>(MATERIAL_PROPERTY_NAME, 0, 1) });
-
-    std::vector<std::string> attrs;
-    size_t i = 0;
-    const char* currentAtttrControl = 0;
-    const char* currentAtttr = 0;
-
-    while (currentAtttrControl = sceneGraphElement->Attribute((std::string("material") + std::to_string(i)).c_str(), currentAtttr))
-    {
-        result.m_GraphicsObjectSignature.m_Materials.push_back(materialsManager->GetMaterial(sceneGraphElement->Attribute((std::string("material") + std::to_string(i)).c_str())));
-        i++;
-    }
-
-    result.m_GraphicsObjectSignature.m_SerializableGraphicsObject = serializableSphereGraphicObject;
-    result.m_GraphicsObjectSignature.m_VertexFormat = vertexFormat;
-    result.m_GraphicsObjectSignature.m_XMLElement = sceneGraphElement;
-    result.m_GraphicsObjectSignature.m_VertexDataStream = std::make_shared<VertexDataStream>(result.m_GraphicsObjectSignature, serializableSphereGraphicObject->m_Center, serializableSphereGraphicObject->m_R, serializableSphereGraphicObject->m_MatX);
-    result.m_GraphicsObjectSignature.m_Valid = true;
+    SphereOrdinaryGraphicsObject* sphereOrdinaryGraphicsObject = popNew(SphereOrdinaryGraphicsObject)(materialsManager, sceneGraphElement);
+    result.m_OrdinaryGraphicsObject = sphereOrdinaryGraphicsObject;
 
     return result;
 }
 
 SphereGraphicsObjectHandler::SphereGraphicsObjectHandler() : OrdinaryGraphicsObjectHandler("sphere") {}
 
-
-TriangleGraphicsObjectHandler::VertexDataStream::VertexDataStream()
-{}
-TriangleGraphicsObjectHandler::VertexDataStream::VertexDataStream(const OrdinaryGraphicsObjectSignature& signature) : m_Signature(signature)
-{}
-
-void TriangleGraphicsObjectHandler::VertexDataStream::Open()
-{
-	m_NumVertexes = SerializableTriangleGraphicObject::NumVertexes;
-}
-void TriangleGraphicsObjectHandler::VertexDataStream::Close()
-{
-}
-void TriangleGraphicsObjectHandler::VertexDataStream::WriteTo(VertexData& data, size_t vertexesOffset)
-{
-	SerializableTriangleGraphicObject* serializableGraphicsObject = (SerializableTriangleGraphicObject*)m_Signature.m_SerializableGraphicsObject;
-	memcpy((void*)((SerializableTriangleGraphicObject::VertexType*)data.GetDataPtrForSlot(0) + vertexesOffset), serializableGraphicsObject->m_Vertexes.data(), sizeof(SerializableTriangleGraphicObject::VertexType)*m_NumVertexes);
-}
-
-SphereGraphicsObjectHandler::VertexDataStream::VertexDataStream()
-{}
-SphereGraphicsObjectHandler::VertexDataStream::VertexDataStream(const OrdinaryGraphicsObjectSignature& signature, glm::vec3 center, float r, glm::uint matX) : m_Signature(signature), m_Center(center), m_R(r), m_MatX(matX)
-{}
-
-void SphereGraphicsObjectHandler::VertexDataStream::Open()
-{
-    const size_t stepsNum = 20;//30;
-    float radL = 0.0;
-    float maxRadL = glm::pi<float>();
-    float radLStep = maxRadL / stepsNum;
-
-    float l = m_Center.z - m_R;
-    float maxL = 2 * m_R;
-    float lStep =( maxL) / stepsNum;
-
-    float minRadStep = (2 * glm::pi<float>()) / stepsNum;
-
-    m_NumVertexes = 6 * (stepsNum) * (stepsNum);
-    m_Vertexes.reserve(m_NumVertexes);
-
-    int majCount = 0;
-    for (float currentSlice = l; currentSlice < maxL + l; currentSlice += lStep)
-    {
-        float majR = m_R * (glm::sin(radL));
-        float majRNext = m_R * (glm::sin(radL + radLStep));
-        float nextSlice = currentSlice + lStep;
-        int minCount = 0;
-        for (float minRad = 0.0; minRad < 2 * glm::pi<float>(); minRad += minRadStep)
-        {
-            glm::vec4 spherePosOffset = glm::vec4(m_Center.x, m_Center.y, 0.0, 0.0);
-            glm::vec4 v1 = glm::vec4(glm::cos(minRad) * majR, glm::sin(minRad) * majR, cos(radL)*m_R + l + m_R, 1.0) + spherePosOffset;
-            glm::vec3 n1 = glm::vec3(v1) - m_Center;
-            SerializableSphereGraphicObject::VertexType vertex1 = SerializableSphereGraphicObject::VertexType(v1, n1, m_MatX);
-
-            glm::vec4 v2 = glm::vec4(glm::cos(minRad) * majRNext, glm::sin(minRad) * majRNext, cos(radL+radLStep) * m_R + l + m_R, 1.0) + spherePosOffset;
-            glm::vec3 n2 = glm::vec3(v2) - m_Center;
-            SerializableSphereGraphicObject::VertexType vertex2 = SerializableSphereGraphicObject::VertexType(v2, n2, m_MatX);
-
-            glm::vec4 v3 = glm::vec4(glm::cos(minRad + minRadStep) * majRNext, glm::sin(minRad + minRadStep) * majRNext, cos(radL + radLStep) * m_R + l + m_R, 1.0) + spherePosOffset;
-            glm::vec3 n3 = glm::vec3(v3) - m_Center;
-            SerializableSphereGraphicObject::VertexType vertex3 = SerializableSphereGraphicObject::VertexType(v3, n3, m_MatX);
-
-            glm::vec4 v4 = glm::vec4(glm::cos(minRad + minRadStep) * majR, glm::sin(minRad + minRadStep) * majR, cos(radL) * m_R + l + m_R, 1.0) + spherePosOffset;
-            glm::vec3 n4 = glm::vec3(v4) - m_Center;
-            SerializableSphereGraphicObject::VertexType vertex4 = SerializableSphereGraphicObject::VertexType(v4, n4, m_MatX);
-
-            m_Vertexes.push_back(vertex1);
-            m_Vertexes.push_back(vertex2);
-            m_Vertexes.push_back(vertex3);
-
-            m_Vertexes.push_back(vertex3);
-            m_Vertexes.push_back(vertex4);
-            m_Vertexes.push_back(vertex1);
-
-            minCount += 6;
-        }
-        majCount++;
-        radL += radLStep;
-    }
-}
-void SphereGraphicsObjectHandler::VertexDataStream::Close()
-{
-}
-void SphereGraphicsObjectHandler::VertexDataStream::WriteTo(VertexData& data, size_t vertexesOffset)
-{
-    SerializableTriangleGraphicObject* serializableGraphicsObject = (SerializableTriangleGraphicObject*)m_Signature.m_SerializableGraphicsObject;
-    memcpy((void*)((SerializableTriangleGraphicObject::VertexType*)data.GetDataPtrForSlot(0) + vertexesOffset), m_Vertexes.data(), sizeof(SerializableTriangleGraphicObject::VertexType) * m_NumVertexes);
-}
-
 OrdinaryGraphicsObjectManager::OrdinaryGraphicsObjectManager() : m_Handlers({ popNew(TriangleGraphicsObjectHandler)(), popNew(SphereGraphicsObjectHandler)() })
 {
 }
 OrdinaryGraphicsObjectManager::~OrdinaryGraphicsObjectManager()
 {
+    for (OrdinaryGraphicsObject*& obj : m_Objects)
+        if (obj)
+            popDelete(obj);
 	for (OrdinaryGraphicsObjectHandler* handler : m_Handlers)
 		if (handler)
 			popDelete(handler);
@@ -323,11 +333,11 @@ OrdinaryGraphicsObjectHandler::HandleResult OrdinaryGraphicsObjectManager::Handl
 	for (OrdinaryGraphicsObjectHandler* handler : m_Handlers)
 	{
 		OrdinaryGraphicsObjectHandler::HandleResult handleResult = handler->Handle(device, shadersCollection, materialsManager, sceneGraphElement);
-		if (handleResult.m_GraphicsObjectSignature.IsValid())
+		if (handleResult.m_OrdinaryGraphicsObject)
 		{
-			m_ObjectSignatures.push_back(handleResult.m_GraphicsObjectSignature);
+			m_Objects.push_back(handleResult.m_OrdinaryGraphicsObject);
 
-			return OrdinaryGraphicsObjectHandler::HandleResult{ m_ObjectSignatures.back(), handleResult.m_SerializableGraphicObject };
+			return handleResult;
 		} 
 	}
 	return OrdinaryGraphicsObjectHandler::HandleResult();
@@ -337,9 +347,10 @@ std::map<unsigned int, std::shared_ptr<MaterialBatchStructuredBuffer>> MaterialB
 
 void OrdinaryGraphicsObjectManager::CompileGraphicObjects(GraphicsDevice& device, GraphicsTextureCollection& textureCollection, ShadersCollection& shadersCollection, GraphicsMaterialsManager* materialsManager)
 {
+    //expand model to have several batches
     std::set<size_t> allreadyBatched;
 
-    for (size_t m = 0; m < m_ObjectSignatures.size(); m++)
+    for (size_t m = 0; m < m_Objects.size(); m++)
 	{
         if (allreadyBatched.find(m) != allreadyBatched.end())
             continue;
@@ -353,14 +364,15 @@ void OrdinaryGraphicsObjectManager::CompileGraphicObjects(GraphicsDevice& device
         std::vector<uint32_t> batchSet;
 
         size_t z = 1;
-		for (size_t i = 0; i < m_ObjectSignatures.size(); i++)
+		for (size_t i = 0; i < m_Objects.size(); i++)
 		{
-			if (m_ObjectSignatures[i].m_VertexFormat == m_ObjectSignatures[m].m_VertexFormat && m_ObjectSignatures[i].m_Materials.size() == m_ObjectSignatures[m].m_Materials.size())
+            //check material types instead of themselves
+			if (m_Objects[i]->m_VertexFormat == m_Objects[m]->m_VertexFormat && m_Objects[i]->m_Materials.size() == m_Objects[m]->m_Materials.size())
 			{
 				bool match = true;
-                for (size_t k = 0; k < m_ObjectSignatures[m].m_Materials.size(); k++)
+                for (size_t k = 0; k < m_Objects[m]->m_Materials.size(); k++)
                 {
-                    if (m_ObjectSignatures[m].m_Materials[k] != m_ObjectSignatures[i].m_Materials[k])
+                    if (m_Objects[m]->m_Materials[k] != m_Objects[i]->m_Materials[k])
                         match = false;
                 }
 			
@@ -373,23 +385,21 @@ void OrdinaryGraphicsObjectManager::CompileGraphicObjects(GraphicsDevice& device
 
      
 		size_t overallVertexesNum = 0;
-		for (size_t i : batchSet)
-		{
-            m_ObjectSignatures[i].m_VertexDataStream->Open();
-			overallVertexesNum += m_ObjectSignatures[i].m_VertexDataStream->GetNumVertexes();
-		}
+        for (size_t i : batchSet)
+        {
+            overallVertexesNum += m_Objects[i]->GetNumVertexes();
+        }
 
 
 		size_t vertexesWritten = 0;
-		VertexData vertexData(m_ObjectSignatures[m].m_VertexFormat, overallVertexesNum);
+		VertexData vertexData(m_Objects[m]->m_VertexFormat, overallVertexesNum);
 		for (size_t i : batchSet)
 		{
-			VertexFormat& vertexFormat = m_ObjectSignatures[i].m_VertexFormat;
-			OrdinaryGraphicsObjectSignature& signature = m_ObjectSignatures[i];
-			signature.m_VertexDataStream->WriteTo(vertexData, vertexesWritten);
-			signature.m_VertexDataStream->Close();
+            OrdinaryGraphicsObject* obj = m_Objects[i];
+			VertexFormat& vertexFormat = obj->m_VertexFormat;
 
-			vertexesWritten += signature.m_VertexDataStream->GetNumVertexes();
+            obj->WriteGeometry(vertexData, vertexesWritten);
+            vertexesWritten += obj->GetNumVertexes();
 
             allreadyBatched.insert(i);
 		}
@@ -399,17 +409,17 @@ void OrdinaryGraphicsObjectManager::CompileGraphicObjects(GraphicsDevice& device
 			object.m_Topology = GraphicsTopology(device, textureCollection, shadersCollection, vertexData, true);
 
 			bool singleMaterial = false;
-			if (m_ObjectSignatures[m].m_Materials.size() == 1)
+			if (m_Objects[m]->m_Materials.size() == 1)
 			{
-				object.m_Material = m_ObjectSignatures[m].m_Materials[0];
+				object.m_Material = m_Objects[m]->m_Materials[0];
 				singleMaterial = true;
 			}
 
 			if (!singleMaterial)
 			{
 				std::vector<GraphicsMaterial*> tempMaterials;
-				for (unsigned int k = 0; k < m_ObjectSignatures[m].m_Materials.size(); k++)
-					tempMaterials.push_back(m_ObjectSignatures[m].m_Materials[k]);
+				for (unsigned int k = 0; k < m_Objects[m]->m_Materials.size(); k++)
+					tempMaterials.push_back(m_Objects[m]->m_Materials[k]);
 
                 object.m_Materials = tempMaterials;
 
@@ -426,20 +436,20 @@ void OrdinaryGraphicsObjectManager::CompileGraphicObjects(GraphicsDevice& device
                 }
 			}
 
-			m_Objects.push_back(object);
+            m_DrawableObjects.push_back(object);
 
 	}
 
-	size_t i = 0;
+	/*size_t i = 0;
 	for (OrdinaryGraphicsObjectSignature& signature : m_ObjectSignatures)
 	{
 		
-	}
+	}*/
 }
 
 void OrdinaryGraphicsObjectManager::Render(GraphicsDevice& device, ShadersCollection& shadersCollection, const std::vector<GraphicsShaderMacro>& passMacros, const Camera& camera)
 {
-	for (GraphicsObject& object : m_Objects)
+	for (GraphicsObject& object : m_DrawableObjects)
 	{
         if (object.m_Material != nullptr)
             object.m_Material->Bind(device, shadersCollection, passMacros);

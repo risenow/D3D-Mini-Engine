@@ -46,6 +46,7 @@ void GraphicsTopology::Bind(GraphicsDevice& device, ShadersCollection& shadersCo
         ID3D11ShaderResourceView* textureSRV = m_Texture->GetSRV();
         device.GetD3D11DeviceContext()->DSSetShaderResources(0, 1, (ID3D11ShaderResourceView * *)& textureSRV);
 
+        //index for resource binding to be calculated by state manager
         device.GetD3D11DeviceContext()->DSSetShaderResources(1, 1, (ID3D11ShaderResourceView * *)& bufferSRV);
         break;
     }

@@ -10,6 +10,7 @@
 class GraphicsObject
 {
 public:
+    glm::mat4x4 m_Transform;
 	GraphicsTopology m_Topology;
 	std::vector<GraphicsMaterial*> m_Materials; // if m_Materials.size() > 1 then GraphicsObject is batched || all meterials should be of the same type
 	GraphicsMaterial* m_Material;
