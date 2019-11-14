@@ -9,16 +9,16 @@
 <pbr roughness="0.5"/>
 </plain_color_material>
 
-<triangle material0="red_material" material1="green_material">
+<triangle material0="red_material">
 <vertex p="0.5 0.5 -10.5" n="0.0 0.0 1.0" uv="0"/>
 <vertex p="-0.5 0.5 -10.5" n="0.0 0.0 1.0" uv="0"/>
 <vertex p="-0.5 -0.5 -10.5" n="0.0 0.0 1.0" uv="0"/>
 </triangle>
 
-<sphere material0="red_material" material1="green_material">
+<sphere material0="green_material">
 <center p="0.0 0.0 -6.0"/>
 <radius r="2.0"/>
-<matx x="1"/>
+<matx x="0"/>
 </sphere>   
  
 </root0>                                                                                                                                                                                                                                                                                                                                                                                                                             

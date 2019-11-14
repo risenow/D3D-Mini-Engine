@@ -85,6 +85,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>CPU_SIDE_CODE;USE_CUSTOM_ALLOCATORS;_DEBUG;WIN32;_LIB;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <LanguageStandard>Default</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

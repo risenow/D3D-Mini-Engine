@@ -8,29 +8,28 @@
 
 class GraphicObject; //immediate drawable
 
-//create SceneDrawableObject:SerializableGraphicObject
-//dynamic material indexes generation !!!! todo
-
-void OrdinaryGraphicsObject::SetTransform(const glm::mat4x4& t) const
-{
-    assert(m_Drawable);
-    m_Drawable->m_Transform = t;
-};
-
-// preparation for several batches
-//+ realtime material index calc
 struct OrdinaryObjectsKey
 {
     VertexFormat m_VertexFormat;
     std::vector<GraphicsMaterial*> m_Materials; // reduce to store only materials type
+    bool m_IsBatchable;
 
     FNVhash_t Hash()
     {
-        FNVhash_t r = FNV((char*)& m_VertexFormat, sizeof(VertexFormat));
+        size_t slotsNum = m_VertexFormat.GetNumSlotsUsed();
+        FNVhash_t r = FNV((char*)&slotsNum, sizeof(size_t));
+        r ^= FNV((char*)(m_VertexFormat.m_PerSlotVertexSizes.data()), m_VertexFormat.m_PerSlotVertexSizes.size() * sizeof(size_t));
+
         for (GraphicsMaterial* m : m_Materials)
             r ^= FNV((char*)&m, sizeof(GraphicsMaterial*));
         return r;
     }
+};
+ 
+void OrdinaryGraphicsObject::SetTransform(const glm::mat4x4& t) const
+{
+    assert(m_Drawable);
+    m_Drawable->m_Transform = t;
 };
 
 OrdinaryGraphicsObjectHandler::OrdinaryGraphicsObjectHandler() {}
@@ -98,9 +97,6 @@ TriangleOrdinaryGraphicsObject::TriangleOrdinaryGraphicsObject(GraphicsMaterials
 
     m_VertexFormat = vertexFormat;
     m_XMLElement = element;
-
-    m_VertexData = VertexData(m_VertexFormat, NumVertexes);
-    memcpy((void*)((TriangleOrdinaryGraphicsObject::VertexType*)m_VertexData.GetDataPtrForSlot(0)), m_Vertexes.data(), sizeof(TriangleOrdinaryGraphicsObject::VertexType) * NumVertexes);
 }
 //VertexData& TriangleOrdinaryGraphicsObject::GetVertexData()
 TriangleOrdinaryGraphicsObject::VertexType  TriangleOrdinaryGraphicsObject::ParseVertex(tinyxml2::XMLElement* vertexElement)
@@ -148,9 +144,21 @@ size_t TriangleOrdinaryGraphicsObject::GetNumVertexes() const
 {
     return NumVertexes;
 }
-void TriangleOrdinaryGraphicsObject::WriteGeometry(VertexData& data, size_t vertexesOffset)
+void TriangleOrdinaryGraphicsObject::WriteGeometry(VertexData& data, const std::set<GraphicsMaterial*>& materialIndexRemap, size_t vertexesOffset)
 {
-    memcpy((void*)((TriangleOrdinaryGraphicsObject::VertexType*)data.GetDataPtrForSlot(0) + vertexesOffset), m_Vertexes.data(), sizeof(TriangleOrdinaryGraphicsObject::VertexType) * NumVertexes);
+    std::vector<size_t> matRemap;
+    for (GraphicsMaterial*& mat : m_Materials)
+    {
+        matRemap.push_back(std::distance(materialIndexRemap.begin(), materialIndexRemap.find(mat)));
+    }
+    TriangleOrdinaryGraphicsObject::VertexType* dst = (TriangleOrdinaryGraphicsObject::VertexType*)data.GetDataPtrForSlot(0) + vertexesOffset;
+    for (size_t i = 0; i < m_Vertexes.size(); i++)
+    {
+        TriangleOrdinaryGraphicsObject::VertexType& v = (*(dst + i));
+        v = m_Vertexes[i];
+        v.m_TexCoord = matRemap[v.m_TexCoord];
+
+    }
 }
 
 
@@ -254,9 +262,22 @@ size_t SphereOrdinaryGraphicsObject::GetNumVertexes() const
 {
     return m_Vertexes.size();
 }
-void SphereOrdinaryGraphicsObject::WriteGeometry(VertexData& data, size_t vertexesOffset)
+void SphereOrdinaryGraphicsObject::WriteGeometry(VertexData& data, const std::set<GraphicsMaterial*>& materialIndexRemap, size_t vertexesOffset)
 {
-    memcpy((void*)((SphereOrdinaryGraphicsObject::VertexType*)data.GetDataPtrForSlot(0) + vertexesOffset), m_Vertexes.data(), sizeof(SphereOrdinaryGraphicsObject::VertexType) * m_Vertexes.size());
+    
+    std::vector<size_t> matRemap;
+    for (GraphicsMaterial*& mat : m_Materials)
+    {
+        matRemap.push_back(std::distance(materialIndexRemap.begin(), materialIndexRemap.find(mat)));
+    }
+    SphereOrdinaryGraphicsObject::VertexType* dst = (SphereOrdinaryGraphicsObject::VertexType*)data.GetDataPtrForSlot(0) + vertexesOffset;
+    for (size_t i = 0; i < m_Vertexes.size(); i++)
+    {
+        SphereOrdinaryGraphicsObject::VertexType& v = (*(dst + i));
+        v = m_Vertexes[i];
+        v.m_TexCoord = matRemap[v.m_TexCoord];
+
+    }
 }
 
 void SphereOrdinaryGraphicsObject::Serialize(tinyxml2::XMLElement* element, tinyxml2::XMLDocument& document)
@@ -343,11 +364,11 @@ OrdinaryGraphicsObjectHandler::HandleResult OrdinaryGraphicsObjectManager::Handl
 	return OrdinaryGraphicsObjectHandler::HandleResult();
 }
 
+
 std::map<unsigned int, std::shared_ptr<MaterialBatchStructuredBuffer>> MaterialBatchStructuredBuffers;
 
 void OrdinaryGraphicsObjectManager::CompileGraphicObjects(GraphicsDevice& device, GraphicsTextureCollection& textureCollection, ShadersCollection& shadersCollection, GraphicsMaterialsManager* materialsManager)
 {
-    //expand model to have several batches
     std::set<size_t> allreadyBatched;
 
     for (size_t m = 0; m < m_Objects.size(); m++)
@@ -355,24 +376,21 @@ void OrdinaryGraphicsObjectManager::CompileGraphicObjects(GraphicsDevice& device
         if (allreadyBatched.find(m) != allreadyBatched.end())
             continue;
 
-		struct 
-		{
-			glm::uint begin;
-			glm::uint end;
-		} _range;
-
         std::vector<uint32_t> batchSet;
 
-        size_t z = 1;
+        std::string materialType = m_Objects[m]->m_Materials[0]->GetType();
+
+
+        std::set<GraphicsMaterial*> materialsIndexMap;
+        //from <m> ?
 		for (size_t i = 0; i < m_Objects.size(); i++)
 		{
-            //check material types instead of themselves
-			if (m_Objects[i]->m_VertexFormat == m_Objects[m]->m_VertexFormat && m_Objects[i]->m_Materials.size() == m_Objects[m]->m_Materials.size())
+			if (m_Objects[i]->m_VertexFormat == m_Objects[m]->m_VertexFormat)
 			{
 				bool match = true;
-                for (size_t k = 0; k < m_Objects[m]->m_Materials.size(); k++)
+                for (size_t k = 0; k < m_Objects[i]->m_Materials.size(); k++)
                 {
-                    if (m_Objects[m]->m_Materials[k] != m_Objects[i]->m_Materials[k])
+                    if (m_Objects[i]->m_Materials[k]->GetType() != materialType)
                         match = false;
                 }
 			
@@ -387,6 +405,8 @@ void OrdinaryGraphicsObjectManager::CompileGraphicObjects(GraphicsDevice& device
 		size_t overallVertexesNum = 0;
         for (size_t i : batchSet)
         {
+            for (GraphicsMaterial* mat : m_Objects[i]->m_Materials)
+                materialsIndexMap.insert(mat);
             overallVertexesNum += m_Objects[i]->GetNumVertexes();
         }
 
@@ -398,7 +418,7 @@ void OrdinaryGraphicsObjectManager::CompileGraphicObjects(GraphicsDevice& device
             OrdinaryGraphicsObject* obj = m_Objects[i];
 			VertexFormat& vertexFormat = obj->m_VertexFormat;
 
-            obj->WriteGeometry(vertexData, vertexesWritten);
+            obj->WriteGeometry(vertexData, materialsIndexMap, vertexesWritten);
             vertexesWritten += obj->GetNumVertexes();
 
             allreadyBatched.insert(i);
@@ -408,19 +428,21 @@ void OrdinaryGraphicsObjectManager::CompileGraphicObjects(GraphicsDevice& device
 			object.m_Valid = true;
 			object.m_Topology = GraphicsTopology(device, textureCollection, shadersCollection, vertexData, true);
 
+            std::vector<GraphicsMaterial*> tempMaterials;
+
+            for (GraphicsMaterial* mat : materialsIndexMap)
+                tempMaterials.push_back(mat);
+
 			bool singleMaterial = false;
-			if (m_Objects[m]->m_Materials.size() == 1)
-			{
-				object.m_Material = m_Objects[m]->m_Materials[0];
-				singleMaterial = true;
-			}
+            //todo check if not batchable
+            if (tempMaterials.size() == 1)
+            {
+                object.m_Material = m_Objects[m]->m_Materials[0];
+                singleMaterial = true;
+            }
 
 			if (!singleMaterial)
 			{
-				std::vector<GraphicsMaterial*> tempMaterials;
-				for (unsigned int k = 0; k < m_Objects[m]->m_Materials.size(); k++)
-					tempMaterials.push_back(m_Objects[m]->m_Materials[k]);
-
                 object.m_Materials = tempMaterials;
 
                 if (MaterialBatchStructuredBuffers.find(m) == MaterialBatchStructuredBuffers.end())
@@ -439,12 +461,6 @@ void OrdinaryGraphicsObjectManager::CompileGraphicObjects(GraphicsDevice& device
             m_DrawableObjects.push_back(object);
 
 	}
-
-	/*size_t i = 0;
-	for (OrdinaryGraphicsObjectSignature& signature : m_ObjectSignatures)
-	{
-		
-	}*/
 }
 
 void OrdinaryGraphicsObjectManager::Render(GraphicsDevice& device, ShadersCollection& shadersCollection, const std::vector<GraphicsShaderMacro>& passMacros, const Camera& camera)

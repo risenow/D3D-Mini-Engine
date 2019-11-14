@@ -9,6 +9,7 @@
 #include "Graphics/GraphicsObjectManager.h"
 #include "Graphics/SerializableGraphicsObject.h"
 #include "Graphics/GraphicsTextureCollection.h"
+#include <set>
 
 class GraphicsObject;
 
@@ -19,7 +20,7 @@ class OrdinaryGraphicsObject : public SerializableGraphicsObject
 public:
     virtual void SetTransform(const glm::mat4x4& t) const;
 
-    virtual void WriteGeometry(VertexData& data, size_t vertexesOffset = 0) = 0;
+    virtual void WriteGeometry(VertexData& data, const std::set<GraphicsMaterial*>& materialIndexRemap, size_t vertexesOffset = 0) = 0;
     virtual size_t GetNumVertexes() const = 0;
 public:
     GraphicsObject* m_Drawable;
@@ -68,7 +69,7 @@ public:
     void Serialize(tinyxml2::XMLElement* element, tinyxml2::XMLDocument& document);
     void Deserialize(tinyxml2::XMLElement* element);
 
-    virtual void WriteGeometry(VertexData& data, size_t vertexesOffset = 0) override;
+    virtual void WriteGeometry(VertexData& data, const std::set<GraphicsMaterial*>& materialIndexRemap, size_t vertexesOffset = 0) override;
     virtual size_t GetNumVertexes() const override;
 private:
     VertexData m_VertexData;
@@ -105,7 +106,7 @@ public:
     void Serialize(tinyxml2::XMLElement* element, tinyxml2::XMLDocument& document);
     void Deserialize(tinyxml2::XMLElement* element);
 
-    virtual void WriteGeometry(VertexData& data, size_t vertexesOffset = 0) override;
+    virtual void WriteGeometry(VertexData& data, const std::set<GraphicsMaterial*>& materialIndexRemap, size_t vertexesOffset = 0) override;
     virtual size_t GetNumVertexes() const override;
 private:
     glm::vec3 m_Center;
@@ -135,6 +136,7 @@ public:
 	GraphicsObjectManager::HandleResult Handle(GraphicsDevice& device, GraphicsTextureCollection& textureCollection, ShadersCollection& shadersCollection, GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* sceneGraphElement);
 	OrdinaryGraphicsObjectHandler::HandleResult Handle_(GraphicsDevice& device, GraphicsTextureCollection& textureCollection, ShadersCollection& shadersCollection, GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* sceneGraphElement);
 
+    //run it in separate thread
 	void CompileGraphicObjects(GraphicsDevice& device, GraphicsTextureCollection& textureCollection, ShadersCollection& shadersCollection, GraphicsMaterialsManager* materialsManager);
 private:
     std::vector<OrdinaryGraphicsObject*> m_Objects;
