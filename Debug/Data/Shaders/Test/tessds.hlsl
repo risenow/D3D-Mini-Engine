@@ -52,7 +52,11 @@ PixelInputType DSEntry(ConstantOutputType input, float3 uvwCoord : SV_DomainLoca
     //output.position = mul(output.position, projectionMatrix);
 
     // Send the input color into the pixel shader.
+#ifdef BATCH
     output.color = float4(PSConstsStructured[patch[0].material].colorRoughness.xyz, 1.0)* uvwCoord.x + float4(PSConstsStructured[patch[1].material].colorRoughness.xyz, 1.0) * uvwCoord.y + float4(PSConstsStructured[patch[2].material].colorRoughness.xyz, 1.0) * uvwCoord.z;//patch[0].color;
+#else
+    output.color = colorRoughness;
+#endif
 
     return output;
 }

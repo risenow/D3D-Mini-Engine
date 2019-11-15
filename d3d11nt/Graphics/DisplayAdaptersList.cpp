@@ -46,7 +46,7 @@ void DisplayAdaptersList::LogInfo()
         DXGI_ADAPTER_DESC currentAdapterDesc;
         D3D_HR_OP(m_Adapters[i]->GetDesc(&currentAdapterDesc));
         LOG_BUFFER(std::string("Adapter index: " + std::to_string(i)), logBuffer);
-        LOG_BUFFER(wstrtostr(std::wstring(L"Description: ") + std::wstring(currentAdapterDesc.Description)), logBuffer);
+        LOG_BUFFER(wstrtostr_fast(std::wstring(L"Description: ") + std::wstring(currentAdapterDesc.Description)), logBuffer);
         LOG_BUFFER(std::string(""), logBuffer);
     }
 	popGetLogger().WriteUsingMode({ &LOG_CONSOLE_STREAM(), &LOG_FILE_STREAM() }, logBuffer, RuntimeLogMode_None);

@@ -13,6 +13,8 @@ float4 LoadLDS(uint2 c)
 return lds[c.y*32 + c.x];
 }
 
+#define offset_x 0
+#define offset_y 0
 #ifdef HORIZONTAL
 #define offset_x 1
 #define offset_y 0

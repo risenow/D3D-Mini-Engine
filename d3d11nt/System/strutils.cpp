@@ -1,6 +1,17 @@
 #include "stdafx.h"
 #include "System/strutils.h"
 
+std::wstring strtowstr_fast(const std::string& str)
+{
+    std::wstring wstr = std::wstring(str.begin(), str.end());
+    return wstr;
+}
+std::string wstrtostr_fast(const std::wstring& wstr)
+{
+    std::string str = std::string(wstr.begin(), wstr.end());
+    return str;
+}
+
 std::wstring strtowstr(const std::string& str)
 {
     std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
@@ -30,7 +41,7 @@ bool StrIsUnsignedInt(const std::string& str)
 template<>
 void ToString(const std::wstring& in, std::string& out)
 {
-    out = wstrtostr(in);
+    out = wstrtostr_fast(in);
 }
 template<>
 void ToString(const std::string& in, std::string& out)
@@ -41,7 +52,7 @@ void ToString(const std::string& in, std::string& out)
 template<>
 void ToString(const std::string& in, std::wstring& out)
 {
-    out = strtowstr(in);
+    out = strtowstr_fast(in);
 }
 template<>
 void ToString(const std::wstring& in, std::wstring& out)
@@ -57,12 +68,12 @@ std::wstring GetWideString(const wcptr& str)
 template<>
 std::wstring GetWideString(const std::string& str)
 {
-    return strtowstr(str);
+    return strtowstr_fast(str);
 }
 template<>
 std::wstring GetWideString(const cptr& str)
 {
-    return strtowstr(std::string(str));
+    return strtowstr_fast(std::string(str));
 }
 /*template<>
 std::wstring GetWideString(wcptr str)

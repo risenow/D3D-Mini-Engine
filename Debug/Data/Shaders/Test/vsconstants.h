@@ -32,17 +32,17 @@ DECLARE_CONSTANT_STRUCTURE VSConsts
     DECLARE_FLOAT4X4 normalMatrix;//48
     DECLARE_FLOAT tessellationAmount;//49
     DECLARE_FLOAT3 padding;//52
-    DECLARE_FLOAT3 offset1;//55
-    DECLARE_FLOAT offset2;//56
-    DECLARE_FLOAT offset3;//57
-    DECLARE_FLOAT4 offset4;//61
-    DECLARE_FLOAT4 offset5;//65
-    DECLARE_FLOAT4 offset6;//69
-    DECLARE_FLOAT offset7;//70
-    DECLARE_FLOAT offset8;//71
-    DECLARE_FLOAT4 offset9;//75
-    DECLARE_FLOAT4 offset10;//79
-    DECLARE_FLOAT offset11;//80
+    DECLARE_FLOAT3 vscoffset1;//55
+    DECLARE_FLOAT vscoffset2;//56
+    DECLARE_FLOAT vscoffset3;//57
+    DECLARE_FLOAT4 vscoffset4;//61
+    DECLARE_FLOAT4 vscoffset5;//65
+    DECLARE_FLOAT4 vscoffset6;//69
+    DECLARE_FLOAT vscoffset7;//70
+    DECLARE_FLOAT vscoffset8;//71
+    DECLARE_FLOAT4 vscoffset9;//75
+    DECLARE_FLOAT4 vscoffset10;//79
+    DECLARE_FLOAT vscoffset11;//80
 //DECLARE_FLOAT coef1;
 //DECLARE_FLOAT coef2;
 //DECLARE_FLOAT coef3;

@@ -18,18 +18,14 @@ struct PS_OUTPUT
 };
 
 PS_OUTPUT PSEntry(float4 pos : SV_POSITION
-#ifdef BATCH
             , in float4 diffuseRoughness : COLOR0
             , in float4 vPos : POSITION1
             , in float4 iCenter : POSITION2
             , in float3 stc : TEXCOORD1
             , in float3 vnormal : NORMAL0
             //, in uint iMaterial : TEXCOORD0
-#endif
             )// : SV_Target
 {
-#ifdef BATCH
-
     float3 diffuse = diffuseRoughness.rgb;
     float rough = diffuseRoughness.a;
     
@@ -50,7 +46,4 @@ PS_OUTPUT PSEntry(float4 pos : SV_POSITION
 #endif
     
 	return output;
-#else
-    return float4(1.0, 0.0, 0.0, 1.0);
-#endif
 }

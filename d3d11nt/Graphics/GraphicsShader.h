@@ -164,7 +164,7 @@ public:
         std::string target = GetShaderD3DTarget<T>();
         std::string entry = GetShaderEntryPointName<T>();
 
-		D3D_HR_OP(D3DCompile(content.c_str(), content.size(), wstrtostr(filePath).c_str(), shaderMacros.data(), D3D_COMPILE_STANDARD_FILE_INCLUDE,
+		D3D_HR_OP(D3DCompile(content.c_str(), content.size(), wstrtostr_fast(filePath).c_str(), shaderMacros.data(), D3D_COMPILE_STANDARD_FILE_INCLUDE,
             GetShaderEntryPointName<T>().c_str(), GetShaderD3DTarget<T>().c_str(), D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION | D3DCOMPILE_ENABLE_STRICTNESS |D3DCOMPILE_PACK_MATRIX_COLUMN_MAJOR, 0,
 			(ID3DBlob**)&shader.GetBlobRef(), &errorMsgs));
 		if (errorMsgs)

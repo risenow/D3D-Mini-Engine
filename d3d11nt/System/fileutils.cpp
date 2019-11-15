@@ -5,7 +5,7 @@
 
 bool FileExists(const std::string& fileName)
 {
-    DWORD dwAttrib = GetFileAttributes(strtowstr(fileName).c_str());
+    DWORD dwAttrib = GetFileAttributes(strtowstr_fast(fileName).c_str());
 
     return (dwAttrib != INVALID_FILE_ATTRIBUTES &&
            !(dwAttrib & FILE_ATTRIBUTE_DIRECTORY));
@@ -13,7 +13,7 @@ bool FileExists(const std::string& fileName)
 
 void CreateSimpleFile(const std::string& fileName)
 {
-    HANDLE handle = CreateFile(strtowstr(fileName).c_str(), GENERIC_READ | GENERIC_WRITE, 
+    HANDLE handle = CreateFile(strtowstr_fast(fileName).c_str(), GENERIC_READ | GENERIC_WRITE,
                                0, NULL, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, NULL);
 }
 

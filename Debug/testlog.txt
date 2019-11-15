@@ -1,21 +1,53 @@
-2[TIME:525] Adapters enumerated:
-[TIME:526] Adapter index: 0
-[TIME:527] Description: NVIDIA GeForce GTX 1070
-[TIME:528] 
-[TIME:529] Adapter index: 1
-[TIME:529] Description: Microsoft Basic Render Driver
-[TIME:530] 
-2[TIME:11604] C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\vs.hlsl(15,21-28): warning X3578: Output value 'oICenter' is not completely initialized
+2[TIME:72] Adapters enumerated:
+[TIME:73] Adapter index: 0
+[TIME:75] Description: NVIDIA GeForce GTX 1070
+[TIME:76] 
+[TIME:77] Adapter index: 1
+[TIME:78] Description: Microsoft Basic Render Driver
+[TIME:80] 
+2[TIME:1774] D:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\vs.hlsl(15,21-28): warning X3578: Output value 'oICenter' is not completely initialized
 
-2[TIME:11643] C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(63,5-33): warning X3206: implicit truncation of vector type
-C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(114,12-51): warning X3206: implicit truncation of vector type
-C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(110,32): warning X4000: use of potentially uninitialized variable (CookTorrance)
+2[TIME:1803] D:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\vs.hlsl(15,21-28): warning X3578: Output value 'oICenter' is not completely initialized
 
-2[TIME:11682] C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(63,5-33): warning X3206: implicit truncation of vector type
-C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(114,12-51): warning X3206: implicit truncation of vector type
-C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(110,32): warning X4000: use of potentially uninitialized variable (CookTorrance)
+2[TIME:1862] D:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(63,5-33): warning X3206: implicit truncation of vector type
+D:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(114,12-51): warning X3206: implicit truncation of vector type
+D:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(110,32): warning X4000: use of potentially uninitialized variable (CookTorrance)
 
-2[TIME:11878] C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\cs.hlsl(42,15): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used
+2[TIME:1916] D:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(63,5-33): warning X3206: implicit truncation of vector type
+D:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(114,12-51): warning X3206: implicit truncation of vector type
+D:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(110,32): warning X4000: use of potentially uninitialized variable (CookTorrance)
 
-2[TIME:12029] C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\cs.hlsl(42,15): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used
+2[TIME:1971] D:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(63,5-33): warning X3206: implicit truncation of vector type
+D:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(114,12-51): warning X3206: implicit truncation of vector type
+D:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(110,32): warning X4000: use of potentially uninitialized variable (CookTorrance)
+
+2[TIME:2032] D:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(63,5-33): warning X3206: implicit truncation of vector type
+D:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(114,12-51): warning X3206: implicit truncation of vector type
+D:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(110,32): warning X4000: use of potentially uninitialized variable (CookTorrance)
+
+2[TIME:2370] D:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\cs.hlsl(44,15): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used
+
+2[TIME:2586] D:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\cs.hlsl(44,15): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used
+
+2[TIME:2816] D:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\cs.hlsl(19,19): warning X1519: 'offset_x' : macro redefinition
+D:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\cs.hlsl(44,15): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used
+
+2[TIME:3047] D:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\cs.hlsl(19,19): warning X1519: 'offset_x' : macro redefinition
+D:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\cs.hlsl(44,15): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used
+
+2[TIME:3277] D:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\cs.hlsl(24,19): warning X1519: 'offset_y' : macro redefinition
+D:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\cs.hlsl(44,15): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used
+
+2[TIME:3515] D:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\cs.hlsl(24,19): warning X1519: 'offset_y' : macro redefinition
+D:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\cs.hlsl(44,15): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used
+
+2[TIME:3750] D:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\cs.hlsl(19,19): warning X1519: 'offset_x' : macro redefinition
+D:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\cs.hlsl(23,19): warning X1519: 'offset_x' : macro redefinition
+D:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\cs.hlsl(24,19): warning X1519: 'offset_y' : macro redefinition
+D:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\cs.hlsl(44,15): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used
+
+2[TIME:4015] D:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\cs.hlsl(19,19): warning X1519: 'offset_x' : macro redefinition
+D:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\cs.hlsl(23,19): warning X1519: 'offset_x' : macro redefinition
+D:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\cs.hlsl(24,19): warning X1519: 'offset_y' : macro redefinition
+D:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\cs.hlsl(44,15): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used
 

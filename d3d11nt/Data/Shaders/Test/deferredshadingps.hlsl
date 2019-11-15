@@ -162,5 +162,5 @@ float4 PSEntry(
     float4 result = float4(ct + diffuse * 0.1 * 1.0 , 1.0);
     
     //gamma correction
-    return pow(result/(result/2.2 + 1.0), (1.0/2.2));
+    return pow(result/(result/2.4 + 1.0), (1.0/2.2));
 }

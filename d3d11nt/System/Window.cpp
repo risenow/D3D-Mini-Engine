@@ -82,7 +82,7 @@ void Window::InternalCreateWindow(Window* target)
     }
 
     target->m_WindowHandle = CreateWindow(windowClassName.c_str(),
-        strtowstr(target->m_Title).c_str(),
+        strtowstr_fast(target->m_Title).c_str(),
         WS_OVERLAPPEDWINDOW,
         target->m_X, target->m_Y, target->m_Width, target->m_Height,
         NULL,
@@ -114,7 +114,7 @@ void Window::WindowThreadWorker(Window* owner)
 void Window::SetTitle(const std::string& title)
 {
     m_Title = title;
-    SetWindowText(m_WindowHandle, strtowstr(m_Title).c_str());
+    SetWindowText(m_WindowHandle, strtowstr_fast(m_Title).c_str());
 }
 void Window::Close()
 {

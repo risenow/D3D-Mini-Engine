@@ -5,9 +5,9 @@
 DECLARE_MATERIAL_CONSTANT_STRUCTURE PSConsts
 {
     DECLARE_FLOAT4 colorRoughness;
-    DECLARE_FLOAT4 offset1;
-    DECLARE_FLOAT4 offset2;
-    DECLARE_FLOAT4 offset3;
+    DECLARE_FLOAT4 pscoffset1;
+    DECLARE_FLOAT4 pscoffset2;
+    DECLARE_FLOAT4 pscoffset3;
     //DECLARE_FLOAT4X4 offset2;
 };
 

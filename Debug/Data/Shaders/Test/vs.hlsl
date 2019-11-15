@@ -32,6 +32,8 @@ void VSEntry(in float4 iPos : POSITION
     float4 vPos = mul(view, wPos);
     oPos = mul(projection, vPos);
 #ifdef BATCH
-    diffuseRoughness =PSConstsStructured[iMaterial].colorRoughness;//float4(PSConstsStructured[iMaterial].coef, 1.0);
+    diffuseRoughness = PSConstsStructured[iMaterial].colorRoughness;
+#else
+    diffuseRoughness = colorRoughness;
 #endif
 }

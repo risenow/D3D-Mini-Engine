@@ -22,7 +22,7 @@ public:
 	GraphicsTopology();
 	GraphicsTopology(GraphicsDevice& device, GraphicsTextureCollection& textureCollection, ShadersCollection& shadersCollection, VertexData& vertexData, bool isBatch = false);
 
-	void Bind(GraphicsDevice& device, ShadersCollection& shadersCollection, GraphicsBuffer& buffer, const Camera& camera, TopologyType type);
+	void Bind(GraphicsDevice& device, ShadersCollection& shadersCollection, GraphicsBuffer* materialsStructuredbuffer, GraphicsBuffer* materialsConstantBuffer, const Camera& camera, TopologyType type);
 	GraphicsBuffer* GetConstantsBuffer() const;
 
 	void DrawCall(GraphicsDevice& device);
@@ -40,6 +40,7 @@ private:
 	unsigned long m_VertexCount;
 
 	bool m_IsValid;
+    bool m_IsBatch;
 
 	static GraphicsConstantsBuffer<VSConsts> m_ConstantsBuffer;
 	static bool m_ConstantsBufferInitialized;

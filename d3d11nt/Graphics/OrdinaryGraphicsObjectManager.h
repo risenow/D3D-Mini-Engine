@@ -18,15 +18,18 @@ class GraphicsObject;
 class OrdinaryGraphicsObject : public SerializableGraphicsObject
 {
 public:
+    OrdinaryGraphicsObject() : m_Batchable(false) {}
     virtual void SetTransform(const glm::mat4x4& t) const;
 
-    virtual void WriteGeometry(VertexData& data, const std::set<GraphicsMaterial*>& materialIndexRemap, size_t vertexesOffset = 0) = 0;
+    virtual void WriteGeometry(VertexData& data, const std::set<GraphicsMaterial*>& materialIndexRemap, bool batched = false, size_t vertexesOffset = 0) = 0;
     virtual size_t GetNumVertexes() const = 0;
 public:
     GraphicsObject* m_Drawable;
-    VertexFormat m_VertexFormat;
+    VertexFormat m_VertexFormat; //make batched and not versions
+    VertexFormat m_BatchedVertexFormat;
     std::vector<GraphicsMaterial*> m_Materials;
     tinyxml2::XMLElement* m_XMLElement;
+    bool m_Batchable;
 };
 
 class OrdinaryGraphicsObjectHandler;
@@ -58,9 +61,15 @@ public:
         struct {
         glm::vec4 m_Position;
         glm::vec3 m_Normal;
-        glm::uint m_TexCoord;
     }
-    VertexType;
+    VertexType;//need batched and non batched separate versions
+    struct BatchedVertexType {
+        BatchedVertexType(VertexType basic, glm::uint texCoord) : m_Position(basic.m_Position), m_Normal(basic.m_Normal), m_TexCoord(texCoord) {}
+        glm::vec4 m_Position;
+        glm::vec3 m_Normal;
+        glm::uint m_TexCoord;
+    };
+
     typedef glm::uvec2 TexCoordType;
 
     TriangleOrdinaryGraphicsObject(const std::array<VertexType, NumVertexes>& vertexes, const std::string& materialName, const std::string name);
@@ -69,7 +78,7 @@ public:
     void Serialize(tinyxml2::XMLElement* element, tinyxml2::XMLDocument& document);
     void Deserialize(tinyxml2::XMLElement* element);
 
-    virtual void WriteGeometry(VertexData& data, const std::set<GraphicsMaterial*>& materialIndexRemap, size_t vertexesOffset = 0) override;
+    virtual void WriteGeometry(VertexData& data, const std::set<GraphicsMaterial*>& materialIndexRemap, bool batched = false, size_t vertexesOffset = 0) override;
     virtual size_t GetNumVertexes() const override;
 private:
     VertexData m_VertexData;
@@ -93,7 +102,14 @@ class SphereOrdinaryGraphicsObject : public OrdinaryGraphicsObject
 public:
     struct VertexType {
 
-        VertexType(glm::vec4 pos, glm::vec3 normal, glm::uint texCoord) : m_Position(pos), m_Normal(normal), m_TexCoord(texCoord) {}
+        VertexType(glm::vec4 pos, glm::vec3 normal, glm::uint texCoord) : m_Position(pos), m_Normal(normal){}
+        glm::vec4 m_Position;
+        glm::vec3 m_Normal;
+    };
+    struct BatchedVertexType {
+
+        BatchedVertexType(VertexType basic, glm::uint texCoord) : m_Position(basic.m_Position), m_Normal(basic.m_Normal), m_TexCoord(texCoord) {}
+        BatchedVertexType(glm::vec4 pos, glm::vec3 normal, glm::uint texCoord) : m_Position(pos), m_Normal(normal), m_TexCoord(texCoord) {}
         glm::vec4 m_Position;
         glm::vec3 m_Normal;
         glm::uint m_TexCoord;
@@ -106,7 +122,7 @@ public:
     void Serialize(tinyxml2::XMLElement* element, tinyxml2::XMLDocument& document);
     void Deserialize(tinyxml2::XMLElement* element);
 
-    virtual void WriteGeometry(VertexData& data, const std::set<GraphicsMaterial*>& materialIndexRemap, size_t vertexesOffset = 0) override;
+    virtual void WriteGeometry(VertexData& data, const std::set<GraphicsMaterial*>& materialIndexRemap, bool batched = false, size_t vertexesOffset = 0) override;
     virtual size_t GetNumVertexes() const override;
 private:
     glm::vec3 m_Center;

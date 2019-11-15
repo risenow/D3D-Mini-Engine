@@ -73,7 +73,7 @@ std::string MakePosStr(const glm::vec3& pos)
 
 TriangleGraphicsObjectHandler::TriangleGraphicsObjectHandler() : OrdinaryGraphicsObjectHandler("triangle") {}
 
-TriangleOrdinaryGraphicsObject::TriangleOrdinaryGraphicsObject(GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* element)
+TriangleOrdinaryGraphicsObject::TriangleOrdinaryGraphicsObject(GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* element) : OrdinaryGraphicsObject()
 {
     Deserialize(element);
 
@@ -82,7 +82,8 @@ TriangleOrdinaryGraphicsObject::TriangleOrdinaryGraphicsObject(GraphicsMaterials
     const std::string POSITION_PROPERTY_NAME = "POSITION";
     typedef glm::uint LocalTexCoordType;
 
-    VertexFormat vertexFormat({ CreateVertexPropertyPrototype<glm::vec4>(POSITION_PROPERTY_NAME), CreateVertexPropertyPrototype<glm::vec3>(NORMAL_PROPERTY_NAME), CreateVertexPropertyPrototype<LocalTexCoordType>(TEXCOORD_PROPERTY_NAME) });// , CreateVertexPropertyPrototype<uint32_t>(MATERIAL_PROPERTY_NAME, 0, 1) });
+    VertexFormat vertexFormat({ CreateVertexPropertyPrototype<glm::vec4>(POSITION_PROPERTY_NAME), CreateVertexPropertyPrototype<glm::vec3>(NORMAL_PROPERTY_NAME) });// , CreateVertexPropertyPrototype<uint32_t>(MATERIAL_PROPERTY_NAME, 0, 1) });
+    VertexFormat batchedVertexFormat({ CreateVertexPropertyPrototype<glm::vec4>(POSITION_PROPERTY_NAME), CreateVertexPropertyPrototype<glm::vec3>(NORMAL_PROPERTY_NAME), CreateVertexPropertyPrototype<LocalTexCoordType>(TEXCOORD_PROPERTY_NAME) });
 
     std::vector<std::string> attrs;
     size_t i = 0;
@@ -96,12 +97,13 @@ TriangleOrdinaryGraphicsObject::TriangleOrdinaryGraphicsObject(GraphicsMaterials
     }
 
     m_VertexFormat = vertexFormat;
+    m_BatchedVertexFormat = batchedVertexFormat;
     m_XMLElement = element;
 }
 //VertexData& TriangleOrdinaryGraphicsObject::GetVertexData()
 TriangleOrdinaryGraphicsObject::VertexType  TriangleOrdinaryGraphicsObject::ParseVertex(tinyxml2::XMLElement* vertexElement)
 {
-    return TriangleOrdinaryGraphicsObject::VertexType({ ParsePos(std::string(vertexElement->Attribute("p"))), glm::vec3(ParsePos(std::string(vertexElement->Attribute("n")))), vertexElement->UnsignedAttribute("uv", 0) });
+    return TriangleOrdinaryGraphicsObject::VertexType({ ParsePos(std::string(vertexElement->Attribute("p"))), glm::vec3(ParsePos(std::string(vertexElement->Attribute("n")))) });
 
 }
 void TriangleOrdinaryGraphicsObject::Serialize(tinyxml2::XMLElement* element, tinyxml2::XMLDocument& document)
@@ -121,13 +123,18 @@ void TriangleOrdinaryGraphicsObject::Serialize(tinyxml2::XMLElement* element, ti
 }
 void TriangleOrdinaryGraphicsObject::Deserialize(tinyxml2::XMLElement* element)
 {
-
+    //todo move to OrinaryGraphicsObject code
     const tinyxml2::XMLAttribute* attr = element->FirstAttribute();
     if (attr)
         while (attr)
         {
             std::string attrValue = std::string(attr->Value());
-            m_MaterialNames.push_back(attrValue);
+
+            if (strstr(attr->Name(), "material"))
+                m_MaterialNames.push_back(attrValue);
+            if (strstr(attr->Name(), "batchable"))
+                m_Batchable = attrValue == "true";
+
             attr = attr->Next();
         }
 
@@ -144,20 +151,31 @@ size_t TriangleOrdinaryGraphicsObject::GetNumVertexes() const
 {
     return NumVertexes;
 }
-void TriangleOrdinaryGraphicsObject::WriteGeometry(VertexData& data, const std::set<GraphicsMaterial*>& materialIndexRemap, size_t vertexesOffset)
+
+// to support not batched objects
+void TriangleOrdinaryGraphicsObject::WriteGeometry(VertexData& data, const std::set<GraphicsMaterial*>& materialIndexRemap, bool batched, size_t vertexesOffset)
 {
     std::vector<size_t> matRemap;
     for (GraphicsMaterial*& mat : m_Materials)
     {
         matRemap.push_back(std::distance(materialIndexRemap.begin(), materialIndexRemap.find(mat)));
     }
+    if (batched)
+    {
+        TriangleOrdinaryGraphicsObject::BatchedVertexType* dst = (TriangleOrdinaryGraphicsObject::BatchedVertexType*)data.GetDataPtrForSlot(0) + vertexesOffset;
+        for (size_t i = 0; i < m_Vertexes.size(); i++)
+        {
+            TriangleOrdinaryGraphicsObject::BatchedVertexType& v = (*(dst + i));
+            v = BatchedVertexType(m_Vertexes[i], matRemap[0]); // suppose we have one material per object
+        }
+        return;
+    }
+
     TriangleOrdinaryGraphicsObject::VertexType* dst = (TriangleOrdinaryGraphicsObject::VertexType*)data.GetDataPtrForSlot(0) + vertexesOffset;
     for (size_t i = 0; i < m_Vertexes.size(); i++)
     {
         TriangleOrdinaryGraphicsObject::VertexType& v = (*(dst + i));
         v = m_Vertexes[i];
-        v.m_TexCoord = matRemap[v.m_TexCoord];
-
     }
 }
 
@@ -231,7 +249,7 @@ void GenerateSphereGeometry(const glm::vec3& center, float r, size_t matX, std::
     }
 }
 
-SphereOrdinaryGraphicsObject::SphereOrdinaryGraphicsObject(GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* element)
+SphereOrdinaryGraphicsObject::SphereOrdinaryGraphicsObject(GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* element) : OrdinaryGraphicsObject()
 {
     Deserialize(element);
 
@@ -240,7 +258,8 @@ SphereOrdinaryGraphicsObject::SphereOrdinaryGraphicsObject(GraphicsMaterialsMana
     const std::string POSITION_PROPERTY_NAME = "POSITION";
     typedef glm::uint LocalTexCoordType;
 
-    VertexFormat vertexFormat({ CreateVertexPropertyPrototype<glm::vec4>(POSITION_PROPERTY_NAME), CreateVertexPropertyPrototype<glm::vec3>(NORMAL_PROPERTY_NAME), CreateVertexPropertyPrototype<LocalTexCoordType>(TEXCOORD_PROPERTY_NAME) });// , CreateVertexPropertyPrototype<uint32_t>(MATERIAL_PROPERTY_NAME, 0, 1) });
+    VertexFormat vertexFormat({ CreateVertexPropertyPrototype<glm::vec4>(POSITION_PROPERTY_NAME), CreateVertexPropertyPrototype<glm::vec3>(NORMAL_PROPERTY_NAME) });// , CreateVertexPropertyPrototype<uint32_t>(MATERIAL_PROPERTY_NAME, 0, 1) });
+    VertexFormat batchedVertexFormat({ CreateVertexPropertyPrototype<glm::vec4>(POSITION_PROPERTY_NAME), CreateVertexPropertyPrototype<glm::vec3>(NORMAL_PROPERTY_NAME), CreateVertexPropertyPrototype<LocalTexCoordType>(TEXCOORD_PROPERTY_NAME) });// , CreateVertexPropertyPrototype<uint32_t>(MATERIAL_PROPERTY_NAME, 0, 1) });
 
     std::vector<std::string> attrs;
     size_t i = 0;
@@ -254,6 +273,7 @@ SphereOrdinaryGraphicsObject::SphereOrdinaryGraphicsObject(GraphicsMaterialsMana
     }
 
     m_VertexFormat = vertexFormat;
+    m_BatchedVertexFormat = batchedVertexFormat;
     m_XMLElement = element;
 
     GenerateSphereGeometry(m_Center, m_R, m_MatX, m_Vertexes);
@@ -262,7 +282,7 @@ size_t SphereOrdinaryGraphicsObject::GetNumVertexes() const
 {
     return m_Vertexes.size();
 }
-void SphereOrdinaryGraphicsObject::WriteGeometry(VertexData& data, const std::set<GraphicsMaterial*>& materialIndexRemap, size_t vertexesOffset)
+void SphereOrdinaryGraphicsObject::WriteGeometry(VertexData& data, const std::set<GraphicsMaterial*>& materialIndexRemap, bool batched, size_t vertexesOffset)
 {
     
     std::vector<size_t> matRemap;
@@ -270,14 +290,25 @@ void SphereOrdinaryGraphicsObject::WriteGeometry(VertexData& data, const std::se
     {
         matRemap.push_back(std::distance(materialIndexRemap.begin(), materialIndexRemap.find(mat)));
     }
+
+    if (batched)
+    {
+        SphereOrdinaryGraphicsObject::BatchedVertexType* dst = (SphereOrdinaryGraphicsObject::BatchedVertexType*)data.GetDataPtrForSlot(0) + vertexesOffset;
+        for (size_t i = 0; i < m_Vertexes.size(); i++)
+        {
+            SphereOrdinaryGraphicsObject::BatchedVertexType& v = (*(dst + i));
+            v = BatchedVertexType(m_Vertexes[i], matRemap[0]);
+        }
+        return;
+    }
+
     SphereOrdinaryGraphicsObject::VertexType* dst = (SphereOrdinaryGraphicsObject::VertexType*)data.GetDataPtrForSlot(0) + vertexesOffset;
     for (size_t i = 0; i < m_Vertexes.size(); i++)
     {
         SphereOrdinaryGraphicsObject::VertexType& v = (*(dst + i));
         v = m_Vertexes[i];
-        v.m_TexCoord = matRemap[v.m_TexCoord];
-
     }
+
 }
 
 void SphereOrdinaryGraphicsObject::Serialize(tinyxml2::XMLElement* element, tinyxml2::XMLDocument& document)
@@ -303,7 +334,12 @@ void SphereOrdinaryGraphicsObject::Deserialize(tinyxml2::XMLElement* element)
         while (attr)
         {
             std::string attrValue = std::string(attr->Value());
-            m_MaterialNames.push_back(attrValue);
+
+            if (strstr(attr->Name(), "material"))
+                m_MaterialNames.push_back(attrValue);
+            if (strstr(attr->Name(), "batchable"))
+                m_Batchable = attrValue == "true";
+
             attr = attr->Next();
         }
 
@@ -382,24 +418,31 @@ void OrdinaryGraphicsObjectManager::CompileGraphicObjects(GraphicsDevice& device
 
 
         std::set<GraphicsMaterial*> materialsIndexMap;
+        VertexFormat basicVertexFormat = m_Objects[m]->m_VertexFormat;
+        VertexFormat batchedVertexFormat = m_Objects[m]->m_BatchedVertexFormat;
         //from <m> ?
-		for (size_t i = 0; i < m_Objects.size(); i++)
-		{
-			if (m_Objects[i]->m_VertexFormat == m_Objects[m]->m_VertexFormat)
-			{
-				bool match = true;
-                for (size_t k = 0; k < m_Objects[i]->m_Materials.size(); k++)
-                {
-                    if (m_Objects[i]->m_Materials[k]->GetType() != materialType)
-                        match = false;
-                }
+        if (m_Objects[m]->m_Batchable)
+            for (size_t i = 0; i < m_Objects.size(); i++)
+            {
+                if (!m_Objects[i]->m_Batchable)
+                    continue;
+	            if (m_Objects[i]->m_BatchedVertexFormat == batchedVertexFormat)
+	            {
+		            bool match = true;
+                    for (size_t k = 0; k < m_Objects[i]->m_Materials.size(); k++)
+                    {
+                        if (m_Objects[i]->m_Materials[k]->GetType() != materialType)
+                            match = false;
+                    }
 			
-                if (match)
-                {
-                    batchSet.push_back(i);
-                }
-			}
-		}
+                    if (match)
+                    {
+                        batchSet.push_back(i);
+                    }
+	            }
+            }
+        else
+            batchSet.push_back(m);
 
      
 		size_t overallVertexesNum = 0;
@@ -410,55 +453,57 @@ void OrdinaryGraphicsObjectManager::CompileGraphicObjects(GraphicsDevice& device
             overallVertexesNum += m_Objects[i]->GetNumVertexes();
         }
 
+        bool batched = batchSet.size() > 1;
 
 		size_t vertexesWritten = 0;
-		VertexData vertexData(m_Objects[m]->m_VertexFormat, overallVertexesNum);
+        VertexFormat usedVertexFormat = (batched) ? batchedVertexFormat : basicVertexFormat;
+		VertexData vertexData(usedVertexFormat, overallVertexesNum);
 		for (size_t i : batchSet)
 		{
             OrdinaryGraphicsObject* obj = m_Objects[i];
-			VertexFormat& vertexFormat = obj->m_VertexFormat;
 
-            obj->WriteGeometry(vertexData, materialsIndexMap, vertexesWritten);
+            obj->WriteGeometry(vertexData, materialsIndexMap, batched, vertexesWritten);
             vertexesWritten += obj->GetNumVertexes();
 
             allreadyBatched.insert(i);
 		}
 
-			GraphicsObject object;
-			object.m_Valid = true;
-			object.m_Topology = GraphicsTopology(device, textureCollection, shadersCollection, vertexData, true);
 
-            std::vector<GraphicsMaterial*> tempMaterials;
+		GraphicsObject object;
+		object.m_Valid = true;
+		object.m_Topology = GraphicsTopology(device, textureCollection, shadersCollection, vertexData, batched);
 
-            for (GraphicsMaterial* mat : materialsIndexMap)
-                tempMaterials.push_back(mat);
+        std::vector<GraphicsMaterial*> tempMaterials;
 
-			bool singleMaterial = false;
-            //todo check if not batchable
-            if (tempMaterials.size() == 1)
+        for (GraphicsMaterial* mat : materialsIndexMap)
+            tempMaterials.push_back(mat);
+
+		bool singleMaterial = false;
+        //todo check if not batchable
+        if (tempMaterials.size() == 1 && !batched)
+        {
+            object.m_Material = m_Objects[m]->m_Materials[0];
+            singleMaterial = true;
+        }
+
+		if (!singleMaterial && batched)
+		{
+            object.m_Materials = tempMaterials;
+
+            if (MaterialBatchStructuredBuffers.find(m) == MaterialBatchStructuredBuffers.end())
             {
-                object.m_Material = m_Objects[m]->m_Materials[0];
-                singleMaterial = true;
+                MaterialBatchStructuredBuffers[m] = std::make_shared<MaterialBatchStructuredBuffer>(MaterialBatchStructuredBuffer(device, tempMaterials));
+                for (size_t i = 0; i < object.m_Materials.size(); i++)
+                    object.m_Materials[i]->SetMaterialsStructuredBuffer(MaterialBatchStructuredBuffers[m]);
             }
+            else
+            {
+                for (size_t i = 0; i< object.m_Materials.size(); i++)
+                    object.m_Materials[i]->SetMaterialsStructuredBuffer(MaterialBatchStructuredBuffers[m]);
+            }
+		}
 
-			if (!singleMaterial)
-			{
-                object.m_Materials = tempMaterials;
-
-                if (MaterialBatchStructuredBuffers.find(m) == MaterialBatchStructuredBuffers.end())
-                {
-                    MaterialBatchStructuredBuffers[m] = std::make_shared<MaterialBatchStructuredBuffer>(MaterialBatchStructuredBuffer(device, tempMaterials));
-                    for (size_t i = 0; i < object.m_Materials.size(); i++)
-                        object.m_Materials[i]->SetMaterialsStructuredBuffer(MaterialBatchStructuredBuffers[m]);
-                }
-                else
-                {
-                    for (size_t i = 0; i< object.m_Materials.size(); i++)
-                        object.m_Materials[i]->SetMaterialsStructuredBuffer(MaterialBatchStructuredBuffers[m]);
-                }
-			}
-
-            m_DrawableObjects.push_back(object);
+        m_DrawableObjects.push_back(object);
 
 	}
 }
@@ -472,7 +517,8 @@ void OrdinaryGraphicsObjectManager::Render(GraphicsDevice& device, ShadersCollec
         else
             object.m_Materials[0]->Bind(device, shadersCollection, passMacros);
 
-		object.m_Topology.Bind(device, shadersCollection, object.m_Materials[0]->GetBuffer(), camera, Topology_Basic);
+        object.m_Topology.Bind(device, shadersCollection, object.m_Materials.size() ? &object.m_Materials[0]->GetBuffer() : (GraphicsBuffer*)nullptr,
+                                object.m_Material ? object.m_Material->GetConstantsBuffer() : nullptr, camera, Topology_Basic);
 
 		object.m_Topology.DrawCall(device);
 	}

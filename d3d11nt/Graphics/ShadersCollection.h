@@ -16,6 +16,7 @@ typedef FNVhash_t ShaderID;
 typedef std::vector<GraphicsShaderMacro> ShaderVariation;
 
 void GetAllMacrosCombinations(const std::vector<GraphicsShaderMacro>& macroSet, std::vector<std::vector<GraphicsShaderMacro>>& permutations);
+std::vector<ShaderVariation> GetAllPermutations(const std::vector<GraphicsShaderMacro>& macroSet);
 
 template<class T>
 class CompilableShader

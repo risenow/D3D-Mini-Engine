@@ -21,6 +21,15 @@ void GetAllMacrosCombinations(const std::vector<GraphicsShaderMacro>& macroSet, 
         }
     }
 }
+//mb use bitfields for macro everywhere?
+std::vector<ShaderVariation> GetAllPermutations(const std::vector<GraphicsShaderMacro>& macroSet)
+{
+    std::vector<ShaderVariation> mutations;
+    GetAllMacrosCombinations(macroSet, mutations);
+
+    return mutations;
+}
+
 
 
 const wchar_t* VERTEX_SHADER_FILE_TYPE = L".vs";
@@ -50,7 +59,7 @@ ShaderID GetShaderID(const std::wstring& filePath, const std::vector<GraphicsSha
 	std::string hashSrc;
 	hashSrc.reserve(hashSrcSize);
 	
-	hashSrc += wstrtostr(filePath);
+	hashSrc += wstrtostr_fast(filePath);
 	for (const std::string& aggregatedMacro : aggregatedMacros)
 	{
 		hashSrc += aggregatedMacro;

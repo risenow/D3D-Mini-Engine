@@ -51,7 +51,7 @@ void WriteFPSToWindowTitle(Window& window, const FrameMeasurer& frameMeasurer)
     std::string newWindowTitle = window.GetTitle();
     newWindowTitle += " FPS(per second counter): " + std::to_string(frameMeasurer.GetFPSBasedOnPerSecondFrameCounter());
     newWindowTitle += " FPS(based on average frametime): " + std::to_string(frameMeasurer.GetFPSBasedOnAverageFrameTime());
-    SetWindowText(window.GetWindowHandle(), strtowstr(newWindowTitle).c_str());
+    SetWindowText(window.GetWindowHandle(), strtowstr_fast(newWindowTitle).c_str());
 }
 
 float DeserializeCameraFOV(const IniFile& ini)
@@ -171,15 +171,17 @@ int main(int argc, char* argv[])
     GetAllMacrosCombinations(dsMacroSet, dsPermutations); //add includ/exclude processing rules
     shadersCollection.AddShader<GraphicsPixelShader>(L"Test/deferredshadingps.hlsl", dsPermutations );
 
-	shadersCollection.AddShader<GraphicsVertexShader>(L"Test/vs.hlsl", { { GraphicsShaderMacro("BATCH", "1") } });
-	shadersCollection.AddShader<GraphicsPixelShader> (L"Test/ps.hlsl", { { GraphicsShaderMacro("BATCH", "1") } });
-    shadersCollection.AddShader<GraphicsPixelShader> (L"Test/ps.hlsl",  { { GraphicsShaderMacro("BATCH", "1") }, { GraphicsShaderMacro("BATCH", "1"), GraphicsShaderMacro("GBUFFER_PASS", "1") } });
-    shadersCollection.AddShader<GraphicsComputeShader>(L"Test/cs.hlsl", { { GraphicsShaderMacro("BATCH", "1"), GraphicsShaderMacro("HORIZONTAL", "0") } });
-    shadersCollection.AddShader<GraphicsComputeShader>(L"Test/cs.hlsl", { { GraphicsShaderMacro("BATCH", "1"), GraphicsShaderMacro("VERTICAL", "0") } });
-    shadersCollection.AddShader<GraphicsVertexShader> (L"Test/tessvs.hlsl", { { GraphicsShaderMacro("BATCH", "1") } });
-    shadersCollection.AddShader<GraphicsHullShader>   (L"Test/tesshs.hlsl", { { GraphicsShaderMacro("BATCH", "1") } });
-    shadersCollection.AddShader<GraphicsDomainShader> (L"Test/tessds.hlsl", { { GraphicsShaderMacro("BATCH", "1") } });
-    shadersCollection.AddShader<GraphicsPixelShader>  (L"Test/tessps.hlsl", { { GraphicsShaderMacro("BATCH", "1") } });
+    shadersCollection.AddShader<GraphicsVertexShader>(L"Test/vs.hlsl", GetAllPermutations({ GraphicsShaderMacro("BATCH", "1") }));
+	shadersCollection.AddShader<GraphicsPixelShader> (L"Test/ps.hlsl", GetAllPermutations({ GraphicsShaderMacro("BATCH", "1") }));
+    shadersCollection.AddShader<GraphicsPixelShader>(L"Test/ps.hlsl", GetAllPermutations({ GraphicsShaderMacro("BATCH", "1"), GraphicsShaderMacro("GBUFFER_PASS", "1") }));
+    shadersCollection.AddShader<GraphicsComputeShader>(L"Test/cs.hlsl", GetAllPermutations({ GraphicsShaderMacro("BATCH", "1"), 
+                                                                                            GraphicsShaderMacro("HORIZONTAL", "0"), 
+                                                                                            GraphicsShaderMacro("VERTICAL", "0") })); 
+                                                                                    //add "must contain " rule to permutations finder
+    shadersCollection.AddShader<GraphicsVertexShader> (L"Test/tessvs.hlsl", GetAllPermutations({ GraphicsShaderMacro("BATCH", "1") }));
+    shadersCollection.AddShader<GraphicsHullShader>   (L"Test/tesshs.hlsl", GetAllPermutations({ GraphicsShaderMacro("BATCH", "1") }));
+    shadersCollection.AddShader<GraphicsDomainShader> (L"Test/tessds.hlsl", GetAllPermutations({ GraphicsShaderMacro("BATCH", "1") }));
+    shadersCollection.AddShader<GraphicsPixelShader>  (L"Test/tessps.hlsl", GetAllPermutations({ GraphicsShaderMacro("BATCH", "1") }));
 	shadersCollection.ExecuteShadersCompilation(device);
 
     GraphicsTextureCollection textureCollection;

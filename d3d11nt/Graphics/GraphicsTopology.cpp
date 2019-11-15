@@ -8,16 +8,16 @@
 GraphicsConstantsBuffer<VSConsts> GraphicsTopology::m_ConstantsBuffer;
 bool GraphicsTopology::m_ConstantsBufferInitialized = false;
 
-GraphicsTopology::GraphicsTopology() : m_VertexCount(0) {}
-GraphicsTopology::GraphicsTopology(GraphicsDevice& device, GraphicsTextureCollection& textureCollection, ShadersCollection& shadersCollection, VertexData& vertexData, bool isBatch) : // m_VertexBuffer(device, vertexData),
+GraphicsTopology::GraphicsTopology() : m_VertexCount(0), m_IsBatch(false), m_IsValid(false) {}
+GraphicsTopology::GraphicsTopology(GraphicsDevice& device, GraphicsTextureCollection& textureCollection, ShadersCollection& shadersCollection, VertexData& vertexData, bool isBatch) : m_IsBatch(isBatch),// m_VertexBuffer(device, vertexData),
     m_Shader(shadersCollection.GetShader<GraphicsVertexShader>(L"Test/vs.hlsl", isBatch ? ShaderVariation({ SHADER_MACRO_BATCH }) : ShaderVariation())),
     m_TessVSShader(shadersCollection.GetShader<GraphicsVertexShader>(L"Test/tessvs.hlsl", ShaderVariation({ SHADER_MACRO_BATCH }))),
     m_TessHSShader(shadersCollection.GetShader<GraphicsHullShader>(L"Test/tesshs.hlsl", ShaderVariation({ SHADER_MACRO_BATCH }))),
     m_TessDSShader(shadersCollection.GetShader<GraphicsDomainShader>(L"Test/tessds.hlsl", ShaderVariation({ SHADER_MACRO_BATCH }))),
     m_Texture(textureCollection["displ.png"].get()),
 
-																																 m_InputLayout(device, vertexData.GetVertexFormat(), m_Shader),
-																																 m_VertexCount(vertexData.GetNumVertexes())
+    m_InputLayout(device, vertexData.GetVertexFormat(), m_Shader),
+    m_VertexCount(vertexData.GetNumVertexes())
 {
 	for (unsigned long i = 0; i < vertexData.GetVertexFormat().GetNumSlotsUsed(); i++)
 	{
@@ -30,10 +30,10 @@ GraphicsTopology::GraphicsTopology(GraphicsDevice& device, GraphicsTextureCollec
 	}
 }
 
-void GraphicsTopology::Bind(GraphicsDevice& device, ShadersCollection& shadersCollection, GraphicsBuffer& buffer, const Camera& camera, TopologyType type)
+void GraphicsTopology::Bind(GraphicsDevice& device, ShadersCollection& shadersCollection, GraphicsBuffer* materialsStructuredbuffer, GraphicsBuffer* materialsConstantBuffer, const Camera& camera, TopologyType type)
 {
-    m_Shader = shadersCollection.GetShader<GraphicsVertexShader>(L"Test/vs.hlsl", ShaderVariation({ SHADER_MACRO_BATCH }));
-    ID3D11ShaderResourceView* bufferSRV = buffer.GetSRV();
+    m_Shader = shadersCollection.GetShader<GraphicsVertexShader>(L"Test/vs.hlsl", m_IsBatch ? ShaderVariation({ SHADER_MACRO_BATCH }) : ShaderVariation({}));
+    ID3D11ShaderResourceView* bufferSRV = materialsStructuredbuffer ? materialsStructuredbuffer->GetSRV() : nullptr;
     switch (type)
     {
     case Topology_Tesselated:
@@ -47,7 +47,8 @@ void GraphicsTopology::Bind(GraphicsDevice& device, ShadersCollection& shadersCo
         device.GetD3D11DeviceContext()->DSSetShaderResources(0, 1, (ID3D11ShaderResourceView * *)& textureSRV);
 
         //index for resource binding to be calculated by state manager
-        device.GetD3D11DeviceContext()->DSSetShaderResources(1, 1, (ID3D11ShaderResourceView * *)& bufferSRV);
+        if (bufferSRV)
+            device.GetD3D11DeviceContext()->DSSetShaderResources(1, 1, (ID3D11ShaderResourceView * *)& bufferSRV);
         break;
     }
     case Topology_Basic:
@@ -55,7 +56,8 @@ void GraphicsTopology::Bind(GraphicsDevice& device, ShadersCollection& shadersCo
         m_InputLayout.Bind(device);
     }
 
-    device.GetD3D11DeviceContext()->VSSetShaderResources(0, 1, (ID3D11ShaderResourceView * *)& bufferSRV);
+    if (bufferSRV)
+        device.GetD3D11DeviceContext()->VSSetShaderResources(0, 1, (ID3D11ShaderResourceView * *)& bufferSRV);
 
     BindVertexBuffers(device, m_VertexBuffers);
 
@@ -73,7 +75,12 @@ void GraphicsTopology::Bind(GraphicsDevice& device, ShadersCollection& shadersCo
         glm::vec3 pos = camera.GetPosition();
         consts.wpos = -glm::vec4(pos.x, pos.y, pos.z, 1.0);//glm::vec4( camera.GetPosition(), 1.0);
 		m_ConstantsBuffer.Update(device, consts);
-        BindMultipleGraphicsConstantBuffers(device, 0, { &m_ConstantsBuffer }, GraphicsShaderMask_Vertex | GraphicsShaderMask_Pixel | GraphicsShaderMask_Hull | GraphicsShaderMask_Domain);
+
+        std::vector<GraphicsBuffer*> cbuffers = { &m_ConstantsBuffer };
+        if (materialsConstantBuffer)
+            cbuffers.push_back(materialsConstantBuffer);
+
+        BindMultipleGraphicsConstantBuffers(device, 0, cbuffers, GraphicsShaderMask_Vertex | GraphicsShaderMask_Pixel | GraphicsShaderMask_Hull | GraphicsShaderMask_Domain);
 	}
 }
 GraphicsBuffer* GraphicsTopology::GetConstantsBuffer() const

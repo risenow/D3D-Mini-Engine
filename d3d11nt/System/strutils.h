@@ -8,8 +8,12 @@
 #include <algorithm>
 #include <assert.h>
 
+std::wstring strtowstr_fast(const std::string& str); 
+std::string wstrtostr_fast(const std::wstring& wstr);
+
 std::wstring strtowstr(const std::string& str);
 std::string wstrtostr(const std::wstring& wstr);
+
 bool StrIsRealNumber(const std::string& str);
 bool StrIsInt(const std::string& str);
 bool StrIsUnsignedInt(const std::string& str);
