@@ -8,7 +8,7 @@ class Texture2D
 {
 public:
     Texture2D();
-    Texture2D(ID3D11Texture2D* texture, ID3D11ShaderResourceView* srv = nullptr);
+    Texture2D(GraphicsDevice& device, ID3D11Texture2D* texture, ID3D11ShaderResourceView* srv = nullptr);
     Texture2D(GraphicsDevice& device, size_t width, size_t height, 
               unsigned int mipLevels, unsigned int arraySize, DXGI_FORMAT dxgiFormat, 
               DXGI_SAMPLE_DESC sampleDesc, D3D11_USAGE usage, UINT bindFlags,
@@ -29,6 +29,7 @@ public:
     bool IsValid() const;
 
     void ReleaseGPUData();
+    void InitializeUAV(GraphicsDevice& device);
 
     static Texture2D LoadDeprecated(GraphicsDevice& device, const std::string& file); //loads only png
 private:

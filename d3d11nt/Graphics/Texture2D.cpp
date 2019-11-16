@@ -6,7 +6,7 @@
 #include <d3dcommon.h>
 
 Texture2D::Texture2D() {}
-Texture2D::Texture2D(ID3D11Texture2D* texture, ID3D11ShaderResourceView* srv) : m_Texture(texture), m_SRV(srv), m_UAV(nullptr)
+Texture2D::Texture2D(GraphicsDevice& device, ID3D11Texture2D* texture, ID3D11ShaderResourceView* srv) : m_Texture(texture), m_SRV(srv), m_UAV(nullptr)
 {
     popAssert(texture);
 
@@ -23,6 +23,22 @@ Texture2D::Texture2D(ID3D11Texture2D* texture, ID3D11ShaderResourceView* srv) : 
     m_MiscFlags = desc.MiscFlags;
     m_Usage = desc.Usage;
     m_SampleDesc = desc.SampleDesc;
+
+    D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+    srvDesc.Texture2D.MipLevels = 1;
+    srvDesc.Texture2D.MostDetailedMip = 0;
+    srvDesc.Format = m_DXGIFormat;
+    srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+
+    D3D11_UNORDERED_ACCESS_VIEW_DESC uavDesc;
+    uavDesc.Texture2D.MipSlice = 0;
+    uavDesc.Format = m_DXGIFormat;
+    uavDesc.ViewDimension = D3D11_UAV_DIMENSION_TEXTURE2D;
+
+    if (!srv && !(m_BindFlags & D3D11_BIND_DEPTH_STENCIL) && (m_BindFlags & D3D11_BIND_SHADER_RESOURCE))
+        device.GetD3D11Device()->CreateShaderResourceView((ID3D11Texture2D*)(m_Texture), (D3D11_SHADER_RESOURCE_VIEW_DESC*)& srvDesc, (ID3D11ShaderResourceView * *)& m_SRV);
+    if (!(m_BindFlags & D3D11_BIND_DEPTH_STENCIL) && (m_BindFlags & D3D11_BIND_UNORDERED_ACCESS))
+        device.GetD3D11Device()->CreateUnorderedAccessView((ID3D11Texture2D*)(m_Texture), (D3D11_UNORDERED_ACCESS_VIEW_DESC*)& uavDesc, (ID3D11UnorderedAccessView * *)& m_UAV);
 }
 Texture2D::Texture2D(GraphicsDevice& device, size_t width, size_t height, unsigned int mipLevels, 
                      unsigned int arraySize, DXGI_FORMAT dxgiFormat, 

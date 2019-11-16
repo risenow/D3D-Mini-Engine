@@ -244,13 +244,11 @@ int main(int argc, char* argv[])
     depthStencilDesc.StencilReadMask = 0xFF;
     depthStencilDesc.StencilWriteMask = 0xFF;
 
-    // Stencil operations if pixel is front-facing
     depthStencilDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
     depthStencilDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
     depthStencilDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
     depthStencilDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
 
-    // Stencil operations if pixel is back-facing
     depthStencilDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
     depthStencilDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
     depthStencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
@@ -262,7 +260,7 @@ int main(int argc, char* argv[])
     D3D_HR_OP(device.GetD3D11Device()->CreateDepthStencilState(&depthStencilDesc, &FSQDepthStencilState));
     device.GetD3D11DeviceContext()->OMSetDepthStencilState(FSQDepthStencilState, 0);
 
-    //D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
+
     depthStencilDesc.DepthEnable = TRUE;
     depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
     depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS;
@@ -270,13 +268,11 @@ int main(int argc, char* argv[])
     depthStencilDesc.StencilReadMask = 0xFF;
     depthStencilDesc.StencilWriteMask = 0xFF;
 
-    // Stencil operations if pixel is front-facing
     depthStencilDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
     depthStencilDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
     depthStencilDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
     depthStencilDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
 
-    // Stencil operations if pixel is back-facing
     depthStencilDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
     depthStencilDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
     depthStencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
@@ -299,9 +295,8 @@ int main(int argc, char* argv[])
     uavDesc.Texture2D.MipSlice = 0;
 
     ID3D11UnorderedAccessView* uav;
-
-    //device.GetD3D11Device()->CreateUnorderedAccessView(swapchain.GetBackBufferSurface().GetTexture()->GetD3D11Texture2D(), &uavDesc, &uav);
-
+    uav = swapchain.GetBackBufferSurface().GetTexture()->GetUAV();
+    
     int c = ShowCursor(true);
 
     bool deferredShading = true;
@@ -394,9 +389,11 @@ int main(int argc, char* argv[])
                                                     basicVars.lightPos, basicVars.f0overridetrunc, basicVars.diffuseOverride, 
                                                     basicVars.roverride, psMacros);
 
+            /*
+            uav = swapchain.GetBackBufferSurface().GetTexture()->GetUAV();
             device.GetD3D11DeviceContext()->ClearState();
 
-            /*device.GetD3D11DeviceContext()->ClearState();
+            device.GetD3D11DeviceContext()->ClearState();
 
             device.GetD3D11DeviceContext()->CSSetShader(horBlurComputeShader.GetShader(), nullptr, 0);
 
@@ -411,7 +408,8 @@ int main(int argc, char* argv[])
 
             device.GetD3D11DeviceContext()->Dispatch(UINT(ceil(float(backBufferSurface.GetWidth()) / 32.0f)), UINT(ceil(float(backBufferSurface.GetHeight()) / 32.0f)), 1);
 
-            device.GetD3D11DeviceContext()->ClearState();*/
+            device.GetD3D11DeviceContext()->ClearState();
+            */
         }
     
         else

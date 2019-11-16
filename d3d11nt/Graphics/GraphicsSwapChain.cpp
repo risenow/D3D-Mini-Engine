@@ -41,7 +41,7 @@ void GraphicsSwapChain::InitializeBackBufferSurface(GraphicsDevice& device)
     ID3D11Texture2D* backBuffer;
     D3D_HR_OP(m_SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)(&backBuffer)));
 
-    m_BackBufferTexture = Texture2D(backBuffer);
+    m_BackBufferTexture = Texture2D(device, backBuffer);
     //DEBUG_ONLY(m_BackBufferTexture.SetDebugName("Backbuffer Texture"));
 
     m_BackBufferSurface = ColorSurface(device, &m_BackBufferTexture);   
