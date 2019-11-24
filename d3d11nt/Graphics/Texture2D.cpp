@@ -94,7 +94,7 @@ void Texture2D::Resize(GraphicsDevice& device, size_t width, size_t height, Mult
     {
         m_Width = width;
         m_Height = height;
-       
+        ReleaseGPUData();
         *this = Texture2D(device, m_Width, m_Height, 
                             m_MipLevels, m_ArraySize, 
                             m_DXGIFormat, msType ? GetSampleDesc(device, m_DXGIFormat, msType) : m_SampleDesc, 

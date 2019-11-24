@@ -15,6 +15,7 @@ void CreateView(GraphicsDevice& device, Texture2D* texture, ID3D11RenderTargetVi
     rtvDesc.Format = texture->GetFormat();
     rtvDesc.ViewDimension = texture->GetSamplesCount() > 1 ? D3D11_RTV_DIMENSION_TEXTURE2DMS : D3D11_RTV_DIMENSION_TEXTURE2D;
     D3D_HR_OP(device.GetD3D11Device()->CreateRenderTargetView(texture->GetD3D11Texture2D(), &rtvDesc, view));
+    //HRESULT result = (device.GetD3D11Device()->CreateRenderTargetView(texture->GetD3D11Texture2D(), &rtvDesc, view));
 }
 
 template<>
@@ -25,7 +26,7 @@ void CreateView(GraphicsDevice& device, Texture2D* texture, ID3D11DepthStencilVi
     dsvDesc.Format = texture->GetFormat();
     dsvDesc.ViewDimension = texture->GetSamplesCount() > 1 ? D3D11_DSV_DIMENSION_TEXTURE2DMS : D3D11_DSV_DIMENSION_TEXTURE2D;
 
-    D3D_HR_OP(device.GetD3D11Device()->CreateDepthStencilView(texture->GetD3D11Texture2D(), nullptr, view));
+    D3D_HR_OP(device.GetD3D11Device()->CreateDepthStencilView(texture->GetD3D11Texture2D(), &dsvDesc, view));
 }
 
 
@@ -56,9 +57,11 @@ void GraphicsSurface<T>::Resize(GraphicsDevice& device, size_t width, size_t hei
         m_Texture->Resize(device, width, height, msType);
 
 
-        CreateView(device, m_Texture, (T**)(&m_View));
+        CreateView(device, m_Texture, (T**)(&view));
+#ifndef RENDERDOC
         popAssert(view != m_View);
-        //m_View = view;
+#endif
+        m_View = view;
     }
 }
 
