@@ -146,10 +146,10 @@ int main(int argc, char* argv[])
     Console cons({ &basicvarProducer });
 
     int a;
-    //std::cin >> a; // pause for injection
+    std::cin >> a; // pause for injection
 
     GraphicsDevice device(deviceCreationFlags, FEATURE_LEVEL_ONLY_D3D11, nullptr);
-    GraphicsSwapChain swapchain(device, window, options.GetMultisampleType());
+    GraphicsSwapChain swapchain(device, window, MULTISAMPLE_TYPE_NONE);
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -160,19 +160,20 @@ int main(int argc, char* argv[])
     ImGui_ImplWin32_Init(window.GetWindowHandle());
     ImGui_ImplDX11_Init(device.GetD3D11Device(), device.GetD3D11DeviceContext());
 
-	ShaderID testVSBATCHID = GetShaderID(L"Test/vs.hlsl", { GraphicsShaderMacro("BATCH", "1") });
-	ShaderID testPSBATCHID = GetShaderID(L"Test/ps.hlsl", { GraphicsShaderMacro("BATCH", "1") });
-
-	ShadersCollection shadersCollection(device);
+    ShadersCollection shadersCollection(device);
     shadersCollection.AddShader<GraphicsVertexShader>(L"Test/fsqvs.hlsl", { {} });
 
-    std::vector<GraphicsShaderMacro> dsMacroSet = { GraphicsShaderMacro("OPTIMIZED_SCHLICK", "1"), GraphicsShaderMacro("OVERRIDE_DIFFUSE", "1") };
+    std::vector<GraphicsShaderMacro> dsMacroSet = { GraphicsShaderMacro("OPTIMIZED_SCHLICK", "1"), 
+                                                    GraphicsShaderMacro("OVERRIDE_DIFFUSE", "1"), 
+                                                    GraphicsShaderMacro("SAMPLES_COUNT", "2"),  
+                                                    GraphicsShaderMacro("SAMPLES_COUNT", "4"),
+                                                    GraphicsShaderMacro("SAMPLES_COUNT", "8") };
     std::vector<ShaderVariation> dsPermutations;
     GetAllMacrosCombinations(dsMacroSet, dsPermutations); //add includ/exclude processing rules
     shadersCollection.AddShader<GraphicsPixelShader>(L"Test/deferredshadingps.hlsl", dsPermutations );
 
     shadersCollection.AddShader<GraphicsVertexShader>(L"Test/vs.hlsl", GetAllPermutations({ GraphicsShaderMacro("BATCH", "1") }));
-	shadersCollection.AddShader<GraphicsPixelShader> (L"Test/ps.hlsl", GetAllPermutations({ GraphicsShaderMacro("BATCH", "1") }));
+    shadersCollection.AddShader<GraphicsPixelShader> (L"Test/ps.hlsl", GetAllPermutations({ GraphicsShaderMacro("BATCH", "1") }));
     shadersCollection.AddShader<GraphicsPixelShader>(L"Test/ps.hlsl", GetAllPermutations({ GraphicsShaderMacro("BATCH", "1"), GraphicsShaderMacro("GBUFFER_PASS", "1") }));
     shadersCollection.AddShader<GraphicsComputeShader>(L"Test/cs.hlsl", GetAllPermutations({ GraphicsShaderMacro("BATCH", "1"), 
                                                                                             GraphicsShaderMacro("HORIZONTAL", "0"), 
@@ -182,7 +183,8 @@ int main(int argc, char* argv[])
     shadersCollection.AddShader<GraphicsHullShader>   (L"Test/tesshs.hlsl", GetAllPermutations({ GraphicsShaderMacro("BATCH", "1") }));
     shadersCollection.AddShader<GraphicsDomainShader> (L"Test/tessds.hlsl", GetAllPermutations({ GraphicsShaderMacro("BATCH", "1") }));
     shadersCollection.AddShader<GraphicsPixelShader>  (L"Test/tessps.hlsl", GetAllPermutations({ GraphicsShaderMacro("BATCH", "1") }));
-	shadersCollection.ExecuteShadersCompilation(device);
+    
+    shadersCollection.ExecuteShadersCompilation(device);
 
     GraphicsTextureCollection textureCollection;
     textureCollection.Add(device, "displ.png");
@@ -203,16 +205,27 @@ int main(int argc, char* argv[])
                                                                          DXGI_FORMAT_D24_UNORM_S8_UINT,
                                                                          options.GetMultisampleType(),
                                                                          D3D11_BIND_DEPTH_STENCIL);
+
+    Texture2D intermediateBuffer = Texture2DHelper::CreateCommonTexture(device,
+        backBufferSurface.GetWidth(),
+        backBufferSurface.GetHeight(),
+        1,
+        backBufferSurface.GetTexture()->GetFormat(),
+        options.GetMultisampleType(),
+        D3D11_BIND_RENDER_TARGET);
+    ColorSurface intermediateSurface = ColorSurface(device, &intermediateBuffer);
     //DEBUG_ONLY(depthStencilTexture.SetDebugName("Depth Stencil"));
 
     DepthSurface depthStencilSurface(device, &depthStencilTexture);
-    RenderSet finalRenderSet({ backBufferSurface }, depthStencilSurface);
+    RenderSet intermediateRenderSet({ &intermediateSurface }, &depthStencilSurface);
+    if (options.GetMultisampleType() == MULTISAMPLE_TYPE_NONE)
+        intermediateRenderSet.SetSurfaces({ &backBufferSurface }, &depthStencilSurface);
 
     RenderSet GBuffer = RenderSet(device, backBufferSurface.GetWidth(), backBufferSurface.GetHeight(), options.GetMultisampleType(), { DXGI_FORMAT_R32G32B32A32_FLOAT , DXGI_FORMAT_R32G32B32A32_FLOAT, DXGI_FORMAT_R8G8B8A8_UNORM });
     
     DeferredShadingFullscreenQuad deferredShadingFullscreenQuad(device, GBuffer, shadersCollection, textureCollection);
 
-    GraphicsViewport viewport(finalRenderSet);
+    GraphicsViewport viewport(intermediateRenderSet);
 
     swapchain.SetFullcreenState(false);
 
@@ -228,7 +241,7 @@ int main(int argc, char* argv[])
     rastState.DepthBiasClamp = 0.0f;
     rastState.DepthClipEnable = FALSE;
     rastState.ScissorEnable = FALSE;
-    rastState.MultisampleEnable = FALSE;
+    rastState.MultisampleEnable = options.GetMultisampleType() != MULTISAMPLE_TYPE_NONE;//FALSE;
 
     ID3D11RasterizerState* d3dRastState;
 
@@ -312,6 +325,8 @@ int main(int argc, char* argv[])
     basicVars.overrideDiffuse = false;
     basicVars.lightPos = glm::vec4(100.0, 100.0, 100.0, 1.0);
     basicVars.roverride = 0.5;
+    
+    int msType = std::log2((int)options.GetMultisampleType()) + 1;
 
     while (!window.IsClosed())
     {
@@ -345,17 +360,26 @@ int main(int argc, char* argv[])
         }
 
         viewport = GraphicsViewport(window);
-        if (!swapchain.IsValid(window, options.GetMultisampleType()))
+
+        if (!swapchain.IsValid(window, options.GetMultisampleType()) || intermediateRenderSet.GetColorSurface()->GetTexture()->GetSamplesCount() != (int)options.GetMultisampleType())
         {
             device.GetD3D11DeviceContext()->ClearState();
             swapchain.Validate(device, window, options.GetMultisampleType());
 
             backBufferSurface = swapchain.GetBackBufferSurface();
-            depthStencilSurface.Resize(device, backBufferSurface.GetWidth(), backBufferSurface.GetHeight());
-            finalRenderSet.SetColorSurface(0, backBufferSurface);
-            finalRenderSet.SetDepthSurface(depthStencilSurface);
+            if (options.GetMultisampleType() == MULTISAMPLE_TYPE_NONE)
+            {
+                depthStencilSurface.Resize(device, backBufferSurface.GetWidth(), backBufferSurface.GetHeight(), options.GetMultisampleType());
 
-            GBuffer.Resize(device, backBufferSurface.GetWidth(), backBufferSurface.GetHeight());
+                intermediateRenderSet.SetSurfaces({ &backBufferSurface }, &depthStencilSurface);
+            }
+            else
+            {
+                intermediateRenderSet.SetSurfaces({ &intermediateSurface }, & depthStencilSurface);
+                intermediateRenderSet.Resize(device, backBufferSurface.GetWidth(), backBufferSurface.GetHeight(), options.GetMultisampleType());
+            }
+
+            GBuffer.Resize(device, backBufferSurface.GetWidth(), backBufferSurface.GetHeight(), options.GetMultisampleType());
         }
 
         //gbuffer pass
@@ -374,8 +398,8 @@ int main(int argc, char* argv[])
 
             //lighting pass
             viewport.Set(device);
-            finalRenderSet.Set(device);
-            finalRenderSet.Clear(device, clearColor);
+            intermediateRenderSet.Set(device);
+            intermediateRenderSet.Clear(device, clearColor);
             device.GetD3D11DeviceContext()->RSSetState(d3dRastState);
             device.GetD3D11DeviceContext()->OMSetDepthStencilState(FSQDepthStencilState, 0);
 
@@ -384,6 +408,11 @@ int main(int argc, char* argv[])
                 psMacros.push_back(GraphicsShaderMacro("OPTIMIZED_SCHLICK", "1"));
             if (basicVars.overrideDiffuse)
                 psMacros.push_back(GraphicsShaderMacro("OVERRIDE_DIFFUSE", "1"));
+
+            if (options.GetMultisampleType() > 1)
+            {
+                psMacros.push_back(GraphicsShaderMacro("SAMPLES_COUNT", std::to_string(options.GetMultisampleType())));
+            }
 
             deferredShadingFullscreenQuad.Render(device, shadersCollection, mouseKeyboardCameraController.GetCamera(), 
                                                     basicVars.lightPos, basicVars.f0overridetrunc, basicVars.diffuseOverride, 
@@ -416,8 +445,8 @@ int main(int argc, char* argv[])
         {
             
             viewport.Set(device);
-            finalRenderSet.Set(device);
-            finalRenderSet.Clear(device, clearColor);
+            intermediateRenderSet.Set(device);
+            intermediateRenderSet.Clear(device, clearColor);
             device.GetD3D11DeviceContext()->RSSetState(d3dRastState);
             device.GetD3D11DeviceContext()->OMSetDepthStencilState(depthStencilState, 0);
 
@@ -444,12 +473,10 @@ int main(int argc, char* argv[])
         
 
         {
-            //static float f0 = 0.0f;
             static int counter = 0;
 
             ImGui::Begin("Lighting");
 
-            //ImGui::SliderFloat("F0", &f0override, 0.0f, 1.0f); 
             ImGui::SliderFloat3("Light pos", (float*)&basicVars.lightPos, -1000.0f, 1000.0f);
             ImGui::SliderFloat("Roughness", &basicVars.roverride, 0.0f, 1.0f);
             ImGui::Checkbox("Optimize Schlick", &basicVars.useOptimizedSchlick);
@@ -457,8 +484,9 @@ int main(int argc, char* argv[])
             ImGui::SliderFloat("F0 ampl", &basicVars.f0ampl, 0.0f, 1.0f);
             ImGui::Checkbox("Override diffuse", &basicVars.overrideDiffuse);
             ImGui::ColorEdit3("Diffuse", (float*)& basicVars.diffuseOverride);
+            if (ImGui::SliderInt("Multisample type", (int*)&msType, 1, 4))
+                options.SetMultisampleType((MultisampleType)(unsigned int)(pow(2.0f, (float)msType - 1.0f)));
             basicVars.f0overridetrunc = basicVars.f0override255 * basicVars.f0ampl;
-            //ImGui::SameLine();
 
             ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
             ImGui::End();
@@ -466,13 +494,13 @@ int main(int argc, char* argv[])
         cons.Process();
 
         ImGui::Render();
-        finalRenderSet.Set(device);
-        //finalRenderSet.Clear(device, clearColor);
+        intermediateRenderSet.Set(device);
         ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
+        if (options.GetMultisampleType() > 1)
+            device.GetD3D11DeviceContext()->ResolveSubresource(backBufferSurface.GetTexture()->GetD3D11Texture2D(), 0, intermediateBuffer.GetD3D11Texture2D(), 0, backBufferSurface.GetTexture()->GetFormat());
 
-
-
+        device.GetD3D11DeviceContext()->ClearState();
 
         if (swapchain.IsValid(window, options.GetMultisampleType())) //if swapchain is not valid discard the frame //POSSIBLE RACE CONDITION?
             swapchain.Present();

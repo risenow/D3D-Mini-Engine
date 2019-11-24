@@ -3,8 +3,13 @@
 SamplerState SampleType;
 
 Texture2D gbufferPos: register( t0 );
-Texture2D gbufferNormal : register( t1 );
-Texture2D gbufferColor : register( t2 );
+#ifdef SAMPLES_COUNT
+Texture2DMS<float4, SAMPLES_COUNT> gbufferNormal : register( t1 );
+Texture2DMS<float4, SAMPLES_COUNT> gbufferColor : register( t2 );
+#else
+Texture2D gbufferNormal : register(t1);
+Texture2D gbufferColor : register(t2);
+#endif
 TextureCube reflEnv : register(t3);
 
 bool isCorrectNormal(float3 n)
@@ -124,12 +129,20 @@ float3 CookTorrance(float3 v, float3 n, float3 l, float3 wv, float3 wn, float3 d
 }    
 
 float4 PSEntry(
-             in float2 tc : TEXCOORD0
+             in float2 tc : TEXCOORD0 
+#ifdef SAMPLES_COUNT
+            ,uint i : SV_SampleIndex
+#endif
             ) : SV_Target
 {   
     float2 tc_ = float2(tc.x, 1.0 - tc.y);
     float4 vPos1 = gbufferPos.Sample(SampleType, tc_);
+
+#ifdef SAMPLES_COUNT
+    float4 vNormalDepth = gbufferNormal.Load(int2(tc_ * gbufferSize.xy), i);
+#else
     float4 vNormalDepth = gbufferNormal.Sample(SampleType, tc_).xyzw;
+#endif
 
     if (vNormalDepth.x == 0.0 && vNormalDepth.y == 0.0 && vNormalDepth.z == 0.0)
         return float4(0.0, 0.0, 0.0, 1.0);
@@ -137,7 +150,11 @@ float4 PSEntry(
     float z = vNormalDepth.w;
     float3 vNormal = normalize(vNormalDepth.xyz);
 
+#ifdef SAMPLES_COUNT
+    float4 diffuseRoughness = gbufferColor.Load(int2(tc_ * gbufferSize.xy), i);
+#else
     float4 diffuseRoughness = gbufferColor.Sample(SampleType, tc_);
+#endif
     float3 diffuse = diffuseRoughness.rbg;
 #ifdef OVERRIDE_DIFFUSE
     diffuse = diffuseOverride.rgb;

@@ -28,7 +28,7 @@ Texture2D::Texture2D(GraphicsDevice& device, ID3D11Texture2D* texture, ID3D11Sha
     srvDesc.Texture2D.MipLevels = 1;
     srvDesc.Texture2D.MostDetailedMip = 0;
     srvDesc.Format = m_DXGIFormat;
-    srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+    srvDesc.ViewDimension = m_SampleDesc.Count > 1 ? D3D11_SRV_DIMENSION_TEXTURE2DMS : D3D11_SRV_DIMENSION_TEXTURE2D;
 
     D3D11_UNORDERED_ACCESS_VIEW_DESC uavDesc;
     uavDesc.Texture2D.MipSlice = 0;
@@ -60,7 +60,7 @@ Texture2D::Texture2D(GraphicsDevice& device, size_t width, size_t height, unsign
     srvDesc.Texture2D.MipLevels = 1;
     srvDesc.Texture2D.MostDetailedMip = 0;
     srvDesc.Format = dxgiFormat;
-    srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+    srvDesc.ViewDimension = sampleDesc.Count > 1 ? D3D11_SRV_DIMENSION_TEXTURE2DMS : D3D11_SRV_DIMENSION_TEXTURE2D;
 
     D3D11_UNORDERED_ACCESS_VIEW_DESC uavDesc;
     uavDesc.Texture2D.MipSlice = 0;
@@ -88,15 +88,16 @@ Texture2D::~Texture2D()
 {
 }
 
-void Texture2D::Resize(GraphicsDevice& device, size_t width, size_t height)
+void Texture2D::Resize(GraphicsDevice& device, size_t width, size_t height, MultisampleType msType)
 {
-    if (m_Width != width || m_Height != height)
+    if (m_Width != width || m_Height != height || ((GetSamplesCount() != (int)msType)  && msType))
     {
         m_Width = width;
         m_Height = height;
+       
         *this = Texture2D(device, m_Width, m_Height, 
                             m_MipLevels, m_ArraySize, 
-                            m_DXGIFormat, m_SampleDesc, 
+                            m_DXGIFormat, msType ? GetSampleDesc(device, m_DXGIFormat, msType) : m_SampleDesc, 
                             m_Usage, m_BindFlags, 
                             m_CPUAccessFlags, m_MiscFlags, nullptr);
     }

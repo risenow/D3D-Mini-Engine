@@ -12,7 +12,7 @@ class RenderSet
 public:
     RenderSet();
     RenderSet(GraphicsDevice& device, size_t w, size_t h, MultisampleType ms, const std::vector<DXGI_FORMAT>& formats);
-    RenderSet(const std::vector<ColorSurface>& colorSurface, const DepthSurface& depthStencilSurface);
+    RenderSet(const std::vector<ColorSurface*>& colorSurface, const DepthSurface* depthStencilSurface);
     //RenderSet(ID3D11RenderTargetView* renderTargetView, ID3D11DepthStencilView* depthStencilView, bool useDepthStencil);
     RenderSet(size_t width, size_t height, DXGI_FORMAT colorSurfaceFormat, DXGI_FORMAT depthSurfaceFormat, bool useDepthStencil = false);
 
@@ -25,27 +25,27 @@ public:
     void Set(GraphicsDevice& device);
     void Clear(GraphicsDevice& device, float color[4]);
 
-    void Resize(GraphicsDevice& device, float w, float h)
+    void Resize(GraphicsDevice& device, float w, float h, MultisampleType msType)
     {
-        for (ColorSurface& surface : m_ColorSurfaces)
-            if (surface.GetView())
-                surface.Resize(device, w, h);
+        for (ColorSurface*& surface : m_ColorSurfaces)
+            if (surface->GetView())
+                surface->Resize(device, w, h, msType);
 
-        if (m_DepthStencilSurface.GetView())
+        if (m_DepthStencilSurface->GetView())
         {
-            m_DepthStencilSurface.Resize(device, w, h);
+            m_DepthStencilSurface->Resize(device, w, h, msType);
         }
     }
-
-    void SetColorSurface(size_t idx, const ColorSurface& surface)
+    ColorSurface*& GetColorSurface(size_t idx = 0)
     {
-        m_ColorSurfaces[idx] = surface;
-        //m_RenderTargetTextures[idx] = &surface.GetTexture();
+        return m_ColorSurfaces[idx];
     }
-    void SetDepthSurface(const DepthSurface& surface)
+
+    void SetSurfaces(const std::vector<ColorSurface*>& color, DepthSurface* depth)
     {
-        m_DepthStencilSurface = surface;
-        //m_RenderTargetTextures[idx] = &surface.GetTexture();
+        m_ResourceIsOwned = false;
+        m_ColorSurfaces = color;
+        m_DepthStencilSurface = depth;
     }
 
     Texture2D& GetColorTexture(size_t idx)
@@ -56,9 +56,9 @@ public:
     }
 private:
     void CorrectnessGuard();
-
-    std::vector<ColorSurface> m_ColorSurfaces;
-    DepthSurface m_DepthStencilSurface;
+    bool m_ResourceIsOwned;
+    std::vector<ColorSurface*> m_ColorSurfaces;
+    DepthSurface* m_DepthStencilSurface;
     std::vector<Texture2D> m_RenderTargetTextures;
     Texture2D m_DepthStencilTexture;
 };

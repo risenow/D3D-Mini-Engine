@@ -9,12 +9,11 @@ const STLVector<int> AcceptabeMultisampleTypeValues = {1, 2, 4, 8};
 
 enum MultisampleType
 {
+    MULTISAMPLE_TYPE_INVALID = 0,
     MULTISAMPLE_TYPE_NONE = 1,
     MULTISAMPLE_TYPE_2X = 2,
     MULTISAMPLE_TYPE_4X = 4,
-    MULTISAMPLE_TYPE_8X = 8,
-    MULTISAMPLE_TYPE_16X = 16,
-    MULTISAMPLE_TYPE_32X = 32
+    MULTISAMPLE_TYPE_8X = 8
 };
 
 class GraphicsOptions : public IniSerializable
@@ -27,6 +26,10 @@ public:
     virtual void InitializeIniProperties();
 
     MultisampleType GetMultisampleType();
+    void SetMultisampleType(MultisampleType msType)
+    {
+        m_MultisampleType = msType;
+    }
 private:
     MultisampleType m_MultisampleType;
 

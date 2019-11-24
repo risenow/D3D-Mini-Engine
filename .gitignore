@@ -57,4 +57,3 @@ d3d11nt.VC.VC.opendb
 *.db
 .vs/d3d11nt/v14/.suo
 Debug/Graphics.lib
-*.lib

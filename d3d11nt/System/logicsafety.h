@@ -7,7 +7,7 @@
 #define ENABLE_ASSERTS
 
 #if defined(_DEBUG) && defined(ENABLE_ASSERTS)
-#define popAssert(op) assert(op)  
+#define popAssert(op) assert(op)
 #else
 #define popAssert(op)
 #endif

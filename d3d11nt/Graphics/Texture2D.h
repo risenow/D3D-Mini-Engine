@@ -15,11 +15,13 @@ public:
               UINT cpuAccessFlags, UINT miscFlags, D3D11_SUBRESOURCE_DATA* initialData = nullptr);
     //Texture2D(Texture2D& other);
     ~Texture2D();
-    void Resize(GraphicsDevice& device, size_t width, size_t height);
+    void Resize(GraphicsDevice& device, size_t width, size_t height, MultisampleType msType);
 
     size_t GetWidth() const;
     size_t GetHeight() const;
     size_t GetConsumedVideoMemorySize();
+    size_t GetSamplesCount() const { return m_SampleDesc.Count; }
+    DXGI_FORMAT GetFormat() const { return m_DXGIFormat; }
 
     ID3D11Texture2D* GetD3D11Texture2D() const;
 
@@ -29,7 +31,6 @@ public:
     bool IsValid() const;
 
     void ReleaseGPUData();
-    void InitializeUAV(GraphicsDevice& device);
 
     static Texture2D LoadDeprecated(GraphicsDevice& device, const std::string& file); //loads only png
 private:

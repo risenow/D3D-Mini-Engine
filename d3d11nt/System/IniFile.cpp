@@ -161,7 +161,7 @@ std::string IniFile::ReadSectionFromLine(const std::string& ln)
     {
         charIndex++;
     }
-    popAssert(ln[charIndex] != ']');
+    popAssert(ln[charIndex - 1] == ']');
 
     unsigned int substrCharCount = charIndex - 2;
     return ln.substr(1, substrCharCount); //exclusive [ & ]  //-2 because first param is offset

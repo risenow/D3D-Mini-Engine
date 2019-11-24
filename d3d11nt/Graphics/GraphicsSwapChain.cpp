@@ -45,7 +45,6 @@ void GraphicsSwapChain::InitializeBackBufferSurface(GraphicsDevice& device)
     //DEBUG_ONLY(m_BackBufferTexture.SetDebugName("Backbuffer Texture"));
 
     m_BackBufferSurface = ColorSurface(device, &m_BackBufferTexture);   
-    //backBuffer->Release();
 }
 
 IDXGISwapChain* GraphicsSwapChain::GetDXGISwapChain()
@@ -65,7 +64,7 @@ bool GraphicsSwapChain::IsValid(const Window& window, MultisampleType currentlyS
     DXGI_SWAP_CHAIN_DESC swapchainDesc;
     D3D_HR_OP(m_SwapChain->GetDesc(&swapchainDesc));
     DXGI_MODE_DESC bufferDesc = swapchainDesc.BufferDesc;
-    if (window.GetWidth() != bufferDesc.Width || window.GetHeight() != bufferDesc.Height || swapchainDesc.SampleDesc.Count != (unsigned int)currentlySelectedMultisampleType)
+    if (window.GetWidth() != bufferDesc.Width || window.GetHeight() != bufferDesc.Height)// || swapchainDesc.SampleDesc.Count != (unsigned int)currentlySelectedMultisampleType)
         return false;
     return true;
 }
@@ -140,10 +139,10 @@ void GraphicsSwapChain::UpdateDisplayModesList(IDXGIOutput* output)
 void GraphicsSwapChain::FillSwapChainDesc(const Window& window, DXGI_SWAP_CHAIN_DESC& desc, 
                                           const DXGI_SAMPLE_DESC& sampleDesc)
 {
-    desc.BufferDesc.Width = 0;
-    desc.BufferDesc.Height = 0;
-    desc.BufferDesc.RefreshRate.Numerator = 0;
-    desc.BufferDesc.RefreshRate.Denominator = 0;
+    desc.BufferDesc.Width = window.GetWidth();
+    desc.BufferDesc.Height = window.GetHeight();
+    desc.BufferDesc.RefreshRate.Numerator = 60;
+    desc.BufferDesc.RefreshRate.Denominator = 1;
     desc.BufferDesc.Format = m_Format;
     desc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
     desc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
@@ -151,13 +150,13 @@ void GraphicsSwapChain::FillSwapChainDesc(const Window& window, DXGI_SWAP_CHAIN_
     desc.SampleDesc = sampleDesc;
 
     desc.BufferCount = 1;
-    desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT | DXGI_USAGE_UNORDERED_ACCESS | DXGI_USAGE_SHADER_INPUT;
+    desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT | DXGI_USAGE_SHADER_INPUT | DXGI_USAGE_UNORDERED_ACCESS;
 
     desc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
     desc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 
     desc.OutputWindow = window.GetWindowHandle();
-    desc.Windowed = (window.GetWindowMode() == WindowMode_WINDOWED);
+    desc.Windowed = true;//(window.GetWindowMode() == WindowMode_WINDOWED);
 }
 
 void GraphicsSwapChain::SetFullcreenState(bool state)

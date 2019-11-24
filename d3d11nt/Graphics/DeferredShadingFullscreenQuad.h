@@ -43,6 +43,7 @@ public:
         const glm::vec2 projFactors = camera.GetProjectionFactors();
 
         DeferredShadingPSConsts consts;
+        consts.gbufferSize = glm::vec4(m_GBuffer.GetColorTexture(0).GetWidth(), m_GBuffer.GetColorTexture(0).GetHeight(), 0.0f, 0.0f);
         consts.vLightPos = camera.GetViewMatrix() * lightPos;
         consts.projFactors = glm::vec4(projFactors.x, projFactors.y, 0.0f, 0.0f);
         consts.invView = (glm::inverse(camera.GetViewMatrix()));

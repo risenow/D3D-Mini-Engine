@@ -28,7 +28,7 @@ public:
     GraphicsSurface(GraphicsDevice& device, Texture2D* texture);
     ~GraphicsSurface();
 
-    void Resize(GraphicsDevice& device, size_t width, size_t height);
+    void Resize(GraphicsDevice& device, size_t width, size_t height, MultisampleType msType);
     //void Validate(const GraphicsSurface& surface);
 
     T* GetView()

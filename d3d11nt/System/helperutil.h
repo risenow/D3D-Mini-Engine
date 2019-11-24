@@ -5,6 +5,8 @@
 
 size_t clamp(size_t x, size_t min, size_t max);
 
+double logab(double b, double a);
+
 template<class T>
 struct NumberRange;
 
