@@ -34,7 +34,7 @@ PS_OUTPUT PSEntry(float4 pos : SV_POSITION
     
 #ifndef GBUFFER_PASS
     const float4 lightpos = float4(0.0, 0.0, -2.0, 1.0);
-    float3 lightvec = normalize(vPos.xyz - mul(lightpos, view).xyz);
+    float3 lightvec = normalize(vPos.xyz - vLightPos.xyz);//normalize(vPos.xyz - mul(view, lightpos).xyz);
     float coef = dot(normalize(lightvec), normalize(vnormal));//(0.1*pow(length(lightvec),2.0));
 
     float reflectionweight = 0.6;

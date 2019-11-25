@@ -13,6 +13,7 @@ public:
 
 	GraphicsMaterial* GetMaterial(const std::string& name) const;
 	virtual HandleResult Handle(GraphicsDevice& device, GraphicsTextureCollection& textureCollection, ShadersCollection& shadersCollection, GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* sceneGraphElement);
+    void Update(const std::vector<GraphicsLightObject>& lights);
 private:
 	std::map<std::string, GraphicsMaterial*> m_Materials;
 	std::vector<GraphicsMaterialHandleFunc> m_Handlers;

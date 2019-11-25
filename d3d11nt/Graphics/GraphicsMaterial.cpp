@@ -15,3 +15,8 @@ void GraphicsMaterial::SetMaterialsStructuredBuffer(std::shared_ptr<MaterialBatc
 }
 
 GraphicsBuffer& GraphicsMaterial::GetBuffer() { return m_MaterialStructuredBuffer->GetBuffer(); }
+
+void GraphicsMaterial::Update(const std::vector<GraphicsLightObject>& lights)
+{
+    m_Lights = lights;
+}

@@ -25,6 +25,7 @@
 #include "Graphics/GraphicsTextureCollection.h"
 #include "Graphics/FrameRateLock.h"
 #include "Graphics/SceneGraph.h"
+#include "Graphics/GraphicsMaterialsManager.h"
 #include "Graphics/DeferredShadingFullscreenQuad.h"
 #include "Graphics/BasicPixelShaderVariations.h"
 #include "Graphics/BlurShaderVariations.h"
@@ -165,23 +166,12 @@ int main(int argc, char* argv[])
 
     ShadersCollection shadersCollection(device);
     shadersCollection.AddShader<GraphicsVertexShader>(L"Test/fsqvs.hlsl", { {} });
-
-    std::vector<GraphicsShaderMacro> dsMacroSet = { GraphicsShaderMacro("OPTIMIZED_SCHLICK", "1"), 
-                                                    GraphicsShaderMacro("OVERRIDE_DIFFUSE", "1"), 
-                                                    GraphicsShaderMacro("SAMPLES_COUNT", "2"),  
-                                                    GraphicsShaderMacro("SAMPLES_COUNT", "4"),
-                                                    GraphicsShaderMacro("SAMPLES_COUNT", "8") };
-    //std::vector<ShaderVariation> dsPermutations;
-    //GetAllMacrosCombinations(dsMacroSet, dsPermutations); //add includ/exclude processing rules
-
-    std::vector<ShaderVariation> dsPermutations = DeferredShadingShaderVariations::GetPermutations();
-
-    shadersCollection.AddShader<GraphicsPixelShader>(L"Test/deferredshadingps.hlsl", dsPermutations );
+    shadersCollection.AddShader<GraphicsPixelShader>(L"Test/deferredshadingps.hlsl", DeferredShadingShaderVariations::GetPermutations());
 
     shadersCollection.AddShader<GraphicsVertexShader>(L"Test/vs.hlsl", GetAllPermutations({ GraphicsShaderMacro("BATCH", "1") }));
     shadersCollection.AddShader<GraphicsPixelShader>(L"Test/ps.hlsl", BasicPixelShaderVariations::GetPermutations());
     shadersCollection.AddShader<GraphicsComputeShader>(L"Test/cs.hlsl", BlurShaderVariations::GetPermutations());
-                                                                                    //add "must contain " rule to permutations finder
+                                                                                    
     shadersCollection.AddShader<GraphicsVertexShader> (L"Test/tessvs.hlsl", GetAllPermutations({ GraphicsShaderMacro("BATCH", "1") }));
     shadersCollection.AddShader<GraphicsHullShader>   (L"Test/tesshs.hlsl", GetAllPermutations({ GraphicsShaderMacro("BATCH", "1") }));
     shadersCollection.AddShader<GraphicsDomainShader> (L"Test/tessds.hlsl", GetAllPermutations({ GraphicsShaderMacro("BATCH", "1") }));
@@ -315,7 +305,7 @@ int main(int argc, char* argv[])
     
     int c = ShowCursor(true);
 
-    bool deferredShading = true;
+    bool deferredShading = false;
     bool pause = false;
     bool cameraRotationActive = false;
 
@@ -337,6 +327,7 @@ int main(int argc, char* argv[])
         if (window.ExplicitUpdate())
             continue;
 #endif
+        sceneGraph.GetMaterialManager()->Update({ {basicVars.lightPos, 1.0} });
 
         shadersCollection.ExecuteShadersCompilation(device);
 
@@ -455,7 +446,7 @@ int main(int argc, char* argv[])
 
             sceneGraph.GetOrdinaryGraphicsObjectManager()->Render(device, shadersCollection, { }, mouseKeyboardCameraController.GetCamera());
 
-            device.GetD3D11DeviceContext()->ClearState();
+            /*device.GetD3D11DeviceContext()->ClearState();
 
             device.GetD3D11DeviceContext()->CSSetShader(horBlurComputeShader.GetShader(), nullptr, 0);
 
@@ -470,7 +461,7 @@ int main(int argc, char* argv[])
 
             device.GetD3D11DeviceContext()->Dispatch(UINT(ceil(float(backBufferSurface.GetWidth()) / 32.0f)), UINT(ceil(float(backBufferSurface.GetHeight()) / 32.0f)), 1);
 
-            device.GetD3D11DeviceContext()->ClearState();
+            device.GetD3D11DeviceContext()->ClearState();*/
 
         }
         
@@ -479,7 +470,7 @@ int main(int argc, char* argv[])
             static int counter = 0;
 
             ImGui::Begin("Lighting");
-
+            ImGui::Checkbox("Deferred", &deferredShading);
             ImGui::SliderFloat3("Light pos", (float*)&basicVars.lightPos, -1000.0f, 1000.0f);
             ImGui::SliderFloat("Roughness", &basicVars.roverride, 0.0f, 1.0f);
             ImGui::Checkbox("Optimize Schlick", &basicVars.useOptimizedSchlick);

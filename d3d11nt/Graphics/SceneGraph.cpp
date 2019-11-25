@@ -66,3 +66,7 @@ OrdinaryGraphicsObjectManager* SceneGraph::GetOrdinaryGraphicsObjectManager() co
 {
 	return m_OrdinaryGraphicsObjectManager;
 }
+GraphicsMaterialsManager* SceneGraph::GetMaterialManager()
+{
+    return m_MaterialsManager;
+}

@@ -513,9 +513,9 @@ void OrdinaryGraphicsObjectManager::Render(GraphicsDevice& device, ShadersCollec
 	for (GraphicsObject& object : m_DrawableObjects)
 	{
         if (object.m_Material != nullptr)
-            object.m_Material->Bind(device, shadersCollection, passMacros);
+            object.m_Material->Bind(device, shadersCollection, camera, passMacros);
         else
-            object.m_Materials[0]->Bind(device, shadersCollection, passMacros);
+            object.m_Materials[0]->Bind(device, shadersCollection, camera, passMacros);
 
         object.m_Topology.Bind(device, shadersCollection, object.m_Materials.size() ? &object.m_Materials[0]->GetBuffer() : (GraphicsBuffer*)nullptr,
                                 object.m_Material ? object.m_Material->GetConstantsBuffer() : nullptr, camera, Topology_Basic);

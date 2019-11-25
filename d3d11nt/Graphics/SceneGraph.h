@@ -21,6 +21,7 @@ public:
 	~SceneGraph();
 
 	OrdinaryGraphicsObjectManager* GetOrdinaryGraphicsObjectManager() const;
+    GraphicsMaterialsManager* GetMaterialManager();
 
 	void Serialize(const std::string& filePath);
     //void Deserialize(const std::string& filePath);

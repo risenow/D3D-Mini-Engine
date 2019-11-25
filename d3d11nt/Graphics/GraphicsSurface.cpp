@@ -43,7 +43,7 @@ template<class T>
 GraphicsSurface<T>::~GraphicsSurface()
 {
 }
-
+#define RENDERDOC
 template<class T>
 void GraphicsSurface<T>::Resize(GraphicsDevice& device, size_t width, size_t height, MultisampleType msType)
 {

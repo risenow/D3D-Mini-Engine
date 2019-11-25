@@ -83,7 +83,7 @@ GraphicsBuffer* GraphicsPlainColorMaterial::GetConstantsBuffer() const
 {
 	return (GraphicsBuffer*)&m_ConstantsBuffer;
 }
-void GraphicsPlainColorMaterial::Bind(GraphicsDevice& device, ShadersCollection& shadersCollection, const std::vector<GraphicsShaderMacro>& passMacros, size_t variationIndex/* = 0*/)
+void GraphicsPlainColorMaterial::Bind(GraphicsDevice& device, ShadersCollection& shadersCollection, const Camera& camera, const std::vector<GraphicsShaderMacro>& passMacros, size_t variationIndex/* = 0*/)
 {
     std::vector<GraphicsShaderMacro> macros;
     macros.reserve(1 + passMacros.size());
@@ -103,6 +103,8 @@ void GraphicsPlainColorMaterial::Bind(GraphicsDevice& device, ShadersCollection&
         m_MaterialStructuredBuffer->Bind(device);
         return;
     }
+
+    m_Data.vLightPos = camera.GetViewMatrix() * m_Lights[0].m_LightPos;
 
 	if (m_ConstantsBufferInitialized)
 	{
