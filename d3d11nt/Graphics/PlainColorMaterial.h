@@ -7,8 +7,6 @@
 #include "Graphics/ShadersCollection.h"
 #include "Graphics/GraphicsTextureCollection.h"
 #include "System/Camera.h"
-#include <SimpleMath.h>
-using namespace DirectX;
 #include "Data/Shaders/Test/psconstants.h"
 
 class GraphicsPlainColorMaterial : public GraphicsMaterial

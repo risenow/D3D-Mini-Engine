@@ -2,9 +2,6 @@
 //#define GLM_FORCE_DEPTH_ZERO_TO_ONE
 #include "Extern/glm/glm.hpp"
 #include <d3d11.h>
-#include <SimpleMath.h>
-
-using namespace DirectX;
 
 typedef glm::vec3 CameraPosition;
 typedef glm::vec3 CameraRotation;
