@@ -5,6 +5,8 @@
 
 size_t clamp(size_t x, size_t min, size_t max);
 
+#define eq_eps 0.0001;
+bool isExpOf2(int n);
 double logab(double b, double a);
 
 template<class T>

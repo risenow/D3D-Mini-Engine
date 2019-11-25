@@ -147,6 +147,15 @@
     <ClInclude Include="..\d3d11nt\Graphics\GraphicsGPUResident.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\d3d11nt\Graphics\BasicPixelShaderVariations.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\d3d11nt\Graphics\BlurShaderVariations.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\d3d11nt\Graphics\DeferredShadingShaderVariations.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -234,6 +243,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\d3d11nt\Graphics\GraphicsObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\d3d11nt\Graphics\BlurShaderVariations.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\d3d11nt\Graphics\BasicPixelShaderVariations.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\d3d11nt\Graphics\DeferredShadingShaderVariations.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

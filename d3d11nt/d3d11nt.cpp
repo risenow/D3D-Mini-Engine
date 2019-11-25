@@ -26,6 +26,9 @@
 #include "Graphics/FrameRateLock.h"
 #include "Graphics/SceneGraph.h"
 #include "Graphics/DeferredShadingFullscreenQuad.h"
+#include "Graphics/BasicPixelShaderVariations.h"
+#include "Graphics/BlurShaderVariations.h"
+#include "Graphics/DeferredShadingShaderVariations.h"
 #include "System/HardwareInfo.h"
 #include "System/memutils.h"
 #include "Extern/glm/gtc/matrix_transform.hpp"
@@ -168,16 +171,16 @@ int main(int argc, char* argv[])
                                                     GraphicsShaderMacro("SAMPLES_COUNT", "2"),  
                                                     GraphicsShaderMacro("SAMPLES_COUNT", "4"),
                                                     GraphicsShaderMacro("SAMPLES_COUNT", "8") };
-    std::vector<ShaderVariation> dsPermutations;
-    GetAllMacrosCombinations(dsMacroSet, dsPermutations); //add includ/exclude processing rules
+    //std::vector<ShaderVariation> dsPermutations;
+    //GetAllMacrosCombinations(dsMacroSet, dsPermutations); //add includ/exclude processing rules
+
+    std::vector<ShaderVariation> dsPermutations = DeferredShadingShaderVariations::GetPermutations();
+
     shadersCollection.AddShader<GraphicsPixelShader>(L"Test/deferredshadingps.hlsl", dsPermutations );
 
     shadersCollection.AddShader<GraphicsVertexShader>(L"Test/vs.hlsl", GetAllPermutations({ GraphicsShaderMacro("BATCH", "1") }));
-    shadersCollection.AddShader<GraphicsPixelShader> (L"Test/ps.hlsl", GetAllPermutations({ GraphicsShaderMacro("BATCH", "1") }));
-    shadersCollection.AddShader<GraphicsPixelShader>(L"Test/ps.hlsl", GetAllPermutations({ GraphicsShaderMacro("BATCH", "1"), GraphicsShaderMacro("GBUFFER_PASS", "1") }));
-    shadersCollection.AddShader<GraphicsComputeShader>(L"Test/cs.hlsl", GetAllPermutations({ GraphicsShaderMacro("BATCH", "1"), 
-                                                                                            GraphicsShaderMacro("HORIZONTAL", "0"), 
-                                                                                            GraphicsShaderMacro("VERTICAL", "0") })); 
+    shadersCollection.AddShader<GraphicsPixelShader>(L"Test/ps.hlsl", BasicPixelShaderVariations::GetPermutations());
+    shadersCollection.AddShader<GraphicsComputeShader>(L"Test/cs.hlsl", BlurShaderVariations::GetPermutations());
                                                                                     //add "must contain " rule to permutations finder
     shadersCollection.AddShader<GraphicsVertexShader> (L"Test/tessvs.hlsl", GetAllPermutations({ GraphicsShaderMacro("BATCH", "1") }));
     shadersCollection.AddShader<GraphicsHullShader>   (L"Test/tesshs.hlsl", GetAllPermutations({ GraphicsShaderMacro("BATCH", "1") }));
@@ -295,8 +298,8 @@ int main(int argc, char* argv[])
     D3D_HR_OP(device.GetD3D11Device()->CreateDepthStencilState(&depthStencilDesc, &depthStencilState));
     device.GetD3D11DeviceContext()->OMSetDepthStencilState(depthStencilState, 0);
 
-    GraphicsComputeShader horBlurComputeShader = shadersCollection.GetShader<GraphicsComputeShader>(L"Test/cs.hlsl", { GraphicsShaderMacro("BATCH", "1"), GraphicsShaderMacro("HORIZONTAL", "0") });
-    GraphicsComputeShader verBlurComputeShader = shadersCollection.GetShader<GraphicsComputeShader>(L"Test/cs.hlsl", { GraphicsShaderMacro("BATCH", "1"), GraphicsShaderMacro("VERTICAL", "0") });
+    GraphicsComputeShader horBlurComputeShader = shadersCollection.GetShader<GraphicsComputeShader>(L"Test/cs.hlsl", { GraphicsShaderMacro("HORIZONTAL", "0") });
+    GraphicsComputeShader verBlurComputeShader = shadersCollection.GetShader<GraphicsComputeShader>(L"Test/cs.hlsl", { GraphicsShaderMacro("VERTICAL", "0") });
 
 
     GraphicsHullShader hullShader = shadersCollection.GetShader<GraphicsHullShader>(L"Test/tesshs.hlsl", { GraphicsShaderMacro("BATCH", "1") });

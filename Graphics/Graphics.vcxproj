@@ -153,8 +153,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\d3d11nt\Extern\WICTextureLoader.h" />
+    <ClInclude Include="..\d3d11nt\Graphics\BasicPixelShaderVariations.h" />
+    <ClInclude Include="..\d3d11nt\Graphics\BlurShaderVariations.h" />
     <ClInclude Include="..\d3d11nt\Graphics\ConstantsPreprocessing.h" />
     <ClInclude Include="..\d3d11nt\Graphics\DeferredShadingFullscreenQuad.h" />
+    <ClInclude Include="..\d3d11nt\Graphics\DeferredShadingShaderVariations.h" />
     <ClInclude Include="..\d3d11nt\graphics\DisplayAdaptersList.h" />
     <ClInclude Include="..\d3d11nt\graphics\DX11Object.h" />
     <ClInclude Include="..\d3d11nt\graphics\dxerrorcodesinterpreteutil.h" />
@@ -197,6 +200,9 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\d3d11nt\Graphics\BasicPixelShaderVariations.cpp" />
+    <ClCompile Include="..\d3d11nt\Graphics\BlurShaderVariations.cpp" />
+    <ClCompile Include="..\d3d11nt\Graphics\DeferredShadingShaderVariations.cpp" />
     <ClCompile Include="..\d3d11nt\graphics\DisplayAdaptersList.cpp" />
     <ClCompile Include="..\d3d11nt\graphics\dxerrorcodesinterpreteutil.cpp" />
     <ClCompile Include="..\d3d11nt\Graphics\FrameMeasurer.cpp" />

@@ -6,12 +6,21 @@
 #include "Graphics/ShadersCollection.h"
 #include "System/mtutils.h"
 #include "System/pathutils.h"
+#include "System/helperutil.h"
 
-void GetAllMacrosCombinations(const std::vector<GraphicsShaderMacro>& macroSet, std::vector<std::vector<GraphicsShaderMacro>>& permutations)
+void GetAllMacrosCombinations(const std::vector<GraphicsShaderMacro>& macroSet, std::vector<std::vector<GraphicsShaderMacro>>& permutations, size_t hasAnyOfRule, size_t hasOnlyOneOfRule, size_t optionallyHasOnlyOneOfRule, size_t hasAllOfRule)
 {
     size_t setBitmask = pow(2, macroSet.size()) - 1;
     for (size_t i = 0; i <= setBitmask; i++)
     {
+        if (optionallyHasOnlyOneOfRule && !((i & optionallyHasOnlyOneOfRule) == 0 || isExpOf2(i & optionallyHasOnlyOneOfRule)))
+            continue;
+        if (hasOnlyOneOfRule && !isExpOf2(i & hasOnlyOneOfRule))
+            continue;
+        if (hasAnyOfRule && (i & hasAnyOfRule) == 0)
+            continue;
+        if (hasAllOfRule && (i & hasAllOfRule) != hasAllOfRule)
+            continue;
         permutations.push_back(ShaderVariation());
         ShaderVariation& currentMutation = permutations.back();
         for (size_t j = 0; j < macroSet.size(); j++)
@@ -22,10 +31,10 @@ void GetAllMacrosCombinations(const std::vector<GraphicsShaderMacro>& macroSet, 
     }
 }
 //mb use bitfields for macro everywhere?
-std::vector<ShaderVariation> GetAllPermutations(const std::vector<GraphicsShaderMacro>& macroSet)
+std::vector<ShaderVariation> GetAllPermutations(const std::vector<GraphicsShaderMacro>& macroSet, size_t hasAnyOfRule, size_t hasOnlyOneOfRule, size_t optionallyHasOnlyOneOfRule, size_t hasAllOfRule)
 {
     std::vector<ShaderVariation> mutations;
-    GetAllMacrosCombinations(macroSet, mutations);
+    GetAllMacrosCombinations(macroSet, mutations, hasAnyOfRule, hasOnlyOneOfRule, optionallyHasOnlyOneOfRule, hasAllOfRule);
 
     return mutations;
 }

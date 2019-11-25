@@ -15,8 +15,8 @@ static const std::wstring ShadersRootPath = L"Data/Shaders/";
 typedef FNVhash_t ShaderID;
 typedef std::vector<GraphicsShaderMacro> ShaderVariation;
 
-void GetAllMacrosCombinations(const std::vector<GraphicsShaderMacro>& macroSet, std::vector<std::vector<GraphicsShaderMacro>>& permutations);
-std::vector<ShaderVariation> GetAllPermutations(const std::vector<GraphicsShaderMacro>& macroSet);
+void GetAllMacrosCombinations(const std::vector<GraphicsShaderMacro>& macroSet, std::vector<std::vector<GraphicsShaderMacro>>& permutations, size_t hasAnyOfRule = 0, size_t hasOnlyOneOfRule = 0, size_t optionallyHasOnlyOneOfRule = 0, size_t hasAllOfRule = 0);
+std::vector<ShaderVariation> GetAllPermutations(const std::vector<GraphicsShaderMacro>& macroSet, size_t hasAnyOfRule = 0, size_t hasOnlyOneOfRule = 0, size_t optionallyHasOnlyOneOfRule = 0, size_t hasAllOfRule = 0);
 
 template<class T>
 class CompilableShader
