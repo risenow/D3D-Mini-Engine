@@ -81,7 +81,7 @@ std::vector<D3D11_INPUT_ELEMENT_DESC> VertexFormat::GetD3D11InputElementDescs() 
 
 VertexData::VertexData() : m_NumVertexes(0)
 {}
-VertexData::VertexData(const VertexFormat& vertexFormat, count_t vertexesNum) : m_VertexFormat(vertexFormat), m_NumVertexes(vertexesNum)
+VertexData::VertexData(const VertexFormat& vertexFormat, count_t vertexesNum, count_t instancesCount) : m_VertexFormat(vertexFormat), m_NumVertexes(vertexesNum)
 {
     m_NumSlots = m_VertexFormat.GetNumSlotsUsed();
     m_Data.resize(m_NumSlots);

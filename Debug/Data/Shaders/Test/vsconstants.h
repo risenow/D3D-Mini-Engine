@@ -27,22 +27,22 @@ DECLARE_CONSTANT_STRUCTURE VSConsts
     DECLARE_FLOAT4X4 translatedview;
     DECLARE_FLOAT4X4 model;
     DECLARE_FLOAT4X4 projection;
-    DECLARE_FLOAT4X4 view;//32
+    DECLARE_FLOAT4X4 view;
     DECLARE_FLOAT4X4 viewProjection;
-    DECLARE_FLOAT4X4 normalMatrix;//48
-    DECLARE_FLOAT tessellationAmount;//49
-    DECLARE_FLOAT3 padding;//52
-    DECLARE_FLOAT3 vscoffset1;//55
-    DECLARE_FLOAT vscoffset2;//56
-    DECLARE_FLOAT vscoffset3;//57
-    DECLARE_FLOAT4 vscoffset4;//61
-    DECLARE_FLOAT4 vscoffset5;//65
-    DECLARE_FLOAT4 vscoffset6;//69
-    DECLARE_FLOAT vscoffset7;//70
-    DECLARE_FLOAT vscoffset8;//71
-    DECLARE_FLOAT4 vscoffset9;//75
-    DECLARE_FLOAT4 vscoffset10;//79
-    DECLARE_FLOAT vscoffset11;//80
+    DECLARE_FLOAT4X4 normalMatrix;
+    DECLARE_FLOAT tessellationAmount;
+    DECLARE_FLOAT3 padding;
+    DECLARE_FLOAT3 vscoffset1;
+    DECLARE_FLOAT vscoffset2;
+    DECLARE_FLOAT vscoffset3;
+    DECLARE_FLOAT4 vscoffset4;
+    DECLARE_FLOAT4 vscoffset5;
+    DECLARE_FLOAT4 vscoffset6;
+    DECLARE_FLOAT vscoffset7;
+    DECLARE_FLOAT vscoffset8;
+    DECLARE_FLOAT4 vscoffset9;
+    DECLARE_FLOAT4 vscoffset10;
+    DECLARE_FLOAT vscoffset11;
 //DECLARE_FLOAT coef1;
 //DECLARE_FLOAT coef2;
 //DECLARE_FLOAT coef3;

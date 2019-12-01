@@ -18,6 +18,14 @@ typedef std::vector<GraphicsShaderMacro> ShaderVariation;
 void GetAllMacrosCombinations(const std::vector<GraphicsShaderMacro>& macroSet, std::vector<std::vector<GraphicsShaderMacro>>& permutations, size_t hasAnyOfRule = 0, size_t hasOnlyOneOfRule = 0, size_t optionallyHasOnlyOneOfRule = 0, size_t hasAllOfRule = 0);
 std::vector<ShaderVariation> GetAllPermutations(const std::vector<GraphicsShaderMacro>& macroSet, size_t hasAnyOfRule = 0, size_t hasOnlyOneOfRule = 0, size_t optionallyHasOnlyOneOfRule = 0, size_t hasAllOfRule = 0);
 
+struct ShaderStrIdentifier
+{
+    ShaderStrIdentifier() {}
+    ShaderStrIdentifier(const std::wstring& _path, ShaderVariation& _variation) : path(_path), variation(_variation) {}
+    std::wstring path;
+    ShaderVariation variation;
+};
+
 template<class T>
 class CompilableShader
 {

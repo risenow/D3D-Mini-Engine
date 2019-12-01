@@ -4,7 +4,9 @@
 #include "System/MemoryManager.h"
 #include "System/hashutils.h"
 #include "Graphics/OrdinaryGraphicsObjectManager.h"
+#include "Graphics/LightingGraphicsTopology.h"
 #include "Graphics/GraphicsMaterialsManager.h"
+#include "Extern/glm/gtc/constants.hpp"
 
 class GraphicObject; //immediate drawable
 
@@ -369,15 +371,6 @@ SphereGraphicsObjectHandler::SphereGraphicsObjectHandler() : OrdinaryGraphicsObj
 OrdinaryGraphicsObjectManager::OrdinaryGraphicsObjectManager() : m_Handlers({ popNew(TriangleGraphicsObjectHandler)(), popNew(SphereGraphicsObjectHandler)() })
 {
 }
-OrdinaryGraphicsObjectManager::~OrdinaryGraphicsObjectManager()
-{
-    for (OrdinaryGraphicsObject*& obj : m_Objects)
-        if (obj)
-            popDelete(obj);
-	for (OrdinaryGraphicsObjectHandler* handler : m_Handlers)
-		if (handler)
-			popDelete(handler);
-}
 
 GraphicsObjectManager::HandleResult OrdinaryGraphicsObjectManager::Handle(GraphicsDevice& device, GraphicsTextureCollection& textureColection, ShadersCollection& shadersCollection, GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* sceneGraphElement)
 {
@@ -471,7 +464,7 @@ void OrdinaryGraphicsObjectManager::CompileGraphicObjects(GraphicsDevice& device
 
 		GraphicsObject object;
 		object.m_Valid = true;
-		object.m_Topology = GraphicsTopology(device, textureCollection, shadersCollection, vertexData, batched);
+        object.m_Topology = popNew(TypedBasicVertexTriangleGraphicsTopology<VSConsts>)(device, textureCollection, shadersCollection, ShaderStrIdentifier(std::wstring(L"Test/vs.hlsl"), ShaderVariation()), vertexData, batched);
 
         std::vector<GraphicsMaterial*> tempMaterials;
 
@@ -508,6 +501,7 @@ void OrdinaryGraphicsObjectManager::CompileGraphicObjects(GraphicsDevice& device
 	}
 }
 
+
 void OrdinaryGraphicsObjectManager::Render(GraphicsDevice& device, ShadersCollection& shadersCollection, const std::vector<GraphicsShaderMacro>& passMacros, const Camera& camera)
 {
 	for (GraphicsObject& object : m_DrawableObjects)
@@ -517,9 +511,24 @@ void OrdinaryGraphicsObjectManager::Render(GraphicsDevice& device, ShadersCollec
         else
             object.m_Materials[0]->Bind(device, shadersCollection, camera, passMacros);
 
-        object.m_Topology.Bind(device, shadersCollection, object.m_Materials.size() ? &object.m_Materials[0]->GetBuffer() : (GraphicsBuffer*)nullptr,
-                                object.m_Material ? object.m_Material->GetConstantsBuffer() : nullptr, camera, Topology_Basic);
+        VSConsts consts;
+        FillLightingGraphicsTopologyConstants(consts, camera);
+        object.m_Topology->Bind(device, shadersCollection, object.m_Materials.size() ? &object.m_Materials[0]->GetBuffer() : (GraphicsBuffer*)nullptr,
+                                object.m_Material ? object.m_Material->GetConstantsBuffer() : nullptr, (void*)&consts);
 
-		object.m_Topology.DrawCall(device);
+		object.m_Topology->DrawCall(device);
 	}
+}
+
+OrdinaryGraphicsObjectManager::~OrdinaryGraphicsObjectManager()
+{
+    for (GraphicsObject& object : m_DrawableObjects)
+        if (object.m_Topology)
+            popDelete(object.m_Topology);
+    for (OrdinaryGraphicsObject*& obj : m_Objects)
+        if (obj)
+            popDelete(obj);
+    for (OrdinaryGraphicsObjectHandler* handler : m_Handlers)
+        if (handler)
+            popDelete(handler);
 }

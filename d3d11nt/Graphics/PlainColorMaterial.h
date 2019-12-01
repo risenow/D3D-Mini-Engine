@@ -18,13 +18,13 @@ public:
 
 	bool HasValidConstantsBuffer() const;
 	GraphicsBuffer* GetConstantsBuffer() const;
-	void Bind(GraphicsDevice& device, ShadersCollection& shadersCollection, const Camera& camera, const std::vector<GraphicsShaderMacro>& passMacros, size_t variationIndex = 0);
+	void Bind(GraphicsDevice& device, ShadersCollection& shadersCollection, const Camera& camera, const std::vector<GraphicsShaderMacro>& passMacros, size_t variationIndex = 0) override;
 
-	virtual void Serialize(tinyxml2::XMLElement* element, tinyxml2::XMLDocument& document);
-	virtual void Deserialize(tinyxml2::XMLElement* element);
+	virtual void Serialize(tinyxml2::XMLElement* element, tinyxml2::XMLDocument& document) override;
+	virtual void Deserialize(tinyxml2::XMLElement* element) override;
 
-	virtual void* GetDataPtr();
-	virtual size_t GetDataSize();
+	virtual void* GetDataPtr() override;
+	virtual size_t GetDataSize() override;
 
 	static GraphicsMaterial* Handle(GraphicsDevice& device, GraphicsTextureCollection& textureCollection, ShadersCollection& shadersCollection, tinyxml2::XMLElement* sceneGraphElement);
 private:

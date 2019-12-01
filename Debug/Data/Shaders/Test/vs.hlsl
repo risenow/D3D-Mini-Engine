@@ -12,8 +12,8 @@ void VSEntry(in float4 iPos : POSITION
 	    //,out uint oMaterial : TEXCOORD0
         ,out float4 diffuseRoughness : COLOR0
         ,out float4 oVPos : POSITION1
-        ,out float4 oICenter : POSITION2
         ,out float3 stc : TEXCOORD1
+        ,out nointerpolation float3 oVLightPos : POSITION2
         ,out float3 oVNormal : NORMAL0)
 {
     uint width;
@@ -33,7 +33,9 @@ void VSEntry(in float4 iPos : POSITION
     oPos = mul(projection, vPos);
 #ifdef BATCH
     diffuseRoughness = PSConstsStructured[iMaterial].colorRoughness;
+    oVLightPos = PSConstsStructured[iMaterial].vLightPos.xyz;
 #else
     diffuseRoughness = colorRoughness;
+    oVLightPos = vLightPos.xyz;
 #endif
 }

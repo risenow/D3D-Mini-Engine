@@ -20,9 +20,8 @@ struct PS_OUTPUT
 PS_OUTPUT PSEntry(float4 pos : SV_POSITION
             , in float4 diffuseRoughness : COLOR0
             , in float4 vPos : POSITION1
-            , in float4 iCenter : POSITION2
             , in float3 stc : TEXCOORD1
-            , in nointerpolation float3 iVLightPos : POSITION3
+            , in nointerpolation float3 iVLightPos : POSITION2
             , in float3 vnormal : NORMAL0
             //, in uint iMaterial : TEXCOORD0
             )// : SV_Target

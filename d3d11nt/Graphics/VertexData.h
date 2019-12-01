@@ -91,7 +91,7 @@ class VertexData
 {
 public:
     VertexData();
-    VertexData(const VertexFormat& format, count_t vertexNum);
+    VertexData(const VertexFormat& format, count_t vertexNum, count_t instancesCount = 1);
 
     size_t GetSizeInBytesForSlot(index_t slotIndex) const;
     count_t GetNumVertexes() const;

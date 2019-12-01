@@ -20,8 +20,8 @@ struct PS_OUTPUT
 PS_OUTPUT PSEntry(float4 pos : SV_POSITION
             , in float4 diffuseRoughness : COLOR0
             , in float4 vPos : POSITION1
-            , in float4 iCenter : POSITION2
             , in float3 stc : TEXCOORD1
+            , in nointerpolation float3 iVLightPos : POSITION2
             , in float3 vnormal : NORMAL0
             //, in uint iMaterial : TEXCOORD0
             )// : SV_Target
@@ -29,13 +29,12 @@ PS_OUTPUT PSEntry(float4 pos : SV_POSITION
     float3 diffuse = diffuseRoughness.rgb;
     float rough = diffuseRoughness.a;
     
-    //float4 diffuse = float4(1.0, 0.0, 0.0, 1.0);
     PS_OUTPUT output;
     
 #ifndef GBUFFER_PASS
     const float4 lightpos = float4(0.0, 0.0, -2.0, 1.0);
-    float3 lightvec = normalize(vPos.xyz - vLightPos.xyz);//normalize(vPos.xyz - mul(view, lightpos).xyz);
-    float coef = dot(normalize(lightvec), normalize(vnormal));//(0.1*pow(length(lightvec),2.0));
+    float3 lightvec = normalize(-(vPos.xyz - iVLightPos.xyz));
+    float coef = dot(normalize(lightvec), normalize(vnormal));
 
     float reflectionweight = 0.6;
     output.Color = float4((diffuse *coef), 1.0);// (1.0 - reflectionweight) + cubemap.Sample(SampleType, stc).xyzw * reflectionweight) *  coef;

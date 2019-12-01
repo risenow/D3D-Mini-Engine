@@ -45,5 +45,11 @@
     <FxCompile Include="..\d3d11nt\Data\Shaders\Test\vs.hlsl">
       <Filter>Data\Shaders\Test</Filter>
     </FxCompile>
+    <FxCompile Include="..\d3d11nt\Data\Shaders\Test\basicvs.hlsl">
+      <Filter>Data\Shaders\Test</Filter>
+    </FxCompile>
+    <FxCompile Include="..\d3d11nt\Data\Shaders\Test\basicps.hlsl">
+      <Filter>Data\Shaders\Test</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

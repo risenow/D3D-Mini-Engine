@@ -154,6 +154,7 @@
   <ItemGroup>
     <ClInclude Include="..\d3d11nt\Extern\WICTextureLoader.h" />
     <ClInclude Include="..\d3d11nt\Graphics\BasicPixelShaderVariations.h" />
+    <ClInclude Include="..\d3d11nt\Graphics\BasicPlainColorMaterial.h" />
     <ClInclude Include="..\d3d11nt\Graphics\BlurShaderVariations.h" />
     <ClInclude Include="..\d3d11nt\Graphics\ConstantsPreprocessing.h" />
     <ClInclude Include="..\d3d11nt\Graphics\DeferredShadingFullscreenQuad.h" />
@@ -184,6 +185,8 @@
     <ClInclude Include="..\d3d11nt\Graphics\GraphicsTopology.h" />
     <ClInclude Include="..\d3d11nt\graphics\GraphicsViewport.h" />
     <ClInclude Include="..\d3d11nt\Graphics\GraphicsMaterialsManager.h" />
+    <ClInclude Include="..\d3d11nt\Graphics\ImmediateRenderer.h" />
+    <ClInclude Include="..\d3d11nt\Graphics\LightingGraphicsTopology.h" />
     <ClInclude Include="..\d3d11nt\Graphics\MappableDX11MultipleObjectsHolder.h" />
     <ClInclude Include="..\d3d11nt\Graphics\MaterialBatchStructuredBuffer.h" />
     <ClInclude Include="..\d3d11nt\graphics\multisampleutils.h" />
@@ -223,6 +226,7 @@
     <ClCompile Include="..\d3d11nt\Graphics\GraphicsTextureCollection.cpp" />
     <ClCompile Include="..\d3d11nt\Graphics\GraphicsTopology.cpp" />
     <ClCompile Include="..\d3d11nt\graphics\GraphicsViewport.cpp" />
+    <ClCompile Include="..\d3d11nt\Graphics\LightingGraphicsTopology.cpp" />
     <ClCompile Include="..\d3d11nt\Graphics\MaterialBatchStructuredBuffer.cpp" />
     <ClCompile Include="..\d3d11nt\graphics\multisampleutils.cpp" />
     <ClCompile Include="..\d3d11nt\Graphics\OrdinaryGraphicsObjectManager.cpp" />
