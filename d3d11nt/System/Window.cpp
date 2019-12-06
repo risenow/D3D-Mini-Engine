@@ -99,7 +99,7 @@ void Window::InternalCreateWindow(Window* target)
     target->WindowCreationDebugOutput();
 #endif
 
-    SetWindowLong(target->m_WindowHandle, GWLP_USERDATA, (LONG)target);
+    SetWindowLongPtr(target->m_WindowHandle, GWLP_USERDATA, (LONG_PTR)target);
 
     ShowWindow(target->m_WindowHandle, SW_SHOW);
     UpdateWindow(target->m_WindowHandle);
@@ -241,8 +241,11 @@ HINSTANCE Window::GetConsoleHInstance()
     char consoleTitleTempCharBuffer[titleCharBufferSize];
     GetConsoleTitleA(consoleTitleTempCharBuffer, titleCharBufferSize);
     HWND hwndConsole = FindWindowA(NULL, consoleTitleTempCharBuffer);
+#ifdef _WIN64
+    HINSTANCE hInstance = reinterpret_cast<HINSTANCE>(GetWindowLong(hwndConsole, GWLP_HINSTANCE));
+#else
     HINSTANCE hInstance = reinterpret_cast<HINSTANCE>(GetWindowLong(hwndConsole, GWL_HINSTANCE));
-
+#endif
     return hInstance;
 }
 
@@ -259,14 +262,14 @@ LRESULT CALLBACK Window::WndProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM 
         {
             if (HIWORD(lparam) & KF_ALTDOWN)
             {
-                ((Window*)GetWindowLong(hwnd, GWLP_USERDATA))->SwitchMode();
+                ((Window*)GetWindowLongPtr(hwnd, GWLP_USERDATA))->SwitchMode();
             }
         }
         break;
 	case WM_KEYDOWN:
 		if (wparam == VK_ESCAPE)
 		{
-			((Window*)GetWindowLong(hwnd, GWLP_USERDATA))->Close();
+			((Window*)GetWindowLongPtr(hwnd, GWLP_USERDATA))->Close();
 		}
 
 		break;
@@ -277,7 +280,7 @@ LRESULT CALLBACK Window::WndProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM 
         case SIZE_RESTORED:
         case SIZE_MAXIMIZED:
         {
-            Window* window = ((Window*)GetWindowLong(hwnd, GWLP_USERDATA));
+            Window* window = ((Window*)GetWindowLongPtr(hwnd, GWLP_USERDATA));
             window->m_Width = LOWORD(lparam);
             window->m_Height = HIWORD(lparam);
             break;
@@ -288,7 +291,7 @@ LRESULT CALLBACK Window::WndProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM 
     }
 	case WM_MOVE:
 	{
-        Window* window = ((Window*)GetWindowLong(hwnd, GWLP_USERDATA));
+        Window* window = ((Window*)GetWindowLongPtr(hwnd, GWLP_USERDATA));
         window->m_X = LOWORD(lparam);
         window->m_Y = HIWORD(lparam);
 
@@ -296,7 +299,7 @@ LRESULT CALLBACK Window::WndProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM 
 		{
 		case SIZE_RESTORED:
 		{
-			Window* window = ((Window*)GetWindowLong(hwnd, GWLP_USERDATA));
+			Window* window = ((Window*)GetWindowLongPtr(hwnd, GWLP_USERDATA));
 			window->m_X = LOWORD(lparam);
 			window->m_Y = HIWORD(lparam);
 			break;
@@ -307,7 +310,7 @@ LRESULT CALLBACK Window::WndProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM 
 	}
     case WM_CLOSE:
     {
-        ((Window*)GetWindowLong(hwnd, GWLP_USERDATA))->Close();
+        ((Window*)GetWindowLongPtr(hwnd, GWLP_USERDATA))->Close();
         break;
     }
 

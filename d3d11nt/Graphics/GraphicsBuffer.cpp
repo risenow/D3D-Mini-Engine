@@ -140,7 +140,7 @@ VertexBuffer::VertexBuffer(GraphicsDevice& device, VertexData& vertexData, index
 void VertexBuffer::Bind(GraphicsDevice& device)
 {
 	BindVertexBuffers(device, { *this });
-    offset_t offset = 0;
+    unsigned int offset = 0;
     device.GetD3D11DeviceContext()->IASetVertexBuffers(0, 1, (ID3D11Buffer**)&m_Buffer, &m_VertexSizeInBytes, (unsigned int*)&offset);
 }
 
@@ -152,7 +152,7 @@ size_t VertexBuffer::GetVertexSizeInBytes() const
 void BindVertexBuffers(GraphicsDevice& device, const std::vector<VertexBuffer>& vertexBuffers)
 {
 	UINT* offsets = (UINT*)alloca(sizeof(UINT)*vertexBuffers.size());
-	size_t* sizesPerVertex = (size_t*)alloca(sizeof(size_t)*vertexBuffers.size());
+	unsigned int* sizesPerVertex = (unsigned int*)alloca(sizeof(size_t)*vertexBuffers.size());
 	ID3D11Buffer** buffers = (ID3D11Buffer**)alloca(sizeof(ID3D11Buffer*)*vertexBuffers.size());
 	for (unsigned long i = 0; i < vertexBuffers.size(); i++)
 	{

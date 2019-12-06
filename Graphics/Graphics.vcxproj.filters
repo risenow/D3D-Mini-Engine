@@ -24,33 +24,6 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\d3d11nt\graphics\DisplayAdaptersList.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\d3d11nt\graphics\DX11Object.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\d3d11nt\graphics\dxerrorcodesinterpreteutil.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\d3d11nt\graphics\dxlogicsafety.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\d3d11nt\graphics\GraphicsDevice.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\d3d11nt\graphics\GraphicsOptions.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\d3d11nt\graphics\GraphicsSurface.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\d3d11nt\graphics\GraphicsSwapchain.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\d3d11nt\graphics\GraphicsViewport.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\d3d11nt\graphics\multisampleutils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -66,55 +39,22 @@
     <ClInclude Include="..\d3d11nt\graphics\vectors.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\d3d11nt\Graphics\FrameMeasurer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\d3d11nt\Graphics\GraphicsBuffer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\d3d11nt\Graphics\VertexData.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\d3d11nt\Graphics\GraphicsShader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\d3d11nt\Graphics\GraphicsInputLayout.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\d3d11nt\Graphics\ConstantsPreprocessing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\d3d11nt\Graphics\GraphicsConstantsBuffer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\d3d11nt\Graphics\ShadersCollection.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\d3d11nt\Graphics\FrameRateLock.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\d3d11nt\Graphics\SceneGraph.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\d3d11nt\Graphics\GraphicsObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\d3d11nt\Graphics\GraphicsObjectManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\d3d11nt\Graphics\GraphicsMaterialsManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\d3d11nt\Graphics\OrdinaryGraphicsObjectManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\d3d11nt\Graphics\GraphicsMaterial.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\d3d11nt\Graphics\PlainColorMaterial.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\d3d11nt\Graphics\GraphicsTopology.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\d3d11nt\Graphics\SerializableGraphicsObject.h">
@@ -126,25 +66,7 @@
     <ClInclude Include="..\d3d11nt\Graphics\MappableDX11MultipleObjectsHolder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\d3d11nt\Graphics\GeneralShaderMutationsDefines.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\d3d11nt\Graphics\GraphicsTextureCollection.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\d3d11nt\Extern\WICTextureLoader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\d3d11nt\Graphics\GBuffer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\d3d11nt\Graphics\FullscreenQuad.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\d3d11nt\Graphics\DeferredShadingFullscreenQuad.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\d3d11nt\Graphics\GraphicsGPUResident.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\d3d11nt\Graphics\BasicPixelShaderVariations.h">
@@ -153,19 +75,97 @@
     <ClInclude Include="..\d3d11nt\Graphics\BlurShaderVariations.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\d3d11nt\Graphics\BasicPlainColorMaterial.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\d3d11nt\Graphics\LightingGraphicsTopology.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\d3d11nt\Graphics\DeferredShadingFullscreenQuad.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="..\d3d11nt\Graphics\DeferredShadingShaderVariations.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\d3d11nt\graphics\DisplayAdaptersList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\d3d11nt\graphics\DX11Object.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\d3d11nt\graphics\dxerrorcodesinterpreteutil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\d3d11nt\graphics\dxlogicsafety.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\d3d11nt\Graphics\FrameMeasurer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\d3d11nt\Graphics\FrameRateLock.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\d3d11nt\Graphics\FullscreenQuad.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\d3d11nt\Graphics\GBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\d3d11nt\Graphics\GeneralShaderMutationsDefines.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\d3d11nt\Graphics\GraphicsBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\d3d11nt\Graphics\GraphicsConstantsBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\d3d11nt\graphics\GraphicsDevice.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\d3d11nt\Graphics\GraphicsGPUResident.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\d3d11nt\Graphics\GraphicsInputLayout.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\d3d11nt\Graphics\GraphicsLightObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\d3d11nt\Graphics\GraphicsMaterial.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\d3d11nt\Graphics\GraphicsMaterialsManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\d3d11nt\Graphics\GraphicsObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\d3d11nt\Graphics\GraphicsObjectManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\d3d11nt\graphics\GraphicsOptions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\d3d11nt\Graphics\GraphicsShader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\d3d11nt\graphics\GraphicsSurface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\d3d11nt\graphics\GraphicsSwapchain.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\d3d11nt\Graphics\GraphicsTextureCollection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\d3d11nt\Graphics\GraphicsTopology.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\d3d11nt\graphics\GraphicsViewport.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="..\d3d11nt\Graphics\ImmediateRenderer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\d3d11nt\Graphics\BasicPlainColorMaterial.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\d3d11nt\Graphics\LightingGraphicsTopology.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

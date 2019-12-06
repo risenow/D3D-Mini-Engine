@@ -184,7 +184,7 @@ std::string IniFile::ReadPropertyNameFromLine(const std::string& ln, unsigned in
 {
     popAssert(!IsCommentStartChar(ln[0]));
     
-    unsigned int firstVariantCommentStartCharIndex = ln.find(';', 0);
+    auto firstVariantCommentStartCharIndex = ln.find(';', 0);
     popAssert(firstVariantCommentStartCharIndex == std::string::npos || firstVariantCommentStartCharIndex < equalSignPos);
 
     return ln.substr(0, equalSignPos);

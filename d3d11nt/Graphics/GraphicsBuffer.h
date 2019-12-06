@@ -59,7 +59,7 @@ public:
     void Bind(GraphicsDevice& device);
 	size_t GetVertexSizeInBytes() const;
 private:
-    size_t m_VertexSizeInBytes;
+    unsigned int m_VertexSizeInBytes;
 };
 
 void BindVertexBuffers(GraphicsDevice& device, const std::vector<VertexBuffer>& vertexBuffers);

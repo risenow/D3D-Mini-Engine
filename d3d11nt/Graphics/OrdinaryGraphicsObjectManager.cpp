@@ -464,7 +464,7 @@ void OrdinaryGraphicsObjectManager::CompileGraphicObjects(GraphicsDevice& device
 
 		GraphicsObject object;
 		object.m_Valid = true;
-        object.m_Topology = popNew(TypedBasicVertexTriangleGraphicsTopology<VSConsts>)(device, textureCollection, shadersCollection, ShaderStrIdentifier(std::wstring(L"Test/vs.hlsl"), ShaderVariation()), vertexData, batched);
+        object.m_Topology = popNew(TypedBasicVertexGraphicsTopology<VSConsts>)(device, textureCollection, shadersCollection, ShaderStrIdentifier(std::wstring(L"Test/vs.hlsl"), ShaderVariation()), vertexData, Topology_Triangles, batched);
 
         std::vector<GraphicsMaterial*> tempMaterials;
 

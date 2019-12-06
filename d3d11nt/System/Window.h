@@ -147,8 +147,8 @@ private:
 	std::mutex m_WindowThreadCommandsMutex;
 	STLStack<WindowThreadCommand*> m_WindowThreadCommands;
 
-    size_t m_Width;
-    size_t m_Height;
+    unsigned int m_Width;
+    unsigned int m_Height;
 
     unsigned int m_X;
     unsigned int m_Y;

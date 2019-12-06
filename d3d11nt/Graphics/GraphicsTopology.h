@@ -12,9 +12,8 @@
 
 enum TopologyType
 {   
-    Topology_Lines,
-    Topology_Tesselated,
-    Topology_Basic
+    Topology_Lines = D3D11_PRIMITIVE_TOPOLOGY_LINELIST,
+    Topology_Triangles = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST
 };
 
 class GraphicsTopology
@@ -24,23 +23,47 @@ public:
     GraphicsTopology(GraphicsDevice& device, ShadersCollection& shadersCollection, const ShaderStrIdentifier& shaderStrIdentifier, VertexData& data,  bool isBatch);
 
     virtual void Bind(GraphicsDevice& device, ShadersCollection& shadersCollection, GraphicsBuffer* materialsStructuredbuffer, GraphicsBuffer* materialsConstantBuffer, void* constants) = 0;//const Camera& camera, TopologyType type) = 0;
-
+    //virtual void ReleaseGPUData() = 0;
     virtual void DrawCall(GraphicsDevice& device) = 0;
+
+    void ReleaseGPUData()
+    {
+        for (VertexBuffer& buffer : m_VertexBuffers)
+            buffer.ReleaseGPUData();
+        m_InputLayout.ReleaseGPUData();
+    }
+    void UpdateVertexBuffers(GraphicsDevice& device, VertexData& data)
+    {
+        if (data.GetNumVertexes() == 0)
+        {
+            m_UsedVertexCount = 0;
+            return;
+        }
+        popAssert(data.GetVertexFormat().GetNumSlotsUsed() == m_VertexBuffers.size());
+        popAssert(data.GetNumVertexes() < m_CapacityVertexCount);
+
+        //use map unmap
+        device.GetD3D11DeviceContext()->UpdateSubresource(m_VertexBuffers[0].GetBuffer(), 0, nullptr, data.GetDataPtrForSlot(0), data.GetSizeInBytesForSlot(0), 1);
+    }
+
+    std::vector<VertexBuffer>& VertexBuffers() { return m_VertexBuffers; }
 protected:
     std::vector<VertexBuffer> m_VertexBuffers;
     GraphicsInputLayout m_InputLayout;
 
-    unsigned long m_VertexCount;
+    unsigned long m_CapacityVertexCount;
+    unsigned long m_UsedVertexCount;
 
     bool m_IsValid;
     bool m_IsBatch;
 };
 
+//add possibility to create dynamic vertex buffer
 template<class T>
-class TypedBasicVertexTriangleGraphicsTopology : public GraphicsTopology
+class TypedBasicVertexGraphicsTopology : public GraphicsTopology
 {
 public:
-    TypedBasicVertexTriangleGraphicsTopology(GraphicsDevice& device, GraphicsTextureCollection& textureCollection, ShadersCollection& shadersCollection, ShaderStrIdentifier vsShader, VertexData& vertexData, bool isBatch = false) : GraphicsTopology(device, shadersCollection, vsShader, vertexData, isBatch), m_ShaderStrIdentifier(vsShader)
+    TypedBasicVertexGraphicsTopology(GraphicsDevice& device, GraphicsTextureCollection& textureCollection, ShadersCollection& shadersCollection, ShaderStrIdentifier vsShader, VertexData& vertexData, TopologyType type, bool isBatch = false) : GraphicsTopology(device, shadersCollection, vsShader, vertexData, isBatch), m_ShaderStrIdentifier(vsShader), m_Type(type)
     {
         if (!m_ConstantsBufferInitialized)
         {
@@ -76,10 +99,12 @@ public:
     }
     virtual void DrawCall(GraphicsDevice& device) override
     {
-        device.GetD3D11DeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-        device.GetD3D11DeviceContext()->Draw(m_VertexCount, 0);
+        device.GetD3D11DeviceContext()->IASetPrimitiveTopology((D3D_PRIMITIVE_TOPOLOGY)m_Type);
+        device.GetD3D11DeviceContext()->Draw(m_UsedVertexCount, 0);
     }
 private:
+    TopologyType m_Type;
+
     GraphicsVertexShader m_Shader;
 
     ShaderStrIdentifier m_ShaderStrIdentifier;
@@ -89,6 +114,6 @@ private:
 };
 
 template<class T>
-GraphicsConstantsBuffer<T> TypedBasicVertexTriangleGraphicsTopology<T>::m_ConstantsBuffer;
+GraphicsConstantsBuffer<T> TypedBasicVertexGraphicsTopology<T>::m_ConstantsBuffer;
 template<class T>
-bool TypedBasicVertexTriangleGraphicsTopology<T>::m_ConstantsBufferInitialized = false;
+bool TypedBasicVertexGraphicsTopology<T>::m_ConstantsBufferInitialized = false;

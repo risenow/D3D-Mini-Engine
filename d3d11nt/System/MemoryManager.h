@@ -18,6 +18,12 @@ private:
     static BigChunkAllocator*   m_BigChunkAllocator;
 };
 
+#ifdef USE_CUSTOM_ALLOCATORS
 #define popNew(type) new (MemoryManager::GetBigChunkAllocator()->Allocate(sizeof(type), __alignof(type))) type
 
 #define popDelete(p) (MemoryManager::GetBigChunkAllocator()->Deallocate(p))
+#else
+#define popNew(type) new type
+
+#define popDelete(p) delete p
+#endif
