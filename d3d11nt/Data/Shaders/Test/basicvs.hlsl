@@ -1,9 +1,8 @@
-#include "basicinstvsconstants.h
+#include "basicvsconstants.h"
 
-float4 VSEntry(in float4 pos : POSITION0, in float4 icolor, out float4 ocolor) : SV_POSITION
+void VSEntry(in float4 pos : POSITION0, in float4 icolor : COLOR0, out float4 opos : SV_POSITION, out float4 color : NORMAL0)
 {
-    ocolor = icolor;
+    color = icolor;
     float4 vpos = mul(view, pos);
-    float4 opos = mul(projection, vpos);
-	return opos;
+    opos = mul(projection, vpos);
 }

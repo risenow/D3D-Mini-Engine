@@ -27,6 +27,7 @@
 #include "Graphics/SceneGraph.h"
 #include "Graphics/GraphicsMaterialsManager.h"
 #include "Graphics/DeferredShadingFullscreenQuad.h"
+#include "Graphics/ImmediateRenderer.h"
 #include "Graphics/BasicPixelShaderVariations.h"
 #include "Graphics/BlurShaderVariations.h"
 #include "Graphics/DeferredShadingShaderVariations.h"
@@ -168,6 +169,9 @@ int main(int argc, char* argv[])
     shadersCollection.AddShader<GraphicsVertexShader>(L"Test/fsqvs.hlsl", { {} });
     shadersCollection.AddShader<GraphicsPixelShader>(L"Test/deferredshadingps.hlsl", DeferredShadingShaderVariations::GetPermutations());
 
+    shadersCollection.AddShader<GraphicsVertexShader>(L"Test/basicvs.hlsl", { {} });
+    shadersCollection.AddShader<GraphicsPixelShader>(L"Test/basicps.hlsl", { {} });
+
     shadersCollection.AddShader<GraphicsVertexShader>(L"Test/vs.hlsl", GetAllPermutations({ GraphicsShaderMacro("BATCH", "1") }));
     shadersCollection.AddShader<GraphicsPixelShader>(L"Test/ps.hlsl", BasicPixelShaderVariations::GetPermutations());
     shadersCollection.AddShader<GraphicsComputeShader>(L"Test/cs.hlsl", BlurShaderVariations::GetPermutations());
@@ -184,6 +188,8 @@ int main(int argc, char* argv[])
     textureCollection.Add(device, "cubemap.dds");
 
 	SceneGraph sceneGraph(device, textureCollection, shadersCollection, "Data/scene.xml");
+
+    ImmediateRenderer immediateRenderer(device, shadersCollection);
 
 	FrameRateLock frameRateLock(100);
 
@@ -213,6 +219,8 @@ int main(int argc, char* argv[])
     RenderSet intermediateRenderSet({ &intermediateSurface }, &depthStencilSurface);
     if (options.GetMultisampleType() == MULTISAMPLE_TYPE_NONE)
         intermediateRenderSet.SetSurfaces({ &backBufferSurface }, &depthStencilSurface);
+
+    RenderSet swapchainRenderSet({ &backBufferSurface }, &depthStencilSurface);
 
     RenderSet GBuffer = RenderSet(device, backBufferSurface.GetWidth(), backBufferSurface.GetHeight(), options.GetMultisampleType(), { DXGI_FORMAT_R32G32B32A32_FLOAT , DXGI_FORMAT_R32G32B32A32_FLOAT, DXGI_FORMAT_R8G8B8A8_UNORM });
     
@@ -344,6 +352,8 @@ int main(int argc, char* argv[])
         ImGui_ImplDX11_NewFrame();
         ImGui_ImplWin32_NewFrame();
         ImGui::NewFrame();
+
+        immediateRenderer.OnFrameBegin(device);
 
         std::vector<Console::Command*> basicvarCommands;
         cons.FetchCommands(BasicVariablesCommandProducer::Signature, basicvarCommands);
@@ -493,6 +503,11 @@ int main(int argc, char* argv[])
 
         if (options.GetMultisampleType() > 1)
             device.GetD3D11DeviceContext()->ResolveSubresource(backBufferSurface.GetTexture()->GetD3D11Texture2D(), 0, intermediateBuffer.GetD3D11Texture2D(), 0, backBufferSurface.GetTexture()->GetFormat());
+
+        immediateRenderer.Line(glm::vec4(0.0, 0.0, 0.0, 1.0), glm::vec4(0.0, 0.0, -6.0, 1.0), glm::vec4(1.0, 0.0, 0.0, 1.0));
+
+        device.GetD3D11DeviceContext()->OMSetDepthStencilState(FSQDepthStencilState, 0);
+        immediateRenderer.OnFrameEnd(device, shadersCollection, mouseKeyboardCameraController.GetCamera(), swapchainRenderSet);
 
         device.GetD3D11DeviceContext()->ClearState();
 

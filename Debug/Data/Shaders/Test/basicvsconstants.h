@@ -1,5 +1,3 @@
-#pragma once
-
 #include "Graphics/ConstantsPreprocessing.h"
 
 DECLARE_CONSTANT_STRUCTURE BasicVSConsts

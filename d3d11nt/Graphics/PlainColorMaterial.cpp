@@ -33,7 +33,7 @@ GraphicsPlainColorMaterial::GraphicsPlainColorMaterial(GraphicsDevice& device, G
     m_Cubemap = textureCollection["cubemap.dds"];
 
     Deserialize(element);
-	//m_Data.coef = glm::vec3(redFactor, 0.0f, 0.0f);
+
 	m_Name = name;
     m_Shader = shadersCollection.GetShader<GraphicsPixelShader>(L"Test/tessps.hlsl", { GraphicsShaderMacro("BATCH", "1") });//shadersCollection.GetShader<GraphicsPixelShader>(m_ShaderVariationIDs[0]);
 	if (!m_ConstantsBufferInitialized)
@@ -83,7 +83,7 @@ GraphicsBuffer* GraphicsPlainColorMaterial::GetConstantsBuffer() const
 {
 	return (GraphicsBuffer*)&m_ConstantsBuffer;
 }
-void GraphicsPlainColorMaterial::Bind(GraphicsDevice& device, ShadersCollection& shadersCollection, const Camera& camera, const std::vector<GraphicsShaderMacro>& passMacros, size_t variationIndex/* = 0*/)
+void GraphicsPlainColorMaterial::Bind(GraphicsDevice& device, ShadersCollection& shadersCollection, const Camera& camera, void* consts, const std::vector<GraphicsShaderMacro>& passMacros, size_t variationIndex/* = 0*/)
 {
     std::vector<GraphicsShaderMacro> macros;
     macros.reserve(1 + passMacros.size());

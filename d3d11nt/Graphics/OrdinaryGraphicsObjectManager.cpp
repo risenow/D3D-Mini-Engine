@@ -464,7 +464,7 @@ void OrdinaryGraphicsObjectManager::CompileGraphicObjects(GraphicsDevice& device
 
 		GraphicsObject object;
 		object.m_Valid = true;
-        object.m_Topology = popNew(TypedBasicVertexGraphicsTopology<VSConsts>)(device, textureCollection, shadersCollection, ShaderStrIdentifier(std::wstring(L"Test/vs.hlsl"), ShaderVariation()), vertexData, Topology_Triangles, batched);
+        object.m_Topology = popNew(TypedBasicVertexGraphicsTopology<VSConsts>)(device, shadersCollection, ShaderStrIdentifier(std::wstring(L"Test/vs.hlsl"), ShaderVariation()), vertexData, Topology_Triangles);
 
         std::vector<GraphicsMaterial*> tempMaterials;
 
@@ -507,9 +507,9 @@ void OrdinaryGraphicsObjectManager::Render(GraphicsDevice& device, ShadersCollec
 	for (GraphicsObject& object : m_DrawableObjects)
 	{
         if (object.m_Material != nullptr)
-            object.m_Material->Bind(device, shadersCollection, camera, passMacros);
+            object.m_Material->Bind(device, shadersCollection, camera, nullptr, passMacros);
         else
-            object.m_Materials[0]->Bind(device, shadersCollection, camera, passMacros);
+            object.m_Materials[0]->Bind(device, shadersCollection, camera, nullptr, passMacros);
 
         VSConsts consts;
         FillLightingGraphicsTopologyConstants(consts, camera);

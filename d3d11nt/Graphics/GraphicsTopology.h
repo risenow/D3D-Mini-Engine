@@ -24,7 +24,7 @@ public:
 
     virtual void Bind(GraphicsDevice& device, ShadersCollection& shadersCollection, GraphicsBuffer* materialsStructuredbuffer, GraphicsBuffer* materialsConstantBuffer, void* constants) = 0;//const Camera& camera, TopologyType type) = 0;
     //virtual void ReleaseGPUData() = 0;
-    virtual void DrawCall(GraphicsDevice& device) = 0;
+    virtual void DrawCall(GraphicsDevice& device, int overrideVertexCount = -1) = 0;
 
     void ReleaseGPUData()
     {
@@ -40,7 +40,7 @@ public:
             return;
         }
         popAssert(data.GetVertexFormat().GetNumSlotsUsed() == m_VertexBuffers.size());
-        popAssert(data.GetNumVertexes() < m_CapacityVertexCount);
+        popAssert(data.GetNumVertexes() <= m_CapacityVertexCount);
 
         //use map unmap
         device.GetD3D11DeviceContext()->UpdateSubresource(m_VertexBuffers[0].GetBuffer(), 0, nullptr, data.GetDataPtrForSlot(0), data.GetSizeInBytesForSlot(0), 1);
@@ -63,7 +63,9 @@ template<class T>
 class TypedBasicVertexGraphicsTopology : public GraphicsTopology
 {
 public:
-    TypedBasicVertexGraphicsTopology(GraphicsDevice& device, GraphicsTextureCollection& textureCollection, ShadersCollection& shadersCollection, ShaderStrIdentifier vsShader, VertexData& vertexData, TopologyType type, bool isBatch = false) : GraphicsTopology(device, shadersCollection, vsShader, vertexData, isBatch), m_ShaderStrIdentifier(vsShader), m_Type(type)
+    TypedBasicVertexGraphicsTopology() 
+    {}
+    TypedBasicVertexGraphicsTopology(GraphicsDevice& device, ShadersCollection& shadersCollection, ShaderStrIdentifier vsShader, VertexData& vertexData, TopologyType type, bool isBatch = false) : GraphicsTopology(device, shadersCollection, vsShader, vertexData, isBatch), m_ShaderStrIdentifier(vsShader), m_Type(type)
     {
         if (!m_ConstantsBufferInitialized)
         {
@@ -97,10 +99,10 @@ public:
             BindMultipleGraphicsConstantBuffers(device, 0, cbuffers, GraphicsShaderMask_Vertex | GraphicsShaderMask_Pixel | GraphicsShaderMask_Hull | GraphicsShaderMask_Domain);
         }
     }
-    virtual void DrawCall(GraphicsDevice& device) override
+    virtual void DrawCall(GraphicsDevice& device, int overrideVertexCount = -1) override
     {
         device.GetD3D11DeviceContext()->IASetPrimitiveTopology((D3D_PRIMITIVE_TOPOLOGY)m_Type);
-        device.GetD3D11DeviceContext()->Draw(m_UsedVertexCount, 0);
+        device.GetD3D11DeviceContext()->Draw(overrideVertexCount >= 0 ? overrideVertexCount : m_UsedVertexCount, 0);
     }
 private:
     TopologyType m_Type;
