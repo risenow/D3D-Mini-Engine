@@ -58,7 +58,7 @@ void RenderSet::Set(GraphicsDevice& device)
     for (size_t i = 0; i < m_ColorSurfaces.size(); i++)
         renderTargetViews.push_back(m_ColorSurfaces[i]->GetView());
     device.GetD3D11DeviceContext()->OMSetRenderTargets(renderTargetViews.size(), renderTargetViews.data(),
-                                                          m_DepthStencilSurface->GetView());
+                                                          m_DepthStencilSurface ? m_DepthStencilSurface->GetView() : nullptr);
 }
 
 void RenderSet::CorrectnessGuard()
@@ -68,8 +68,8 @@ void RenderSet::CorrectnessGuard()
     for (ColorSurface*& surface : m_ColorSurfaces)
         if (surface->GetView())
             correctColorView = true;
-    popAssert(correctColorView || m_DepthStencilSurface->GetView());
-    if (correctColorView && m_DepthStencilSurface->GetView())
+    popAssert(correctColorView || (m_DepthStencilSurface && m_DepthStencilSurface->GetView()));
+    if (correctColorView && m_DepthStencilSurface && m_DepthStencilSurface->GetView())
     {
         for (size_t i = 0; i < m_ColorSurfaces.size(); i++)
             popAssert(m_ColorSurfaces[i]->GetWidth()  == m_DepthStencilSurface->GetWidth() &&

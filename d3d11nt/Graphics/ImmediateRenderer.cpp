@@ -12,7 +12,7 @@ ImmediateRenderer::ImmediateRenderer(GraphicsDevice& device, ShadersCollection& 
     VertexFormat vertexFormat({ CreateVertexPropertyPrototype<glm::vec4>(POSITION_PROPERTY_NAME), CreateVertexPropertyPrototype<glm::vec4>(COLOR_PROPERTY_NAME) });
     m_VertexData = VertexData(vertexFormat, IMMEDIATE_RENDER_MAX_VERTEXES);
 
-    m_Topology = TypedBasicVertexGraphicsTopology<BasicVSConsts>(device, shadersCollection, ShaderStrIdentifier(L"Test/basicvs.hlsl", ShaderVariation()), m_VertexData, Topology_Lines, false);
+    m_Topology = TypedBasicVertexGraphicsTopology<BasicVSConsts>(device, shadersCollection, ShaderStrIdentifier(L"Test/basicvs.hlsl", ShaderVariation()), m_VertexData, Topology_Lines, GraphicsBuffer::UsageFlag_Default, false);
     m_Material = TypedGraphicsMaterial< BasicPSConstsDummy>(device, shadersCollection, ShaderStrIdentifier(L"Test/basicps.hlsl", ShaderVariation()), "");
 }
 
@@ -23,7 +23,9 @@ void ImmediateRenderer::OnFrameBegin(GraphicsDevice& device)
 }
 void ImmediateRenderer::OnFrameEnd(GraphicsDevice& device, ShadersCollection& shadersCollection, Camera& camera, RenderSet& swapchainRenderSet)
 {
-    swapchainRenderSet.Set(device);
+    RenderSet renderSet = swapchainRenderSet;
+    renderSet.SetSurfaces(renderSet.GetColorSurfaces(), nullptr);
+    renderSet.Set(device);
 
     BasicVSConsts consts;
     FillBasicGraphicsTopologyConstants(consts, camera);

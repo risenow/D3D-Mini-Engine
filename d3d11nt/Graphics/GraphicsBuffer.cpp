@@ -128,9 +128,9 @@ void GraphicsBuffer::Bind(GraphicsDevice& device, GraphicsShaderMaskType stageMa
 }
 
 VertexBuffer::VertexBuffer() {}
-VertexBuffer::VertexBuffer(GraphicsDevice& device, VertexData& vertexData, index_t slotIndex) : GraphicsBuffer(device, 
+VertexBuffer::VertexBuffer(GraphicsDevice& device, VertexData& vertexData, GraphicsBuffer::UsageFlags flags, index_t slotIndex) : GraphicsBuffer(device, 
                                                                                                   vertexData.GetSizeInBytesForSlot(slotIndex),
-                                                                                                  BindFlag_Vertex, UsageFlag_Default, // UsageFlag_Immutable todo: add possibility to create mutable buffer
+                                                                                                  BindFlag_Vertex, flags, // UsageFlag_Immutable todo: add possibility to create mutable buffer
                                                                                                   MiscFlag_Default, vertexData.GetDataPtrForSlot(slotIndex)),
                                                                                                   m_VertexSizeInBytes(vertexData.GetVertexFormat().GetVertexSizeInBytesForSlot(slotIndex))
 {

@@ -41,6 +41,11 @@ public:
         return m_ColorSurfaces[idx];
     }
 
+    std::vector<ColorSurface*>& GetColorSurfaces()
+    {
+        return m_ColorSurfaces;
+    }
+
     void SetSurfaces(const std::vector<ColorSurface*>& color, DepthSurface* depth)
     {
         m_ResourceIsOwned = false;

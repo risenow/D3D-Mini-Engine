@@ -20,7 +20,7 @@ class GraphicsTopology
 {
 public:
     GraphicsTopology();
-    GraphicsTopology(GraphicsDevice& device, ShadersCollection& shadersCollection, const ShaderStrIdentifier& shaderStrIdentifier, VertexData& data,  bool isBatch);
+    GraphicsTopology(GraphicsDevice& device, ShadersCollection& shadersCollection, const ShaderStrIdentifier& shaderStrIdentifier, VertexData& data, GraphicsBuffer::UsageFlags flags,  bool isBatch);
 
     virtual void Bind(GraphicsDevice& device, ShadersCollection& shadersCollection, GraphicsBuffer* materialsStructuredbuffer, GraphicsBuffer* materialsConstantBuffer, void* constants) = 0;//const Camera& camera, TopologyType type) = 0;
     //virtual void ReleaseGPUData() = 0;
@@ -65,7 +65,7 @@ class TypedBasicVertexGraphicsTopology : public GraphicsTopology
 public:
     TypedBasicVertexGraphicsTopology() 
     {}
-    TypedBasicVertexGraphicsTopology(GraphicsDevice& device, ShadersCollection& shadersCollection, ShaderStrIdentifier vsShader, VertexData& vertexData, TopologyType type, bool isBatch = false) : GraphicsTopology(device, shadersCollection, vsShader, vertexData, isBatch), m_ShaderStrIdentifier(vsShader), m_Type(type)
+    TypedBasicVertexGraphicsTopology(GraphicsDevice& device, ShadersCollection& shadersCollection, ShaderStrIdentifier vsShader, VertexData& vertexData, TopologyType type, GraphicsBuffer::UsageFlags usage, bool isBatch = false) : GraphicsTopology(device, shadersCollection, vsShader, vertexData, usage, isBatch), m_ShaderStrIdentifier(vsShader), m_Type(type)
     {
         if (!m_ConstantsBufferInitialized)
         {

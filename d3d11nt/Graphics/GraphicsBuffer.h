@@ -54,7 +54,7 @@ class VertexBuffer : public GraphicsBuffer
 {
 public:
 	VertexBuffer();
-    VertexBuffer(GraphicsDevice& device, VertexData& vertexData, index_t slotIndex = 0);
+    VertexBuffer(GraphicsDevice& device, VertexData& vertexData, UsageFlags usage = UsageFlag_Immutable, index_t slotIndex = 0);
 
     void Bind(GraphicsDevice& device);
 	size_t GetVertexSizeInBytes() const;
