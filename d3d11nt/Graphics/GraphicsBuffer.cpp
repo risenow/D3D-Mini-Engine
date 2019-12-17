@@ -104,7 +104,7 @@ GraphicsBuffer::GraphicsBuffer(GraphicsDevice& device, size_t size, BindFlags bi
     CreateDesc(size, bindFlag, usageFlag, miscFlag, data, structureByteStride, bufferDesc, subresourceData);
     D3D_HR_OP(device.GetD3D11Device()->CreateBuffer(&bufferDesc, (data) ? &subresourceData : nullptr, (ID3D11Buffer**)&m_Buffer));
 
-    if (bindFlag != BindFlag_Vertex && bindFlag != BindFlag_Constant)
+    if (bindFlag != BindFlag_Vertex && bindFlag != BindFlag_Constant && bindFlag != BindFlag_Index)
     {
         D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
         CreateSRVDesc(size, numElements, structureByteStride, format, srvDesc);
@@ -130,7 +130,7 @@ void GraphicsBuffer::Bind(GraphicsDevice& device, GraphicsShaderMaskType stageMa
 VertexBuffer::VertexBuffer() {}
 VertexBuffer::VertexBuffer(GraphicsDevice& device, VertexData& vertexData, GraphicsBuffer::UsageFlags flags, index_t slotIndex) : GraphicsBuffer(device, 
                                                                                                   vertexData.GetSizeInBytesForSlot(slotIndex),
-                                                                                                  BindFlag_Vertex, flags, // UsageFlag_Immutable todo: add possibility to create mutable buffer
+                                                                                                  BindFlag_Vertex, flags,
                                                                                                   MiscFlag_Default, vertexData.GetDataPtrForSlot(slotIndex)),
                                                                                                   m_VertexSizeInBytes(vertexData.GetVertexFormat().GetVertexSizeInBytesForSlot(slotIndex))
 {
@@ -149,6 +149,7 @@ size_t VertexBuffer::GetVertexSizeInBytes() const
 	return m_VertexSizeInBytes;
 }
 
+//use _malloca instead?
 void BindVertexBuffers(GraphicsDevice& device, const std::vector<VertexBuffer>& vertexBuffers)
 {
 	UINT* offsets = (UINT*)alloca(sizeof(UINT)*vertexBuffers.size());
@@ -162,4 +163,18 @@ void BindVertexBuffers(GraphicsDevice& device, const std::vector<VertexBuffer>& 
 	}
 
 	device.GetD3D11DeviceContext()->IASetVertexBuffers(0, vertexBuffers.size(), buffers, sizesPerVertex, offsets);
+}
+
+IndexBuffer::IndexBuffer() {}
+IndexBuffer::IndexBuffer(GraphicsDevice& device, const std::vector<uint32_t>& indexes, GraphicsBuffer::UsageFlags flags) : GraphicsBuffer(device,
+    sizeof(uint32_t) * indexes.size(),
+    BindFlag_Index, flags,
+    MiscFlag_Default, (void*)indexes.data())
+{
+}
+void IndexBuffer::Bind(GraphicsDevice& device)
+{
+    unsigned int offset = 0;
+    if (m_Buffer)
+        device.GetD3D11DeviceContext()->IASetIndexBuffer(m_Buffer, DXGI_FORMAT_R32_UINT, 0);
 }

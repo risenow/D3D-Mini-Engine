@@ -1,9 +1,9 @@
 #include "stdafx.h"
 #include "System/MemoryManager.h"
 #include "Graphics/GraphicsMaterialsManager.h"
-#include "Graphics/PlainColorMaterial.h"
+#include "Graphics/LightingMaterial.h"
 
-GraphicsMaterialsManager::GraphicsMaterialsManager() : m_Handlers({ GraphicsPlainColorMaterial::Handle })
+GraphicsMaterialsManager::GraphicsMaterialsManager() : m_Handlers({ GraphicsLightingMaterial::Handle })
 { }
 GraphicsMaterialsManager::~GraphicsMaterialsManager() 
 {

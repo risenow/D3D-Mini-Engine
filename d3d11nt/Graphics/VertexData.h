@@ -102,6 +102,9 @@ public:
     void* GetVertexPropertyDataPtrForVertexWithIndex(index_t index, const VertexProperty& vertexProperty);
 	void* GetVertexPropertyDataPtr(const VertexProperty& vertexProperty);
 
+    void SetIndexes(const std::vector<uint32_t>& indexes);
+    std::vector<uint32_t>& GetIndexes();
+
 	void Resize(count_t vertexNum);
 protected:
     VertexFormat m_VertexFormat;
@@ -111,4 +114,5 @@ protected:
     typedef STLVector<byte_t> RawData;
     typedef STLVector<RawData> VertexSlotsData;
     VertexSlotsData m_Data;
+    STLVector<uint32_t> m_Indexes;
 };

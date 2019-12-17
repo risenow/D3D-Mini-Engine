@@ -15,7 +15,7 @@ public:
     enum UsageFlags { UsageFlag_Dynamic, UsageFlag_Staging, UsageFlag_Immutable, UsageFlag_Default };
     enum MiscFlags { MiscFlag_Default, MiscFlag_Structured };
 
-	GraphicsBuffer() {}
+	GraphicsBuffer() : m_Buffer(nullptr) {}
     GraphicsBuffer(GraphicsDevice& device, size_t size, BindFlags bindFlag, 
                    UsageFlags usageFlag, MiscFlags miscFlag = MiscFlag_Default, 
                    void* data = nullptr, size_t numElements = 0, size_t structureByteStride = 0, DXGI_FORMAT format = DXGI_FORMAT_UNKNOWN);
@@ -60,6 +60,16 @@ public:
 	size_t GetVertexSizeInBytes() const;
 private:
     unsigned int m_VertexSizeInBytes;
+};
+
+class IndexBuffer : public GraphicsBuffer
+{
+public:
+    IndexBuffer();
+    IndexBuffer(GraphicsDevice& device, const std::vector<uint32_t>& indexes, UsageFlags usage = UsageFlag_Immutable);
+
+    void Bind(GraphicsDevice& device);
+private:
 };
 
 void BindVertexBuffers(GraphicsDevice& device, const std::vector<VertexBuffer>& vertexBuffers);

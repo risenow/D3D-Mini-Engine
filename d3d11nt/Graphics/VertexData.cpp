@@ -128,6 +128,16 @@ void* VertexData::GetVertexPropertyDataPtr(const VertexProperty& vertexProperty)
 	return GetVertexPropertyDataPtrForVertexWithIndex(0, vertexProperty);
 }
 
+void VertexData::SetIndexes(const std::vector<uint32_t>& indexes)
+{
+    m_Indexes = indexes;
+}
+
+std::vector<uint32_t>& VertexData::GetIndexes()
+{
+    return m_Indexes;
+}
+
 void VertexData::Resize(count_t vertexNum)
 {
 	m_NumVertexes = vertexNum;

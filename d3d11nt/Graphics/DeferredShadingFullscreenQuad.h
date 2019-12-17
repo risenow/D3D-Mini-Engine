@@ -16,7 +16,7 @@ public:
         m_ConstantsBuffer = GraphicsConstantsBuffer<DeferredShadingPSConsts>(device);
 
         D3D11_SAMPLER_DESC samplerDesc;
-        samplerDesc.Filter = D3D11_FILTER_MINIMUM_MIN_MAG_MIP_POINT;//D3D11_FILTER_MIN_LINEAR_MAG_POINT_MIP_LINEAR;
+        samplerDesc.Filter = D3D11_FILTER_MIN_LINEAR_MAG_POINT_MIP_LINEAR;
         samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
         samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
         samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;

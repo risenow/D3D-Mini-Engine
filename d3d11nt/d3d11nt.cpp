@@ -222,7 +222,7 @@ int main(int argc, char* argv[])
 
     RenderSet swapchainRenderSet({ &backBufferSurface }, &depthStencilSurface);
 
-    RenderSet GBuffer = RenderSet(device, backBufferSurface.GetWidth(), backBufferSurface.GetHeight(), options.GetMultisampleType(), { DXGI_FORMAT_R32G32B32A32_FLOAT , DXGI_FORMAT_R32G32B32A32_FLOAT, DXGI_FORMAT_R8G8B8A8_UNORM });
+    RenderSet GBuffer = RenderSet(device, backBufferSurface.GetWidth(), backBufferSurface.GetHeight(), options.GetMultisampleType(), { DXGI_FORMAT_R32G32B32A32_FLOAT , DXGI_FORMAT_R16G16B16A16_FLOAT, DXGI_FORMAT_R8G8B8A8_UNORM });//previously for normals DXGI_FORMAT_R32G32B32A32_FLOAT
     
     DeferredShadingFullscreenQuad deferredShadingFullscreenQuad(device, GBuffer, shadersCollection, textureCollection);
 

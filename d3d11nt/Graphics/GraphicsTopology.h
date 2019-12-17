@@ -16,6 +16,7 @@ enum TopologyType
     Topology_Triangles = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST
 };
 
+//may be reset state after draw?
 class GraphicsTopology
 {
 public:
@@ -34,6 +35,7 @@ public:
     }
     void UpdateVertexBuffers(GraphicsDevice& device, VertexData& data)
     {
+        assert(!m_IndexBuffer.GetBuffer());
         if (data.GetNumVertexes() == 0)
         {
             m_UsedVertexCount = 0;
@@ -48,11 +50,13 @@ public:
 
     std::vector<VertexBuffer>& VertexBuffers() { return m_VertexBuffers; }
 protected:
+    IndexBuffer m_IndexBuffer;
     std::vector<VertexBuffer> m_VertexBuffers;
     GraphicsInputLayout m_InputLayout;
 
     unsigned long m_CapacityVertexCount;
-    unsigned long m_UsedVertexCount;
+    unsigned long m_UsedVertexCount; 
+    unsigned long m_IndexesCount;
 
     bool m_IsValid;
     bool m_IsBatch;
@@ -85,6 +89,7 @@ public:
             device.GetD3D11DeviceContext()->VSSetShaderResources(0, 1, (ID3D11ShaderResourceView * *)& bufferSRV);
 
         BindVertexBuffers(device, m_VertexBuffers);
+        m_IndexBuffer.Bind(device);
 
         if (m_ConstantsBufferInitialized)
         {
@@ -102,6 +107,11 @@ public:
     virtual void DrawCall(GraphicsDevice& device, int overrideVertexCount = -1) override
     {
         device.GetD3D11DeviceContext()->IASetPrimitiveTopology((D3D_PRIMITIVE_TOPOLOGY)m_Type);
+        if (m_IndexesCount)
+        {
+            device.GetD3D11DeviceContext()->DrawIndexed(m_IndexesCount, 0, 0);
+            return;
+        }
         device.GetD3D11DeviceContext()->Draw(overrideVertexCount >= 0 ? overrideVertexCount : m_UsedVertexCount, 0);
     }
 private:

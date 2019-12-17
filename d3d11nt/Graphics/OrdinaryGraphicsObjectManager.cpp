@@ -194,7 +194,7 @@ TriangleGraphicsObjectHandler::HandleResult TriangleGraphicsObjectHandler::Handl
 	return result;
 }
 
-void GenerateSphereGeometry(const glm::vec3& center, float r, size_t matX, std::vector<SphereOrdinaryGraphicsObject::VertexType>& vertexes)
+void GenerateSphereGeometry(const glm::vec3& center, float r, size_t matX, std::vector<SphereOrdinaryGraphicsObject::VertexType>& vertexes, std::vector<uint32_t>& indexes)
 {
     const size_t stepsNum = 20;//30;
     float radL = 0.0;
@@ -209,6 +209,9 @@ void GenerateSphereGeometry(const glm::vec3& center, float r, size_t matX, std::
 
     size_t numVertexes = 6 * (stepsNum) * (stepsNum);
     vertexes.reserve(numVertexes);
+    indexes.reserve(numVertexes);
+
+    glm::vec4 spherePosOffset = glm::vec4(center.x, center.y, 0.0, 0.0);
 
     int majCount = 0;
     for (float currentSlice = l; currentSlice < maxL + l; currentSlice += lStep)
@@ -216,35 +219,40 @@ void GenerateSphereGeometry(const glm::vec3& center, float r, size_t matX, std::
         float majR = r * (glm::sin(radL));
         float majRNext = r * (glm::sin(radL + radLStep));
         float nextSlice = currentSlice + lStep;
-        int minCount = 0;
+
         for (float minRad = 0.0; minRad < 2 * glm::pi<float>(); minRad += minRadStep)
-        {
-            glm::vec4 spherePosOffset = glm::vec4(center.x, center.y, 0.0, 0.0);
+        {            
             glm::vec4 v1 = glm::vec4(glm::cos(minRad) * majR, glm::sin(minRad) * majR, cos(radL) * r + l + r, 1.0) + spherePosOffset;
-            glm::vec3 n1 = glm::vec3(v1) - center;
+            glm::vec3 n1 = glm::normalize(glm::vec3(v1) - center);
             SphereOrdinaryGraphicsObject::VertexType vertex1 = SphereOrdinaryGraphicsObject::VertexType(v1, n1, matX);
 
             glm::vec4 v2 = glm::vec4(glm::cos(minRad) * majRNext, glm::sin(minRad) * majRNext, cos(radL + radLStep) * r + l + r, 1.0) + spherePosOffset;
-            glm::vec3 n2 = glm::vec3(v2) - center;
+            glm::vec3 n2 = glm::normalize(glm::vec3(v2) - center);
             SphereOrdinaryGraphicsObject::VertexType vertex2 = SphereOrdinaryGraphicsObject::VertexType(v2, n2, matX);
 
             glm::vec4 v3 = glm::vec4(glm::cos(minRad + minRadStep) * majRNext, glm::sin(minRad + minRadStep) * majRNext, cos(radL + radLStep) * r + l + r, 1.0) + spherePosOffset;
-            glm::vec3 n3 = glm::vec3(v3) - center;
+            glm::vec3 n3 = glm::normalize(glm::vec3(v3) - center);
             SphereOrdinaryGraphicsObject::VertexType vertex3 = SphereOrdinaryGraphicsObject::VertexType(v3, n3, matX);
 
             glm::vec4 v4 = glm::vec4(glm::cos(minRad + minRadStep) * majR, glm::sin(minRad + minRadStep) * majR, cos(radL) * r + l + r, 1.0) + spherePosOffset;
-            glm::vec3 n4 = glm::vec3(v4) - center;
+            glm::vec3 n4 = glm::normalize(glm::vec3(v4) - center);
             SphereOrdinaryGraphicsObject::VertexType vertex4 = SphereOrdinaryGraphicsObject::VertexType(v4, n4, matX);
 
+
+            uint32_t v1index = vertexes.size();
             vertexes.push_back(vertex1);
             vertexes.push_back(vertex2);
             vertexes.push_back(vertex3);
-
-            vertexes.push_back(vertex3);
             vertexes.push_back(vertex4);
-            vertexes.push_back(vertex1);
 
-            minCount += 6;
+
+            indexes.push_back(v1index);
+            indexes.push_back(v1index + 1);
+            indexes.push_back(v1index + 2);
+
+            indexes.push_back(v1index + 2);
+            indexes.push_back(v1index + 3);
+            indexes.push_back(v1index);
         }
         majCount++;
         radL += radLStep;
@@ -278,7 +286,7 @@ SphereOrdinaryGraphicsObject::SphereOrdinaryGraphicsObject(GraphicsMaterialsMana
     m_BatchedVertexFormat = batchedVertexFormat;
     m_XMLElement = element;
 
-    GenerateSphereGeometry(m_Center, m_R, m_MatX, m_Vertexes);
+    GenerateSphereGeometry(m_Center, m_R, m_MatX, m_Vertexes, m_Indexes);
 }
 size_t SphereOrdinaryGraphicsObject::GetNumVertexes() const
 {
@@ -292,6 +300,8 @@ void SphereOrdinaryGraphicsObject::WriteGeometry(VertexData& data, const std::se
     {
         matRemap.push_back(std::distance(materialIndexRemap.begin(), materialIndexRemap.find(mat)));
     }
+
+    data.SetIndexes(m_Indexes);
 
     if (batched)
     {

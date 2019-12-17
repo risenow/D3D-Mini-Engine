@@ -213,7 +213,7 @@
     <ClInclude Include="..\d3d11nt\Graphics\MaterialBatchStructuredBuffer.h" />
     <ClInclude Include="..\d3d11nt\graphics\multisampleutils.h" />
     <ClInclude Include="..\d3d11nt\Graphics\OrdinaryGraphicsObjectManager.h" />
-    <ClInclude Include="..\d3d11nt\Graphics\PlainColorMaterial.h" />
+    <ClInclude Include="..\d3d11nt\Graphics\LightingMaterial.h" />
     <ClInclude Include="..\d3d11nt\graphics\Renderer.h" />
     <ClInclude Include="..\d3d11nt\graphics\RenderSet.h" />
     <ClInclude Include="..\d3d11nt\Graphics\SceneGraph.h" />
@@ -254,7 +254,7 @@
     <ClCompile Include="..\d3d11nt\Graphics\MaterialBatchStructuredBuffer.cpp" />
     <ClCompile Include="..\d3d11nt\graphics\multisampleutils.cpp" />
     <ClCompile Include="..\d3d11nt\Graphics\OrdinaryGraphicsObjectManager.cpp" />
-    <ClCompile Include="..\d3d11nt\Graphics\PlainColorMaterial.cpp" />
+    <ClCompile Include="..\d3d11nt\Graphics\LightingMaterial.cpp" />
     <ClCompile Include="..\d3d11nt\graphics\RenderSet.cpp" />
     <ClCompile Include="..\d3d11nt\Graphics\SceneGraph.cpp" />
     <ClCompile Include="..\d3d11nt\Graphics\ShadersCollection.cpp" />

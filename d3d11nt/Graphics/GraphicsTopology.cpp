@@ -14,4 +14,10 @@ m_CapacityVertexCount(data.GetNumVertexes()), m_UsedVertexCount(m_CapacityVertex
     {
         m_VertexBuffers.push_back(VertexBuffer(device, data, usage, i));
     }
+
+    m_IndexesCount = data.GetIndexes().size();
+    if (m_IndexesCount)
+    {
+        m_IndexBuffer = IndexBuffer(device, data.GetIndexes());
+    }
 }

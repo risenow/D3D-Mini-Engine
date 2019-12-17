@@ -131,6 +131,7 @@ private:
     std::vector<std::string> m_MaterialNames;
 
     std::vector<VertexType> m_Vertexes;
+    std::vector<uint32_t> m_Indexes;
 };
 
 class SphereGraphicsObjectHandler : public OrdinaryGraphicsObjectHandler

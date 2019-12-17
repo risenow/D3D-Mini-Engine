@@ -14,7 +14,7 @@ void VSEntry(in float4 iPos : POSITION
         ,out float4 oVPos : POSITION1
         ,out float3 stc : TEXCOORD1
         ,out nointerpolation float3 oVLightPos : POSITION2
-        ,out float3 oVNormal : NORMAL0)
+        ,out /*nointerpolation*/ float3 oVNormal : NORMAL0)
 {
     uint width;
     uint height;
