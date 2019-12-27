@@ -42,9 +42,10 @@ SceneGraph::SceneGraph(GraphicsDevice& device, GraphicsTextureCollection& textur
             if (handledElements.find(element) == handledElements.cend())
             {
                 OrdinaryGraphicsObjectHandler::HandleResult handleResult = m_OrdinaryGraphicsObjectManager->Handle_(device, textureCollection, shadersCollection, m_MaterialsManager, element);
-                m_SerializableGraphicsObjects.push_back(handleResult.m_OrdinaryGraphicsObject);
-                if (handleResult.m_OrdinaryGraphicsObject != nullptr)
+                if (handleResult.m_OrdinaryGraphicsObjects.size())
                     handledElements.insert(element);
+                for (size_t i = 0; i < handleResult.m_OrdinaryGraphicsObjects.size(); i++)
+                    m_SerializableGraphicsObjects.push_back(handleResult.m_OrdinaryGraphicsObjects[i]);
             }
 		}
 

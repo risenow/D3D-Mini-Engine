@@ -127,7 +127,7 @@ void Console::Process()
         //if (s[0])
         //    ExecCommand(s);
 
-        strcpy(m_InputBuffer, "");
+        strcpy_s(m_InputBuffer, "");
         reclaim_focus = true;
     }
 

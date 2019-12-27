@@ -10,6 +10,8 @@ MouseKeyboardCameraController::MouseKeyboardCameraController(const Camera& camer
 
 void MouseKeyboardCameraController::Update(Window& window)
 {
+    const float VELOCITY = 1.0f;//0.005f;
+
     m_MouseCameraRotationActive = !!(GetAsyncKeyState(VK_RBUTTON));
 
     if (m_MouseCameraRotationActive)
@@ -33,19 +35,19 @@ void MouseKeyboardCameraController::Update(Window& window)
 
     if (GetAsyncKeyState(VK_UP))
     {
-        m_Camera.StepForward(0.005);
+        m_Camera.StepForward(VELOCITY);
     }
     if (GetAsyncKeyState(VK_DOWN))
     {
-        m_Camera.StepForward(-0.005);
+        m_Camera.StepForward(-VELOCITY);
     }
     if (GetAsyncKeyState(VK_LEFT))
     {
-        m_Camera.StepLeft(0.005);
+        m_Camera.StepLeft(VELOCITY);
     }
     if (GetAsyncKeyState(VK_RIGHT))
     {
-        m_Camera.StepLeft(-0.005);
+        m_Camera.StepLeft(-VELOCITY);
     }
 
     m_Camera.UpdateProjection((float)window.GetWidth() / (float)window.GetHeight());

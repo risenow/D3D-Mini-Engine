@@ -9,6 +9,14 @@
 #include "Graphics/GraphicsObjectManager.h"
 #include "Graphics/SerializableGraphicsObject.h"
 #include "Graphics/GraphicsTextureCollection.h"
+#include "Graphics/LightingMaterial.h"
+#include "Extern/tiny_obj_loader.h"
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+#include <assimp/matrix4x4.h>
+#include <assimp/cimport.h>
+#include <unordered_map>
 #include <set>
 
 class GraphicsObject;
@@ -23,6 +31,8 @@ public:
 
     virtual void WriteGeometry(VertexData& data, const std::set<GraphicsMaterial*>& materialIndexRemap, bool batched = false, size_t vertexesOffset = 0) = 0;
     virtual size_t GetNumVertexes() const = 0;
+
+    virtual bool IsDrawable() { return true; }
 public:
     GraphicsObject* m_Drawable;
     VertexFormat m_VertexFormat; //make batched and not versions
@@ -37,16 +47,17 @@ class OrdinaryGraphicsObjectHandler;
 class OrdinaryGraphicsObjectHandler
 {
 public:
+    //expand to support submeshes
 	struct HandleResult
 	{
-        OrdinaryGraphicsObject* m_OrdinaryGraphicsObject;
+        std::vector<OrdinaryGraphicsObject*> m_OrdinaryGraphicsObjects;
 	};
 
 	OrdinaryGraphicsObjectHandler();
 	OrdinaryGraphicsObjectHandler(const std::string& typeName);
 
 	bool CanHandle(tinyxml2::XMLElement* sceneGraphElement) const;
-	virtual HandleResult Handle(GraphicsDevice& device, ShadersCollection& shadersCollection, GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* sceneGraphElement) const = 0;
+	virtual HandleResult Handle(GraphicsDevice& device, ShadersCollection& shadersCollection, GraphicsTextureCollection& textureCollection, GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* sceneGraphElement) const = 0;
 protected:
 	std::string m_TypeName;
 };
@@ -92,7 +103,7 @@ class TriangleGraphicsObjectHandler : public OrdinaryGraphicsObjectHandler
 {
 public:
 	TriangleGraphicsObjectHandler();
-	HandleResult Handle(GraphicsDevice& device, ShadersCollection& shadersCollection, GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* sceneGraphElement) const;
+	HandleResult Handle(GraphicsDevice& device, ShadersCollection& shadersCollection, GraphicsTextureCollection& textureCollection, GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* sceneGraphElement) const override;
 private:
 };
 
@@ -138,7 +149,96 @@ class SphereGraphicsObjectHandler : public OrdinaryGraphicsObjectHandler
 {
 public:
     SphereGraphicsObjectHandler();
-    HandleResult Handle(GraphicsDevice& device, ShadersCollection& shadersCollection, GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* sceneGraphElement) const;
+    HandleResult Handle(GraphicsDevice& device, ShadersCollection& shadersCollection, GraphicsTextureCollection& textureCollection, GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* sceneGraphElement) const override;
+private:
+};
+
+class MetaModelGraphicsObject : public OrdinaryGraphicsObject
+{
+public:
+    friend class SubMeshModelGraphicsObject;
+
+    MetaModelGraphicsObject(GraphicsDevice& device, ShadersCollection& shadersCollection, GraphicsTextureCollection& textureCollection, GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* element);
+
+    void ProduceSubMeshes(std::vector<OrdinaryGraphicsObject*>& graphicsObjects);
+
+    //to implement
+    void Serialize(tinyxml2::XMLElement* element, tinyxml2::XMLDocument& document) {}
+    void Deserialize(tinyxml2::XMLElement* element) 
+    {
+        const tinyxml2::XMLAttribute* attr = element->FirstAttribute();
+        popAssert(attr);
+        if (attr)
+        {
+            if (!strcmp(attr->Name(), "path"))
+            {
+                m_Path = attr->Value();
+            }
+        }
+    }
+
+    virtual void WriteGeometry(VertexData& data, const std::set<GraphicsMaterial*>& materialIndexRemap, bool batched = false, size_t vertexesOffset = 0) override {}
+    virtual size_t GetNumVertexes() const override { return 0; }
+    
+    virtual bool IsDrawable() { return false; }
+protected:
+    std::string m_Path;
+    Assimp::Importer            importer;
+    const aiScene* m_ModelScene;
+};
+
+bool operator<(const tinyobj::index_t& v1, const tinyobj::index_t& v2);
+struct ObjIndexComp
+{
+    bool operator()(const tinyobj::index_t& a, const tinyobj::index_t& b) const 
+    {
+        return a < b;
+    }
+};
+
+class SubMeshModelGraphicsObject : public OrdinaryGraphicsObject
+{
+public:
+    struct VertexType {
+
+        VertexType(const glm::vec4& pos, const glm::vec3& normal, const glm::vec2& texCoord) : m_Position(pos), m_Normal(normal) {}
+        glm::vec4 m_Position;
+        glm::vec3 m_Normal;
+        glm::vec2 m_TexCoord;
+    };
+
+    SubMeshModelGraphicsObject(MetaModelGraphicsObject* metaObj, size_t shapeIndex);
+
+    //not to implement
+    void Serialize(tinyxml2::XMLElement* element, tinyxml2::XMLDocument& document) {}
+    void Deserialize(tinyxml2::XMLElement* element) {}
+
+    virtual void WriteGeometry(VertexData& data, const std::set<GraphicsMaterial*>& materialIndexRemap, bool batched = false, size_t vertexesOffset = 0) override;
+    virtual size_t GetNumVertexes() const override;
+
+private:
+    MetaModelGraphicsObject* m_MetaObj;
+    size_t m_ShapeIndex;
+};
+
+class ModelGraphicsObjectHandler : public OrdinaryGraphicsObjectHandler
+{
+public:
+    ModelGraphicsObjectHandler() : OrdinaryGraphicsObjectHandler("model") {}
+    HandleResult Handle(GraphicsDevice& device, ShadersCollection& shadersCollection, GraphicsTextureCollection& textureCollection, GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* sceneGraphElement) const override
+    {
+        HandleResult result;
+        result.m_OrdinaryGraphicsObjects = { };
+        std::string nm = std::string(sceneGraphElement->Name());
+        if (std::string(sceneGraphElement->Name()) != m_TypeName)
+            return result;
+
+        MetaModelGraphicsObject* metaObjModleGraphicsObject = popNew(MetaModelGraphicsObject)(device, shadersCollection, textureCollection, materialsManager, sceneGraphElement);
+        result.m_OrdinaryGraphicsObjects.push_back(metaObjModleGraphicsObject);
+        metaObjModleGraphicsObject->ProduceSubMeshes(result.m_OrdinaryGraphicsObjects);
+
+        return result;
+    }
 private:
 };
 

@@ -1,4 +1,6 @@
 /d3d11nt/VTune Amplifier Results
+*.diagsession
+*.ipdb
 *.opendb
 *.db-shm
 *.db-wal

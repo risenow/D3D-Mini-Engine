@@ -2,7 +2,21 @@
 #include "System/MemoryManager.h"
 #include "Graphics/LightingMaterial.h"
 #include "Graphics/MaterialBatchStructuredBuffer.h"
+#include "Extern/tiny_obj_loader.h"
 #include <d3d11.h>
+#include <assimp/pbrmaterial.h>
+
+PSConsts LightingConstsFromAiMaterial(aiMaterial* mat)
+{
+    PSConsts r;
+    aiColor3D color(0.f, 0.f, 0.f);
+    mat->Get(AI_MATKEY_COLOR_DIFFUSE, color);
+    float rough;
+    mat->Get(AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_ROUGHNESS_FACTOR, rough);
+    r.colorRoughness = glm::vec4(color.r, color.g, color.b, rough);
+
+    return r;
+}
 
 GraphicsConstantsBuffer<PSConsts> GraphicsLightingMaterial::m_ConstantsBuffer;
 bool GraphicsLightingMaterial::m_ConstantsBufferInitialized = false;
@@ -144,12 +158,11 @@ void GraphicsLightingMaterial::Bind(GraphicsDevice& device, ShadersCollection& s
 		BindMultipleGraphicsConstantBuffers(device, 0, { &m_ConstantsBuffer }, GraphicsShaderMask_Pixel);
 	}
 }
-
 GraphicsMaterial* GraphicsLightingMaterial::Handle(GraphicsDevice& device, GraphicsTextureCollection& textureCollection, ShadersCollection& shadersCollection, tinyxml2::XMLElement* sceneGraphElement)
 {
-	if (std::string(sceneGraphElement->Name()) != std::string("plain_color_material"))
+	if (std::string(sceneGraphElement->Name()) != std::string("lighting_material"))
 		return nullptr;
 
-	return (std::string(sceneGraphElement->Name()) == std::string("plain_color_material")) ? 
+	return (std::string(sceneGraphElement->Name()) == std::string("lighting_material")) ? 
 		popNew(GraphicsLightingMaterial)(device, textureCollection, shadersCollection, sceneGraphElement->Attribute("name"), sceneGraphElement) : nullptr;
 }

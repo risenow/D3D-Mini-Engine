@@ -229,6 +229,7 @@ public:
 private:
     ID3DBlob* m_Blob;
     T* m_Shader;
+    size_t m_VariationID; //????
 };
 
 

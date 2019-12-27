@@ -15,6 +15,8 @@ DXGI_FORMAT GetVertexDXGIFormat()
 	return DXGI_FORMAT_UNKNOWN;
 }
 template<> // glm type
+DXGI_FORMAT GetVertexDXGIFormat<glm::vec2>();
+template<> // glm type
 DXGI_FORMAT GetVertexDXGIFormat<glm::vec3>();
 template<> // glm type
 DXGI_FORMAT GetVertexDXGIFormat<glm::vec4>();
@@ -114,5 +116,5 @@ protected:
     typedef STLVector<byte_t> RawData;
     typedef STLVector<RawData> VertexSlotsData;
     VertexSlotsData m_Data;
-    STLVector<uint32_t> m_Indexes;
+    std::vector<uint32_t> m_Indexes;
 };

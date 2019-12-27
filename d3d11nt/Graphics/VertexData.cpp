@@ -3,6 +3,11 @@
 #include "System/logicsafety.h"
 
 template<> // glm type
+DXGI_FORMAT GetVertexDXGIFormat<glm::vec2>()
+{
+    return DXGI_FORMAT_R32G32_FLOAT;
+}
+template<> // glm type
 DXGI_FORMAT GetVertexDXGIFormat<glm::vec3>()
 {
 	return DXGI_FORMAT_R32G32B32_FLOAT;

@@ -8,7 +8,7 @@
 
 #define IMMEDIATE_RENDER_MAX_VERTEXES 2048
 
-struct BasicPSConstsDummy { int p; };
+struct BasicPSConstsDummy { float __p1; float __p2; float __p3; float __p4; };
 
 //use for debug purposes only(at least in current state)
 class ImmediateRenderer

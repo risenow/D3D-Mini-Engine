@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include "Extern/tinyxml2.h"
+#include "Extern/tiny_obj_loader.h"
 #include "Graphics/GraphicsMaterial.h"
 #include "Graphics/GraphicsDevice.h"
 #include "Graphics/GraphicsConstantsBuffer.h"
@@ -8,6 +9,9 @@
 #include "Graphics/GraphicsTextureCollection.h"
 #include "System/Camera.h"
 #include "Data/Shaders/Test/psconstants.h"
+#include <assimp/material.h>
+
+PSConsts LightingConstsFromAiMaterial(aiMaterial* mat);
 
 class GraphicsLightingMaterial : public GraphicsMaterial
 {

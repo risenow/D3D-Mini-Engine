@@ -1,7 +1,9 @@
 // d3d11nt.cpp : Defines the entry point for the console application.
 //
 
+#pragma warning(disable:4996)
 #include "stdafx.h"
+
 #include <initguid.h>
 
 #include "System/MemoryManager.h"
@@ -38,6 +40,7 @@
 #include "Extern/imgui/imgui.h"
 #include "Extern/imgui/examples/imgui_impl_dx11.h"
 #include "Extern/imgui/examples/imgui_impl_win32.h"
+#include "Extern/tiny_obj_loader.h"
 #include <d3d11.h>
 #include <dxgidebug.h>
 #include "Graphics/RenderSet.h"
@@ -72,7 +75,7 @@ Camera CreateInitialCamera(const IniFile& ini, float aspect)
 	const glm::vec3 rotation  = glm::vec3(0.0f, 0.0f, 0.0f);
 	Camera camera = Camera(position, rotation);
     float deg = DeserializeCameraFOV(ini);
-    camera.SetProjection(45.0f, aspect, 0.1f, 1000.0f);
+    camera.SetProjection(45.0f, aspect, 0.1f, 100000.0f);
 	//camera.SetProjection(glm::perspective(glm::radians(DeserializeCameraFOV(ini)), 1.0f, 0.01f, 1000.0f));
 
 	return camera;
@@ -145,7 +148,7 @@ int main(int argc, char* argv[])
     Window window(iniFile);
     MouseKeyboardCameraController mouseKeyboardCameraController(CreateInitialCamera(iniFile, (float)window.GetWidth()/(float)window.GetHeight()), iniFile);
     DisplayAdaptersList displayAdaptersList;
-    D3D11DeviceCreationFlags deviceCreationFlags(commandLineArgs);
+    D3D11DeviceCreationFlags deviceCreationFlags(false, false);//(commandLineArgs);
 
     BasicVariablesCommandProducer basicvarProducer;
     Console cons({ &basicvarProducer });
@@ -184,7 +187,7 @@ int main(int argc, char* argv[])
     shadersCollection.ExecuteShadersCompilation(device);
 
     GraphicsTextureCollection textureCollection;
-    textureCollection.Add(device, "displ.png");
+    //textureCollection.Add(device, "displ.png");
     textureCollection.Add(device, "cubemap.dds");
 
 	SceneGraph sceneGraph(device, textureCollection, shadersCollection, "Data/scene.xml");

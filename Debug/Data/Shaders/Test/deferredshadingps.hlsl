@@ -95,25 +95,16 @@ float Gsmith_epic(float nl, float nv, float a)
     return Gggx_epic(nl, a)*Gggx_epic(nv, a);
 }
 
-float3 CookTorrance(float3 v, float3 n, float3 l, float3 wv, float3 wn, float3 diff, float a)
+float3 CookTorrance(float nl, float nv, float hn, float hv, float3 wv, float3 wn, float3 diff, float a)
 {
     float roughness = Roughness();
     a = roughness*roughness;
     
     float3 zeros = float3(0.0, 0.0, 0.0);
-    
-    v = normalize(v);
-    n = normalize(n);
-    l = normalize(l);
-    float3 h = normalize(v + l);
-    
-    float nl = dot(n, l);
-    float nv = dot(n, v);
-    float hn = dot(h, n);
-    float hv = dot(h, v);
 
     if (nl <= 0.0) return zeros;
-    if (nv <= 0.0) return zeros;
+    if ((hv/nv) <= 0.0) return zeros;
+    //if (hv <= 0.0) return zeros;
  
     float3 r = reflect(wv, normalize(wn));
     float3 envColor = reflEnv.Sample(SampleType, r);
@@ -122,10 +113,9 @@ float3 CookTorrance(float3 v, float3 n, float3 l, float3 wv, float3 wn, float3 d
     float d = Dggxtrow_epic(hn, a);
     float3 s = schlick_epic(hv);
     
-    float3 spec = (g * d * s * 0.25) / ( dot(n, v));
-    //float spec2 = max(spec, float3(0, 0, 0));
+    float3 spec = (g * d * s * 0.25) / (4.0*nv*nl);
 
-    return 3.14*spec + diff*nl;
+    return 3.14*max(spec, 0.0);
 }    
 
 float4 PSEntry(
@@ -171,12 +161,19 @@ float4 PSEntry(
     float4 wPos = mul(vPos, invView);
     float3 wNormal = mul(vNormal, (float3x3)invView);
     float3 wViewVec = normalize(wPos.xyz - wCamPos.xyz);
-    //stc = r;
-    //float coef = dot(normalize(lightVec), isCorrectNormal(vNormal) ? normalize(vNormal) : float3(0.0, 0.0, 0.0));
+    
+    float3 h = normalize(v + l);
+    
+    float nl = dot(vNormal, l);
+    float nv = dot(vNormal, v);
+    float hn = dot(h, vNormal);
+    float hv = dot(h, v);
 
+    //float nl = max(dot(vNormal, l), 0.0);
+    
     //float reflectionWeight = 0.6;
-    float3 ct = CookTorrance(v, vNormal, l, wViewVec, wNormal, diffuse, rough);
-    float4 result = float4(ct + diffuse * 0.1 * 1.0 , 1.0);
+    float3 specular = CookTorrance(nl, nv, hn, hv, wViewVec, wNormal, diffuse, rough);
+    float4 result = float4(ct + diffuse * 0.1 + diffuse * max(nl, 0.0) , 1.0);
     
     //gamma correction
     return pow(result/(result/2.4 + 1.0), (1.0/2.2));

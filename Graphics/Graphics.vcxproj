@@ -76,7 +76,7 @@
     </LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\D3D11Engine\D3D-Mini-Engine\d3d11nt\Extern\DirectXTK\Inc;$(IncludePath);$(SolutionDir)d3d11nt\</IncludePath>
+    <IncludePath>C:\D3D11Engine\D3D-Mini-Engine\d3d11nt\Extern\DirectXTK\Inc;$(IncludePath);$(SolutionDir)d3d11nt\Extern;$(SolutionDir)d3d11nt\</IncludePath>
     <SourcePath>$(SolutionDir)d3d11nt\Graphics\;$(SourcePath)</SourcePath>
     <LibraryPath />
     <TargetName>$(ProjectName)64</TargetName>
@@ -89,9 +89,12 @@
     <SourcePath>$(SolutionDir)d3d11nt\System\;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)d3d11nt;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)d3d11nt;$(SolutionDir)d3d11nt\Extern;$(IncludePath)</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86</LibraryPath>
     <SourcePath>$(SolutionDir)d3d11nt\System\;$(SourcePath)</SourcePath>
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)$(Configuration)\</IntDir>
+    <TargetName>$(ProjectName)64r</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -126,7 +129,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>$(SolutionDir)\Debug\Extern\tinyxml2\tinyxml264.lib;</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)\Debug\Extern\tinyxml2\tinyxml264.lib;assimpmt.lib;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\Release\;</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -146,7 +150,7 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>$(SolutionDir)\Release\Extern\tinyxml2\tinyxml2.lib;</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)\Debug\Extern\tinyxml2\tinyxml264.lib;</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -156,8 +160,9 @@
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>CPU_SIDE_CODE;USE_CUSTOM_ALLOCATORS;NOMINMAX;WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;CPU_SIDE_CODE;NOMINMAX;WIN64;_CONSOLE;_CRT_SECURE_NO_WARNINGS;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -166,7 +171,8 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>$(SolutionDir)\Release\Extern\tinyxml2\tinyxml2.lib;</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)\Release\Extern\tinyxml2\tinyxml264r.lib;assimpmt.lib;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\Release\</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -222,6 +228,7 @@
     <ClInclude Include="..\d3d11nt\graphics\Texture2D.h" />
     <ClInclude Include="..\d3d11nt\graphics\vectors.h" />
     <ClInclude Include="..\d3d11nt\Graphics\VertexData.h" />
+    <ClInclude Include="GraphicsResourceManager.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>

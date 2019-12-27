@@ -79,7 +79,7 @@
     <LinkIncremental>true</LinkIncremental>
     <LibraryPath>$(SolutionDir)Debug;$(LibraryPath)</LibraryPath>
     <SourcePath>$(VC_SourcePath);..\d3d11nt\Data\Shaders\Test\ps.hlsl;</SourcePath>
-    <IncludePath>C:\D3D11Engine\D3D-Mini-Engine\d3d11nt\Extern\DirectXTK\Inc;$(IncludePath)</IncludePath>
+    <IncludePath>C:\D3D11Engine\D3D-Mini-Engine\d3d11nt\Extern\DirectXTK\Inc;$(SolutionDir)d3d11nt\Extern;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)64</TargetName>
@@ -92,9 +92,12 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(WindowsSDK_IncludePath);$(SolutionDir)d3d11nt;$(IncludePath)</IncludePath>
+    <IncludePath>$(WindowsSDK_IncludePath);$(SolutionDir)d3d11nt;$(SolutionDir)d3d11nt\Extern;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Release;$(LibraryPath)</LibraryPath>
     <ExcludePath />
+    <TargetName>$(ProjectName)64r</TargetName>
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -108,7 +111,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>imgui.lib;WICLoader.lib;DDSLoader.lib;Graphics.lib;System.lib;d3d11.lib;d3dcompiler.lib;dxgi.lib;user32.lib;kernel32.lib;gdi32.lib;ole32.lib</AdditionalDependencies>
+      <AdditionalDependencies>tiny_obj_loader.lib;imgui.lib;WICLoader.lib;DDSLoader.lib;Graphics.lib;System.lib;d3d11.lib;d3dcompiler.lib;dxgi.lib;user32.lib;kernel32.lib;gdi32.lib;ole32.lib</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>echo DA|xcopy "$(SolutionDir)\d3d11nt\Data" "$(SolutionDir)\Debug\Data" /s/h/e/k/f/c</Command>
@@ -126,7 +129,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>imgui64.lib;WICTextureLoader64.lib;DDSTextureLoader64.lib;Graphics64.lib;System64.lib;d3d11.lib;d3dcompiler.lib;dxgi.lib;user32.lib;kernel32.lib;gdi32.lib;ole32.lib</AdditionalDependencies>
+      <AdditionalDependencies>assimpmt.lib;tiny_obj_loader64.lib;imgui64.lib;WICTextureLoader64.lib;DDSTextureLoader64.lib;Graphics64.lib;System64.lib;d3d11.lib;d3dcompiler.lib;dxgi.lib;user32.lib;kernel32.lib;gdi32.lib;ole32.lib</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>echo DA|xcopy "$(SolutionDir)\d3d11nt\Data" "$(SolutionDir)\Debug\Data" /s/h/e/k/f/c</Command>
@@ -147,8 +150,11 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;dxgi.lib;dxguid.lib;graphics.lib;System.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>tiny_obj_loader64.lib;imgui64.lib;WICTextureLoader64.lib;DDSTextureLoader64.lib;Graphics64.lib;System64.lib;d3d11.lib;d3dcompiler.lib;dxgi.lib;user32.lib;kernel32.lib;gdi32.lib;ole32.lib%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>echo DA|xcopy "$(SolutionDir)\d3d11nt\Data" "$(SolutionDir)\Debug\Data" /s/h/e/k/f/c</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -157,16 +163,20 @@
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>CPU_SIDE_CODE;WIN32;NDEBUG;_CONSOLE;NOMINMAX;USE_CUSTOM_ALLOCATORS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NDEBUG;CPU_SIDE_CODE;NOMINMAX;WIN64;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;dxgi.lib;dxguid.lib;graphics.lib;System.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>assimpmt.lib;tiny_obj_loader64r.lib;imgui64r.lib;WICTextureLoader64r.lib;DDSTextureLoader64r.lib;Graphics64r.lib;System64r.lib;d3d11.lib;d3dcompiler.lib;dxgi.lib;user32.lib;kernel32.lib;gdi32.lib;ole32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>echo DA|xcopy "$(SolutionDir)\d3d11nt\Data" "$(SolutionDir)\Release\Data" /s/h/e/k/f/c</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />

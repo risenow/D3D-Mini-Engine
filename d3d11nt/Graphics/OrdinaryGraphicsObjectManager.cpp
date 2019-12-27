@@ -8,6 +8,11 @@
 #include "Graphics/GraphicsMaterialsManager.h"
 #include "Extern/glm/gtc/constants.hpp"
 
+bool operator<(const tinyobj::index_t& v1, const tinyobj::index_t& v2)
+{
+    return (v1.normal_index < v2.normal_index) && (v1.texcoord_index < v2.texcoord_index) && (v1.vertex_index < v2.vertex_index);
+}
+
 class GraphicObject; //immediate drawable
 
 struct OrdinaryObjectsKey
@@ -182,14 +187,15 @@ void TriangleOrdinaryGraphicsObject::WriteGeometry(VertexData& data, const std::
 }
 
 
-TriangleGraphicsObjectHandler::HandleResult TriangleGraphicsObjectHandler::Handle(GraphicsDevice& device, ShadersCollection& shadersCollection, GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* sceneGraphElement) const
+TriangleGraphicsObjectHandler::HandleResult TriangleGraphicsObjectHandler::Handle(GraphicsDevice& device, ShadersCollection& shadersCollection, GraphicsTextureCollection& textureCollection, GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* sceneGraphElement) const
 {
-    HandleResult result = { nullptr };
+    HandleResult result;
+    result.m_OrdinaryGraphicsObjects = { };
 	if (std::string(sceneGraphElement->Name()) != m_TypeName)
 		return result;
 
     TriangleOrdinaryGraphicsObject* triangleOrdinaryGraphicsObject = popNew(TriangleOrdinaryGraphicsObject)(materialsManager, sceneGraphElement);
-	result.m_OrdinaryGraphicsObject = triangleOrdinaryGraphicsObject;
+	result.m_OrdinaryGraphicsObjects.push_back(triangleOrdinaryGraphicsObject);
 
 	return result;
 }
@@ -363,22 +369,120 @@ void SphereOrdinaryGraphicsObject::Deserialize(tinyxml2::XMLElement* element)
     m_MatX = element->FirstChildElement("matx")->UnsignedAttribute("x");
 }
 
-SphereGraphicsObjectHandler::HandleResult SphereGraphicsObjectHandler::Handle(GraphicsDevice& device, ShadersCollection& shadersCollection, GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* sceneGraphElement) const
+SphereGraphicsObjectHandler::HandleResult SphereGraphicsObjectHandler::Handle(GraphicsDevice& device, ShadersCollection& shadersCollection, GraphicsTextureCollection& textureCollection, GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* sceneGraphElement) const
 {
-    HandleResult result = {nullptr};
+    HandleResult result;
+    result.m_OrdinaryGraphicsObjects = { };
     std::string nm = std::string(sceneGraphElement->Name());
     if (std::string(sceneGraphElement->Name()) != m_TypeName)
         return result;
 
     SphereOrdinaryGraphicsObject* sphereOrdinaryGraphicsObject = popNew(SphereOrdinaryGraphicsObject)(materialsManager, sceneGraphElement);
-    result.m_OrdinaryGraphicsObject = sphereOrdinaryGraphicsObject;
+    result.m_OrdinaryGraphicsObjects.push_back(sphereOrdinaryGraphicsObject);
 
     return result;
 }
-
 SphereGraphicsObjectHandler::SphereGraphicsObjectHandler() : OrdinaryGraphicsObjectHandler("sphere") {}
 
-OrdinaryGraphicsObjectManager::OrdinaryGraphicsObjectManager() : m_Handlers({ popNew(TriangleGraphicsObjectHandler)(), popNew(SphereGraphicsObjectHandler)() })
+SubMeshModelGraphicsObject::SubMeshModelGraphicsObject(MetaModelGraphicsObject* metaObj, size_t shapeIndex) : m_MetaObj(metaObj), m_ShapeIndex(shapeIndex)
+{
+    const std::string TEXCOORD_PROPERTY_NAME = "TEXCOORD";
+    const std::string NORMAL_PROPERTY_NAME = "NORMAL";
+    const std::string POSITION_PROPERTY_NAME = "POSITION";
+
+    aiNode* modelNode = m_MetaObj->m_ModelScene->mRootNode;
+    const aiNode* node = modelNode->mChildren[m_ShapeIndex];
+    aiMesh* mesh = m_MetaObj->m_ModelScene->mMeshes[node->mMeshes[0]];
+
+    m_Materials.push_back(m_MetaObj->m_Materials[mesh->mMaterialIndex]);
+
+    m_XMLElement = nullptr;
+
+    //add possibility to support arbitary format(ie no normals or no tc)
+    VertexFormat vertexFormat({ CreateVertexPropertyPrototype<glm::vec4>(POSITION_PROPERTY_NAME), CreateVertexPropertyPrototype<glm::vec3>(NORMAL_PROPERTY_NAME), CreateVertexPropertyPrototype<glm::vec2>(TEXCOORD_PROPERTY_NAME) });
+
+    m_VertexFormat = vertexFormat;
+}
+void SubMeshModelGraphicsObject::WriteGeometry(VertexData& data, const std::set<GraphicsMaterial*>& materialIndexRemap, bool batched, size_t vertexesOffset)
+{
+    SubMeshModelGraphicsObject::VertexType* dst = (SubMeshModelGraphicsObject::VertexType*)data.GetDataPtrForSlot(0) + vertexesOffset;
+    aiNode* modelNode = m_MetaObj->m_ModelScene->mRootNode;
+    const aiNode* node = modelNode->mChildren[m_ShapeIndex];
+
+    if (!node->mNumMeshes)
+        return;
+
+    aiMesh* mesh = m_MetaObj->m_ModelScene->mMeshes[node->mMeshes[0]];
+
+    for (unsigned int v = 0; v < mesh->mNumVertices; v++)
+    {
+        aiVector3D aiPos = mesh->mVertices[v];
+        glm::vec4 pos = glm::vec4(aiPos.x, aiPos.y, aiPos.z, 1.0f);
+        aiVector3D aiNormal = mesh->mNormals[v];
+        glm::vec3 normal = glm::vec3(aiNormal.x, aiNormal.y, aiNormal.z);
+        aiVector3D aiTc = mesh->mTextureCoords[0][v];
+        glm::vec2 tc = glm::vec2(aiTc.x, aiTc.y);
+        *(dst + v) = VertexType(pos, normal, tc);
+    }
+
+    std::vector<uint32_t> indexes;
+    for (unsigned int f = 0; f < mesh->mNumFaces; f++)
+    {
+        aiFace* face = &mesh->mFaces[f];
+        indexes.push_back(face->mIndices[0]);
+        indexes.push_back(face->mIndices[1]);
+        indexes.push_back(face->mIndices[2]);
+    }
+
+    std::swap(data.GetIndexes(), indexes);
+}
+size_t SubMeshModelGraphicsObject::GetNumVertexes() const
+{
+    aiNode* modelNode = m_MetaObj->m_ModelScene->mRootNode;
+    const aiNode* node = modelNode->mChildren[m_ShapeIndex];
+
+    aiMesh* mesh = m_MetaObj->m_ModelScene->mMeshes[node->mMeshes[0]];
+    return mesh->mNumVertices;
+}
+
+MetaModelGraphicsObject::MetaModelGraphicsObject(GraphicsDevice& device, ShadersCollection& shadersCollection, GraphicsTextureCollection& textureCollection, GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* element)
+{
+    Deserialize(element);
+    m_ModelScene = importer.ReadFile(m_Path.c_str(), aiProcess_MakeLeftHanded | aiProcess_FlipWindingOrder | aiProcess_FlipUVs | aiProcess_PreTransformVertices |
+        aiProcess_CalcTangentSpace |
+        //aiProcess_GenSmoothNormals |
+        aiProcess_Triangulate |
+        aiProcess_FixInfacingNormals |
+        aiProcess_FindInvalidData |
+        aiProcess_ValidateDataStructure | 0
+
+    );
+    
+    aiMaterial** materials = m_ModelScene->mMaterials;
+    for (size_t i = 0; i < m_ModelScene->mNumMaterials; i++)
+    {
+        aiMaterial* mat = materials[i];
+        aiString name;
+        mat->Get(AI_MATKEY_NAME, name);
+        GraphicsMaterial* material = popNew(GraphicsLightingMaterial)(device, textureCollection, shadersCollection, std::string(name.C_Str()), LightingConstsFromAiMaterial(mat));
+        m_Materials.push_back(material);
+        materialsManager->Add(material);
+    }
+
+    m_XMLElement = element;
+}
+void MetaModelGraphicsObject::ProduceSubMeshes(std::vector<OrdinaryGraphicsObject*>& graphicsObjects)
+{
+    aiNode* modelNode = m_ModelScene->mRootNode;
+    for (size_t i = 0; i < modelNode->mNumChildren; i++)
+    {
+        graphicsObjects.push_back(popNew(SubMeshModelGraphicsObject)(this, i));
+    }
+
+}
+
+
+OrdinaryGraphicsObjectManager::OrdinaryGraphicsObjectManager() : m_Handlers({ popNew(TriangleGraphicsObjectHandler)(), popNew(SphereGraphicsObjectHandler)(), popNew(ModelGraphicsObjectHandler)()})
 {
 }
 
@@ -392,13 +496,14 @@ OrdinaryGraphicsObjectHandler::HandleResult OrdinaryGraphicsObjectManager::Handl
 {
 	for (OrdinaryGraphicsObjectHandler* handler : m_Handlers)
 	{
-		OrdinaryGraphicsObjectHandler::HandleResult handleResult = handler->Handle(device, shadersCollection, materialsManager, sceneGraphElement);
-		if (handleResult.m_OrdinaryGraphicsObject)
-		{
-			m_Objects.push_back(handleResult.m_OrdinaryGraphicsObject);
+		OrdinaryGraphicsObjectHandler::HandleResult handleResult = handler->Handle(device, shadersCollection, textureColection, materialsManager, sceneGraphElement);
+        for (size_t i = 0; i < handleResult.m_OrdinaryGraphicsObjects.size(); i++)
+        {
+            m_Objects.push_back(handleResult.m_OrdinaryGraphicsObjects[i]);
+        }
 
-			return handleResult;
-		} 
+        if (handleResult.m_OrdinaryGraphicsObjects.size())
+            return handleResult;
 	}
 	return OrdinaryGraphicsObjectHandler::HandleResult();
 }
@@ -412,6 +517,8 @@ void OrdinaryGraphicsObjectManager::CompileGraphicObjects(GraphicsDevice& device
 
     for (size_t m = 0; m < m_Objects.size(); m++)
 	{
+        if (!m_Objects[m]->IsDrawable())
+            continue;
         if (allreadyBatched.find(m) != allreadyBatched.end())
             continue;
 
