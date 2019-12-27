@@ -18,11 +18,9 @@ PSConsts LightingConstsFromAiMaterial(aiMaterial* mat)
     return r;
 }
 
-GraphicsConstantsBuffer<PSConsts> GraphicsLightingMaterial::m_ConstantsBuffer;
-bool GraphicsLightingMaterial::m_ConstantsBufferInitialized = false;
-
 GraphicsLightingMaterial::GraphicsLightingMaterial() {}
 GraphicsLightingMaterial::GraphicsLightingMaterial(GraphicsDevice& device, GraphicsTextureCollection& textureCollection, ShadersCollection& shadersCollection, const std::string& name, const PSConsts& data)
+    : TypedGraphicsMaterialBase<PSConsts>(device, shadersCollection, ShaderStrIdentifier(L"Test/ps.hlsl", ShaderVariation()), name)
 {
     m_ShaderVariationIDs = { GetShaderID(L"Test/ps.hlsl", { GraphicsShaderMacro("BATCH", "1") }) };
 
@@ -47,15 +45,9 @@ GraphicsLightingMaterial::GraphicsLightingMaterial(GraphicsDevice& device, Graph
     m_Cubemap = textureCollection["cubemap.dds"];
 
     m_Data = data;
-
-    m_Name = name;
-    if (!m_ConstantsBufferInitialized)
-    {
-        m_ConstantsBuffer = GraphicsConstantsBuffer<PSConsts>(device);
-        m_ConstantsBufferInitialized = true;
-    }
 }
 GraphicsLightingMaterial::GraphicsLightingMaterial(GraphicsDevice& device, GraphicsTextureCollection& textureCollection, ShadersCollection& shadersCollection, const std::string& name, tinyxml2::XMLElement* element)
+          : TypedGraphicsMaterialBase<PSConsts>(device, shadersCollection, ShaderStrIdentifier(L"Test/ps.hlsl", ShaderVariation()), name)
 {
 	m_ShaderVariationIDs = { GetShaderID(L"Test/ps.hlsl", { GraphicsShaderMacro("BATCH", "1") }) };
     
@@ -80,13 +72,6 @@ GraphicsLightingMaterial::GraphicsLightingMaterial(GraphicsDevice& device, Graph
     m_Cubemap = textureCollection["cubemap.dds"];
 
     Deserialize(element);
-
-	m_Name = name;
-	if (!m_ConstantsBufferInitialized)
-	{
-		m_ConstantsBuffer = GraphicsConstantsBuffer<PSConsts>(device);
-		m_ConstantsBufferInitialized = true;
-	}
 }
 void GraphicsLightingMaterial::Serialize(tinyxml2::XMLElement* element, tinyxml2::XMLDocument& document)
 {
@@ -113,50 +98,17 @@ void GraphicsLightingMaterial::Deserialize(tinyxml2::XMLElement* element)
     tinyxml2::XMLElement* pbrElement = element->FirstChildElement("pbr");
     m_Data.colorRoughness.w = pbrElement->FloatAttribute("roughness");
 }
-void* GraphicsLightingMaterial::GetDataPtr()
-{
-	return &m_Data;
-}
-size_t GraphicsLightingMaterial::GetDataSize()
-{
-	return sizeof(PSConsts);
-}
-bool GraphicsLightingMaterial::HasValidConstantsBuffer() const
-{
-	return m_ConstantsBuffer.GetBuffer() != nullptr;
-}
-GraphicsBuffer* GraphicsLightingMaterial::GetConstantsBuffer() const
-{
-	return (GraphicsBuffer*)&m_ConstantsBuffer;
-}
+
 void GraphicsLightingMaterial::Bind(GraphicsDevice& device, ShadersCollection& shadersCollection, const Camera& camera, void* consts, const std::vector<GraphicsShaderMacro>& passMacros, size_t variationIndex/* = 0*/)
 {
-    std::vector<GraphicsShaderMacro> macros;
-    macros.reserve(1 + passMacros.size());
-    macros.push_back(GraphicsShaderMacro("BATCH", "1"));
-    for (size_t i = 0; i < passMacros.size(); i++)
-        macros.push_back(passMacros[i]);
+    
+    m_Data.vLightPos = camera.GetViewMatrix() * m_Lights[0].m_LightPos;
 
-	m_Shader = shadersCollection.GetShader<GraphicsPixelShader>(L"Test/ps.hlsl", macros);
-	m_Shader.Bind(device);
+    _Bind(device, shadersCollection, passMacros);
 
     ID3D11ShaderResourceView* textureSRV = m_Cubemap->GetSRV();
     device.GetD3D11DeviceContext()->PSSetShaderResources(0, 1, (ID3D11ShaderResourceView * *)& textureSRV);
     device.GetD3D11DeviceContext()->PSSetSamplers(0, 1, &m_SamplerState);
-
-    if (m_MaterialStructuredBuffer)
-    {
-        m_MaterialStructuredBuffer->Bind(device);
-        return;
-    }
-
-    m_Data.vLightPos = camera.GetViewMatrix() * m_Lights[0].m_LightPos;
-
-	if (m_ConstantsBufferInitialized)
-	{
-		m_ConstantsBuffer.Update(device, m_Data);
-		BindMultipleGraphicsConstantBuffers(device, 0, { &m_ConstantsBuffer }, GraphicsShaderMask_Pixel);
-	}
 }
 GraphicsMaterial* GraphicsLightingMaterial::Handle(GraphicsDevice& device, GraphicsTextureCollection& textureCollection, ShadersCollection& shadersCollection, tinyxml2::XMLElement* sceneGraphElement)
 {

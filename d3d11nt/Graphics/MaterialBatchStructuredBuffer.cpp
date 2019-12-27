@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "System/MemoryManager.h"
 #include "Graphics/MaterialBatchStructuredBuffer.h"
+#include "Graphics/GraphicsMaterial.h"
 #include "Graphics/dxlogicsafety.h"
 
 MaterialBatchStructuredBuffer::MaterialBatchStructuredBuffer() : m_Data(nullptr), m_ElementSize(0), m_ElementsNum(0) {}

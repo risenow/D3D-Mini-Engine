@@ -32,6 +32,6 @@ public:
 private:
     VertexData m_VertexData;
     size_t m_UsedVertexCount;
-    TypedGraphicsMaterial<BasicPSConstsDummy> m_Material;
+    BasicGraphicsMaterial<BasicPSConstsDummy> m_Material;
     TypedBasicVertexGraphicsTopology<BasicVSConsts> m_Topology;
 };

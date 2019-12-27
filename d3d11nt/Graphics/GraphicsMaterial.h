@@ -8,6 +8,7 @@
 #include "Graphics/GraphicsLightObject.h"
 #include "Graphics/GraphicsTextureCollection.h"
 #include "Graphics/SerializableGraphicsObject.h"
+#include "Graphics/MaterialBatchStructuredBuffer.h"
 #include "System/Camera.h"
 
 class MaterialBatchStructuredBuffer;
@@ -31,6 +32,8 @@ public:
 
 	bool IsBatched();
 
+    void FillMaterialMacros(std::vector<GraphicsShaderMacro>& dst, const std::vector<GraphicsShaderMacro>& passMacros);
+
     std::vector<GraphicsLightObject>& GetLights() { return m_Lights; }
 protected:
 	std::string m_Name;
@@ -42,12 +45,13 @@ protected:
 
 typedef GraphicsMaterial*(*GraphicsMaterialHandleFunc)(GraphicsDevice&, GraphicsTextureCollection&, ShadersCollection&, tinyxml2::XMLElement*);
 
+
 template<class T>
-class TypedGraphicsMaterial : public GraphicsMaterial
+class TypedGraphicsMaterialBase : public GraphicsMaterial
 {
 public:
-    TypedGraphicsMaterial() {}
-    TypedGraphicsMaterial(GraphicsDevice& device, ShadersCollection& shadersCollection, const ShaderStrIdentifier& shaderStrIdentifier, const std::string& name) : m_ShaderStrIdentifier(shaderStrIdentifier)
+    TypedGraphicsMaterialBase() {}
+    TypedGraphicsMaterialBase(GraphicsDevice& device, ShadersCollection& shadersCollection, const ShaderStrIdentifier& shaderStrIdentifier, const std::string& name) : m_ShaderStrIdentifier(shaderStrIdentifier)
     {
         m_Name = name;
         if (!m_ConstantsBufferInitialized)
@@ -56,27 +60,15 @@ public:
             m_ConstantsBufferInitialized = true;
         }
     }
-    virtual void Bind(GraphicsDevice& device, ShadersCollection& shadersCollection, const Camera& camera, void* consts, const std::vector<GraphicsShaderMacro>& passMacros, size_t variationIndex = 0) override
-    {
-        m_Shader = shadersCollection.GetShader<GraphicsPixelShader>(m_ShaderStrIdentifier.path, m_ShaderStrIdentifier.variation);
-        m_Shader.Bind(device);
 
-        if (m_ConstantsBufferInitialized && consts)
-        {
-            m_Data = *((T*)consts);
-            m_ConstantsBuffer.Update(device, m_Data);
-            BindMultipleGraphicsConstantBuffers(device, 0, { &m_ConstantsBuffer }, GraphicsShaderMask_Pixel);
-        }
-    }
     virtual void Serialize(tinyxml2::XMLElement* element, tinyxml2::XMLDocument& document) override {}
     virtual void Deserialize(tinyxml2::XMLElement* element) override {}
 
-
-    virtual void* TypedGraphicsMaterial::GetDataPtr() override
+    virtual void* GetDataPtr() override
     {
         return &m_Data;
     }
-    virtual size_t TypedGraphicsMaterial::GetDataSize() override
+    virtual size_t GetDataSize() override
     {
         return sizeof(T);
     }
@@ -91,6 +83,29 @@ public:
     }
 
 protected:
+    bool _Bind(GraphicsDevice& device, ShadersCollection& shadersCollection, const std::vector<GraphicsShaderMacro>& passMacros)
+    {
+        std::vector<GraphicsShaderMacro> macros;// = passMacros;
+        FillMaterialMacros(macros, passMacros);
+
+        m_Shader = shadersCollection.GetShader<GraphicsPixelShader>(m_ShaderStrIdentifier.path, macros);
+        m_Shader.Bind(device);
+
+        if (m_MaterialStructuredBuffer)
+        {
+            m_MaterialStructuredBuffer->Bind(device);
+            return false;
+        }
+
+        if (m_ConstantsBufferInitialized)
+        {
+            m_ConstantsBuffer.Update(device, m_Data);
+            BindMultipleGraphicsConstantBuffers(device, 0, { &m_ConstantsBuffer }, GraphicsShaderMask_Pixel);
+        }
+
+        return true;
+    }
+
     T m_Data;
     ShaderStrIdentifier m_ShaderStrIdentifier;
 
@@ -99,6 +114,24 @@ protected:
 };
 
 template<class T>
-GraphicsConstantsBuffer<T> TypedGraphicsMaterial<T>::m_ConstantsBuffer;
+GraphicsConstantsBuffer<T> TypedGraphicsMaterialBase<T>::m_ConstantsBuffer;
 template<class T>
-bool TypedGraphicsMaterial<T>::m_ConstantsBufferInitialized;
+bool TypedGraphicsMaterialBase<T>::m_ConstantsBufferInitialized;
+
+template<class T>
+class BasicGraphicsMaterial : public TypedGraphicsMaterialBase<T>
+{
+public:
+    BasicGraphicsMaterial() {}
+    BasicGraphicsMaterial(GraphicsDevice& device, ShadersCollection& shadersCollection, const ShaderStrIdentifier& shaderStrIdentifier, const std::string& name) : TypedGraphicsMaterialBase<T>(device, shadersCollection, shaderStrIdentifier, name)
+    {}
+
+    virtual void Bind(GraphicsDevice& device, ShadersCollection& shadersCollection, const Camera& camera, void* consts, const std::vector<GraphicsShaderMacro>& passMacros, size_t variationIndex = 0) override
+    {
+        if (consts)
+            m_Data = *((T*)consts);
+
+        _Bind(device, shadersCollection, passMacros);
+    }
+protected:
+};

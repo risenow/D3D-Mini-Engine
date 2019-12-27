@@ -1,11 +1,12 @@
 #pragma once
 #include "Graphics/GraphicsDevice.h"
 #include "Graphics/GraphicsBuffer.h"
-#include "Graphics/GraphicsMaterial.h"
 #include <map>
 #include <vector>
 #include <memory>
 
+
+class GraphicsMaterial;
 class MaterialBatchStructuredBuffer
 {
 public:

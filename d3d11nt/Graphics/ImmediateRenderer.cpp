@@ -13,7 +13,7 @@ ImmediateRenderer::ImmediateRenderer(GraphicsDevice& device, ShadersCollection& 
     m_VertexData = VertexData(vertexFormat, IMMEDIATE_RENDER_MAX_VERTEXES);
 
     m_Topology = TypedBasicVertexGraphicsTopology<BasicVSConsts>(device, shadersCollection, ShaderStrIdentifier(L"Test/basicvs.hlsl", ShaderVariation()), m_VertexData, Topology_Lines, GraphicsBuffer::UsageFlag_Default, false);
-    m_Material = TypedGraphicsMaterial< BasicPSConstsDummy>(device, shadersCollection, ShaderStrIdentifier(L"Test/basicps.hlsl", ShaderVariation()), "");
+    m_Material = BasicGraphicsMaterial< BasicPSConstsDummy>(device, shadersCollection, ShaderStrIdentifier(L"Test/basicps.hlsl", ShaderVariation()), "");
 }
 
 void ImmediateRenderer::OnFrameBegin(GraphicsDevice& device)

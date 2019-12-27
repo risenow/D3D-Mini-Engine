@@ -168,12 +168,10 @@ float4 PSEntry(
     float nv = dot(vNormal, v);
     float hn = dot(h, vNormal);
     float hv = dot(h, v);
-
-    //float nl = max(dot(vNormal, l), 0.0);
     
     //float reflectionWeight = 0.6;
     float3 specular = CookTorrance(nl, nv, hn, hv, wViewVec, wNormal, diffuse, rough);
-    float4 result = float4(ct + diffuse * 0.1 + diffuse * max(nl, 0.0) , 1.0);
+    float4 result = float4(specular + diffuse * 0.1 + diffuse * max(nl, 0.0) , 1.0);
     
     //gamma correction
     return pow(result/(result/2.4 + 1.0), (1.0/2.2));

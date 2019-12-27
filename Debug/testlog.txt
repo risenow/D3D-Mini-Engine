@@ -1,80 +1,79 @@
-2[TIME:1690] Adapters enumerated:
-[TIME:1690] Adapter index: 0
-[TIME:1690] Description: NVIDIA GeForce GTX 1070
-[TIME:1690] 
-[TIME:1690] Adapter index: 1
-[TIME:1691] Description: Microsoft Basic Render Driver
-[TIME:1691] 
-2[TIME:3349] C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(68,5-33): warning X3206: implicit truncation of vector type
-C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(119,12-51): warning X3206: implicit truncation of vector type
-C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(115,32): warning X4000: use of potentially uninitialized variable (CookTorrance)
+2[TIME:1335] Adapters enumerated:
+[TIME:1335] Adapter index: 0
+[TIME:1335] Description: NVIDIA GeForce GTX 1070
+[TIME:1336] 
+[TIME:1336] Adapter index: 1
+[TIME:1336] Description: Microsoft Basic Render Driver
+[TIME:1336] 
+2[TIME:5805] C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(68,5-33): warning X3206: implicit truncation of vector type
+C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(110,12-51): warning X3206: implicit truncation of vector type
+C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(105,32): warning X4000: use of potentially uninitialized variable (CookTorrance)
 
-2[TIME:3395] C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(68,5-33): warning X3206: implicit truncation of vector type
-C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(119,12-51): warning X3206: implicit truncation of vector type
-C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(115,32): warning X4000: use of potentially uninitialized variable (CookTorrance)
+2[TIME:5872] C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(68,5-33): warning X3206: implicit truncation of vector type
+C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(110,12-51): warning X3206: implicit truncation of vector type
+C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(105,32): warning X4000: use of potentially uninitialized variable (CookTorrance)
 
-2[TIME:3441] C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(68,5-33): warning X3206: implicit truncation of vector type
-C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(119,12-51): warning X3206: implicit truncation of vector type
-C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(115,32): warning X4000: use of potentially uninitialized variable (CookTorrance)
+2[TIME:5943] C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(68,5-33): warning X3206: implicit truncation of vector type
+C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(110,12-51): warning X3206: implicit truncation of vector type
+C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(105,32): warning X4000: use of potentially uninitialized variable (CookTorrance)
 
-2[TIME:3487] C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(68,5-33): warning X3206: implicit truncation of vector type
-C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(119,12-51): warning X3206: implicit truncation of vector type
-C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(115,32): warning X4000: use of potentially uninitialized variable (CookTorrance)
+2[TIME:6016] C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(68,5-33): warning X3206: implicit truncation of vector type
+C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(110,12-51): warning X3206: implicit truncation of vector type
+C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(105,32): warning X4000: use of potentially uninitialized variable (CookTorrance)
 
-2[TIME:3539] C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(68,5-33): warning X3206: implicit truncation of vector type
-C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(119,12-51): warning X3206: implicit truncation of vector type
-C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(115,32): warning X4000: use of potentially uninitialized variable (CookTorrance)
+2[TIME:6104] C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(68,5-33): warning X3206: implicit truncation of vector type
+C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(110,12-51): warning X3206: implicit truncation of vector type
+C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(105,32): warning X4000: use of potentially uninitialized variable (CookTorrance)
 
-2[TIME:3586] C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(68,5-33): warning X3206: implicit truncation of vector type
-C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(119,12-51): warning X3206: implicit truncation of vector type
-C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(115,32): warning X4000: use of potentially uninitialized variable (CookTorrance)
+2[TIME:6193] C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(68,5-33): warning X3206: implicit truncation of vector type
+C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(110,12-51): warning X3206: implicit truncation of vector type
+C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(105,32): warning X4000: use of potentially uninitialized variable (CookTorrance)
 
-2[TIME:3637] C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(68,5-33): warning X3206: implicit truncation of vector type
-C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(119,12-51): warning X3206: implicit truncation of vector type
-C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(115,32): warning X4000: use of potentially uninitialized variable (CookTorrance)
+2[TIME:6285] C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(68,5-33): warning X3206: implicit truncation of vector type
+C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(110,12-51): warning X3206: implicit truncation of vector type
+C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(105,32): warning X4000: use of potentially uninitialized variable (CookTorrance)
 
-2[TIME:3689] C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(68,5-33): warning X3206: implicit truncation of vector type
-C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(119,12-51): warning X3206: implicit truncation of vector type
-C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(115,32): warning X4000: use of potentially uninitialized variable (CookTorrance)
+2[TIME:6376] C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(68,5-33): warning X3206: implicit truncation of vector type
+C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(110,12-51): warning X3206: implicit truncation of vector type
+C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(105,32): warning X4000: use of potentially uninitialized variable (CookTorrance)
 
-2[TIME:3738] C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(68,5-33): warning X3206: implicit truncation of vector type
-C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(119,12-51): warning X3206: implicit truncation of vector type
-C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(115,32): warning X4000: use of potentially uninitialized variable (CookTorrance)
+2[TIME:6462] C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(68,5-33): warning X3206: implicit truncation of vector type
+C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(110,12-51): warning X3206: implicit truncation of vector type
+C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(105,32): warning X4000: use of potentially uninitialized variable (CookTorrance)
 
-2[TIME:3792] C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(68,5-33): warning X3206: implicit truncation of vector type
-C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(119,12-51): warning X3206: implicit truncation of vector type
-C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(115,32): warning X4000: use of potentially uninitialized variable (CookTorrance)
+2[TIME:6555] C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(68,5-33): warning X3206: implicit truncation of vector type
+C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(110,12-51): warning X3206: implicit truncation of vector type
+C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(105,32): warning X4000: use of potentially uninitialized variable (CookTorrance)
 
-2[TIME:3840] C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(68,5-33): warning X3206: implicit truncation of vector type
-C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(119,12-51): warning X3206: implicit truncation of vector type
-C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(115,32): warning X4000: use of potentially uninitialized variable (CookTorrance)
+2[TIME:6637] C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(68,5-33): warning X3206: implicit truncation of vector type
+C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(110,12-51): warning X3206: implicit truncation of vector type
+C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(105,32): warning X4000: use of potentially uninitialized variable (CookTorrance)
 
-2[TIME:3898] C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(68,5-33): warning X3206: implicit truncation of vector type
-C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(119,12-51): warning X3206: implicit truncation of vector type
-C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(115,32): warning X4000: use of potentially uninitialized variable (CookTorrance)
+2[TIME:6722] C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(68,5-33): warning X3206: implicit truncation of vector type
+C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(110,12-51): warning X3206: implicit truncation of vector type
+C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(105,32): warning X4000: use of potentially uninitialized variable (CookTorrance)
 
-2[TIME:3948] C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(68,5-33): warning X3206: implicit truncation of vector type
-C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(119,12-51): warning X3206: implicit truncation of vector type
-C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(115,32): warning X4000: use of potentially uninitialized variable (CookTorrance)
+2[TIME:6804] C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(68,5-33): warning X3206: implicit truncation of vector type
+C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(110,12-51): warning X3206: implicit truncation of vector type
+C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(105,32): warning X4000: use of potentially uninitialized variable (CookTorrance)
 
-2[TIME:4000] C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(68,5-33): warning X3206: implicit truncation of vector type
-C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(119,12-51): warning X3206: implicit truncation of vector type
-C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(115,32): warning X4000: use of potentially uninitialized variable (CookTorrance)
+2[TIME:6883] C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(68,5-33): warning X3206: implicit truncation of vector type
+C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(110,12-51): warning X3206: implicit truncation of vector type
+C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(105,32): warning X4000: use of potentially uninitialized variable (CookTorrance)
 
-2[TIME:4056] C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(68,5-33): warning X3206: implicit truncation of vector type
-C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(119,12-51): warning X3206: implicit truncation of vector type
-C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(115,32): warning X4000: use of potentially uninitialized variable (CookTorrance)
+2[TIME:6966] C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(68,5-33): warning X3206: implicit truncation of vector type
+C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(110,12-51): warning X3206: implicit truncation of vector type
+C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(105,32): warning X4000: use of potentially uninitialized variable (CookTorrance)
 
-2[TIME:4115] C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(68,5-33): warning X3206: implicit truncation of vector type
-C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(119,12-51): warning X3206: implicit truncation of vector type
-C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(115,32): warning X4000: use of potentially uninitialized variable (CookTorrance)
+2[TIME:7055] C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(68,5-33): warning X3206: implicit truncation of vector type
+C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(110,12-51): warning X3206: implicit truncation of vector type
+C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\deferredshadingps.hlsl(105,32): warning X4000: use of potentially uninitialized variable (CookTorrance)
 
-2[TIME:4312] C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\cs.hlsl(44,15): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used
+2[TIME:7299] C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\cs.hlsl(44,15): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used
 
-2[TIME:4430] C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\cs.hlsl(19,19): warning X1519: 'offset_x' : macro redefinition
+2[TIME:7469] C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\cs.hlsl(19,19): warning X1519: 'offset_x' : macro redefinition
 C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\cs.hlsl(44,15): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used
 
-2[TIME:4544] C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\cs.hlsl(24,19): warning X1519: 'offset_y' : macro redefinition
+2[TIME:7615] C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\cs.hlsl(24,19): warning X1519: 'offset_y' : macro redefinition
 C:\D3D11Engine\D3D-Mini-Engine\Debug\Data\Shaders\Test\cs.hlsl(44,15): warning X3078: 'i': loop control variable conflicts with a previous declaration in the outer scope; most recent declaration will be used
 
-2[TIME:15761] Operation error: One or more arguments are not valid Line: 105
