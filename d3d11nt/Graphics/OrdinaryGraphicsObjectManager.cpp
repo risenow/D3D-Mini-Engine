@@ -3,6 +3,7 @@
 #include "GraphicsObject.h"
 #include "System/MemoryManager.h"
 #include "System/hashutils.h"
+#include "System/pathutils.h"
 #include "Graphics/OrdinaryGraphicsObjectManager.h"
 #include "Graphics/LightingGraphicsTopology.h"
 #include "Graphics/GraphicsMaterialsManager.h"
@@ -386,6 +387,8 @@ SphereGraphicsObjectHandler::SphereGraphicsObjectHandler() : OrdinaryGraphicsObj
 
 SubMeshModelGraphicsObject::SubMeshModelGraphicsObject(MetaModelGraphicsObject* metaObj, size_t shapeIndex) : m_MetaObj(metaObj), m_ShapeIndex(shapeIndex)
 {
+    const std::string BITANGENT_PROPERTY_NAME = "NORMAL";
+    const std::string TANGENT_PROPERTY_NAME = "NORMAL";
     const std::string TEXCOORD_PROPERTY_NAME = "TEXCOORD";
     const std::string NORMAL_PROPERTY_NAME = "NORMAL";
     const std::string POSITION_PROPERTY_NAME = "POSITION";
@@ -399,13 +402,25 @@ SubMeshModelGraphicsObject::SubMeshModelGraphicsObject(MetaModelGraphicsObject* 
     m_XMLElement = nullptr;
 
     //add possibility to support arbitary format(ie no normals or no tc)
-    VertexFormat vertexFormat({ CreateVertexPropertyPrototype<glm::vec4>(POSITION_PROPERTY_NAME), CreateVertexPropertyPrototype<glm::vec3>(NORMAL_PROPERTY_NAME), CreateVertexPropertyPrototype<glm::vec2>(TEXCOORD_PROPERTY_NAME) });
+    std::vector<VertexPropertyPrototype> vertexProperties = { CreateVertexPropertyPrototype<glm::vec4>(POSITION_PROPERTY_NAME) };
+    if (mesh->HasNormals())
+        vertexProperties.push_back(CreateVertexPropertyPrototype<glm::vec3>(NORMAL_PROPERTY_NAME, 0));
+    if (mesh->HasTextureCoords(0))
+        vertexProperties.push_back(CreateVertexPropertyPrototype<glm::vec2>(TEXCOORD_PROPERTY_NAME));
+    if (mesh->HasTangentsAndBitangents())
+    {
+        vertexProperties.push_back(CreateVertexPropertyPrototype<glm::vec3>(TANGENT_PROPERTY_NAME, 1));
+        vertexProperties.push_back(CreateVertexPropertyPrototype<glm::vec3>(BITANGENT_PROPERTY_NAME, 2));
+    }
+
+    //VertexFormat vertexFormat({ CreateVertexPropertyPrototype<glm::vec4>(POSITION_PROPERTY_NAME), CreateVertexPropertyPrototype<glm::vec3>(NORMAL_PROPERTY_NAME), CreateVertexPropertyPrototype<glm::vec2>(TEXCOORD_PROPERTY_NAME) });
+    VertexFormat vertexFormat(vertexProperties);
 
     m_VertexFormat = vertexFormat;
 }
 void SubMeshModelGraphicsObject::WriteGeometry(VertexData& data, const std::set<GraphicsMaterial*>& materialIndexRemap, bool batched, size_t vertexesOffset)
 {
-    SubMeshModelGraphicsObject::VertexType* dst = (SubMeshModelGraphicsObject::VertexType*)data.GetDataPtrForSlot(0) + vertexesOffset;
+    float* dst = (float*)((SubMeshModelGraphicsObject::VertexType*)data.GetDataPtrForSlot(0) + vertexesOffset);
     aiNode* modelNode = m_MetaObj->m_ModelScene->mRootNode;
     const aiNode* node = modelNode->mChildren[m_ShapeIndex];
 
@@ -414,15 +429,49 @@ void SubMeshModelGraphicsObject::WriteGeometry(VertexData& data, const std::set<
 
     aiMesh* mesh = m_MetaObj->m_ModelScene->mMeshes[node->mMeshes[0]];
 
+    bool normalsEnabled = mesh->HasNormals();
+    bool tcEnabled = mesh->HasTextureCoords(0);
+    bool tbnEnabled = mesh->HasTangentsAndBitangents();
+
+    size_t stride = 4;
+    if (normalsEnabled)
+        stride += 3;
+    if (tcEnabled)
+        stride += 2;
+    if (tbnEnabled)
+        stride += 6;
+
     for (unsigned int v = 0; v < mesh->mNumVertices; v++)
     {
+
         aiVector3D aiPos = mesh->mVertices[v];
         glm::vec4 pos = glm::vec4(aiPos.x, aiPos.y, aiPos.z, 1.0f);
-        aiVector3D aiNormal = mesh->mNormals[v];
-        glm::vec3 normal = glm::vec3(aiNormal.x, aiNormal.y, aiNormal.z);
-        aiVector3D aiTc = mesh->mTextureCoords[0][v];
-        glm::vec2 tc = glm::vec2(aiTc.x, aiTc.y);
-        *(dst + v) = VertexType(pos, normal, tc);
+        *((glm::vec4*)(dst + v * stride)) = pos;
+
+        if (normalsEnabled)
+        {
+            aiVector3D aiNormal = mesh->mNormals[v];
+            glm::vec3 normal = glm::vec3(aiNormal.x, aiNormal.y, aiNormal.z);
+            *((glm::vec3*)(dst + v * stride + 4)) = normal;
+        }
+
+        if (tcEnabled)
+        {
+            aiVector3D aiTc = mesh->mTextureCoords[0][v];
+            glm::vec2 tc = glm::vec2(aiTc.x, aiTc.y);
+            *((glm::vec2*)(dst + v * stride + 7)) = tc;
+        }
+        if (tbnEnabled)
+        {
+            aiVector3D aiTangent = mesh->mTangents[v];
+            glm::vec3 tangent = glm::vec3(aiTangent.x, aiTangent.y, aiTangent.z);
+            *((glm::vec3*)(dst + v * stride + 9)) = tangent;
+
+            aiVector3D aiBitangent = mesh->mBitangents[v];
+            glm::vec3 bitangent = glm::vec3(aiBitangent.x, aiBitangent.y, aiBitangent.z);
+            *((glm::vec3*)(dst + v * stride + 11)) = bitangent;
+        }
+        //*(dst + v) = VertexType(pos, normal, tc);
     }
 
     std::vector<uint32_t> indexes;
@@ -444,6 +493,24 @@ size_t SubMeshModelGraphicsObject::GetNumVertexes() const
     aiMesh* mesh = m_MetaObj->m_ModelScene->mMeshes[node->mMeshes[0]];
     return mesh->mNumVertices;
 }
+bool SubMeshModelGraphicsObject::TBNEnabled()
+{
+    aiNode* modelNode = m_MetaObj->m_ModelScene->mRootNode;
+    const aiNode* node = modelNode->mChildren[m_ShapeIndex];
+
+    aiMesh* mesh = m_MetaObj->m_ModelScene->mMeshes[node->mMeshes[0]];
+
+    return mesh->HasTangentsAndBitangents();
+}
+bool SubMeshModelGraphicsObject::TexCoordEnabled()
+{
+    aiNode* modelNode = m_MetaObj->m_ModelScene->mRootNode;
+    const aiNode* node = modelNode->mChildren[m_ShapeIndex];
+
+    aiMesh* mesh = m_MetaObj->m_ModelScene->mMeshes[node->mMeshes[0]];
+
+    return mesh->HasTextureCoords(0);
+}
 
 MetaModelGraphicsObject::MetaModelGraphicsObject(GraphicsDevice& device, ShadersCollection& shadersCollection, GraphicsTextureCollection& textureCollection, GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* element)
 {
@@ -458,13 +525,23 @@ MetaModelGraphicsObject::MetaModelGraphicsObject(GraphicsDevice& device, Shaders
 
     );
     
+    aiNode* modelNode = m_ModelScene->mRootNode;
+    const aiNode* node = modelNode->mChildren[0];
+
+    aiMesh* mesh = m_ModelScene->mMeshes[node->mMeshes[0]];
+    //check for material's mesh?
+
+    bool tbn = mesh->HasTangentsAndBitangents();
+    bool tc = mesh->HasTextureCoords(0);
+
     aiMaterial** materials = m_ModelScene->mMaterials;
     for (size_t i = 0; i < m_ModelScene->mNumMaterials; i++)
     {
         aiMaterial* mat = materials[i];
         aiString name;
         mat->Get(AI_MATKEY_NAME, name);
-        GraphicsMaterial* material = popNew(GraphicsLightingMaterial)(device, textureCollection, shadersCollection, std::string(name.C_Str()), LightingConstsFromAiMaterial(mat));
+        //TBN ALWAYS TRUE?
+        GraphicsMaterial* material = popNew(GraphicsLightingMaterial)(device, textureCollection, shadersCollection, std::string(name.C_Str()), LightingConstsFromAiMaterial(mat), ExtractLightingMaterialTexturesFromAiMaterial(device, textureCollection, mat, ExcludeFileFromPath(m_Path)), tc, tbn);
         m_Materials.push_back(material);
         materialsManager->Add(material);
     }
@@ -568,9 +645,14 @@ void OrdinaryGraphicsObjectManager::CompileGraphicObjects(GraphicsDevice& device
 		size_t vertexesWritten = 0;
         VertexFormat usedVertexFormat = (batched) ? batchedVertexFormat : basicVertexFormat;
 		VertexData vertexData(usedVertexFormat, overallVertexesNum);
+        bool enableTBN = false;
+        bool enableTC = false;
 		for (size_t i : batchSet)
 		{
             OrdinaryGraphicsObject* obj = m_Objects[i];
+
+            enableTBN = enableTBN || obj->TBNEnabled();
+            enableTC = enableTC || obj->TexCoordEnabled();
 
             obj->WriteGeometry(vertexData, materialsIndexMap, batched, vertexesWritten);
             vertexesWritten += obj->GetNumVertexes();
@@ -579,9 +661,14 @@ void OrdinaryGraphicsObjectManager::CompileGraphicObjects(GraphicsDevice& device
 		}
 
 
+        uint32_t inputSignExtractionVariation = 0;
+        if (enableTBN)
+            inputSignExtractionVariation = inputSignExtractionVariation | BasicPixelShaderVariations::TBN;
+        if (enableTC)
+            inputSignExtractionVariation = inputSignExtractionVariation | BasicPixelShaderVariations::TEXCOORD;
 		GraphicsObject object;
 		object.m_Valid = true;
-        object.m_Topology = popNew(TypedBasicVertexGraphicsTopology<VSConsts>)(device, shadersCollection, ShaderStrIdentifier(std::wstring(L"Test/vs.hlsl"), ShaderVariation()), vertexData, Topology_Triangles, GraphicsBuffer::UsageFlag_Immutable);
+        object.m_Topology = popNew(TypedBasicVertexGraphicsTopology<VSConsts>)(device, shadersCollection, ShaderStrIdentifier(std::wstring(L"Test/vs.hlsl"), inputSignExtractionVariation), vertexData, Topology_Triangles, GraphicsBuffer::UsageFlag_Immutable, enableTC, enableTBN, batched);
 
         std::vector<GraphicsMaterial*> tempMaterials;
 
@@ -619,7 +706,7 @@ void OrdinaryGraphicsObjectManager::CompileGraphicObjects(GraphicsDevice& device
 }
 
 
-void OrdinaryGraphicsObjectManager::Render(GraphicsDevice& device, ShadersCollection& shadersCollection, const std::vector<GraphicsShaderMacro>& passMacros, const Camera& camera)
+void OrdinaryGraphicsObjectManager::Render(GraphicsDevice& device, ShadersCollection& shadersCollection, uint32_t passMacros, const Camera& camera)
 {
 	for (GraphicsObject& object : m_DrawableObjects)
 	{

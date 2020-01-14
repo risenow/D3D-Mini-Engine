@@ -7,7 +7,8 @@
 #include <unordered_set>
 
 
-SceneGraph::SceneGraph() : m_Managers({ m_OrdinaryGraphicsObjectManager = popNew(OrdinaryGraphicsObjectManager)(), m_MaterialsManager = popNew(GraphicsMaterialsManager)() }) {}
+SceneGraph::SceneGraph() : m_Managers({ m_OrdinaryGraphicsObjectManager = popNew(OrdinaryGraphicsObjectManager)(), m_MaterialsManager = popNew(GraphicsMaterialsManager)() })
+                                        /*order is IMPORTANT*/ {}
 SceneGraph::SceneGraph(GraphicsDevice& device, GraphicsTextureCollection& textureCollection, ShadersCollection& shadersCollection, const std::string& sceneGraphFilePath) : SceneGraph()
 {
 	tinyxml2::XMLDocument sceneGraphXML;

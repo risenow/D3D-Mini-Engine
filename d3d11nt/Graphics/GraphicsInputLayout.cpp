@@ -16,5 +16,5 @@ ID3D11InputLayout* GraphicsInputLayout::GetD3D11InputLayout()
 }
 void GraphicsInputLayout::Bind(GraphicsDevice& device)
 {
-	device.GetD3D11DeviceContext()->IASetInputLayout(GetD3D11InputLayout());
+    device.GetD3D11DeviceContext()->IASetInputLayout(GetD3D11InputLayout());
 }

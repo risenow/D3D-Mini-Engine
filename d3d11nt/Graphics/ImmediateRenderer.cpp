@@ -12,8 +12,8 @@ ImmediateRenderer::ImmediateRenderer(GraphicsDevice& device, ShadersCollection& 
     VertexFormat vertexFormat({ CreateVertexPropertyPrototype<glm::vec4>(POSITION_PROPERTY_NAME), CreateVertexPropertyPrototype<glm::vec4>(COLOR_PROPERTY_NAME) });
     m_VertexData = VertexData(vertexFormat, IMMEDIATE_RENDER_MAX_VERTEXES);
 
-    m_Topology = TypedBasicVertexGraphicsTopology<BasicVSConsts>(device, shadersCollection, ShaderStrIdentifier(L"Test/basicvs.hlsl", ShaderVariation()), m_VertexData, Topology_Lines, GraphicsBuffer::UsageFlag_Default, false);
-    m_Material = BasicGraphicsMaterial< BasicPSConstsDummy>(device, shadersCollection, ShaderStrIdentifier(L"Test/basicps.hlsl", ShaderVariation()), "");
+    m_Topology = TypedBasicVertexGraphicsTopology<BasicVSConsts>(device, shadersCollection, ShaderStrIdentifier(L"Test/basicvs.hlsl", 0), m_VertexData, Topology_Lines, GraphicsBuffer::UsageFlag_Default, false);
+    m_Material = BasicGraphicsMaterial< BasicPSConstsDummy>(device, shadersCollection, ShaderStrIdentifier(L"Test/basicps.hlsl", 0), "");
 }
 
 void ImmediateRenderer::OnFrameBegin(GraphicsDevice& device)

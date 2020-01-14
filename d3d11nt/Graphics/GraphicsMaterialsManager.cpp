@@ -33,7 +33,10 @@ GraphicsObjectManager::HandleResult GraphicsMaterialsManager::Handle(GraphicsDev
 }
 void GraphicsMaterialsManager::Add(GraphicsMaterial* material)
 {
-    m_Materials[material->GetName()] = material;
+    std::string key = material->GetName();;
+    if ((m_Materials.find(material->GetName()) != m_Materials.end()))
+        key += '_';
+    m_Materials[key] = material;
 }
 void GraphicsMaterialsManager::Update(const std::vector<GraphicsLightObject>& lights)
 {

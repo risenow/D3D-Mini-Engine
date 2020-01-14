@@ -14,33 +14,38 @@ static const std::wstring ShadersRootPath = L"Data/Shaders/";
 
 typedef FNVhash_t ShaderID;
 typedef std::vector<GraphicsShaderMacro> ShaderVariation;
+struct ExtendedShaderVariation
+{
+    ShaderVariation m_ShaderVariation;
+    uint32_t m_Bits;
+};
 
 void GetAllMacrosCombinations(const std::vector<GraphicsShaderMacro>& macroSet, std::vector<std::vector<GraphicsShaderMacro>>& permutations, size_t hasAnyOfRule = 0, size_t hasOnlyOneOfRule = 0, size_t optionallyHasOnlyOneOfRule = 0, size_t hasAllOfRule = 0);
-std::vector<ShaderVariation> GetAllPermutations(const std::vector<GraphicsShaderMacro>& macroSet, size_t hasAnyOfRule = 0, size_t hasOnlyOneOfRule = 0, size_t optionallyHasOnlyOneOfRule = 0, size_t hasAllOfRule = 0);
+std::vector<ExtendedShaderVariation> GetAllPermutations(const std::vector<GraphicsShaderMacro>& macroSet, size_t hasAnyOfRule = 0, size_t hasOnlyOneOfRule = 0, size_t optionallyHasOnlyOneOfRule = 0, size_t hasAllOfRule = 0);
 
 struct ShaderStrIdentifier
 {
     ShaderStrIdentifier() {}
-    ShaderStrIdentifier(const std::wstring& _path, ShaderVariation& _variation) : path(_path), variation(_variation) {}
+    ShaderStrIdentifier(const std::wstring& _path, uint32_t _variation) : path(_path), variation(_variation) {}
     std::wstring path;
-    ShaderVariation variation;
+    uint32_t variation;
 };
 
 template<class T>
 class CompilableShader
 {
 public:
-	CompilableShader(const std::wstring& filePath, const std::vector<ShaderVariation>& shaderVariations = {}) : m_Changed(true), m_FilePath(filePath), m_ShaderVariations(shaderVariations) { Load(ShadersRootPath + filePath); }
+	CompilableShader(const std::wstring& filePath, const std::vector<ExtendedShaderVariation>& shaderVariations = {}) : m_Changed(true), m_FilePath(filePath), m_ShaderVariations(shaderVariations) { Load(ShadersRootPath + filePath); }
 
 	//bool m_Loaded;
 	std::wstring m_FilePath;
-	std::vector<ShaderVariation> m_ShaderVariations;
+	std::vector<ExtendedShaderVariation> m_ShaderVariations;
 	std::string m_Content;
 
 	ShaderID GetVariationID(size_t variationIndex) const
 	{
-		ShaderID id = GetShaderID(m_FilePath, m_ShaderVariations[variationIndex]);
-		return GetShaderID(m_FilePath, m_ShaderVariations[variationIndex]);
+		ShaderID id = GetShaderID(m_FilePath, m_ShaderVariations[variationIndex].m_Bits); // delete
+		return GetShaderID(m_FilePath, m_ShaderVariations[variationIndex].m_Bits);
 	}
 	size_t GetVariationsCount() const
 	{
@@ -75,7 +80,7 @@ public:
 	T Compile(GraphicsDevice& device, size_t variationIndex)
 	{
         m_Changed = false;
-		return T::CreateFromTextContent(device, ShadersRootPath + m_FilePath, m_Content, m_ShaderVariations[variationIndex]);
+		return T::CreateFromTextContent(device, ShadersRootPath + m_FilePath, m_Content, m_ShaderVariations[variationIndex].m_ShaderVariation);
 	}
 
     bool IsChanged() const
@@ -91,7 +96,7 @@ private:
     bool m_Changed;
 };
 
-ShaderID GetShaderID(const std::wstring& filePath, const std::vector<GraphicsShaderMacro>& shaderMacros);
+ShaderID GetShaderID(const std::wstring& filePath, uint32_t bits);
 
 class ShadersCollection
 {
@@ -99,7 +104,7 @@ public:
 	ShadersCollection(GraphicsDevice& device);
 
 	template<class T>
-	void AddShader(const std::wstring& filePath, const std::vector<ShaderVariation>& shaderMacros = {})
+	void AddShader(const std::wstring& filePath, const std::vector<ExtendedShaderVariation>& shaderMacros = {})
 	{
 		LOG(std::string("Shader type is not supported"));
 		popAssert(false);
@@ -107,7 +112,7 @@ public:
 
 #define DeclAddShader(type, v) \
     template<> \
-    void AddShader<##type>(const std::wstring& filePath, const std::vector<ShaderVariation>& shaderMacros) \
+    void AddShader<##type>(const std::wstring& filePath, const std::vector<ExtendedShaderVariation>& shaderMacros) \
     { \
         std::lock_guard<std::mutex> lockGuard(m_ShadersLoadingMutex); \
         ##v .push_back(CompilableShader< ##type >(filePath, shaderMacros)); \
@@ -121,7 +126,7 @@ public:
   
     
 	template<class T>
-	T GetShader(const std::wstring& filePath, const std::vector<GraphicsShaderMacro>& shaderMacros)
+	T GetShader(const std::wstring& filePath, const uint32_t& shaderMacros)
 	{
 		LOG(std::string("Shader type is not supported"));
 		popAssert(false);
@@ -131,7 +136,7 @@ public:
 
 #define DeclGetShader(type, v) \
     template<> \
-    ##type GetShader< ##type >(const std::wstring& filePath, const std::vector<GraphicsShaderMacro>& shaderMacros) \
+    ##type GetShader< ##type >(const std::wstring& filePath, const uint32_t& shaderMacros) \
     { \
        std::lock_guard<std::mutex> lockGuard(m_ShadersLoadingMutex); \
        ShaderID id = GetShaderID(filePath, shaderMacros);  \

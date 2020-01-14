@@ -25,7 +25,7 @@ Texture2D::Texture2D(GraphicsDevice& device, ID3D11Texture2D* texture, ID3D11Sha
     m_SampleDesc = desc.SampleDesc;
 
     D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
-    srvDesc.Texture2D.MipLevels = 1;
+    srvDesc.Texture2D.MipLevels = desc.MipLevels;
     srvDesc.Texture2D.MostDetailedMip = 0;
     srvDesc.Format = m_DXGIFormat;
     srvDesc.ViewDimension = m_SampleDesc.Count > 1 ? D3D11_SRV_DIMENSION_TEXTURE2DMS : D3D11_SRV_DIMENSION_TEXTURE2D;

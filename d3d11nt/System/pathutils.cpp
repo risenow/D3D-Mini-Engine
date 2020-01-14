@@ -1,6 +1,11 @@
 #include "stdafx.h"
 #include "System/pathutils.h"
 
+/*std::string ExcludeFileFromPath(const std::string& path)
+{
+    return ReducePathRank(path, GetPathRank(path) - 1);
+}
+
 bool IsPathToFile(const std::wstring& path)
 {
 	for (long i = path.size() - 1; i >= 0; i--)
@@ -71,8 +76,8 @@ void NormalizePath(std::wstring& path)
 			path[i] = '/';
 	}
 }
-
-void NormalizePath(wchar_t* path)
+*/
+void NormalizePathPlain(wchar_t* path)
 {
 	for (unsigned long i = 0; path[i] != '\0'; i++)
 	{

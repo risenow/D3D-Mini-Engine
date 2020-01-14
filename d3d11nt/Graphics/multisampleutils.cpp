@@ -26,3 +26,11 @@ DXGI_SAMPLE_DESC GetSampleDesc(GraphicsDevice& device, DXGI_FORMAT format, Multi
     }
     return desc;
 }
+DXGI_SAMPLE_DESC GetDefaultSampleDesc()
+{
+    DXGI_SAMPLE_DESC desc;
+    desc.Count = 1;
+    desc.Quality = 0;
+
+    return desc;
+}

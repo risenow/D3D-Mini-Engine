@@ -2,6 +2,7 @@
 #include "System/MemoryManager.h"
 #include "Graphics/LightingMaterial.h"
 #include "Graphics/MaterialBatchStructuredBuffer.h"
+#include "Graphics/BasicPixelShaderVariations.h"
 #include "Extern/tiny_obj_loader.h"
 #include <d3d11.h>
 #include <assimp/pbrmaterial.h>
@@ -14,18 +15,56 @@ PSConsts LightingConstsFromAiMaterial(aiMaterial* mat)
     float rough;
     mat->Get(AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_ROUGHNESS_FACTOR, rough);
     r.colorRoughness = glm::vec4(color.r, color.g, color.b, rough);
-
     return r;
 }
 
-GraphicsLightingMaterial::GraphicsLightingMaterial() {}
-GraphicsLightingMaterial::GraphicsLightingMaterial(GraphicsDevice& device, GraphicsTextureCollection& textureCollection, ShadersCollection& shadersCollection, const std::string& name, const PSConsts& data)
-    : TypedGraphicsMaterialBase<PSConsts>(device, shadersCollection, ShaderStrIdentifier(L"Test/ps.hlsl", ShaderVariation()), name)
+std::string PreProcessPath(const std::string& _path, const std::string basePath)
 {
-    m_ShaderVariationIDs = { GetShaderID(L"Test/ps.hlsl", { GraphicsShaderMacro("BATCH", "1") }) };
+    std::string path;
+    path.reserve(_path.size() + basePath.size() + 1);
+    path = basePath;
+    if (path[path.size() - 1] != '/')
+        path += '/';
+    path += std::string(_path.c_str());
+
+    return path;
+}
+
+std::vector<Texture2D*> ExtractLightingMaterialTexturesFromAiMaterial(GraphicsDevice& device, GraphicsTextureCollection& textureCollection, aiMaterial* mat, const std::string& basePath)
+{
+    aiString diffusePath;
+    mat->Get(AI_MATKEY_TEXTURE(aiTextureType_DIFFUSE, 0), diffusePath);
+    aiString normalPath;
+    mat->Get(AI_MATKEY_TEXTURE(aiTextureType_DISPLACEMENT, 0), normalPath);
+
+    std::vector<Texture2D*> materials;
+    Texture2D* mt = textureCollection.RequestTexture(device, PreProcessPath(std::string(diffusePath.C_Str()), basePath));
+
+    if (!mt)
+    {
+        mt = textureCollection.GetBlackTexture();//textureCollection["Data/Textures/black.png"].get();
+    }
+    materials.push_back(mt);
+
+    mt = textureCollection.RequestTexture(device, PreProcessPath(std::string(normalPath.C_Str()), basePath), true);
+
+    if (!mt)
+    {
+        mt = textureCollection.GetBlackTexture();//textureCollection["Data/Textures/black.png"].get();
+    }
+    materials.push_back(mt);
+
+    return materials;
+}
+
+GraphicsLightingMaterial::GraphicsLightingMaterial() {}
+GraphicsLightingMaterial::GraphicsLightingMaterial(GraphicsDevice& device, GraphicsTextureCollection& textureCollection, ShadersCollection& shadersCollection, const std::string& name, const PSConsts& data, const std::vector<Texture2D*>& materialTextures, bool tc, bool tbn)
+    : TypedGraphicsMaterialBase<PSConsts>(device, shadersCollection, ShaderStrIdentifier(L"Test/ps.hlsl", 0), name), m_TBNEnabled(tbn), m_TexCoordEnabled(tc)
+{
+    m_ShaderVariationIDs = { GetShaderID(L"Test/ps.hlsl", BasicPixelShaderVariations::BATCH) };
 
     D3D11_SAMPLER_DESC samplerDesc;
-    samplerDesc.Filter = D3D11_FILTER_MIN_LINEAR_MAG_POINT_MIP_LINEAR;
+    samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
     samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
     samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
     samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
@@ -44,20 +83,24 @@ GraphicsLightingMaterial::GraphicsLightingMaterial(GraphicsDevice& device, Graph
 
     m_Cubemap = textureCollection["cubemap.dds"];
 
+    popAssert(materialTextures.size() == 2);
+
+    m_DiffuseMap = materialTextures[0];
+    m_NormalMap = materialTextures[1];
     m_Data = data;
 }
-GraphicsLightingMaterial::GraphicsLightingMaterial(GraphicsDevice& device, GraphicsTextureCollection& textureCollection, ShadersCollection& shadersCollection, const std::string& name, tinyxml2::XMLElement* element)
-          : TypedGraphicsMaterialBase<PSConsts>(device, shadersCollection, ShaderStrIdentifier(L"Test/ps.hlsl", ShaderVariation()), name)
+GraphicsLightingMaterial::GraphicsLightingMaterial(GraphicsDevice& device, GraphicsTextureCollection& textureCollection, ShadersCollection& shadersCollection, const std::string& name, tinyxml2::XMLElement* element, bool tc, bool tbn)
+          : TypedGraphicsMaterialBase<PSConsts>(device, shadersCollection, ShaderStrIdentifier(L"Test/ps.hlsl", 0), name), m_TBNEnabled(tbn), m_TexCoordEnabled(tc)
 {
-	m_ShaderVariationIDs = { GetShaderID(L"Test/ps.hlsl", { GraphicsShaderMacro("BATCH", "1") }) };
+	m_ShaderVariationIDs = { GetShaderID(L"Test/ps.hlsl", BasicPixelShaderVariations::BATCH) };
     
     D3D11_SAMPLER_DESC samplerDesc;
-    samplerDesc.Filter = D3D11_FILTER_MIN_LINEAR_MAG_POINT_MIP_LINEAR;
+    samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
     samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
     samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
     samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
     samplerDesc.MipLODBias = 0.0f;
-    samplerDesc.MaxAnisotropy = 1;
+    samplerDesc.MaxAnisotropy = 16;
     samplerDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
     samplerDesc.BorderColor[0] = 0;
     samplerDesc.BorderColor[1] = 0;
@@ -69,6 +112,8 @@ GraphicsLightingMaterial::GraphicsLightingMaterial(GraphicsDevice& device, Graph
     // Create the texture sampler state.
     device.GetD3D11Device()->CreateSamplerState(&samplerDesc, &m_SamplerState);
 
+    m_DiffuseMap = textureCollection.GetBlackTexture();//textureCollection["Data/Textures/black.png"].get();
+    m_NormalMap = m_DiffuseMap;
     m_Cubemap = textureCollection["cubemap.dds"];
 
     Deserialize(element);
@@ -99,15 +144,19 @@ void GraphicsLightingMaterial::Deserialize(tinyxml2::XMLElement* element)
     m_Data.colorRoughness.w = pbrElement->FloatAttribute("roughness");
 }
 
-void GraphicsLightingMaterial::Bind(GraphicsDevice& device, ShadersCollection& shadersCollection, const Camera& camera, void* consts, const std::vector<GraphicsShaderMacro>& passMacros, size_t variationIndex/* = 0*/)
-{
-    
+void GraphicsLightingMaterial::Bind(GraphicsDevice& device, ShadersCollection& shadersCollection, const Camera& camera, void* consts, uint32_t passBits, size_t variationIndex/* = 0*/)
+{    
     m_Data.vLightPos = camera.GetViewMatrix() * m_Lights[0].m_LightPos;
 
-    _Bind(device, shadersCollection, passMacros);
+    uint32_t shaderBits = passBits;
+    if (m_TBNEnabled)
+        shaderBits = shaderBits | BasicPixelShaderVariations::TBN;
+    if (m_TexCoordEnabled)
+        shaderBits = shaderBits | BasicPixelShaderVariations::TEXCOORD;
+    _Bind(device, shadersCollection, shaderBits);
 
-    ID3D11ShaderResourceView* textureSRV = m_Cubemap->GetSRV();
-    device.GetD3D11DeviceContext()->PSSetShaderResources(0, 1, (ID3D11ShaderResourceView * *)& textureSRV);
+    std::vector< ID3D11ShaderResourceView*> textureSRVs = { m_DiffuseMap->GetSRV(), m_NormalMap->GetSRV() };
+    device.GetD3D11DeviceContext()->PSSetShaderResources(0, 2, textureSRVs.data());
     device.GetD3D11DeviceContext()->PSSetSamplers(0, 1, &m_SamplerState);
 }
 GraphicsMaterial* GraphicsLightingMaterial::Handle(GraphicsDevice& device, GraphicsTextureCollection& textureCollection, ShadersCollection& shadersCollection, tinyxml2::XMLElement* sceneGraphElement)

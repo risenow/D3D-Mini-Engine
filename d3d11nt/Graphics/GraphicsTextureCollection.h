@@ -1,12 +1,20 @@
 #pragma once
 #include "Graphics/Texture2D.h"
 #include "Graphics/GraphicsDevice.h"
+#include "multisampleutils.h"
 #define cimg_use_png
 #define cimg_use_jpeg
 //#include "Cimg.h"
 #include <map>
 #include <memory>
 #include "System/helperutil.h"
+#include "Extern/WICTextureLoader.h"
+#include "Extern/DDSTextureLoader.h"
+#include <DirectXTex.h>
+#include <algorithm>
+#include <math.h>
+
+bool IsFileOfSupported2DFormat(const std::string& file, std::string& format);
 
 class  GraphicsTextureCollection : public std::map<std::string, std::shared_ptr<Texture2D>>
 {
@@ -14,8 +22,86 @@ public:
     GraphicsTextureCollection() {}
     ~GraphicsTextureCollection() {}
 
-    void Add(GraphicsDevice& device, const std::string& file, DXGI_FORMAT format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
+    auto Add(GraphicsDevice& device, const std::string& file, bool isNormalMap = false, DXGI_FORMAT format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB)
+    {
+        std::string sformat;
+        if (IsFileOfSupported2DFormat(file, sformat))
+        {
+            ID3D11Resource* res;
+            ID3D11ShaderResourceView* srv;
+            HRESULT hr = DirectX::CreateWICTextureFromFile(device.GetD3D11Device(), strtowstr_fast(file).c_str(), (ID3D11Resource * *)& res, &srv);
 
+            if (SUCCEEDED(hr))
+            {
+                auto i = insert({ file, std::make_shared<Texture2D>(device, (ID3D11Texture2D*)res, srv) });
+                return i.first;
+            }
+
+            return end();
+        }
+
+        if (sformat == "dds")
+        {
+            ID3D11Resource* res;
+            ID3D11ShaderResourceView* srv;
+            HRESULT hr = DirectX::CreateDDSTextureFromFile(
+                device.GetD3D11Device(),
+                strtowstr_fast(file).c_str(),
+                (ID3D11Resource * *)& res,
+                &srv);
+
+            if (SUCCEEDED(hr))
+            {
+                auto i = insert({ file, std::make_shared<Texture2D>(device, (ID3D11Texture2D*)res, srv) });
+                return i.first;
+            }
+            return end();
+        }
+
+        if (sformat == "tga")
+        {
+            ID3D11Resource* res = nullptr;
+            DirectX::ScratchImage scrImage;
+            DirectX::TexMetadata texMetaData;
+            DirectX::ScratchImage mipChain;
+            DirectX::TexMetadata mipChainMetaData;
+
+            HRESULT hr = ( DirectX::LoadFromTGAFile(strtowstr_fast(file).c_str(), &texMetaData, scrImage));
+
+            int levels = 0; //mb use lower levels num for normal maps
+
+            HRESULT hr2 = -1;
+            if (scrImage.GetImageCount())
+            {
+                DirectX::GenerateMipMaps(scrImage.GetImages()[0], DirectX::TEX_FILTER_DEFAULT, levels, mipChain, false);
+                hr2 = (DirectX::CreateTextureEx(device.GetD3D11Device(), mipChain.GetImages(), mipChain.GetImageCount(), mipChain.GetMetadata(), D3D11_USAGE_DEFAULT, D3D11_BIND_SHADER_RESOURCE, 0, 0, !isNormalMap, &res));
+            }
+
+            if (SUCCEEDED(hr) && SUCCEEDED(hr2))
+            {
+                auto i = insert({ file, std::make_shared<Texture2D>(device, (ID3D11Texture2D*)res, nullptr) });
+                return i.first;
+            }
+        }
+
+        return end();
+    }
+    Texture2D* RequestTexture(GraphicsDevice& device, const std::string& file, bool isNormalMap = false);// finds texture or creates it if non existant then return
+    Texture2D* GetBlackTexture()
+    {
+        return &m_BlackTexture;
+    }
   private:
+      void InitializeBlackTexture(GraphicsDevice& device)
+      {
+          uint8_t p[4] = { 0, 0, 0, 1 };
+          D3D11_SUBRESOURCE_DATA data;
+          data.pSysMem = (void*)p;
+          data.SysMemPitch = sizeof(uint8_t) * 4;
+          data.SysMemSlicePitch = 0;
+          m_BlackTexture = Texture2D(device, 1, 1, 1, 1, DXGI_FORMAT_R8G8B8A8_UNORM, GetDefaultSampleDesc(), D3D11_USAGE_DEFAULT, D3D11_BIND_SHADER_RESOURCE, 0, 0, &data);
+      }
+
+      Texture2D m_BlackTexture;
 
 };

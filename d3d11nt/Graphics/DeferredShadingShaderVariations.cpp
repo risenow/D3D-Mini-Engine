@@ -12,7 +12,7 @@ size_t DeferredShadingShaderVariations::SAMPLES_COUNT2 = 1 << 2;
 size_t DeferredShadingShaderVariations::SAMPLES_COUNT4 = 1 << 3;
 size_t DeferredShadingShaderVariations::SAMPLES_COUNT8 = 1 << 4;
 
-std::vector<ShaderVariation> DeferredShadingShaderVariations::GetPermutations()
+std::vector<ExtendedShaderVariation> DeferredShadingShaderVariations::GetPermutations()
 {
     size_t optionallyHasOnlyOneOf = SAMPLES_COUNT2 | SAMPLES_COUNT4 | SAMPLES_COUNT8;
     return GetAllPermutations(MacroSet, 0, 0, optionallyHasOnlyOneOf);

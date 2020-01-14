@@ -8,6 +8,7 @@
 #include "Graphics/ShadersCollection.h"
 #include "Graphics/GraphicsTextureCollection.h"
 #include "Graphics/VertexData.h"
+#include "Graphics/BasicPixelShaderVariations.h"
 #include "Graphics/GeneralShaderMutationsDefines.h"
 
 enum TopologyType
@@ -35,6 +36,7 @@ public:
     }
     void UpdateVertexBuffers(GraphicsDevice& device, VertexData& data)
     {
+        //mb assert same vertex format as alredy in?
         assert(!m_IndexBuffer.GetBuffer());
         if (data.GetNumVertexes() == 0)
         {
@@ -69,7 +71,7 @@ class TypedBasicVertexGraphicsTopology : public GraphicsTopology
 public:
     TypedBasicVertexGraphicsTopology() 
     {}
-    TypedBasicVertexGraphicsTopology(GraphicsDevice& device, ShadersCollection& shadersCollection, ShaderStrIdentifier vsShader, VertexData& vertexData, TopologyType type, GraphicsBuffer::UsageFlags usage, bool isBatch = false) : GraphicsTopology(device, shadersCollection, vsShader, vertexData, usage, isBatch), m_ShaderStrIdentifier(vsShader), m_Type(type)
+    TypedBasicVertexGraphicsTopology(GraphicsDevice& device, ShadersCollection& shadersCollection, ShaderStrIdentifier vsShader, VertexData& vertexData, TopologyType type, GraphicsBuffer::UsageFlags usage, bool tcEnabled, bool tbnEnabled = false, bool isBatch = false) : GraphicsTopology(device, shadersCollection, vsShader, vertexData, usage, isBatch), m_ShaderStrIdentifier(vsShader), m_Type(type), m_TBNEnabled(tbnEnabled), m_TexCoordEnabled(tcEnabled)
     {
         if (!m_ConstantsBufferInitialized)
         {
@@ -79,7 +81,13 @@ public:
     }
     virtual void Bind(GraphicsDevice& device, ShadersCollection& shadersCollection, GraphicsBuffer* materialsStructuredbuffer, GraphicsBuffer* materialsConstantBuffer, void* constants) override
     {
-        m_Shader = shadersCollection.GetShader<GraphicsVertexShader>(m_ShaderStrIdentifier.path, m_IsBatch ? ShaderVariation({ SHADER_MACRO_BATCH }) : ShaderVariation({}));
+        uint32_t shaderVariation = m_IsBatch ? BasicPixelShaderVariations::BATCH : 0;
+        if (m_TBNEnabled)
+            shaderVariation = shaderVariation | BasicPixelShaderVariations::TBN;
+        if (m_TexCoordEnabled)
+            shaderVariation = shaderVariation | BasicPixelShaderVariations::TEXCOORD;
+
+        m_Shader = shadersCollection.GetShader<GraphicsVertexShader>(m_ShaderStrIdentifier.path, shaderVariation);
         ID3D11ShaderResourceView* bufferSRV = materialsStructuredbuffer ? materialsStructuredbuffer->GetSRV() : nullptr;
         
         m_Shader.Bind(device);
@@ -120,6 +128,10 @@ private:
     GraphicsVertexShader m_Shader;
 
     ShaderStrIdentifier m_ShaderStrIdentifier;
+
+    bool m_TBNEnabled;
+
+    bool m_TexCoordEnabled;
 
     static GraphicsConstantsBuffer<T> m_ConstantsBuffer;
     static bool m_ConstantsBufferInitialized;

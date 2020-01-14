@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Graphics/GraphicsMaterial.h"
+#include "Graphics/BasicPixelShaderVariations.h"
 
 std::string GraphicsMaterial::GetName() const
 {
@@ -19,11 +20,9 @@ void GraphicsMaterial::Update(const std::vector<GraphicsLightObject>& lights)
 {
     m_Lights = lights;
 }
-void GraphicsMaterial::FillMaterialMacros(std::vector<GraphicsShaderMacro>& dstMacros, const std::vector<GraphicsShaderMacro>& passMacros)
+void GraphicsMaterial::FillMaterialBits(uint32_t& dstMacros, const uint32_t passMacros)
 {
-    dstMacros.reserve(1 + passMacros.size());
+    dstMacros = passMacros;
     if (IsBatched())
-        dstMacros.push_back(GraphicsShaderMacro("BATCH", "1"));
-    for (size_t i = 0; i < passMacros.size(); i++)
-        dstMacros.push_back(passMacros[i]);
+        dstMacros = dstMacros | BasicPixelShaderVariations::BATCH;
 }

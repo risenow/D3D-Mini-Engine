@@ -4,10 +4,14 @@
 class BlurShaderVariations
 {
 public:
-    static std::vector<ShaderVariation> GetPermutations();
+    static std::vector<ExtendedShaderVariation> GetPermutations();
 
     static std::vector<GraphicsShaderMacro> MacroSet;
-    static size_t VERTICAL;
-    static size_t HORIZONTAL;
+
+    enum
+    {
+        VERTICAL = 1 << 0,
+        HORIZONTAL = 1 << 1
+    };
 };
 

@@ -8,8 +8,10 @@
 
 bool IsFileOfSupported2DFormat(const std::string& file, std::string& format)
 {
+    if (!file.size())
+        return false;
     format.reserve(6);
-    for (size_t i = file.size() - 1; (file[i] != '.') && (i >= 0); i--)
+    for (int i = file.size() - 1; (i >= 0) && (file[i] != '.'); i--)
         format.push_back(file[i]);
     std::reverse(format.begin(), format.end());
 
@@ -20,49 +22,16 @@ bool IsFileOfSupported2DFormat(const std::string& file, std::string& format)
     return supported;
 }
 
-void GraphicsTextureCollection::Add(GraphicsDevice& device, const std::string& file, DXGI_FORMAT format)
+Texture2D* GraphicsTextureCollection::RequestTexture(GraphicsDevice& device, const std::string& file, bool isNormalMap) //mb return shared ptr?
 {
-    std::string sformat;
-    if (IsFileOfSupported2DFormat(file, sformat))
+    auto it = find(file);
+    if (it == end())
     {
-        ID3D11Resource* res;
-        ID3D11ShaderResourceView* srv;
-        DirectX::CreateWICTextureFromFile(device.GetD3D11Device(), strtowstr_fast(file).c_str(), (ID3D11Resource * *)& res, &srv);
-        insert({ file, std::make_shared<Texture2D>(device, (ID3D11Texture2D*)res, srv) });
-
-        return;
+        auto it_ = Add(device, file, isNormalMap);
+        if (it_ != end())
+            return (*it_).second.get();
     }
-
-    if (sformat == "dds")
-    {
-        ID3D11Resource* res;
-        ID3D11ShaderResourceView* srv;
-        DirectX::CreateDDSTextureFromFile(
-            device.GetD3D11Device(),
-            strtowstr_fast(file).c_str(),
-            (ID3D11Resource * *)& res,
-            &srv);
-
-        insert({ file, std::make_shared<Texture2D>(device, (ID3D11Texture2D*)res, srv) });
-    }
-    /*bool supported = IsFileOfSupported2DFormat(file);
-
-    //stbi__context context;
-    int width, height, channels;
-    //stbi_set_flip_vertically_on_load(true);
-    unsigned char* image = stbi_load(file.c_str(),
-        &width,
-        &height,
-        &channels,
-        STBI_rgb_alpha);
-    //using namespace cimg_library;
-    DXGI_SAMPLE_DESC desc;
-    desc.Count = 1;
-    desc.Quality = 0;
-    D3D11_SUBRESOURCE_DATA subr;
-    subr.pSysMem = (void*)image;//img.data();
-    subr.SysMemPitch = width * sizeof(char) *4;
-    subr.SysMemSlicePitch = width * height * sizeof(char) * channels;
-    insert({ file, std::make_shared<Texture2D>(device, width, height, 1, 1, format, desc, D3D11_USAGE_DEFAULT, D3D11_BIND_SHADER_RESOURCE, 0, 0, (D3D11_SUBRESOURCE_DATA*)& subr) });
-    */
+    else
+        return it->second.get();
+    return nullptr;
 }

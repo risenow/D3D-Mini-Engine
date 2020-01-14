@@ -1,15 +1,15 @@
 <root0>
-<plain_color_material name="red_material">
+<lighting_material name="red_material">
 <color r="1.0" g="0.0" b="0.0"/>
 <pbr roughness="0.9"/>
-</plain_color_material>
+</lighting_material>
 
-<plain_color_material name="green_material">
+<lighting_material name="green_material">
 <color r="1.0" g="1.0" b="0.0"/>
 <pbr roughness="0.5"/>
-</plain_color_material>
+</lighting_material>
   
-<basic_plain_color_material name="plain_color_material"/>
+<basic_lighting_material name="lighting_material"/>
 
 <triangle material0="red_material" batchable="false">
 <vertex p="0.5 0.5 -10.5" n="0.0 0.0 1.0" uv="0"/>
@@ -23,6 +23,6 @@
 <matx x="0"/>
 </sphere>   
   
-<objmodel path="Data/Sponza/sponza.obj"/>
+<model path="Data/Sponza/sponza.obj"/>
  
 </root0>                                                                                                                                                                                                                                                                                                                                                                                                                             

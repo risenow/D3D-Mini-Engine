@@ -129,7 +129,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>assimpmt.lib;tiny_obj_loader64.lib;imgui64.lib;WICTextureLoader64.lib;DDSTextureLoader64.lib;Graphics64.lib;System64.lib;d3d11.lib;d3dcompiler.lib;dxgi.lib;user32.lib;kernel32.lib;gdi32.lib;ole32.lib</AdditionalDependencies>
+      <AdditionalDependencies>DirectXTex64.lib;assimp-vc141-mt.lib;tiny_obj_loader64.lib;imgui64.lib;WICTextureLoader64.lib;DDSTextureLoader64.lib;Graphics64.lib;System64.lib;d3d11.lib;d3dcompiler.lib;dxgi.lib;user32.lib;kernel32.lib;gdi32.lib;ole32.lib</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>echo DA|xcopy "$(SolutionDir)\d3d11nt\Data" "$(SolutionDir)\Debug\Data" /s/h/e/k/f/c</Command>
@@ -172,7 +172,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>assimpmt.lib;tiny_obj_loader64r.lib;imgui64r.lib;WICTextureLoader64r.lib;DDSTextureLoader64r.lib;Graphics64r.lib;System64r.lib;d3d11.lib;d3dcompiler.lib;dxgi.lib;user32.lib;kernel32.lib;gdi32.lib;ole32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>DirectXTex64r.lib;assimp-vc141-mt.lib;tiny_obj_loader64r.lib;imgui64r.lib;WICTextureLoader64r.lib;DDSTextureLoader64r.lib;Graphics64r.lib;System64r.lib;d3d11.lib;d3dcompiler.lib;dxgi.lib;user32.lib;kernel32.lib;gdi32.lib;ole32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>echo DA|xcopy "$(SolutionDir)\d3d11nt\Data" "$(SolutionDir)\Release\Data" /s/h/e/k/f/c</Command>

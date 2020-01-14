@@ -4,7 +4,7 @@
 class DeferredShadingShaderVariations
 {
 public:
-    static std::vector<ShaderVariation> GetPermutations();
+    static std::vector<ExtendedShaderVariation> GetPermutations();
 
     static std::vector<GraphicsShaderMacro> MacroSet;
     static size_t OPTIMIZED_SCHLICK;

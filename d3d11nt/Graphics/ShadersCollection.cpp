@@ -8,7 +8,7 @@
 #include "System/pathutils.h"
 #include "System/helperutil.h"
 
-void GetAllMacrosCombinations(const std::vector<GraphicsShaderMacro>& macroSet, std::vector<std::vector<GraphicsShaderMacro>>& permutations, size_t hasAnyOfRule, size_t hasOnlyOneOfRule, size_t optionallyHasOnlyOneOfRule, size_t hasAllOfRule)
+void GetAllMacrosCombinations(const std::vector<GraphicsShaderMacro>& macroSet, std::vector<ExtendedShaderVariation>& permutations, size_t hasAnyOfRule, size_t hasOnlyOneOfRule, size_t optionallyHasOnlyOneOfRule, size_t hasAllOfRule)
 {
     size_t setBitmask = pow(2, macroSet.size()) - 1;
     for (size_t i = 0; i <= setBitmask; i++)
@@ -21,19 +21,20 @@ void GetAllMacrosCombinations(const std::vector<GraphicsShaderMacro>& macroSet, 
             continue;
         if (hasAllOfRule && (i & hasAllOfRule) != hasAllOfRule)
             continue;
-        permutations.push_back(ShaderVariation());
-        ShaderVariation& currentMutation = permutations.back();
+        permutations.push_back(ExtendedShaderVariation());
+        ShaderVariation& currentMutation = permutations.back().m_ShaderVariation;
         for (size_t j = 0; j < macroSet.size(); j++)
         {
             if (i & (1 << j))
                 currentMutation.push_back(macroSet[j]);
         }
+        permutations.back().m_Bits = i;
     }
 }
 //mb use bitfields for macro everywhere?
-std::vector<ShaderVariation> GetAllPermutations(const std::vector<GraphicsShaderMacro>& macroSet, size_t hasAnyOfRule, size_t hasOnlyOneOfRule, size_t optionallyHasOnlyOneOfRule, size_t hasAllOfRule)
+std::vector<ExtendedShaderVariation> GetAllPermutations(const std::vector<GraphicsShaderMacro>& macroSet, size_t hasAnyOfRule, size_t hasOnlyOneOfRule, size_t optionallyHasOnlyOneOfRule, size_t hasAllOfRule)
 {
-    std::vector<ShaderVariation> mutations;
+    std::vector<ExtendedShaderVariation> mutations;
     GetAllMacrosCombinations(macroSet, mutations, hasAnyOfRule, hasOnlyOneOfRule, optionallyHasOnlyOneOfRule, hasAllOfRule);
 
     return mutations;
@@ -47,34 +48,11 @@ const wchar_t* PIXEL_SHADER_FILE_TYPE = L".ps";
 const wchar_t* VERTEX_SHADER_FILE_SIGN = L"vs";
 const wchar_t* PIXEL_SHADER_FILE_SIGN = L"ps";
 
-ShaderID GetShaderID(const std::wstring& filePath, const std::vector<GraphicsShaderMacro>& shaderMacros)
+ShaderID GetShaderID(const std::wstring& filePath, uint32_t bits)
 {
-	//std::string temp = wstrtostr(filePath);
-	std::vector<std::string> aggregatedMacros(shaderMacros.size());
-	for (size_t i = 0; i < shaderMacros.size(); i++)
-	{
-		const GraphicsShaderMacro& macro = shaderMacros[i];
-		aggregatedMacros[i].reserve(macro.m_Name.size() + macro.m_Value.size());
-		aggregatedMacros[i] += macro.m_Name;
-		aggregatedMacros[i] += macro.m_Value;
-	}
-	std::sort(aggregatedMacros.begin(), aggregatedMacros.end());
+	std::string temp = wstrtostr(filePath);
 
-	size_t hashSrcSize = filePath.size();
-	for (const std::string& aggregatedMacro : aggregatedMacros)
-	{
-		hashSrcSize += aggregatedMacro.size();
-	}
-	std::string hashSrc;
-	hashSrc.reserve(hashSrcSize);
-	
-	hashSrc += wstrtostr_fast(filePath);
-	for (const std::string& aggregatedMacro : aggregatedMacros)
-	{
-		hashSrc += aggregatedMacro;
-	}
-
-	return FNV(hashSrc.c_str(), hashSrc.size());
+	return FNV(temp.c_str(), temp.size()) ^ FNV((char*)&bits, sizeof(bits)); // WARNING!!!!!!!!!!!!!!(concatenation of hashes - VERY SUSPICIOUS)
 }
 
 ShadersCollection::ShadersCollection(GraphicsDevice& device) : m_Device(device), m_FileChangesMonitor(GetShadersDirFullPath()) // to insert shaders dir here
@@ -245,7 +223,7 @@ void ShadersCollection::CalculatePaths()
 {
 	wchar_t buffer[1024];
 	GetCurrentDirectory(1024, buffer);
-	NormalizePath(buffer);
+	NormalizePathPlain(buffer);
 
 	m_RootDirRank = GetPathRank(std::wstring(buffer));
 	m_ShadersRootDirRank = GetPathRank(m_FileChangesMonitor.GetDirPath());

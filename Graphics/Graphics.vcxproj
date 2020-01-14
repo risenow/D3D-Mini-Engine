@@ -129,8 +129,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>$(SolutionDir)\Debug\Extern\tinyxml2\tinyxml264.lib;assimpmt.lib;</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)\Release\;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(SolutionDir)\Debug\Extern\tinyxml2\tinyxml264.lib;assimp-vc141-mt.lib;DirectXTex64.lib;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\Debug\;</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -171,7 +171,7 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>$(SolutionDir)\Release\Extern\tinyxml2\tinyxml264r.lib;assimpmt.lib;</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)\Release\Extern\tinyxml2\tinyxml264r.lib;assimp-vc141-mt.lib;DirectXTex64r.lib;</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)\Release\</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
@@ -228,6 +228,7 @@
     <ClInclude Include="..\d3d11nt\graphics\Texture2D.h" />
     <ClInclude Include="..\d3d11nt\graphics\vectors.h" />
     <ClInclude Include="..\d3d11nt\Graphics\VertexData.h" />
+    <ClInclude Include="BasicPassGeometryVariations.h" />
     <ClInclude Include="GraphicsResourceManager.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />

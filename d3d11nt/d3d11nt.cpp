@@ -148,7 +148,7 @@ int main(int argc, char* argv[])
     Window window(iniFile);
     MouseKeyboardCameraController mouseKeyboardCameraController(CreateInitialCamera(iniFile, (float)window.GetWidth()/(float)window.GetHeight()), iniFile);
     DisplayAdaptersList displayAdaptersList;
-    D3D11DeviceCreationFlags deviceCreationFlags(false, false);//(commandLineArgs);
+    D3D11DeviceCreationFlags deviceCreationFlags(true, true);//(commandLineArgs);
 
     BasicVariablesCommandProducer basicvarProducer;
     Console cons({ &basicvarProducer });
@@ -175,7 +175,7 @@ int main(int argc, char* argv[])
     shadersCollection.AddShader<GraphicsVertexShader>(L"Test/basicvs.hlsl", { {} });
     shadersCollection.AddShader<GraphicsPixelShader>(L"Test/basicps.hlsl", { {} });
 
-    shadersCollection.AddShader<GraphicsVertexShader>(L"Test/vs.hlsl", GetAllPermutations({ GraphicsShaderMacro("BATCH", "1") }));
+    shadersCollection.AddShader<GraphicsVertexShader>(L"Test/vs.hlsl", GetAllPermutations({ GraphicsShaderMacro("BATCH", "1"), GraphicsShaderMacro("GBUFFER", "1"), GraphicsShaderMacro("TBN", "1"),  GraphicsShaderMacro("TEXCOORD", "1") }));
     shadersCollection.AddShader<GraphicsPixelShader>(L"Test/ps.hlsl", BasicPixelShaderVariations::GetPermutations());
     shadersCollection.AddShader<GraphicsComputeShader>(L"Test/cs.hlsl", BlurShaderVariations::GetPermutations());
                                                                                     
@@ -189,6 +189,7 @@ int main(int argc, char* argv[])
     GraphicsTextureCollection textureCollection;
     //textureCollection.Add(device, "displ.png");
     textureCollection.Add(device, "cubemap.dds");
+    //textureCollection.Add(device, "Data/Textures/black.png");
 
 	SceneGraph sceneGraph(device, textureCollection, shadersCollection, "Data/scene.xml");
 
@@ -299,12 +300,8 @@ int main(int argc, char* argv[])
     D3D_HR_OP(device.GetD3D11Device()->CreateDepthStencilState(&depthStencilDesc, &depthStencilState));
     device.GetD3D11DeviceContext()->OMSetDepthStencilState(depthStencilState, 0);
 
-    GraphicsComputeShader horBlurComputeShader = shadersCollection.GetShader<GraphicsComputeShader>(L"Test/cs.hlsl", { GraphicsShaderMacro("HORIZONTAL", "0") });
-    GraphicsComputeShader verBlurComputeShader = shadersCollection.GetShader<GraphicsComputeShader>(L"Test/cs.hlsl", { GraphicsShaderMacro("VERTICAL", "0") });
-
-
-    GraphicsHullShader hullShader = shadersCollection.GetShader<GraphicsHullShader>(L"Test/tesshs.hlsl", { GraphicsShaderMacro("BATCH", "1") });
-    GraphicsDomainShader domainShader = shadersCollection.GetShader<GraphicsDomainShader>(L"Test/tessds.hlsl", { GraphicsShaderMacro("BATCH", "1") });
+    GraphicsComputeShader horBlurComputeShader = shadersCollection.GetShader<GraphicsComputeShader>(L"Test/cs.hlsl", BlurShaderVariations::HORIZONTAL);
+    GraphicsComputeShader verBlurComputeShader = shadersCollection.GetShader<GraphicsComputeShader>(L"Test/cs.hlsl", BlurShaderVariations::HORIZONTAL);
 
     D3D11_UNORDERED_ACCESS_VIEW_DESC uavDesc;
     uavDesc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
@@ -399,7 +396,7 @@ int main(int argc, char* argv[])
             device.GetD3D11DeviceContext()->RSSetState(d3dRastState);
             device.GetD3D11DeviceContext()->OMSetDepthStencilState(depthStencilState, 0);
 
-            sceneGraph.GetOrdinaryGraphicsObjectManager()->Render(device, shadersCollection, { GraphicsShaderMacro("GBUFFER_PASS", "1") }, mouseKeyboardCameraController.GetCamera());
+            sceneGraph.GetOrdinaryGraphicsObjectManager()->Render(device, shadersCollection, BasicPixelShaderVariations::GBUFFER, mouseKeyboardCameraController.GetCamera());
 
             device.GetD3D11DeviceContext()->ClearState();
 
@@ -410,20 +407,37 @@ int main(int argc, char* argv[])
             device.GetD3D11DeviceContext()->RSSetState(d3dRastState);
             device.GetD3D11DeviceContext()->OMSetDepthStencilState(FSQDepthStencilState, 0);
 
-            std::vector<GraphicsShaderMacro> psMacros;
+            uint32_t passBits = 0;
             if (basicVars.useOptimizedSchlick)
-                psMacros.push_back(GraphicsShaderMacro("OPTIMIZED_SCHLICK", "1"));
+                passBits = passBits | DeferredShadingShaderVariations::OPTIMIZED_SCHLICK;
             if (basicVars.overrideDiffuse)
-                psMacros.push_back(GraphicsShaderMacro("OVERRIDE_DIFFUSE", "1"));
+                passBits = passBits | DeferredShadingShaderVariations::OVERRIDE_DIFFUSE;
 
             if (options.GetMultisampleType() > 1)
             {
-                psMacros.push_back(GraphicsShaderMacro("SAMPLES_COUNT", std::to_string(options.GetMultisampleType())));
+                switch (options.GetMultisampleType())
+                {
+                case 2:
+                {
+                    passBits = passBits | DeferredShadingShaderVariations::SAMPLES_COUNT2;
+                    break;
+                }
+                case 4:
+                {
+                    passBits = passBits | DeferredShadingShaderVariations::SAMPLES_COUNT4;
+                    break;
+                }
+                case 8:
+                {
+                    passBits = passBits | DeferredShadingShaderVariations::SAMPLES_COUNT8;
+                    break;
+                }
+                }
             }
 
             deferredShadingFullscreenQuad.Render(device, shadersCollection, mouseKeyboardCameraController.GetCamera(), 
                                                     basicVars.lightPos, basicVars.f0overridetrunc, basicVars.diffuseOverride, 
-                                                    basicVars.roverride, psMacros);
+                                                    basicVars.roverride, passBits);
 
             /*
             uav = swapchain.GetBackBufferSurface().GetTexture()->GetUAV();

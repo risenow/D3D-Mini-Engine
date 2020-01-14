@@ -32,6 +32,9 @@ public:
     virtual void WriteGeometry(VertexData& data, const std::set<GraphicsMaterial*>& materialIndexRemap, bool batched = false, size_t vertexesOffset = 0) = 0;
     virtual size_t GetNumVertexes() const = 0;
 
+    virtual bool TBNEnabled() = 0;
+    virtual bool TexCoordEnabled() = 0;
+
     virtual bool IsDrawable() { return true; }
 public:
     GraphicsObject* m_Drawable;
@@ -91,6 +94,9 @@ public:
 
     virtual void WriteGeometry(VertexData& data, const std::set<GraphicsMaterial*>& materialIndexRemap, bool batched = false, size_t vertexesOffset = 0) override;
     virtual size_t GetNumVertexes() const override;
+
+    bool TBNEnabled() override { return false; }
+    bool TexCoordEnabled() override { return false; }
 private:
     VertexData m_VertexData;
     VertexType ParseVertex(tinyxml2::XMLElement* vertexElement);
@@ -135,6 +141,9 @@ public:
 
     virtual void WriteGeometry(VertexData& data, const std::set<GraphicsMaterial*>& materialIndexRemap, bool batched = false, size_t vertexesOffset = 0) override;
     virtual size_t GetNumVertexes() const override;
+
+    bool TBNEnabled() override { return false; }
+    bool TexCoordEnabled() override { return false; }
 private:
     glm::vec3 m_Center;
     float m_R;
@@ -181,6 +190,9 @@ public:
     virtual size_t GetNumVertexes() const override { return 0; }
     
     virtual bool IsDrawable() { return false; }
+
+    bool TBNEnabled() override { return false; }
+    bool TexCoordEnabled() override { return false; }
 protected:
     std::string m_Path;
     Assimp::Importer            importer;
@@ -199,9 +211,12 @@ struct ObjIndexComp
 class SubMeshModelGraphicsObject : public OrdinaryGraphicsObject
 {
 public:
+    typedef glm::vec4 PositionType;
+    typedef glm::vec3 NormalType;
+    typedef glm::vec2 TcType;
     struct VertexType {
 
-        VertexType(const glm::vec4& pos, const glm::vec3& normal, const glm::vec2& texCoord) : m_Position(pos), m_Normal(normal) {}
+        VertexType(const glm::vec4& pos, const glm::vec3& normal, const glm::vec2& texCoord) : m_Position(pos), m_Normal(normal), m_TexCoord(texCoord) {}
         glm::vec4 m_Position;
         glm::vec3 m_Normal;
         glm::vec2 m_TexCoord;
@@ -216,6 +231,8 @@ public:
     virtual void WriteGeometry(VertexData& data, const std::set<GraphicsMaterial*>& materialIndexRemap, bool batched = false, size_t vertexesOffset = 0) override;
     virtual size_t GetNumVertexes() const override;
 
+    bool TBNEnabled() override;
+    bool TexCoordEnabled() override;
 private:
     MetaModelGraphicsObject* m_MetaObj;
     size_t m_ShapeIndex;
@@ -239,6 +256,7 @@ public:
 
         return result;
     }
+
 private:
 };
 
@@ -248,7 +266,7 @@ public:
 	OrdinaryGraphicsObjectManager();
 	~OrdinaryGraphicsObjectManager();
 
-	void Render(GraphicsDevice& device, ShadersCollection& shaderCollection, const std::vector<GraphicsShaderMacro>& passMacros, const Camera& camera);
+	void Render(GraphicsDevice& device, ShadersCollection& shaderCollection, uint32_t passShaderBits, const Camera& camera);
 
 	GraphicsObjectManager::HandleResult Handle(GraphicsDevice& device, GraphicsTextureCollection& textureCollection, ShadersCollection& shadersCollection, GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* sceneGraphElement);
 	OrdinaryGraphicsObjectHandler::HandleResult Handle_(GraphicsDevice& device, GraphicsTextureCollection& textureCollection, ShadersCollection& shadersCollection, GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* sceneGraphElement);

@@ -18,7 +18,7 @@ class GraphicsMaterial : public SerializableGraphicsObject
 public:
     virtual bool HasValidConstantsBuffer() const = 0;
     virtual GraphicsBuffer* GetConstantsBuffer() const = 0;
-	virtual void Bind(GraphicsDevice& device, ShadersCollection& shadersCollection, const Camera& camera, void* consts, const std::vector<GraphicsShaderMacro>& passMacros, size_t variationIndex = 0) = 0;
+	virtual void Bind(GraphicsDevice& device, ShadersCollection& shadersCollection, const Camera& camera, void* consts, uint32_t shaderBits, size_t variationIndex = 0) = 0;
 
     virtual void* GetDataPtr() = 0;
     virtual size_t GetDataSize() = 0;
@@ -32,7 +32,7 @@ public:
 
 	bool IsBatched();
 
-    void FillMaterialMacros(std::vector<GraphicsShaderMacro>& dst, const std::vector<GraphicsShaderMacro>& passMacros);
+    void FillMaterialBits(uint32_t& dst, const uint32_t passMacros);
 
     std::vector<GraphicsLightObject>& GetLights() { return m_Lights; }
 protected:
@@ -83,10 +83,10 @@ public:
     }
 
 protected:
-    bool _Bind(GraphicsDevice& device, ShadersCollection& shadersCollection, const std::vector<GraphicsShaderMacro>& passMacros)
+    bool _Bind(GraphicsDevice& device, ShadersCollection& shadersCollection, uint32_t shaderBits)
     {
-        std::vector<GraphicsShaderMacro> macros;// = passMacros;
-        FillMaterialMacros(macros, passMacros);
+        uint32_t macros;
+        FillMaterialBits(macros, shaderBits);
 
         m_Shader = shadersCollection.GetShader<GraphicsPixelShader>(m_ShaderStrIdentifier.path, macros);
         m_Shader.Bind(device);
@@ -126,12 +126,12 @@ public:
     BasicGraphicsMaterial(GraphicsDevice& device, ShadersCollection& shadersCollection, const ShaderStrIdentifier& shaderStrIdentifier, const std::string& name) : TypedGraphicsMaterialBase<T>(device, shadersCollection, shaderStrIdentifier, name)
     {}
 
-    virtual void Bind(GraphicsDevice& device, ShadersCollection& shadersCollection, const Camera& camera, void* consts, const std::vector<GraphicsShaderMacro>& passMacros, size_t variationIndex = 0) override
+    virtual void Bind(GraphicsDevice& device, ShadersCollection& shadersCollection, const Camera& camera, void* consts, uint32_t passBits, size_t variationIndex = 0) override
     {
         if (consts)
             m_Data = *((T*)consts);
 
-        _Bind(device, shadersCollection, passMacros);
+        _Bind(device, shadersCollection, passBits);
     }
 protected:
 };
