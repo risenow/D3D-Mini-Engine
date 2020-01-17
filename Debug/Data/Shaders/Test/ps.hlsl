@@ -33,7 +33,7 @@ PS_OUTPUT PSEntry(float4 pos : SV_POSITION
             , in /*nointerpolation*/ float3 vbitangent : NORMAL2
 #endif
             //, in uint iMaterial : TEXCOORD0
-            )// : SV_Target
+            )
 {
 #ifdef TEXCOORD
     float4 diffData = diffuseMap.Sample(SampleType, iTc);

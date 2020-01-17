@@ -27,6 +27,12 @@
     <None Include="..\d3d11nt\Data\Shaders\Test\ssaops.hlsl">
       <Filter>Data\Shaders\Test</Filter>
     </None>
+    <None Include="..\d3d11nt\Data\Shaders\Test\basicps.hlsl" />
+    <None Include="..\d3d11nt\Data\Shaders\Test\basicvs.hlsl" />
+    <None Include="..\d3d11nt\Data\Shaders\Test\vs.hlsl" />
+    <None Include="..\d3d11nt\Data\Shaders\Test\ssaoconstants.h">
+      <Filter>Data\Shaders\Test</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\d3d11nt\Data\Shaders\Test\vsconstants.h">
@@ -46,16 +52,5 @@
     <Xml Include="..\d3d11nt\Data\scene.xml">
       <Filter>Data</Filter>
     </Xml>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="..\d3d11nt\Data\Shaders\Test\vs.hlsl">
-      <Filter>Data\Shaders\Test</Filter>
-    </FxCompile>
-    <FxCompile Include="..\d3d11nt\Data\Shaders\Test\basicvs.hlsl">
-      <Filter>Data\Shaders\Test</Filter>
-    </FxCompile>
-    <FxCompile Include="..\d3d11nt\Data\Shaders\Test\basicps.hlsl">
-      <Filter>Data\Shaders\Test</Filter>
-    </FxCompile>
   </ItemGroup>
 </Project>

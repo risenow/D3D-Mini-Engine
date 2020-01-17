@@ -119,7 +119,7 @@ float3 CookTorrance(float nl, float nv, float hn, float hv, float3 wv, float3 wn
 }    
 
 #define GAMMA_CORRECTION
-#define REINHARD
+//#define REINHARD
 
 float4 PSEntry(
              in float2 tc : TEXCOORD0 
@@ -174,7 +174,7 @@ float4 PSEntry(
     
     //float reflectionWeight = 0.6;
     float3 specular = CookTorrance(nl, nv, hn, hv, wViewVec, wNormal, diffuse, rough);
-    float4 result = float4(specular + diffuse * 0.1 + diffuse * max(nl, 0.0) , 1.0);
+    float4 result = float4(specular + diffuse * 0.05 + diffuse * max(nl, 0.0), 1.0);
     
 #ifdef REINHARD
     result = result / (result / 2.4 + 1.0);

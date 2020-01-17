@@ -406,9 +406,13 @@ SubMeshModelGraphicsObject::SubMeshModelGraphicsObject(MetaModelGraphicsObject* 
     if (mesh->HasNormals())
         vertexProperties.push_back(CreateVertexPropertyPrototype<glm::vec3>(NORMAL_PROPERTY_NAME, 0));
     if (mesh->HasTextureCoords(0))
+    {
+        m_TexCoordEnabled = true;
         vertexProperties.push_back(CreateVertexPropertyPrototype<glm::vec2>(TEXCOORD_PROPERTY_NAME));
+    }
     if (mesh->HasTangentsAndBitangents())
     {
+        m_TBNEnabled = true;
         vertexProperties.push_back(CreateVertexPropertyPrototype<glm::vec3>(TANGENT_PROPERTY_NAME, 1));
         vertexProperties.push_back(CreateVertexPropertyPrototype<glm::vec3>(BITANGENT_PROPERTY_NAME, 2));
     }
@@ -493,24 +497,6 @@ size_t SubMeshModelGraphicsObject::GetNumVertexes() const
     aiMesh* mesh = m_MetaObj->m_ModelScene->mMeshes[node->mMeshes[0]];
     return mesh->mNumVertices;
 }
-bool SubMeshModelGraphicsObject::TBNEnabled()
-{
-    aiNode* modelNode = m_MetaObj->m_ModelScene->mRootNode;
-    const aiNode* node = modelNode->mChildren[m_ShapeIndex];
-
-    aiMesh* mesh = m_MetaObj->m_ModelScene->mMeshes[node->mMeshes[0]];
-
-    return mesh->HasTangentsAndBitangents();
-}
-bool SubMeshModelGraphicsObject::TexCoordEnabled()
-{
-    aiNode* modelNode = m_MetaObj->m_ModelScene->mRootNode;
-    const aiNode* node = modelNode->mChildren[m_ShapeIndex];
-
-    aiMesh* mesh = m_MetaObj->m_ModelScene->mMeshes[node->mMeshes[0]];
-
-    return mesh->HasTextureCoords(0);
-}
 
 MetaModelGraphicsObject::MetaModelGraphicsObject(GraphicsDevice& device, ShadersCollection& shadersCollection, GraphicsTextureCollection& textureCollection, GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* element)
 {
@@ -524,15 +510,6 @@ MetaModelGraphicsObject::MetaModelGraphicsObject(GraphicsDevice& device, Shaders
         aiProcess_ValidateDataStructure | 0
 
     );
-    
-    aiNode* modelNode = m_ModelScene->mRootNode;
-    const aiNode* node = modelNode->mChildren[0];
-
-    aiMesh* mesh = m_ModelScene->mMeshes[node->mMeshes[0]];
-    //check for material's mesh?
-
-    bool tbn = mesh->HasTangentsAndBitangents();
-    bool tc = mesh->HasTextureCoords(0);
 
     aiMaterial** materials = m_ModelScene->mMaterials;
     for (size_t i = 0; i < m_ModelScene->mNumMaterials; i++)
@@ -541,7 +518,7 @@ MetaModelGraphicsObject::MetaModelGraphicsObject(GraphicsDevice& device, Shaders
         aiString name;
         mat->Get(AI_MATKEY_NAME, name);
         //TBN ALWAYS TRUE?
-        GraphicsMaterial* material = popNew(GraphicsLightingMaterial)(device, textureCollection, shadersCollection, std::string(name.C_Str()), LightingConstsFromAiMaterial(mat), ExtractLightingMaterialTexturesFromAiMaterial(device, textureCollection, mat, ExcludeFileFromPath(m_Path)), tc, tbn);
+        GraphicsMaterial* material = popNew(GraphicsLightingMaterial)(device, textureCollection, shadersCollection, std::string(name.C_Str()), LightingConstsFromAiMaterial(mat), ExtractLightingMaterialTexturesFromAiMaterial(device, textureCollection, mat, ExcludeFileFromPath(m_Path)));
         m_Materials.push_back(material);
         materialsManager->Add(material);
     }
@@ -710,10 +687,18 @@ void OrdinaryGraphicsObjectManager::Render(GraphicsDevice& device, ShadersCollec
 {
 	for (GraphicsObject& object : m_DrawableObjects)
 	{
+        GraphicsTopology* currentTopology = object.m_Topology;
+
+        uint32_t materialPassMacros = passMacros;
+        if (currentTopology->TexCoordsEnabled())
+            materialPassMacros = materialPassMacros | BasicPixelShaderVariations::TEXCOORD;
+        if (currentTopology->TBNEnabled())
+            materialPassMacros = materialPassMacros | BasicPixelShaderVariations::TBN;
+
         if (object.m_Material != nullptr)
-            object.m_Material->Bind(device, shadersCollection, camera, nullptr, passMacros);
+            object.m_Material->Bind(device, shadersCollection, camera, nullptr, materialPassMacros);
         else
-            object.m_Materials[0]->Bind(device, shadersCollection, camera, nullptr, passMacros);
+            object.m_Materials[0]->Bind(device, shadersCollection, camera, nullptr, materialPassMacros);
 
         VSConsts consts;
         FillLightingGraphicsTopologyConstants(consts, camera);

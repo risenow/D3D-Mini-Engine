@@ -58,8 +58,8 @@ std::vector<Texture2D*> ExtractLightingMaterialTexturesFromAiMaterial(GraphicsDe
 }
 
 GraphicsLightingMaterial::GraphicsLightingMaterial() {}
-GraphicsLightingMaterial::GraphicsLightingMaterial(GraphicsDevice& device, GraphicsTextureCollection& textureCollection, ShadersCollection& shadersCollection, const std::string& name, const PSConsts& data, const std::vector<Texture2D*>& materialTextures, bool tc, bool tbn)
-    : TypedGraphicsMaterialBase<PSConsts>(device, shadersCollection, ShaderStrIdentifier(L"Test/ps.hlsl", 0), name), m_TBNEnabled(tbn), m_TexCoordEnabled(tc)
+GraphicsLightingMaterial::GraphicsLightingMaterial(GraphicsDevice& device, GraphicsTextureCollection& textureCollection, ShadersCollection& shadersCollection, const std::string& name, const PSConsts& data, const std::vector<Texture2D*>& materialTextures)
+    : TypedGraphicsMaterialBase<PSConsts>(device, shadersCollection, ShaderStrIdentifier(L"Test/ps.hlsl", 0), name)
 {
     m_ShaderVariationIDs = { GetShaderID(L"Test/ps.hlsl", BasicPixelShaderVariations::BATCH) };
 
@@ -89,8 +89,8 @@ GraphicsLightingMaterial::GraphicsLightingMaterial(GraphicsDevice& device, Graph
     m_NormalMap = materialTextures[1];
     m_Data = data;
 }
-GraphicsLightingMaterial::GraphicsLightingMaterial(GraphicsDevice& device, GraphicsTextureCollection& textureCollection, ShadersCollection& shadersCollection, const std::string& name, tinyxml2::XMLElement* element, bool tc, bool tbn)
-          : TypedGraphicsMaterialBase<PSConsts>(device, shadersCollection, ShaderStrIdentifier(L"Test/ps.hlsl", 0), name), m_TBNEnabled(tbn), m_TexCoordEnabled(tc)
+GraphicsLightingMaterial::GraphicsLightingMaterial(GraphicsDevice& device, GraphicsTextureCollection& textureCollection, ShadersCollection& shadersCollection, const std::string& name, tinyxml2::XMLElement* element)
+          : TypedGraphicsMaterialBase<PSConsts>(device, shadersCollection, ShaderStrIdentifier(L"Test/ps.hlsl", 0), name)
 {
 	m_ShaderVariationIDs = { GetShaderID(L"Test/ps.hlsl", BasicPixelShaderVariations::BATCH) };
     
@@ -149,10 +149,6 @@ void GraphicsLightingMaterial::Bind(GraphicsDevice& device, ShadersCollection& s
     m_Data.vLightPos = camera.GetViewMatrix() * m_Lights[0].m_LightPos;
 
     uint32_t shaderBits = passBits;
-    if (m_TBNEnabled)
-        shaderBits = shaderBits | BasicPixelShaderVariations::TBN;
-    if (m_TexCoordEnabled)
-        shaderBits = shaderBits | BasicPixelShaderVariations::TEXCOORD;
     _Bind(device, shadersCollection, shaderBits);
 
     std::vector< ID3D11ShaderResourceView*> textureSRVs = { m_DiffuseMap->GetSRV(), m_NormalMap->GetSRV() };

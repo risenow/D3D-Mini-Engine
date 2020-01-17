@@ -22,7 +22,7 @@ class GraphicsTopology
 {
 public:
     GraphicsTopology();
-    GraphicsTopology(GraphicsDevice& device, ShadersCollection& shadersCollection, const ShaderStrIdentifier& shaderStrIdentifier, VertexData& data, GraphicsBuffer::UsageFlags flags,  bool isBatch);
+    GraphicsTopology(GraphicsDevice& device, ShadersCollection& shadersCollection, const ShaderStrIdentifier& shaderStrIdentifier, VertexData& data, GraphicsBuffer::UsageFlags flags, bool tcEnabled, bool tbnEnabled, bool isBatch);
 
     virtual void Bind(GraphicsDevice& device, ShadersCollection& shadersCollection, GraphicsBuffer* materialsStructuredbuffer, GraphicsBuffer* materialsConstantBuffer, void* constants) = 0;//const Camera& camera, TopologyType type) = 0;
     //virtual void ReleaseGPUData() = 0;
@@ -51,6 +51,9 @@ public:
     }
 
     std::vector<VertexBuffer>& VertexBuffers() { return m_VertexBuffers; }
+
+    bool TBNEnabled() { return m_TBNEnabled; }
+    bool TexCoordsEnabled() { return m_TexCoordEnabled; }
 protected:
     IndexBuffer m_IndexBuffer;
     std::vector<VertexBuffer> m_VertexBuffers;
@@ -61,7 +64,10 @@ protected:
     unsigned long m_IndexesCount;
 
     bool m_IsValid;
+
     bool m_IsBatch;
+    bool m_TBNEnabled;
+    bool m_TexCoordEnabled;
 };
 
 //add possibility to create dynamic vertex buffer
@@ -71,7 +77,7 @@ class TypedBasicVertexGraphicsTopology : public GraphicsTopology
 public:
     TypedBasicVertexGraphicsTopology() 
     {}
-    TypedBasicVertexGraphicsTopology(GraphicsDevice& device, ShadersCollection& shadersCollection, ShaderStrIdentifier vsShader, VertexData& vertexData, TopologyType type, GraphicsBuffer::UsageFlags usage, bool tcEnabled, bool tbnEnabled = false, bool isBatch = false) : GraphicsTopology(device, shadersCollection, vsShader, vertexData, usage, isBatch), m_ShaderStrIdentifier(vsShader), m_Type(type), m_TBNEnabled(tbnEnabled), m_TexCoordEnabled(tcEnabled)
+    TypedBasicVertexGraphicsTopology(GraphicsDevice& device, ShadersCollection& shadersCollection, ShaderStrIdentifier vsShader, VertexData& vertexData, TopologyType type, GraphicsBuffer::UsageFlags usage, bool tcEnabled, bool tbnEnabled = false, bool isBatch = false) : GraphicsTopology(device, shadersCollection, vsShader, vertexData, usage, tcEnabled, tbnEnabled, isBatch), m_ShaderStrIdentifier(vsShader), m_Type(type)
     {
         if (!m_ConstantsBufferInitialized)
         {
@@ -128,10 +134,6 @@ private:
     GraphicsVertexShader m_Shader;
 
     ShaderStrIdentifier m_ShaderStrIdentifier;
-
-    bool m_TBNEnabled;
-
-    bool m_TexCoordEnabled;
 
     static GraphicsConstantsBuffer<T> m_ConstantsBuffer;
     static bool m_ConstantsBufferInitialized;

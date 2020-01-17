@@ -20,7 +20,9 @@ struct PS_OUTPUT
 };
 
 PS_OUTPUT PSEntry(float4 pos : SV_POSITION
+#ifdef TEXCOORD
             , in float2 iTc : TEXCOORD0
+#endif
             , in float4 diffuseRoughness : COLOR0
             , in float4 vPos : POSITION1
             , in float3 stc : TEXCOORD1
@@ -31,22 +33,28 @@ PS_OUTPUT PSEntry(float4 pos : SV_POSITION
             , in /*nointerpolation*/ float3 vbitangent : NORMAL2
 #endif
             //, in uint iMaterial : TEXCOORD0
-            )// : SV_Target
+            )
 {
+#ifdef TEXCOORD
     float4 diffData = diffuseMap.Sample(SampleType, iTc);
     if (diffData.a < 0.01)
     discard;
     
     float3 diffuse = diffData.rgb;
+#else
+    float3 diffuse = diffuseRoughness.rgb;
+#endif
     //float3 diffuse = diffuseRoughness.rgb;
     float rough = diffuseRoughness.a;
     
     float3 normal = vnormal;
 #ifdef TBN
+#ifdef TEXCOORD
     float3x3 mTBN = float3x3(vtangent, vbitangent, vnormal);
     float3 surfNormal = normalMap.Sample(SampleType, iTc).rgb;
     surfNormal = normalize(surfNormal * 2.0 - 1.0);
     normal = normalize(mul(surfNormal, mTBN));
+#endif
 #endif
 
     PS_OUTPUT output;

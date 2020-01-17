@@ -26,14 +26,14 @@ class GraphicsObject;
 class OrdinaryGraphicsObject : public SerializableGraphicsObject
 {
 public:
-    OrdinaryGraphicsObject() : m_Batchable(false) {}
+    OrdinaryGraphicsObject(bool tcEnabled = false, bool tbnEnabled = false, bool batched = false) : m_TexCoordEnabled(tcEnabled), m_TBNEnabled(tbnEnabled), m_Batchable(batched) {}
     virtual void SetTransform(const glm::mat4x4& t) const;
 
     virtual void WriteGeometry(VertexData& data, const std::set<GraphicsMaterial*>& materialIndexRemap, bool batched = false, size_t vertexesOffset = 0) = 0;
     virtual size_t GetNumVertexes() const = 0;
 
-    virtual bool TBNEnabled() = 0;
-    virtual bool TexCoordEnabled() = 0;
+    bool TBNEnabled() { return m_TBNEnabled; }
+    bool TexCoordEnabled() { return m_TexCoordEnabled; }
 
     virtual bool IsDrawable() { return true; }
 public:
@@ -43,6 +43,9 @@ public:
     std::vector<GraphicsMaterial*> m_Materials;
     tinyxml2::XMLElement* m_XMLElement;
     bool m_Batchable;
+
+    bool m_TBNEnabled;
+    bool m_TexCoordEnabled;
 };
 
 class OrdinaryGraphicsObjectHandler;
@@ -94,9 +97,6 @@ public:
 
     virtual void WriteGeometry(VertexData& data, const std::set<GraphicsMaterial*>& materialIndexRemap, bool batched = false, size_t vertexesOffset = 0) override;
     virtual size_t GetNumVertexes() const override;
-
-    bool TBNEnabled() override { return false; }
-    bool TexCoordEnabled() override { return false; }
 private:
     VertexData m_VertexData;
     VertexType ParseVertex(tinyxml2::XMLElement* vertexElement);
@@ -142,8 +142,6 @@ public:
     virtual void WriteGeometry(VertexData& data, const std::set<GraphicsMaterial*>& materialIndexRemap, bool batched = false, size_t vertexesOffset = 0) override;
     virtual size_t GetNumVertexes() const override;
 
-    bool TBNEnabled() override { return false; }
-    bool TexCoordEnabled() override { return false; }
 private:
     glm::vec3 m_Center;
     float m_R;
@@ -191,8 +189,6 @@ public:
     
     virtual bool IsDrawable() { return false; }
 
-    bool TBNEnabled() override { return false; }
-    bool TexCoordEnabled() override { return false; }
 protected:
     std::string m_Path;
     Assimp::Importer            importer;
@@ -231,8 +227,6 @@ public:
     virtual void WriteGeometry(VertexData& data, const std::set<GraphicsMaterial*>& materialIndexRemap, bool batched = false, size_t vertexesOffset = 0) override;
     virtual size_t GetNumVertexes() const override;
 
-    bool TBNEnabled() override;
-    bool TexCoordEnabled() override;
 private:
     MetaModelGraphicsObject* m_MetaObj;
     size_t m_ShapeIndex;

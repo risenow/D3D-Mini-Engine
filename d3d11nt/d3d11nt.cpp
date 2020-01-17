@@ -148,7 +148,7 @@ int main(int argc, char* argv[])
     Window window(iniFile);
     MouseKeyboardCameraController mouseKeyboardCameraController(CreateInitialCamera(iniFile, (float)window.GetWidth()/(float)window.GetHeight()), iniFile);
     DisplayAdaptersList displayAdaptersList;
-    D3D11DeviceCreationFlags deviceCreationFlags(true, true);//(commandLineArgs);
+    D3D11DeviceCreationFlags deviceCreationFlags(false, false);//(commandLineArgs);
 
     BasicVariablesCommandProducer basicvarProducer;
     Console cons({ &basicvarProducer });

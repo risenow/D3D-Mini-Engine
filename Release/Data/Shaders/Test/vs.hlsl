@@ -12,11 +12,15 @@ void VSEntry(in float4 iPos : POSITION
         ,in uint iMaterial : TEXCOORD0
 
 #else
+#ifdef TEXCOORD
         ,in float2 iTc : TEXCOORD0
+#endif
 #endif
         ,out float4 oPos : SV_POSITION
 #ifndef BATCH
+#ifdef TEXCOORD
 	    ,out float2 oTc : TEXCOORD0
+#endif
 #endif
         ,out float4 diffuseRoughness : COLOR0
         ,out float4 oVPos : POSITION1
@@ -52,7 +56,9 @@ void VSEntry(in float4 iPos : POSITION
     diffuseRoughness = PSConstsStructured[iMaterial].colorRoughness;
     oVLightPos = PSConstsStructured[iMaterial].vLightPos.xyz;
 #else
+#ifdef TEXCOORD
     oTc = iTc;
+#endif
     diffuseRoughness = colorRoughness;
     oVLightPos = vLightPos.xyz;
 #endif
