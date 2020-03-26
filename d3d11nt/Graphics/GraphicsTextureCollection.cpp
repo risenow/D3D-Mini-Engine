@@ -16,7 +16,7 @@ bool IsFileOfSupported2DFormat(const std::string& file, std::string& format)
     std::reverse(format.begin(), format.end());
 
     bool supported = false;
-    if (format == "jpg" || format == "png")
+    if (format == "jpg" || format == "JPG" || format == "png")
         supported = true;
 
     return supported;

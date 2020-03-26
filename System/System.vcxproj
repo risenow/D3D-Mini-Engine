@@ -176,6 +176,7 @@
   <ItemGroup>
     <ClInclude Include="..\d3d11nt\System\areahelper.h" />
     <ClInclude Include="..\d3d11nt\System\arrayutil.h" />
+    <ClInclude Include="..\d3d11nt\System\BasicVariablesContext.h" />
     <ClInclude Include="..\d3d11nt\System\BigChunkAllocator.h" />
     <ClInclude Include="..\d3d11nt\System\BoundQuad.h" />
     <ClInclude Include="..\d3d11nt\System\builddefines.h" />

@@ -13,6 +13,7 @@
 
 enum TopologyType
 {   
+    Topology_Points = D3D11_PRIMITIVE_TOPOLOGY_POINTLIST,
     Topology_Lines = D3D11_PRIMITIVE_TOPOLOGY_LINELIST,
     Topology_Triangles = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST
 };
@@ -26,7 +27,7 @@ public:
 
     virtual void Bind(GraphicsDevice& device, ShadersCollection& shadersCollection, GraphicsBuffer* materialsStructuredbuffer, GraphicsBuffer* materialsConstantBuffer, void* constants) = 0;//const Camera& camera, TopologyType type) = 0;
     //virtual void ReleaseGPUData() = 0;
-    virtual void DrawCall(GraphicsDevice& device, int overrideVertexCount = -1) = 0;
+    virtual void DrawCall(GraphicsDevice& device, int overrideVertexCount = -1, int startLocation = 0) = 0;
 
     void ReleaseGPUData()
     {
@@ -118,15 +119,24 @@ public:
             BindMultipleGraphicsConstantBuffers(device, 0, cbuffers, GraphicsShaderMask_Vertex | GraphicsShaderMask_Pixel | GraphicsShaderMask_Hull | GraphicsShaderMask_Domain);
         }
     }
-    virtual void DrawCall(GraphicsDevice& device, int overrideVertexCount = -1) override
+    virtual void DrawCall(GraphicsDevice& device, int overrideVertexCount = -1, int startLocation = 0) override
     {
-        device.GetD3D11DeviceContext()->IASetPrimitiveTopology((D3D_PRIMITIVE_TOPOLOGY)m_Type);
+        D3D_PRIMITIVE_TOPOLOGY type = (D3D_PRIMITIVE_TOPOLOGY)m_Type;
+
+        device.GetD3D11DeviceContext()->IASetPrimitiveTopology((D3D_PRIMITIVE_TOPOLOGY)type);
         if (m_IndexesCount)
         {
             device.GetD3D11DeviceContext()->DrawIndexed(m_IndexesCount, 0, 0);
             return;
         }
         device.GetD3D11DeviceContext()->Draw(overrideVertexCount >= 0 ? overrideVertexCount : m_UsedVertexCount, 0);
+    }
+    void DrawCallEx(GraphicsDevice& device, TopologyType type, int overrideVertexCount = -1, int startLocation = 0)
+    {
+        TopologyType tempType = m_Type;
+        m_Type = type;
+        DrawCall(device, overrideVertexCount, startLocation);
+        m_Type = tempType;
     }
 private:
     TopologyType m_Type;

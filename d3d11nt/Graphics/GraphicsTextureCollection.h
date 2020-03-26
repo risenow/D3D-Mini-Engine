@@ -19,7 +19,12 @@ bool IsFileOfSupported2DFormat(const std::string& file, std::string& format);
 class  GraphicsTextureCollection : public std::map<std::string, std::shared_ptr<Texture2D>>
 {
 public:
-    GraphicsTextureCollection() {}
+    GraphicsTextureCollection(GraphicsDevice& device) 
+    {
+        InitializeWhiteTexture(device);
+        InitializeBlackTexture(device);
+        InitializeBlueTexture(device);
+    }
     ~GraphicsTextureCollection() {}
 
     auto Add(GraphicsDevice& device, const std::string& file, bool isNormalMap = false, DXGI_FORMAT format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB)
@@ -75,6 +80,7 @@ public:
             {
                 DirectX::GenerateMipMaps(scrImage.GetImages()[0], DirectX::TEX_FILTER_DEFAULT, levels, mipChain, false);
                 hr2 = (DirectX::CreateTextureEx(device.GetD3D11Device(), mipChain.GetImages(), mipChain.GetImageCount(), mipChain.GetMetadata(), D3D11_USAGE_DEFAULT, D3D11_BIND_SHADER_RESOURCE, 0, 0, !isNormalMap, &res));
+                //hr2 = (DirectX::CreateTextureEx(device.GetD3D11Device(), scrImage.GetImages(), scrImage.GetImageCount(), scrImage.GetMetadata(), D3D11_USAGE_DEFAULT, D3D11_BIND_SHADER_RESOURCE, 0, 0, !isNormalMap, &res));
             }
 
             if (SUCCEEDED(hr) && SUCCEEDED(hr2))
@@ -91,17 +97,41 @@ public:
     {
         return &m_BlackTexture;
     }
+    Texture2D* GetBlueTexture()
+    {
+        return &m_BlueTexture;
+    }
+    Texture2D* GetWhiteTexture()
+    {
+        return &m_WhiteTexture;
+    }
   private:
-      void InitializeBlackTexture(GraphicsDevice& device)
+      Texture2D InitializeMonotoneTexture(GraphicsDevice& device, uint8_t color[4])
       {
-          uint8_t p[4] = { 0, 0, 0, 1 };
           D3D11_SUBRESOURCE_DATA data;
-          data.pSysMem = (void*)p;
+          data.pSysMem = (void*)color;
           data.SysMemPitch = sizeof(uint8_t) * 4;
           data.SysMemSlicePitch = 0;
-          m_BlackTexture = Texture2D(device, 1, 1, 1, 1, DXGI_FORMAT_R8G8B8A8_UNORM, GetDefaultSampleDesc(), D3D11_USAGE_DEFAULT, D3D11_BIND_SHADER_RESOURCE, 0, 0, &data);
+          return Texture2D(device, 1, 1, 1, 1, DXGI_FORMAT_R8G8B8A8_UNORM, GetDefaultSampleDesc(), D3D11_USAGE_DEFAULT, D3D11_BIND_SHADER_RESOURCE, 0, 0, &data);
+      }
+      void InitializeBlackTexture(GraphicsDevice& device)
+      {
+          uint8_t p[4] = { 0, 0, 0, 255 };
+          m_BlackTexture = InitializeMonotoneTexture(device, p);
+      }
+      void InitializeBlueTexture(GraphicsDevice& device)
+      {
+          uint8_t p[4] = { 0, 0, 255, 255 };
+          m_BlueTexture = InitializeMonotoneTexture(device, p);
+      }
+      void InitializeWhiteTexture(GraphicsDevice& device)
+      {
+          uint8_t p[4] = { 255, 255, 255, 255 };
+          m_WhiteTexture = InitializeMonotoneTexture(device, p);
       }
 
       Texture2D m_BlackTexture;
+      Texture2D m_BlueTexture;
+      Texture2D m_WhiteTexture;
 
 };

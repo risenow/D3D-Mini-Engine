@@ -10,8 +10,8 @@
 class DeferredShadingFullscreenQuad
 {
 public:
-    //DeferredShadingFullscreenQuad() {}
-    DeferredShadingFullscreenQuad(GraphicsDevice& device, RenderSet& gbuffer, ShadersCollection& shadersCollection, GraphicsTextureCollection& textureCollection) : m_FullscreenQuad(shadersCollection), m_GBuffer(gbuffer), m_PixelShader(shadersCollection.GetShader<GraphicsPixelShader>(L"Test/deferredshadingps.hlsl", {}))
+    DeferredShadingFullscreenQuad() {}
+    DeferredShadingFullscreenQuad(GraphicsDevice& device, RenderSet* gbuffer, ShadersCollection& shadersCollection, GraphicsTextureCollection& textureCollection) : m_FullscreenQuad(shadersCollection), m_GBuffer(gbuffer), m_PixelShader(shadersCollection.GetShader<GraphicsPixelShader>(L"Test/deferredshadingps.hlsl", {}))
     {
         m_ConstantsBuffer = GraphicsConstantsBuffer<DeferredShadingPSConsts>(device);
 
@@ -36,14 +36,14 @@ public:
         m_EnvMap = textureCollection["cubemap.dds"];
     }
 
-    void Render(GraphicsDevice& device, ShadersCollection& shadersCollection, Camera& camera, const glm::vec4 lightPos = glm::vec4(), const glm::vec3& f0override = glm::vec3(), const glm::vec3& diffuseOverride = glm::vec3(), float roverride = 0.0f, uint32_t passBits = 0)
+    void Render(GraphicsDevice& device, ShadersCollection& shadersCollection, Camera& camera, Texture2D* ssao, const glm::vec4 lightPos = glm::vec4(), const glm::vec3& f0override = glm::vec3(), const glm::vec3& diffuseOverride = glm::vec3(), float roverride = 0.0f, uint32_t passBits = 0)
     {
         m_PixelShader = shadersCollection.GetShader<GraphicsPixelShader>(L"Test/deferredshadingps.hlsl", passBits);
 
         const glm::vec2 projFactors = camera.GetProjectionFactors();
 
         DeferredShadingPSConsts consts;
-        consts.gbufferSize = glm::vec4(m_GBuffer.GetColorTexture(0).GetWidth(), m_GBuffer.GetColorTexture(0).GetHeight(), 0.0f, 0.0f);
+        consts.gbufferSize = glm::vec4(m_GBuffer->GetColorTexture(0).GetWidth(), m_GBuffer->GetColorTexture(0).GetHeight(), 0.0f, 0.0f);
         consts.vLightPos = camera.GetViewMatrix() * lightPos;
         consts.projFactors = glm::vec4(projFactors.x, projFactors.y, 0.0f, 0.0f);
         consts.invView = (glm::inverse(camera.GetViewMatrix()));
@@ -62,12 +62,13 @@ public:
         textureSRVs.reserve(3);
         for (size_t i = 0; i < 3; i++)
         {
-            textureSRVs.push_back(m_GBuffer.GetColorTexture(i).GetSRV());
+            textureSRVs.push_back(m_GBuffer->GetColorTexture(i).GetSRV());
         }
         textureSRVs.push_back(m_EnvMap->GetSRV());
+        textureSRVs.push_back(ssao->GetSRV());
 
 
-        device.GetD3D11DeviceContext()->PSSetShaderResources(0, 4, textureSRVs.data());
+        device.GetD3D11DeviceContext()->PSSetShaderResources(0, 5, textureSRVs.data());
 
         m_FullscreenQuad.Render(device);
     }
@@ -77,7 +78,7 @@ private:
 
     GraphicsConstantsBuffer<DeferredShadingPSConsts> m_ConstantsBuffer;
     GraphicsPixelShader m_PixelShader;
-    RenderSet& m_GBuffer;
+    RenderSet* m_GBuffer;
     FullscreenQuad m_FullscreenQuad;
     ID3D11SamplerState* m_SamplerState;
 };

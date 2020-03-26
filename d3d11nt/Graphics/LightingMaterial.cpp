@@ -4,6 +4,7 @@
 #include "Graphics/MaterialBatchStructuredBuffer.h"
 #include "Graphics/BasicPixelShaderVariations.h"
 #include "Extern/tiny_obj_loader.h"
+#include "System/pathutils.h"
 #include <d3d11.h>
 #include <assimp/pbrmaterial.h>
 
@@ -37,20 +38,25 @@ std::vector<Texture2D*> ExtractLightingMaterialTexturesFromAiMaterial(GraphicsDe
     aiString normalPath;
     mat->Get(AI_MATKEY_TEXTURE(aiTextureType_DISPLACEMENT, 0), normalPath);
 
+    std::string sDiffusePath = std::string(diffusePath.C_Str());
+    std::string sNormalPath = std::string(normalPath.C_Str());
+    NormalizePath(sDiffusePath);
+    NormalizePath(sNormalPath);
+
     std::vector<Texture2D*> materials;
-    Texture2D* mt = textureCollection.RequestTexture(device, PreProcessPath(std::string(diffusePath.C_Str()), basePath));
+    Texture2D* mt = textureCollection.RequestTexture(device, PreProcessPath(sDiffusePath, basePath));
 
     if (!mt)
     {
-        mt = textureCollection.GetBlackTexture();//textureCollection["Data/Textures/black.png"].get();
+        mt = textureCollection.GetWhiteTexture();
     }
     materials.push_back(mt);
 
-    mt = textureCollection.RequestTexture(device, PreProcessPath(std::string(normalPath.C_Str()), basePath), true);
+    mt = textureCollection.RequestTexture(device, PreProcessPath(sNormalPath, basePath), true);
 
     if (!mt)
     {
-        mt = textureCollection.GetBlackTexture();//textureCollection["Data/Textures/black.png"].get();
+        mt = textureCollection.GetBlueTexture();
     }
     materials.push_back(mt);
 
@@ -112,7 +118,7 @@ GraphicsLightingMaterial::GraphicsLightingMaterial(GraphicsDevice& device, Graph
     // Create the texture sampler state.
     device.GetD3D11Device()->CreateSamplerState(&samplerDesc, &m_SamplerState);
 
-    m_DiffuseMap = textureCollection.GetBlackTexture();//textureCollection["Data/Textures/black.png"].get();
+    m_DiffuseMap = textureCollection.GetWhiteTexture();
     m_NormalMap = m_DiffuseMap;
     m_Cubemap = textureCollection["cubemap.dds"];
 
@@ -152,6 +158,7 @@ void GraphicsLightingMaterial::Bind(GraphicsDevice& device, ShadersCollection& s
     _Bind(device, shadersCollection, shaderBits);
 
     std::vector< ID3D11ShaderResourceView*> textureSRVs = { m_DiffuseMap->GetSRV(), m_NormalMap->GetSRV() };
+
     device.GetD3D11DeviceContext()->PSSetShaderResources(0, 2, textureSRVs.data());
     device.GetD3D11DeviceContext()->PSSetSamplers(0, 1, &m_SamplerState);
 }

@@ -11,6 +11,7 @@ Texture2D normalMap: register(t1);
 struct PS_OUTPUT
 {
 #ifdef GBUFFER_PASS
+    float4 PlainNormal: SV_Target3;
     float4 Color: SV_Target2;
     float4 Normal: SV_Target1;
     float4 Position : SV_Target0;
@@ -70,6 +71,7 @@ PS_OUTPUT PSEntry(float4 pos : SV_POSITION
     output.Color = float4(diffuse, rough);
     output.Normal = float4(normal, vPos.z);
     output.Position = vPos;
+    output.PlainNormal = float4(vnormal, vPos.z);
 #endif
     
 	return output;

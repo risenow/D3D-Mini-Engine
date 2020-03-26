@@ -126,6 +126,9 @@
     <ClInclude Include="..\d3d11nt\System\Mat4x4Storage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\d3d11nt\System\BasicVariablesContext.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

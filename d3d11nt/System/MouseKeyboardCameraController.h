@@ -10,7 +10,7 @@ class MouseKeyboardCameraController : public IniSerializable
 public:
 	MouseKeyboardCameraController(const Camera& camera, IniFile& ini);
 
-	void Update(Window& window);
+	void Update(Window& window, bool useAngleParametrization, float expEyeX, float expEyeY);
 	Camera& GetCamera()
 	{
 		return m_Camera;

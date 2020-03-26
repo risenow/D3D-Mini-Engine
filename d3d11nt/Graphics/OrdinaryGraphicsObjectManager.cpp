@@ -448,7 +448,7 @@ void SubMeshModelGraphicsObject::WriteGeometry(VertexData& data, const std::set<
     for (unsigned int v = 0; v < mesh->mNumVertices; v++)
     {
 
-        aiVector3D aiPos = mesh->mVertices[v];
+        aiVector3D aiPos = mesh->mVertices[v]* 0.1f;
         glm::vec4 pos = glm::vec4(aiPos.x, aiPos.y, aiPos.z, 1.0f);
         *((glm::vec4*)(dst + v * stride)) = pos;
 
@@ -501,11 +501,13 @@ size_t SubMeshModelGraphicsObject::GetNumVertexes() const
 MetaModelGraphicsObject::MetaModelGraphicsObject(GraphicsDevice& device, ShadersCollection& shadersCollection, GraphicsTextureCollection& textureCollection, GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* element)
 {
     Deserialize(element);
-    m_ModelScene = importer.ReadFile(m_Path.c_str(), aiProcess_MakeLeftHanded | aiProcess_FlipWindingOrder | aiProcess_FlipUVs | aiProcess_PreTransformVertices |
+    m_ModelScene = importer.ReadFile(m_Path.c_str(), 
+        //aiProcess_MakeLeftHanded | 
+        aiProcess_FlipWindingOrder | aiProcess_FlipUVs | aiProcess_PreTransformVertices |
         aiProcess_CalcTangentSpace |
-        //aiProcess_GenSmoothNormals |
+        aiProcess_GenNormals |
         aiProcess_Triangulate |
-        aiProcess_FixInfacingNormals |
+        //aiProcess_FixInfacingNormals |
         aiProcess_FindInvalidData |
         aiProcess_ValidateDataStructure | 0
 

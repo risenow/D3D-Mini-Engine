@@ -11,6 +11,7 @@ Texture2D gbufferNormal : register(t1);
 Texture2D gbufferColor : register(t2);
 #endif
 TextureCube reflEnv : register(t3);
+Texture2D ssao : register(t4);
 
 bool isCorrectNormal(float3 n)
 {
@@ -173,8 +174,9 @@ float4 PSEntry(
     float hv = dot(h, v);
     
     //float reflectionWeight = 0.6;
+    float ao = ssao.Sample(SampleType, tc_)*0.25;
     float3 specular = CookTorrance(nl, nv, hn, hv, wViewVec, wNormal, diffuse, rough);
-    float4 result = float4(specular + diffuse * 0.05 + diffuse * max(nl, 0.0), 1.0);
+    float4 result = float4(specular + diffuse * ao + diffuse * max(nl, 0.0), 1.0);
     
 #ifdef REINHARD
     result = result / (result / 2.4 + 1.0);

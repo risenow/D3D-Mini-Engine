@@ -33,6 +33,9 @@
     <None Include="..\d3d11nt\Data\Shaders\Test\ssaoconstants.h">
       <Filter>Data\Shaders\Test</Filter>
     </None>
+    <None Include="..\d3d11nt\Data\Shaders\Test\fsqvs.hlsl">
+      <Filter>Data\Shaders\Test</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\d3d11nt\Data\Shaders\Test\vsconstants.h">
@@ -52,5 +55,10 @@
     <Xml Include="..\d3d11nt\Data\scene.xml">
       <Filter>Data</Filter>
     </Xml>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="psmvs.hlsl">
+      <Filter>Data\Shaders\Test</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

@@ -6,7 +6,7 @@
 class FullscreenQuad
 {
 public:
-   // FullscreenQuad() {}
+    FullscreenQuad() {}
     FullscreenQuad(ShadersCollection& shadersCollection) : m_VertexShader(shadersCollection.GetShader<GraphicsVertexShader>(L"Test/fsqvs.hlsl", {}))
     {}
     void Render(GraphicsDevice& device)

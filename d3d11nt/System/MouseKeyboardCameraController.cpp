@@ -8,9 +8,13 @@ MouseKeyboardCameraController::MouseKeyboardCameraController(const Camera& camer
 	DeserializeFromIni(ini);
 }
 
-void MouseKeyboardCameraController::Update(Window& window)
+void MouseKeyboardCameraController::Update(Window& window, bool useAngleParametrization, float expEyeX, float expEyeY)
 {
     const float VELOCITY = 1.0f;//0.005f;
+
+    m_Camera.UseAngleParametrization(useAngleParametrization);
+    m_Camera.SetEyeX(expEyeX);
+    m_Camera.SetEyeY(expEyeY);
 
     m_MouseCameraRotationActive = !!(GetAsyncKeyState(VK_RBUTTON));
 

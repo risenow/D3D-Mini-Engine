@@ -26,12 +26,15 @@ public:
     ImmediateRenderer(GraphicsDevice& device, ShadersCollection& shadersCollection);
     void OnFrameBegin(GraphicsDevice& device);
     void OnFrameEnd(GraphicsDevice& device, ShadersCollection& shadersCollection, Camera& camera, RenderSet& swapchainRenderSet); //render is here
-    void Line(const glm::vec4& v1, const glm::vec4& v2, const glm::vec4& color); 
+    void Line(const glm::vec4& v1, const glm::vec4& v2, const glm::vec4& color);
+    void Point(const glm::vec4& v, const glm::vec4& color);
     void ReleaseGPUData();
     //void Render();
 private:
+    size_t m_PointsStartLocation;
     VertexData m_VertexData;
-    size_t m_UsedVertexCount;
+    size_t m_LinesUsedVertexCount;
+    size_t m_PointsUsedVertexCount;
     BasicGraphicsMaterial<BasicPSConstsDummy> m_Material;
     TypedBasicVertexGraphicsTopology<BasicVSConsts> m_Topology;
 };

@@ -76,7 +76,10 @@ T ExcludeFileFromPath(const T& path)
     int i = p.size() - 1;
     while (i >= 0 && p[i] != '/') i--;
     
-    return p.substr(0, p.size() - i);
+    if (i < 0)
+        return path;
+
+    return p.substr(0, i + 1);
 
     //return ReducePathRank(path, GetPathRank(path) - 1);
 }

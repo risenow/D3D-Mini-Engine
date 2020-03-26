@@ -324,7 +324,7 @@ namespace glm
 		tmat4x4<T, defaultp> Result(static_cast<T>(0));
 		Result[0][0] = w;
 		Result[1][1] = h;
-		Result[2][3] = - static_cast<T>(1);
+        Result[2][3] = - static_cast<T>(1);
 
 #		if GLM_DEPTH_CLIP_SPACE == GLM_DEPTH_ZERO_TO_ONE
 			Result[2][2] = zFar / (zNear - zFar);
@@ -542,6 +542,18 @@ namespace glm
 		Result[3][0] =-dot(s, eye);
 		Result[3][1] =-dot(u, eye);
 		Result[3][2] = dot(f, eye);
+        /*Result[0][0] = s.x;
+        Result[0][1] = s.y;
+        Result[0][2] = s.z;
+        Result[1][0] = u.x;
+        Result[1][1] = u.y;
+        Result[1][2] = u.z;
+        Result[2][0] = -f.x;
+        Result[2][1] = -f.y;
+        Result[2][2] = -f.z;
+        Result[3][0] = -dot(s, eye);
+        Result[3][1] = -dot(u, eye);
+        Result[3][2] = dot(f, eye); */
 		return Result;
 	}
 

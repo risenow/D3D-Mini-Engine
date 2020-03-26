@@ -12,7 +12,7 @@ RenderSet::RenderSet(const std::vector<ColorSurface*>& colorSurfaces, const Dept
     CorrectnessGuard();
 }
 
-RenderSet::RenderSet(GraphicsDevice& device, size_t w, size_t h, MultisampleType ms, const std::vector<DXGI_FORMAT>& formats) : m_ResourceIsOwned(true)
+RenderSet::RenderSet(GraphicsDevice& device, size_t w, size_t h, MultisampleType ms, const std::vector<DXGI_FORMAT>& formats, bool uav) : m_ResourceIsOwned(true)
 {
     m_DepthStencilTexture = Texture2DHelper::CreateCommonTexture(device,
         w,
@@ -25,6 +25,10 @@ RenderSet::RenderSet(GraphicsDevice& device, size_t w, size_t h, MultisampleType
 
     m_ColorSurfaces.resize(formats.size());
     m_RenderTargetTextures.resize(formats.size());
+    
+    uint32_t bindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+    if (uav)
+        bindFlags |= D3D11_BIND_UNORDERED_ACCESS;
     for (size_t i = 0; i < formats.size(); i++)
     {
         m_RenderTargetTextures[i] = Texture2DHelper::CreateCommonTexture(device,
@@ -33,7 +37,7 @@ RenderSet::RenderSet(GraphicsDevice& device, size_t w, size_t h, MultisampleType
             1,
             formats[i],
             ms,
-            D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE);
+            bindFlags);
         m_ColorSurfaces[i] = popNew(ColorSurface)(device, &m_RenderTargetTextures[i]);
     }
 }

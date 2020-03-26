@@ -11,7 +11,7 @@ class RenderSet
 {
 public:
     RenderSet();
-    RenderSet(GraphicsDevice& device, size_t w, size_t h, MultisampleType ms, const std::vector<DXGI_FORMAT>& formats);
+    RenderSet(GraphicsDevice& device, size_t w, size_t h, MultisampleType ms, const std::vector<DXGI_FORMAT>& formats, bool uav = false);
     RenderSet(const std::vector<ColorSurface*>& colorSurface, const DepthSurface* depthStencilSurface);
     //RenderSet(ID3D11RenderTargetView* renderTargetView, ID3D11DepthStencilView* depthStencilView, bool useDepthStencil);
     RenderSet(size_t width, size_t height, DXGI_FORMAT colorSurfaceFormat, DXGI_FORMAT depthSurfaceFormat, bool useDepthStencil = false);
@@ -58,6 +58,11 @@ public:
         assert(idx < m_RenderTargetTextures.size());
         assert(idx < m_ColorSurfaces.size());
         return m_RenderTargetTextures[idx];
+    }
+
+    Texture2D& GetDepthTexture()
+    {
+        return m_DepthStencilTexture;
     }
 private:
     void CorrectnessGuard();
