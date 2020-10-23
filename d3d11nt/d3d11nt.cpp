@@ -39,6 +39,8 @@
 #include "Graphics/GBufferRenderPass.h"
 #include "Graphics/SSAORenderPass.h"
 #include "Graphics/LightingRenderPass.h"
+#include "Graphics/GraphicsDirectionalShadowMap.h"
+#include "Graphics/GraphicsShadowMapPass.h"
 #include "System/HardwareInfo.h"
 #include "System/BasicVariablesContext.h"
 #include "System/memutils.h"
@@ -234,7 +236,7 @@ int main(int argc, char* argv[])
     swapchain.SetFullcreenState(false);
 
     float clearColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
-
+    //
     D3D11_RASTERIZER_DESC rastState;
     rastState.AntialiasedLineEnable = true;
     rastState.CullMode = D3D11_CULL_NONE;
@@ -316,6 +318,9 @@ int main(int argc, char* argv[])
     bool pause = false;
     bool cameraRotationActive = false;
 
+    GraphicsShadowMapPass shadowMapPass = GraphicsShadowMapPass(device, depthStencilState);
+    shadowMapPass.InitializeOutputDependencies();
+
     PassResource GBufferResource = PassResource(&GBuffer, nullptr);
     GBufferRenderPass gbufferRenderPass = GBufferRenderPass(&GBufferResource, d3dRastState, depthStencilState);
     gbufferRenderPass.InitializeOutputDependencies();
@@ -325,7 +330,7 @@ int main(int argc, char* argv[])
     ssaoRenderPass.InitializeOutputDependencies();
 
     PassResource finalResource = PassResource(&intermediateRenderSet, nullptr);
-    LightingRenderPass lightingRenderPass = LightingRenderPass(device, shadersCollection, textureCollection, &finalResource, &SSAOBufferResource, &GBufferResource, d3dRastState, FSQDepthStencilState);
+    LightingRenderPass lightingRenderPass = LightingRenderPass(device, shadersCollection, textureCollection, &finalResource, &SSAOBufferResource, &GBufferResource, &shadowMapPass.m_ShadowMap, d3dRastState, FSQDepthStencilState);
     lightingRenderPass.InitializeOutputDependencies();
 
     std::vector<RenderPass*> passList = BuildPassList(&finalResource);
@@ -343,9 +348,8 @@ int main(int argc, char* argv[])
     float fov = 45.0f;
     int msType = std::log2((int)options.GetMultisampleType()) + 1;
     bool ssaoToSwapchain = false;
-    bool useAngleParametrization = false;
-    float eyeX = 0.0f;
-    float eyeY = 0.0f;
+    
+    bool useAngles = true;
 
     while (!window.IsClosed())
     {
@@ -421,9 +425,18 @@ int main(int argc, char* argv[])
                 ssaoRenderPass.SetOutputRenderSet(&SSAORenderSet);
                 finalResource.m_Dependency = &lightingRenderPass;
                 passList = BuildPassList(&finalResource);
+                passList.insert(passList.cbegin(), { &shadowMapPass });
             }
+
+#define REAL_CAMERA
+#ifdef REAL_CAMERA
+#define HERECAM mouseKeyboardCameraController.GetCamera()
+#else
+#define HERECAM shadowMapPass.m_ShadowMap.GetCamera()
+#endif
+
             for (RenderPass* pass : passList)
-                pass->Render(device, sceneGraph, shadersCollection, textureCollection, mouseKeyboardCameraController.GetCamera(), options, &basicVars);
+                pass->Render(device, sceneGraph, shadersCollection, textureCollection, HERECAM/*mouseKeyboardCameraController.GetCamera()shadowMapPass.m_ShadowMap.GetCamera()*/, options, &basicVars);
 
             /*
             uav = swapchain.GetBackBufferSurface().GetTexture()->GetUAV();
@@ -466,10 +479,8 @@ int main(int argc, char* argv[])
             static int counter = 0;
 
             ImGui::Begin("Lighting");
-            ImGui::Checkbox("Camera Angle parametrization", &useAngleParametrization);
+            ImGui::Checkbox("Use Angles", &useAngles);
             ImGui::SliderFloat("FOV", &fov, 30.0f, 120.0f);
-            ImGui::SliderFloat("Eye X", &eyeX, -1.0f, 1.0f);
-            ImGui::SliderFloat("Eye Y", &eyeY, -1.0f, 1.0f);
             ImGui::Checkbox("Deferred", &deferredShading);
             ImGui::SliderFloat3("Light pos", (float*)&basicVars.lightPos, -1000.0f, 1000.0f);
             ImGui::SliderFloat("Roughness", &basicVars.roverride, 0.0f, 1.0f);
@@ -488,6 +499,9 @@ int main(int argc, char* argv[])
             ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
             ImGui::End();
         }
+        shadowMapPass.m_ShadowMap.GetCamera().m_UseAngles = useAngles;
+        //mouseKeyboardCameraController.GetCamera().SetOrientation(glm::vec3(eyeX, eyeY, 1.0));
+
         cons.Process();
 
         ImGui::Render();
@@ -524,7 +538,7 @@ int main(int argc, char* argv[])
         WriteFPSToWindowTitle(window, frameMeasurer);
 
 		if (window.IsFocused() && !pause)
-		    mouseKeyboardCameraController.Update(window, useAngleParametrization, eyeX, eyeY);
+		    mouseKeyboardCameraController.Update(window);
 
         window.AddCommand(SetCursorVisibilityCommand(!mouseKeyboardCameraController.GetMouseCameraRotationActive()));
        

@@ -47,10 +47,10 @@ public:
             //glm::vec3 v = glm::vec3(((float)rand() - (float)HalfRandMax) / (float)HalfRandMax, ((float)rand() - (float)HalfRandMax) / (float)HalfRandMax, (float)rand()/(float)RAND_MAX);
             //v = glm::normalize(v) * ((float)rand() / (float)RAND_MAX);
             glm::vec3 v;
-            //do
-            //{
+            do
+            {
                 v = GenRandomVector();
-            //} while (v.z < 0.05);
+            } while (v.z < 0.075);
             consts.kernelSamples[i] = glm::vec4(v, 1.0);//glm::vec4(0.0, 0.0, 1.0, 1.0f);
 
             if (i < RAND_VECTOR_COUNT)

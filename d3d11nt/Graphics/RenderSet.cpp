@@ -18,9 +18,9 @@ RenderSet::RenderSet(GraphicsDevice& device, size_t w, size_t h, MultisampleType
         w,
         h,
         1,
-        DXGI_FORMAT_D24_UNORM_S8_UINT,
+        DXGI_FORMAT_R24G8_TYPELESS,//DXGI_FORMAT_D24_UNORM_S8_UINT,
         ms,
-        D3D11_BIND_DEPTH_STENCIL);
+        D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE);
     m_DepthStencilSurface = popNew(DepthSurface)(device, &m_DepthStencilTexture);
 
     m_ColorSurfaces.resize(formats.size());
@@ -44,13 +44,13 @@ RenderSet::RenderSet(GraphicsDevice& device, size_t w, size_t h, MultisampleType
 
 size_t RenderSet::GetWidth() const
 {
-    assert(m_ColorSurfaces.size());
-    return m_ColorSurfaces[0]->GetWidth();
+    assert(m_ColorSurfaces.size() || m_DepthStencilSurface);
+    return (m_ColorSurfaces.size()) ? m_ColorSurfaces[0]->GetWidth() : m_DepthStencilSurface->GetWidth();
 }
 size_t RenderSet::GetHeight() const
 {
-    assert(m_ColorSurfaces.size());
-    return m_ColorSurfaces[0]->GetHeight();
+    assert(m_ColorSurfaces.size() || m_DepthStencilSurface);
+    return (m_ColorSurfaces.size()) ? m_ColorSurfaces[0]->GetHeight() : m_DepthStencilSurface->GetHeight();
 }
 
 void RenderSet::Set(GraphicsDevice& device)

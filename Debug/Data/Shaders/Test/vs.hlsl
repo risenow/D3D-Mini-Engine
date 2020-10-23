@@ -2,23 +2,25 @@
 #include "psconstants.h"
 
 
-void VSEntry(in float4 iPos : POSITION 
-            ,in float3 iNormal : NORMAL0
+void VSEntry(in float4 iPos : POSITION
+    , in float3 iNormal : NORMAL0
 #ifdef TBN
-            ,in float3 iTangent : NORMAL1
-            ,in float3 iBitangent : NORMAL2
+    , in float3 iTangent : NORMAL1
+    , in float3 iBitangent : NORMAL2
 #endif
 #ifdef BATCH // INCORRECT! (BEN GOLD)
-        ,in uint iMaterial : TEXCOORD0
+    , in uint iMaterial : TEXCOORD0
 
 #else
 #ifdef TEXCOORD
-        ,in float2 iTc : TEXCOORD0
+    , in float2 iTc : TEXCOORD0
 #endif
 #endif
         ,out float4 oPos : SV_POSITION
+        ,out float4 wPos : TEXCOORD2
 #ifndef BATCH
 #ifdef TEXCOORD
+
 	    ,out float2 oTc : TEXCOORD0
 #endif
 #endif
@@ -49,7 +51,7 @@ void VSEntry(in float4 iPos : POSITION
     float3 r = reflect(viewVec, normalize(iNormal));
     stc = r;
 	
-    float4 wPos = mul(model, iPos);
+    wPos = mul(model, iPos);
     float4 vPos = mul(view, wPos);
     oPos = mul(projection, vPos);
 #ifdef BATCH

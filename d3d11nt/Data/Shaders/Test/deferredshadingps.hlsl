@@ -1,6 +1,7 @@
 #include "deferredshadingpsconstants.h"
 
-SamplerState SampleType;
+SamplerState SampleType : register(s0);
+SamplerComparisonState ShadowSampler : register(s1);
 
 Texture2D gbufferPos: register( t0 );
 #ifdef SAMPLES_COUNT
@@ -12,6 +13,7 @@ Texture2D gbufferColor : register(t2);
 #endif
 TextureCube reflEnv : register(t3);
 Texture2D ssao : register(t4);
+Texture2D shadowMap : register(t5);
 
 bool isCorrectNormal(float3 n)
 {
@@ -157,12 +159,13 @@ float4 PSEntry(
     //_f0 = gbufferColor.Sample(SampleType, tc_);
     //float4 diffuse = gbufferColor.Sample(SampleType, tc_);
     float2 ndcXY = tc * 2.0 - 1.0;
-    float4 vPos = float4(-ndcXY.x * projFactors.x * z, -ndcXY.y * projFactors.y * z, z, 1.0f);
-    
+    //float4 vPos = float4(-ndcXY.x * projFactors.x * z, -ndcXY.y * projFactors.y * z, z, 1.0f);//for right handed
+    float4 vPos = float4(ndcXY.x * projFactors.x * z, ndcXY.y * projFactors.y * z, z, 1.0f);//for left handed
+    float4 vPos2 = float4(ndcXY.x * projFactors.x * z, -ndcXY.y * projFactors.y * z, z, 1.0f);
     float3 l = normalize(-(vPos.xyz - vLightPos.xyz));
     float3 v = normalize(-vPos.xyz);
     
-    float4 wPos = mul(vPos, invView);
+    float4 wPos = mul(invView, vPos);//mul(invView, vPos2); // to use correct vPos
     float3 wNormal = mul(vNormal, (float3x3)invView);
     float3 wViewVec = normalize(wPos.xyz - wCamPos.xyz);
     
@@ -174,10 +177,35 @@ float4 PSEntry(
     float hv = dot(h, v);
     
     //float reflectionWeight = 0.6;
-    float ao = ssao.Sample(SampleType, tc_)*0.25;
+    float ao = ssao.Sample(SampleType, tc_)*0.25 + length(vPos1)*0.0000001;
     float3 specular = CookTorrance(nl, nv, hn, hv, wViewVec, wNormal, diffuse, rough);
     float4 result = float4(specular + diffuse * ao + diffuse * max(nl, 0.0), 1.0);
     
+    float4 shadowmapPos = mul(shadowsView, wPos); //there is no sense to seek for mistake there
+    shadowmapPos /= shadowmapPos.w;
+    shadowmapPos.xy = (shadowmapPos.xy + float2(1.0, 1.0)) * 0.5;//(shadowmapPos + float4(1.0, 1.0, 0.0, 0.0)) * 0.5;
+    shadowmapPos.y = 1.0 - shadowmapPos.y;
+    float shdepth = shadowMap.Sample(SampleType, shadowmapPos.xy).r;
+
+    float shadowFactor = 0.0;
+    float2 pixelSize = float2(1.0, 1.0) / shadowmapSize.xy;
+    
+    float currentXOffset = -1.0 * pixelSize.x;
+    for (int i = 0; i < 5; i++)
+    {
+        float currentYOffset = -1.0 * pixelSize.y;
+        for (int j = 0; j < 5; j++)
+        {
+            shadowFactor += min((shadowMap.SampleCmpLevelZero(ShadowSampler, shadowmapPos.xy + float2(currentXOffset, currentYOffset), shadowmapPos.z - 0.001).r + 0.35), 1.0);
+            currentYOffset += 0.5 * pixelSize.y;
+        }
+        
+        currentXOffset += 0.5 * pixelSize.x;
+    }
+
+    shadowFactor /= 25.0;
+
+    //shadowFactor = min((shadowMap.SampleCmpLevelZero(ShadowSampler, shadowmapPos.xy, shadowmapPos.z - 0.001).r + 0.2), 1.0) + shdepth * 0.00001; //curDepth
 #ifdef REINHARD
     result = result / (result / 2.4 + 1.0);
 #endif
@@ -185,5 +213,5 @@ float4 PSEntry(
     result = pow(result, 1.0 / 2.2);
 #endif
     //gamma correction
-    return result;
+    return result * shadowFactor;
 }

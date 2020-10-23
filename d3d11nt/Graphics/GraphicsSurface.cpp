@@ -18,12 +18,19 @@ void CreateView(GraphicsDevice& device, Texture2D* texture, ID3D11RenderTargetVi
     //HRESULT result = (device.GetD3D11Device()->CreateRenderTargetView(texture->GetD3D11Texture2D(), &rtvDesc, view));
 }
 
+DXGI_FORMAT GetFormatDSV(DXGI_FORMAT format)
+{
+    if (format == DXGI_FORMAT_R24G8_TYPELESS)
+        return DXGI_FORMAT_D24_UNORM_S8_UINT;
+    return format;
+}
+
 template<>
 void CreateView(GraphicsDevice& device, Texture2D* texture, ID3D11DepthStencilView** view)
 {
     D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc;
     ZeroMemory(&dsvDesc, sizeof(D3D11_DEPTH_STENCIL_VIEW_DESC));
-    dsvDesc.Format = texture->GetFormat();
+    dsvDesc.Format = GetFormatDSV(texture->GetFormat());
     dsvDesc.ViewDimension = texture->GetSamplesCount() > 1 ? D3D11_DSV_DIMENSION_TEXTURE2DMS : D3D11_DSV_DIMENSION_TEXTURE2D;
 
     D3D_HR_OP(device.GetD3D11Device()->CreateDepthStencilView(texture->GetD3D11Texture2D(), &dsvDesc, view));

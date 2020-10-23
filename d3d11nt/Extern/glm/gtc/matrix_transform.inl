@@ -7,6 +7,8 @@
 
 namespace glm
 {
+#define GLM_DEPTH_CLIP_SPACE GLM_DEPTH_ZERO_TO_ONE
+#define GLM_COORDINATE_SYSTEM GLM_LEFT_HANDED
 	template <typename T, precision P>
 	GLM_FUNC_QUALIFIER tmat4x4<T, P> translate(tmat4x4<T, P> const & m, tvec3<T, P> const & v)
 	{
@@ -154,8 +156,10 @@ namespace glm
 			Result[2][2] = - static_cast<T>(1) / (zFar - zNear);
 			Result[3][2] = - zNear / (zFar - zNear);
 #		else
-			Result[2][2] = - static_cast<T>(2) / (zFar - zNear);
-			Result[3][2] = - (zFar + zNear) / (zFar - zNear);
+			//Result[2][2] = - static_cast<T>(2) / (zFar - zNear);
+			//Result[3][2] = - (zFar + zNear) / (zFar - zNear);
+            Result[2][2] = -static_cast<T>(1) / (zFar - zNear);
+            Result[3][2] = -zNear / (zFar - zNear);
 #		endif
 
 		return Result;

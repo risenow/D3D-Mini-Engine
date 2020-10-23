@@ -209,6 +209,7 @@
     <ClInclude Include="..\d3d11nt\Graphics\GraphicsInputLayout.h" />
     <ClInclude Include="..\d3d11nt\graphics\GraphicsOptions.h" />
     <ClInclude Include="..\d3d11nt\Graphics\GraphicsShader.h" />
+    <ClInclude Include="..\d3d11nt\Graphics\GraphicsShadowMapPass.h" />
     <ClInclude Include="..\d3d11nt\graphics\GraphicsSurface.h" />
     <ClInclude Include="..\d3d11nt\graphics\GraphicsSwapchain.h" />
     <ClInclude Include="..\d3d11nt\Graphics\GraphicsTextureCollection.h" />

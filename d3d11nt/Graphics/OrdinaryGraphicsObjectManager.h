@@ -260,7 +260,7 @@ public:
 	OrdinaryGraphicsObjectManager();
 	~OrdinaryGraphicsObjectManager();
 
-	void Render(GraphicsDevice& device, ShadersCollection& shaderCollection, uint32_t passShaderBits, const Camera& camera);
+	void Render(GraphicsDevice& device, ShadersCollection& shaderCollection, uint32_t passShaderBits, const Camera& camera, bool shadowPass = false);
 
 	GraphicsObjectManager::HandleResult Handle(GraphicsDevice& device, GraphicsTextureCollection& textureCollection, ShadersCollection& shadersCollection, GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* sceneGraphElement);
 	OrdinaryGraphicsObjectHandler::HandleResult Handle_(GraphicsDevice& device, GraphicsTextureCollection& textureCollection, ShadersCollection& shadersCollection, GraphicsMaterialsManager* materialsManager, tinyxml2::XMLElement* sceneGraphElement);

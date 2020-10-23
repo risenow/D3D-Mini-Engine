@@ -10,7 +10,7 @@
 class LightingRenderPass : public RenderPass
 {
 public:
-    LightingRenderPass(GraphicsDevice& device, ShadersCollection& shadersCollection, GraphicsTextureCollection& textureCollection, PassResource* finalRenderSet, PassResource* ssaoRenderSet, PassResource* gbufferRenderSet, ID3D11RasterizerState* rastState, ID3D11DepthStencilState* depthState) : RenderPass({ gbufferRenderSet, ssaoRenderSet }, { finalRenderSet }, "lighting"), m_RastState(rastState), m_DepthState(depthState)
+    LightingRenderPass(GraphicsDevice& device, ShadersCollection& shadersCollection, GraphicsTextureCollection& textureCollection, PassResource* finalRenderSet, PassResource* ssaoRenderSet, PassResource* gbufferRenderSet, GraphicsDirectionalShadowMap* shadowmap, ID3D11RasterizerState* rastState, ID3D11DepthStencilState* depthState) : RenderPass({ gbufferRenderSet, ssaoRenderSet }, { finalRenderSet }, "lighting"), m_RastState(rastState), m_DepthState(depthState), m_Shadowmap(shadowmap)
     {
         RenderSet* final = ((RenderSet*)m_OutputResources[0]->m_Resource);
         RenderSet* gbuffer = ((RenderSet*)m_InputResources[0]->m_Resource);
@@ -69,7 +69,7 @@ public:
             }
         }
 
-        m_LightingFullscreenQuad.Render(device, shadersCollection, camera, &SSAORenderSet->GetColorTexture(0), basicVariables->lightPos, basicVariables->f0overridetrunc, basicVariables->diffuseOverride, basicVariables->roverride, passBits);
+        m_LightingFullscreenQuad.Render(device, shadersCollection, camera, &SSAORenderSet->GetColorTexture(0), m_Shadowmap, basicVariables->lightPos, basicVariables->f0overridetrunc, basicVariables->diffuseOverride, basicVariables->roverride, passBits);
 
         device.GetD3D11DeviceContext()->ClearState();
     }
@@ -78,4 +78,5 @@ private:
     ID3D11RasterizerState* m_RastState;
     ID3D11DepthStencilState* m_DepthState;
     GraphicsViewport m_Viewport;
+    GraphicsDirectionalShadowMap* m_Shadowmap;
 };

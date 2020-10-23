@@ -39,6 +39,7 @@ public:
 
     void SetPosition(const glm::vec3& position);
     void SetRotation(const glm::vec3& rotation);
+    void SetOrientation(const glm::vec3& orientation);
 
     //calling UpdateViewProjectionMatrix once
     void SetPositionRotation(const glm::vec3& position, const glm::vec3& rotation);
@@ -49,19 +50,6 @@ public:
 
     void StepForward(float step);
     void StepLeft(float step);
-
-    void UseAngleParametrization(bool v)
-    {
-        m_UseAngleParametrization = v;
-    }
-    void SetEyeX(float v)
-    {
-        m_ExpEyeX = v;
-    }
-    void SetEyeY(float v)
-    {
-        m_ExpEyeY = v;
-    }
 
     const glm::mat4x4& GetViewProjectionMatrix() const;
     const glm::mat4x4& GetViewMatrix() const;
@@ -74,6 +62,7 @@ public:
 
     //test
     glm::vec3 m_Eye;
+    bool m_UseAngles;
 private:
     glm::vec3 m_ViewVec;
     glm::vec3 m_LeftVec;
@@ -88,8 +77,4 @@ private:
     float m_Near;
     float m_Far;
     float m_Aspect;
-
-    bool m_UseAngleParametrization;
-    float m_ExpEyeX;
-    float m_ExpEyeY;
 };

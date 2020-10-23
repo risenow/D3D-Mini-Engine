@@ -5,11 +5,11 @@
 #include "Extern/glm/gtc/quaternion.hpp"
 #include "Extern/glm/gtx/matrix_interpolation.hpp"
 
-Camera::Camera(const glm::vec3& position, const glm::vec3& rotation) : m_Position(position), m_Rotation(rotation)
+#include <iostream>
+
+Camera::Camera(const glm::vec3& position, const glm::vec3& rotation) : m_Position(position), m_Rotation(rotation), m_UseAngles(true)
 {
     UpdateViewProjectionMatrix();
-    m_UseAngleParametrization = true;
-    m_ExpEyeX = 0.0;
 }
 
 glm::vec3 GetRow3D(const glm::mat4x4& m, size_t i)
@@ -21,9 +21,31 @@ glm::mat4x4 ViewIdentity()
 {
     //invalid, directx uses left-handed coordinate system
     glm::mat4x4 m;
-    m[0][0] = -1;
-    m[2][2] = -1;
+    m[0][0] = 1;
+    m[2][2] = 1;
     return m;
+}
+
+void Camera::SetOrientation(const glm::vec3& _orientation)
+{
+    glm::vec3 orientation = glm::normalize(_orientation);
+    glm::vec3 viewVec = glm::vec3(0.0, 0.0, 1.0);
+
+    glm::vec3 eyeXZ = orientation;
+    eyeXZ.y = 0;
+    eyeXZ = glm::normalize(eyeXZ);
+    float signZY = glm::sign(glm::cross(eyeXZ, glm::vec3(viewVec.x, 0.0, viewVec.z)).y);
+
+    float xzAngleCos = glm::clamp(glm::dot(eyeXZ, orientation), -1.0f, 1.0f); //wtf, normalized vector dot normalized vector gives slightly > 1.0
+    float angleXZ = (glm::sign(orientation.y) * acos(xzAngleCos));
+    float angleZY = signZY * acos(glm::dot(eyeXZ, glm::vec3(viewVec.x, 0.0f, viewVec.z)));
+
+    std::cout << angleXZ << " " << angleZY << std::endl;
+
+    m_Rotation.x = angleXZ;
+    m_Rotation.y = angleZY;
+
+    m_Eye = orientation;
 }
 
 void Camera::UpdateViewProjectionMatrix()
@@ -33,58 +55,54 @@ void Camera::UpdateViewProjectionMatrix()
     static const glm::vec3 zAxis = glm::vec3(0.0f, 0.0f, 1.0f);
 
     m_ViewMatrix = ViewIdentity();//glm::mat4x4();
-    //m_ViewMatrix = glm::rotate(m_ViewMatrix, m_Rotation.x, xAxis);
-    //m_ViewMatrix = glm::rotate(m_ViewMatrix, m_Rotation.y, yAxis);
-    m_Eye = glm::normalize(glm::vec3(m_ExpEyeX, m_ExpEyeY, 1.0));//glm::normalize(glm::vec3(1.0, 0.7, 1.0));
-    glm::mat4x4 tempView = (glm::lookAt(glm::vec3(0, 0, 0), m_Eye, glm::vec3(0.0, 1.0, 0.0)));
-    if (!m_UseAngleParametrization)
+   
+    m_ViewVec = glm::vec3(0.0, 0.0, 1.0);
+
+    /*glm::vec3 eyeXZ = m_Eye;
+    eyeXZ.y = 0;
+
+    float signXZ = -glm::sign(glm::cross(eyeXZ, m_Eye).x);//if positive rotate counter clockwise
+
+    eyeXZ = glm::normalize(eyeXZ);
+
+    glm::vec3 eyeZY = m_Eye;
+    eyeZY.x = 0;
+    float signZY = glm::sign(glm::cross(eyeXZ, glm::vec3(m_ViewVec.x, 0.0, m_ViewVec.z)).y);
+    eyeZY = glm::normalize(eyeZY);
+
+    float angleXZ = signXZ * acos(glm::dot(eyeXZ, m_Eye));// * (180.0/glm::pi<float>());
+    float angleZY = signZY * acos(glm::dot(eyeXZ, glm::vec3(m_ViewVec.x, 0.0f, m_ViewVec.z)));// * (180.0/glm::pi<float>());
+    */
+    if (m_UseAngles)
     {
-        m_ViewMatrix = (glm::lookAt(glm::vec3(0, 0, 0), m_Eye, glm::vec3(0.0, 1.0, 0.0)));
+        m_ViewMatrix = glm::rotate(m_ViewMatrix, m_Rotation.x, xAxis);
+        m_ViewMatrix = glm::rotate(m_ViewMatrix, -m_Rotation.y, yAxis);
+        m_ViewMatrix = (glm::translate(m_ViewMatrix, -m_Position));
     }
     else
     {
-        //m_ViewMatrix = (glm::transpose(m_ViewMatrix));
-
-        //m_ViewMatrix = glm::transpose(m_ViewMatrix); //it should be here by math if we want to write mat*v
-
-        //m_ViewMatrix = glm::rotate(m_ViewMatrix, m_Rotation.x, xAxis);
-        //m_ViewMatrix = glm::rotate(m_ViewMatrix, m_Rotation.y, yAxis);
-        glm::mat4x4 tempPrev = glm::transpose(m_ViewMatrix);
-        m_ViewVec = glm::vec3(0.0, 0.0, 1.0);//tempPrev[2];
-
-        glm::vec3 eyeXZ = m_Eye;
-        eyeXZ.y = 0;
-
-        float signXZ = -glm::sign(glm::cross(eyeXZ, m_Eye).x);//if positive rotate counter clockwise
-
-        eyeXZ = glm::normalize(eyeXZ);
-
-        glm::vec3 eyeZY = m_Eye;
-        eyeZY.x = 0;
-        float signZY = glm::sign(glm::cross(eyeXZ, glm::vec3(m_ViewVec.x, 0.0, m_ViewVec.z)).y);
-        eyeZY = glm::normalize(eyeZY);
-
-        float angleXZ = signXZ * acos(glm::dot(eyeXZ, m_Eye));// * (180.0/glm::pi<float>());
-        float angleZY = signZY * acos(glm::dot(eyeXZ, glm::vec3(m_ViewVec.x, 0.0f, m_ViewVec.z)));// * (180.0/glm::pi<float>());
-
-        m_ViewMatrix = glm::rotate(m_ViewMatrix, angleXZ, xAxis);
-        m_ViewMatrix = glm::rotate(m_ViewMatrix, angleZY, yAxis);
-        glm::vec3 eyeRecalc = glm::vec3(glm::vec4(0.0, 0.0, 1.0, 0.0) * m_ViewMatrix);
-        //m_ViewMatrix = glm::inverse(m_ViewMatrix);
-        //m_ViewMatrix = (glm::translate(m_ViewMatrix, -m_Position));
+        m_ViewMatrix = glm::lookAt(m_Position, m_Position + m_Eye, glm::vec3(0.0, 1.0, 0.0));
     }
+    //m_ViewMatrix = glm::lookAt(m_Position, m_Position + m_Eye, glm::vec3(0.0, 1.0, 0.0));
+    //glm::vec3 eyeRecalc = glm::vec3(glm::vec4(0.0, 0.0, 1.0, 0.0) * m_ViewMatrix);
+
     glm::mat4x4 temp = glm::transpose(m_ViewMatrix);
     m_LeftVec = temp[0];
     m_ViewVec = temp[2];
 
     glm::vec2 projFactors = GetProjectionFactors();
 
-    m_ViewProjectionMatrix = m_ViewMatrix * m_ProjectionMatrix;
+    glm::vec4 wP = glm::vec4(300.0, 400.0, 1.0, 1.0);
+    glm::vec4 vP = m_ViewMatrix * wP;
+
+    glm::vec4 restrWP = glm::inverse(m_ViewMatrix) * vP;
+
+    m_ViewProjectionMatrix = m_ProjectionMatrix * m_ViewMatrix; //m_ViewMatrix * m_ProjectionMatrix;//m_ProjectionMatrix * m_ViewMatrix;
 }
 
 void Camera::StepForward(float step)
 {
-    m_Position -= m_ViewVec * step;
+    m_Position += m_ViewVec * step;
 }
 
 void Camera::StepLeft(float step)

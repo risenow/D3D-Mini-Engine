@@ -685,7 +685,7 @@ void OrdinaryGraphicsObjectManager::CompileGraphicObjects(GraphicsDevice& device
 }
 
 
-void OrdinaryGraphicsObjectManager::Render(GraphicsDevice& device, ShadersCollection& shadersCollection, uint32_t passMacros, const Camera& camera)
+void OrdinaryGraphicsObjectManager::Render(GraphicsDevice& device, ShadersCollection& shadersCollection, uint32_t passMacros, const Camera& camera, bool shadowPass)
 {
 	for (GraphicsObject& object : m_DrawableObjects)
 	{
@@ -697,10 +697,15 @@ void OrdinaryGraphicsObjectManager::Render(GraphicsDevice& device, ShadersCollec
         if (currentTopology->TBNEnabled())
             materialPassMacros = materialPassMacros | BasicPixelShaderVariations::TBN;
 
-        if (object.m_Material != nullptr)
-            object.m_Material->Bind(device, shadersCollection, camera, nullptr, materialPassMacros);
+        if (!shadowPass)
+        {
+            if (object.m_Material != nullptr)
+                object.m_Material->Bind(device, shadersCollection, camera, nullptr, materialPassMacros);
+            else
+                object.m_Materials[0]->Bind(device, shadersCollection, camera, nullptr, materialPassMacros);
+        }
         else
-            object.m_Materials[0]->Bind(device, shadersCollection, camera, nullptr, materialPassMacros);
+            GraphicsMaterial::BindNull(device);
 
         VSConsts consts;
         FillLightingGraphicsTopologyConstants(consts, camera);

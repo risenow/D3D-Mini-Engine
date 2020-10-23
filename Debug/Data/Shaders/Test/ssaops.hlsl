@@ -19,7 +19,7 @@ float4 ReadNormalLinDepth(float2 uv)
     float4 vNormalDepth = gbufferNormal.Load(int2(uv * gbufferSize.xy), 0);
 #else
     int3 tc = round(int3(uv * gbufferSize.xy, 0));
-    float4 vNormalDepth = gbufferNormal.Sample(SampleType, uv).xyzw;
+    float4 vNormalDepth = gbufferNormal.Sample(SampleType, float2(uv.x, uv.y - 1.0/gbufferSize.y)).xyzw;
 #endif
     return vNormalDepth;
 }
@@ -66,9 +66,9 @@ float4 PSEntry(in float2 uv_ : TEXCOORD0) : SV_TARGET
     float2 ndcXY = uv * 2.0 - 1.0;
     float4 origin = ReadPos(uv).xyzw;//float4(-ndcXY.x * projFactors.x * z, ndcXY.y * projFactors.y * z, z, 1.0f);
     float3 n = normalize(vNormalDepth.xyz);
-    //n = cross(normalize(ddy_fine(origin.xyz)), normalize(ddx_fine((origin.xyz))));
-    float3 r = normalize(rv[int(abs(nrand(uv)* (RAND_VECTOR_COUNT - 1)))]);
-    //float3 r = normalize(float3(0.0, 1.0, 0.0));//float3(0.0, 0.0, 1.0);//(rv[int(abs(nrand(uv)* (RAND_VECTOR_COUNT - 1)))]);
+    //float3 n = -normalize(cross(normalize(ddy_fine(origin.xyz)), normalize(ddx_fine((origin.xyz)))));
+    //float3 r = normalize(rv[int(abs(nrand(uv)* (RAND_VECTOR_COUNT - 2)))]);
+    float3 r = normalize(float3(0.0, 1.0, 0.0));//float3(0.0, 0.0, 1.0);//(rv[int(abs(nrand(uv)* (RAND_VECTOR_COUNT - 1)))]);
     float3 t = normalize(r - dot(n, r)*n);
     float3 b = normalize(cross(t, n));//order?
     
@@ -81,13 +81,13 @@ float4 PSEntry(in float2 uv_ : TEXCOORD0) : SV_TARGET
     float3x3 TBN = float3x3(t, b, n);
 
     float4 pos = ReadPos(uv).xyzw;
-    float radius = 0.4f/max(z, 1.0) + (pos.x + pos.y + pos.z + pos.a + Otc.x + Otc.y) * 0.000000000001;
+    float radius = 0.9f;//max(z, 1.0) + (pos.x + pos.y + pos.z + pos.a + Otc.x + Otc.y) * 0.000000000001;
 
     float ao = 0.0;
-    float sampleCount = SSAO_SAMPLE_COUNT-0;
+    float sampleCount = SSAO_SAMPLE_COUNT;
     
     #ifdef ORIENTED_HEMISPHERE
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < SSAO_SAMPLE_COUNT; i++)
     {
         float3 kernelVec = normalize(kernelSamples[i].xyz);
         
@@ -97,20 +97,33 @@ float4 PSEntry(in float2 uv_ : TEXCOORD0) : SV_TARGET
         float4 Spr = mul(projection, Svs);
         float dbg = Spr.x * gbufferSize.x;
         Spr /= Spr.w;
-        Spr = (Spr + float4(1.0, 1.0, 0.0, 0.0))*0.5;
+        //Spr = (Spr + float4(1.0, 1.0, 0.0, 0.0))*0.5;
+        Spr = float4((Spr.x + 1.0)*0.5, (Spr.y + 1.0)*0.5, Spr.z, Spr.w);
+        //Spr.xy += float2(1.0, 1.0);
+        //Spr.xy *= 0.5;
         Spr.y = 1.0 - Spr.y;
+        
         float sampleDepth = ReadNormalLinDepth(Spr.xy).w;
-        float rangeCheck = abs(origin.z - sampleDepth) < radius ? 1.0 : 0.0;
+        float potential = max((abs(sampleDepth) < abs(Svs.z) - 0.85 - 0.0*(abs(n.y)) ? 1.0 : 0.0), 0.0);
+        float rangeCheck = ((kernelVec.z) < 1.0 && potential < 0.1) ? (abs(origin.z - sampleDepth) < radius*1.5 ? 1.0 : 0.0) : 1.0;
         //float outOfRange = (Spr.x < 0.0 || Spr.x > 1.0 || Spr.y < 0.0 || Spr.y > 1.0) ? 1.0 : 0.0;
+        
+        if (Spr.x > 1.0 || Spr.y > 1.0 || Spr.x < 0.0 || Spr.y < 0.0015 || rangeCheck < 0.13)
+        {
+            sampleCount--;
+            continue;
+        }
         
         //if (Spr.y >= 0.0 && Spr.y <= 1.0 && Spr.x >= 0.0 && Spr.x <= 1.0)
         //{
-        ao += (abs(sampleDepth) < abs(Svs.z) - 0.0 ? 1.0 : 0.0)  ;//naive way to do the things, optimum = ray marching + weighing by angle
+        
+        ao += potential;//max((abs(sampleDepth) < abs(Svs.z) - 0.2 - 0.0*(abs(n.y)) ? 1.0 : 0.0), 0.0)  ;//naive way to do the things, optimum = ray marching + weighing by angle
         
         //}
         //else
         //sampleCount--;
     }
+    sampleCount = max(sampleCount, 1);
     ao /= sampleCount;
     ao = 1.0 - ao;
     #else

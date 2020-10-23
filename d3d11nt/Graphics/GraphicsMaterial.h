@@ -34,6 +34,11 @@ public:
 
     void FillMaterialBits(uint32_t& dst, const uint32_t passMacros);
 
+    static void BindNull(GraphicsDevice& device)
+    {
+        device.GetD3D11DeviceContext()->PSSetShader(nullptr, nullptr, 0);
+    }
+
     std::vector<GraphicsLightObject>& GetLights() { return m_Lights; }
 protected:
 	std::string m_Name;

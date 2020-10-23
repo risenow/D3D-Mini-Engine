@@ -198,6 +198,9 @@
     <ClInclude Include="..\d3d11nt\Graphics\GraphicsDirectionalShadowMap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\d3d11nt\Graphics\GraphicsShadowMapPass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

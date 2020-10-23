@@ -8,13 +8,9 @@ MouseKeyboardCameraController::MouseKeyboardCameraController(const Camera& camer
 	DeserializeFromIni(ini);
 }
 
-void MouseKeyboardCameraController::Update(Window& window, bool useAngleParametrization, float expEyeX, float expEyeY)
+void MouseKeyboardCameraController::Update(Window& window)
 {
     const float VELOCITY = 1.0f;//0.005f;
-
-    m_Camera.UseAngleParametrization(useAngleParametrization);
-    m_Camera.SetEyeX(expEyeX);
-    m_Camera.SetEyeY(expEyeY);
 
     m_MouseCameraRotationActive = !!(GetAsyncKeyState(VK_RBUTTON));
 
@@ -34,7 +30,7 @@ void MouseKeyboardCameraController::Update(Window& window, bool useAngleParametr
         const float maxXAxisRotateAngle = glm::radians(75.0f);
         m_RotationAxisX = std::max(std::min(m_RotationAxisX, maxXAxisRotateAngle), -maxXAxisRotateAngle);
 
-        m_Camera.SetRotation(glm::vec3(m_RotationAxisX, m_RotationAxisY, 0));
+        m_Camera.SetRotation(glm::vec3(-m_RotationAxisX, m_RotationAxisY, 0));
     }
 
     if (GetAsyncKeyState(VK_UP))

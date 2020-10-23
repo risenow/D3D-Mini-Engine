@@ -21,6 +21,7 @@ struct PS_OUTPUT
 };
 
 PS_OUTPUT PSEntry(float4 pos : SV_POSITION
+                 ,in float4 wPos : TEXCOORD2
 #ifdef TEXCOORD
             , in float2 iTc : TEXCOORD0
 #endif

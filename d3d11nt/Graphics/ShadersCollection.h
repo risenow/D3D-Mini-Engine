@@ -58,20 +58,11 @@ public:
         std::stringstream buffer;
         buffer << shaderFile.rdbuf();
 
-        m_Content = buffer.str();//std::string(std::istreambuf_iterator<char>(shaderFile), std::istreambuf_iterator<char>());
+        m_Content = buffer.str();
 
         bool isf = shaderFile.fail();
 		shaderFile.close();
 
-        /*shaderFile.open(filePath);
-        //std::stringstream buffer;
-        std::string buffer2;
-        shaderFile >> buffer2;//buffer2 << shaderFile.rdbuf();
-        shaderFile.close();*/
-        //m_Content = buffer.str();//std::string(std::istreambuf_iterator<char>(shaderFile), std::istreambuf_iterator<char>());
-        
-
-        //assert(m_Content.size() != 0);
         if (m_Content.size() != 0)
             m_Changed = true;
 
